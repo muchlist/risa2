@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/router/routing_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../const.dart';
+import 'package:risa2/src/router/routes.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -12,15 +9,20 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   String _token = "";
 
-  _loadToken() async {
-    var prefs = await SharedPreferences.getInstance();
-    _token = (prefs.getString(tokenSaved) ?? "");
+  _loadToken() {
+    // var prefs = await SharedPreferences.getInstance();
+    // _token = (prefs.getString(tokenSaved) ?? "");
+    _token = "";
     if (_token == "") {
-      await Navigator.pushNamedAndRemoveUntil(
-          context, loginViewRoute, ModalRoute.withName(loginViewRoute));
+      Future(() {
+        Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.login,
+            ModalRoute.withName(RouteGenerator.login));
+      });
     } else {
-      await Navigator.pushNamedAndRemoveUntil(
-          context, homeViewRoute, ModalRoute.withName(homeViewRoute));
+      Future(() {
+        Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.home,
+            ModalRoute.withName(RouteGenerator.home));
+      });
     }
   }
 
@@ -32,6 +34,8 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Text("Loading ...")));
+    return Scaffold(
+      body: Center(child: const Text(". . .")),
+    );
   }
 }

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/router/routing_constants.dart';
-import 'package:risa2/src/screens/landing/landing.dart';
-import 'src/router/router.dart' as router;
+import 'package:risa2/src/router/routes.dart';
 
 void main() async {
   runApp(MyApp());
@@ -19,9 +17,9 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.green,
           buttonColor: Color(0xff4643D3),
           fontFamily: "Cascadia"),
-      onGenerateRoute: router.generateRoute,
-      initialRoute: landingPageViewRoute,
-      home: LandingPage(),
+      initialRoute: RouteGenerator.landing,
+      onGenerateRoute: RouteGenerator.generateRoute,
+      // home: LandingPage(),
       debugShowCheckedModeBanner: false,
     );
   }

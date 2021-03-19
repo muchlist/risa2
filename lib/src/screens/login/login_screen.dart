@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/widgets/button.dart';
+import 'package:risa2/src/router/routes.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -69,7 +69,21 @@ class _LoginFormState extends State<LoginForm> {
       final username = usernameController.text;
       final password = passwordController.text;
 
-      // final login = LoginClass(user: email, password: password);
+      if (username == password) {
+        final snackBar = SnackBar(
+          content: Text('Yay! A SnackBar!'),
+          action: SnackBarAction(
+            label: 'Undo',
+            onPressed: () {
+              // Some code to undo the change.
+            },
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            RouteGenerator.home, ModalRoute.withName(RouteGenerator.home));
+      }
     } else {
       debugPrint("Error :(");
     }
@@ -140,9 +154,21 @@ class _LoginFormState extends State<LoginForm> {
             SizedBox(
               height: 10,
             ),
-            RisaButton(
-              title: "Login",
-              onPress: _login,
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 4.0),
+              width: double.infinity,
+              child: ElevatedButton(
+                child: Text(
+                  "Login",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                onPressed: _login,
+                style: ElevatedButton.styleFrom(
+                    primary: Theme.of(context).buttonColor,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0)),
+                    padding: EdgeInsets.all(15.0)),
+              ),
             )
           ],
         ));
