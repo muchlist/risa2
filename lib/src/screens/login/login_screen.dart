@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:risa2/src/router/routes.dart';
+import 'package:risa2/src/widgets/button.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -154,22 +155,7 @@ class _LoginFormState extends State<LoginForm> {
             SizedBox(
               height: 10,
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 4.0),
-              width: double.infinity,
-              child: ElevatedButton(
-                child: Text(
-                  "Login",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                onPressed: _login,
-                style: ElevatedButton.styleFrom(
-                    primary: Theme.of(context).buttonColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0)),
-                    padding: EdgeInsets.all(15.0)),
-              ),
-            )
+            RisaButton(title: "Login", onPress: _login)
           ],
         ));
   }
