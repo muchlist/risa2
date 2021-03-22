@@ -1,10 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:risa2/src/models/dashboard_category.dart';
 
 class DashboardIcon extends StatelessWidget {
-  final String title;
-  final String image;
+  final DashboardItem dashboardItem;
 
-  const DashboardIcon({required this.title, required this.image});
+  const DashboardIcon(this.dashboardItem);
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +22,13 @@ class DashboardIcon extends StatelessWidget {
               padding: EdgeInsets.all(4),
               child: Container(
                 child: Icon(
-                  Icons.dashboard,
+                  dashboardItem.icon,
                   color: Colors.white,
                 ),
                 width: 60,
                 height: 60,
                 decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                    color: dashboardItem.color,
                     borderRadius: BorderRadius.circular(25)),
               ),
             ),
@@ -37,7 +38,7 @@ class DashboardIcon extends StatelessWidget {
           ),
           Flexible(
             child: Text(
-              title,
+              dashboardItem.title,
               style: TextStyle(fontSize: 12),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,

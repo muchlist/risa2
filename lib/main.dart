@@ -20,9 +20,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: _title,
       theme: ThemeData(
-          primaryColor: Color(0xff4643D3),
+          primaryColor: Color.fromRGBO(70, 67, 211, 1),
           accentColor: Colors.white,
-          buttonColor: Color(0xff4643D3),
+          buttonColor: Color.fromRGBO(70, 67, 211, 1),
           fontFamily: "Cascadia"),
       onGenerateRoute: RouteGenerator.generateRoute,
       home: LandingPage(),

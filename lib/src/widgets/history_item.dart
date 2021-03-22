@@ -14,27 +14,7 @@ class HistoryItem extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    RichText(
-                        text: TextSpan(children: [
-                      WidgetSpan(child: Icon(Icons.camera)),
-                      WidgetSpan(
-                          child: SizedBox(
-                        width: 8,
-                      )),
-                      TextSpan(
-                          text: "SP CY2 BLOK-C-013",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              fontSize: 18))
-                    ])),
-                    Text(
-                      "12 Feb 2021",
-                    )
-                  ]),
+              row1,
               SizedBox(
                 height: 8,
               ),
@@ -53,13 +33,14 @@ class HistoryItem extends StatelessWidget {
                 children: <Widget>[
                   Container(
                     decoration: BoxDecoration(
-                        color: Colors.orangeAccent,
+                        color: Color.fromRGBO(255, 186, 130, 0.15),
                         borderRadius: BorderRadius.circular(5)),
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
                         "Progress",
-                        style: TextStyle(color: Colors.white),
+                        style:
+                            TextStyle(color: Color.fromRGBO(255, 186, 130, 1)),
                       ),
                     ),
                   ),
@@ -74,3 +55,22 @@ class HistoryItem extends StatelessWidget {
     );
   }
 }
+
+Row row1 =
+    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+  RichText(
+      text: TextSpan(children: [
+    WidgetSpan(child: Icon(Icons.camera)),
+    WidgetSpan(
+        child: SizedBox(
+      width: 8,
+    )),
+    TextSpan(
+        text: "SP CY2 BLOK-C-013",
+        style: TextStyle(
+            fontWeight: FontWeight.bold, color: Colors.black, fontSize: 18))
+  ])),
+  Text(
+    "12 Feb 2021",
+  )
+]);

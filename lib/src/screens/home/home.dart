@@ -2,46 +2,15 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:risa2/src/widgets/history_item.dart';
+import 'package:risa2/src/widgets/history_item_alt.dart';
 import 'corousel.dart';
 import 'dashboard_grid.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: Container(
-                width: 50,
-                height: 50,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)),
-              ),
-            ),
-          )
-        ],
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        title: RichText(
-          text: TextSpan(
-              text: "Hi, Muchlis\n",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                  color: Colors.white),
-              children: <TextSpan>[
-                TextSpan(
-                    text: "Welcome to RISA",
-                    style: TextStyle(fontSize: 12, color: Colors.white))
-              ]),
-        ),
-      ),
-      // HOME BODY
-      body: Stack(
+    return SafeArea(
+      child: Stack(
         children: <Widget>[
           SingleChildScrollView(
             child: Column(
@@ -54,11 +23,14 @@ class HomeScreen extends StatelessWidget {
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     children: <Widget>[
-                      HistoryItem(),
-                      HistoryItem(),
-                      HistoryItem(),
+                      HistoryListTile(),
+                      HistoryListTile(),
+                      HistoryListTile(),
                     ],
                   ),
+                ),
+                SizedBox(
+                  height: 300,
                 )
               ],
             ),

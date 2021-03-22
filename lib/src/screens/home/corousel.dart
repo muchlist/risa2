@@ -1,7 +1,20 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:risa2/src/models/improve_preview.dart';
 
 class Corousel extends StatelessWidget {
+  var improvementList = [
+    ImprovePreview(
+        title: "Update IOS PPU Pandu",
+        description:
+            "Update sebanyak 57 tablet pandu di lingkungan pelindo III",
+        progress: 97),
+    ImprovePreview(
+        title: "Maintnenace UPS",
+        description: "Maintenance seluruh perangkat ups",
+        progress: 50),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -20,10 +33,12 @@ class Corousel extends StatelessWidget {
           enlargeCenterPage: true,
           scrollDirection: Axis.horizontal,
         ),
-        items: [1, 2, 3, 4, 5].map((i) {
+        items: improvementList.map((i) {
           return Builder(
             builder: (BuildContext context) {
-              return CorouselItem();
+              return CorouselItem(
+                improvePreview: i,
+              );
             },
           );
         }).toList(),
@@ -33,6 +48,10 @@ class Corousel extends StatelessWidget {
 }
 
 class CorouselItem extends StatelessWidget {
+  final ImprovePreview improvePreview;
+
+  const CorouselItem({required this.improvePreview});
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -49,7 +68,7 @@ class CorouselItem extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    "Hayu asdsadasd asdasdasd asdasdasd asdasdas asdasdas asdasda asdasdasu",
+                    improvePreview.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -59,10 +78,8 @@ class CorouselItem extends StatelessWidget {
             subtitle: Row(
               children: [
                 Expanded(
-                    child: Text(
-                        "mo,okloonoioijio asdasd asd asdassd asd asda asd asd asasdasdasasd asd asd as",
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis)),
+                    child: Text(improvePreview.description,
+                        maxLines: 2, overflow: TextOverflow.ellipsis)),
               ],
             ),
             trailing: Container(
@@ -72,7 +89,7 @@ class CorouselItem extends StatelessWidget {
                   shape: BoxShape.circle,
                 ),
                 child: Text(
-                  "80%",
+                  "${improvePreview.progress}%",
                   style: TextStyle(fontSize: 10),
                 )),
           ),
