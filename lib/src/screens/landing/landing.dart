@@ -12,16 +12,18 @@ class _LandingPageState extends State<LandingPage> {
   _loadToken() {
     // var prefs = await SharedPreferences.getInstance();
     // _token = (prefs.getString(tokenSaved) ?? "");
-    _token = "";
+    _token = "xx";
     if (_token == "") {
       Future(() {
-        Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.login,
-            ModalRoute.withName(RouteGenerator.login));
+        // Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.login,
+        //     ModalRoute.withName(RouteGenerator.login));
+        Navigator.pushReplacementNamed(context, RouteGenerator.login);
       });
     } else {
       Future(() {
-        Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.home,
-            ModalRoute.withName(RouteGenerator.home));
+        // Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.home,
+        //     ModalRoute.withName(RouteGenerator.home));
+            Navigator.pushReplacementNamed(context, RouteGenerator.home);
       });
     }
   }
