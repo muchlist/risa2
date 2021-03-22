@@ -10,7 +10,6 @@ class DashboardGrid extends StatelessWidget {
         return false;
       },
       child: GridView.count(
-        physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         crossAxisCount: 4,
         mainAxisSpacing: 1,

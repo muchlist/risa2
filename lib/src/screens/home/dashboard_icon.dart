@@ -8,16 +8,23 @@ class DashboardIcon extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {},
-            child: Container(
-              child: Icon(
-                Icons.dashboard,
-                color: Colors.white,
+            splashColor: Colors.orange,
+            customBorder: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(4),
+              child: Container(
+                child: Icon(
+                  Icons.dashboard,
+                  color: Colors.white,
+                ),
+                width: 65,
+                height: 65,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(25)),
               ),
-              width: 65,
-              height: 65,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(25)),
             ),
           ),
           SizedBox(

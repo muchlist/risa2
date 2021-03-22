@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       title: _title,
       theme: ThemeData(
           primaryColor: Color(0xff4643D3),
-          accentColor: Colors.green,
+          accentColor: Colors.white,
           buttonColor: Color(0xff4643D3),
           fontFamily: "Cascadia"),
       onGenerateRoute: RouteGenerator.generateRoute,

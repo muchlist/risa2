@@ -26,7 +26,10 @@ class HistoryItem extends StatelessWidget {
                       )),
                       TextSpan(
                           text: "SP CY2 BLOK-C-013",
-                          style: TextStyle(fontWeight: FontWeight.bold))
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                              fontSize: 18))
                     ])),
                     Text(
                       "12 Feb 2021",
