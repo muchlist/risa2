@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
 class DashboardIcon extends StatelessWidget {
+  final String title;
+  final String image;
+
+  const DashboardIcon({required this.title, required this.image});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,8 +24,8 @@ class DashboardIcon extends StatelessWidget {
                   Icons.dashboard,
                   color: Colors.white,
                 ),
-                width: 65,
-                height: 65,
+                width: 60,
+                height: 60,
                 decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(25)),
@@ -28,12 +33,15 @@ class DashboardIcon extends StatelessWidget {
             ),
           ),
           SizedBox(
-            height: 8,
+            height: 2,
           ),
-          Text(
-            "Dashboard",
-            style: TextStyle(fontSize: 12),
-            overflow: TextOverflow.fade,
+          Flexible(
+            child: Text(
+              title,
+              style: TextStyle(fontSize: 12),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
           )
         ],
       ),

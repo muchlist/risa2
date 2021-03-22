@@ -5,7 +5,7 @@ class Corousel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12.0),
+      padding: const EdgeInsets.only(bottom: 12.0, top: 20),
       child: CarouselSlider(
         options: CarouselOptions(
           height: 100,
@@ -38,23 +38,44 @@ class CorouselItem extends StatelessWidget {
     return Center(
       child: Card(
         shadowColor: Colors.white,
-        elevation: 2,
+        elevation: 5,
         shape: RoundedRectangleBorder(
             side: BorderSide(color: Colors.white, width: 0.5),
             borderRadius: BorderRadius.circular(10)),
-        child: ListTile(
-          title: Text("Hayuu"),
-          subtitle: Text("mo,okloonoioijio"),
-          trailing: Container(
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.blueGrey),
-                shape: BoxShape.circle,
-              ),
-              child: Text(
-                "80%",
-                style: TextStyle(fontSize: 10),
-              )),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListTile(
+            title: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "Hayu asdsadasd asdasdasd asdasdasd asdasdas asdasdas asdasda asdasdasu",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+            subtitle: Row(
+              children: [
+                Expanded(
+                    child: Text(
+                        "mo,okloonoioijio asdasd asd asdassd asd asda asd asd asasdasdasasd asd asd as",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis)),
+              ],
+            ),
+            trailing: Container(
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.blueGrey),
+                  shape: BoxShape.circle,
+                ),
+                child: Text(
+                  "80%",
+                  style: TextStyle(fontSize: 10),
+                )),
+          ),
         ),
       ),
     );
