@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/models/dashboard_category.dart';
+import 'package:risa2/src/models/dashboard.dart';
 
 class DashboardIcon extends StatelessWidget {
-  final DashboardItem dashboardItem;
+  final Dashboard dashboardItem;
 
   const DashboardIcon(this.dashboardItem);
 

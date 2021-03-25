@@ -1,10 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:risa2/src/widgets/history_item.dart';
-import 'package:risa2/src/widgets/history_item_alt.dart';
 import 'corousel.dart';
 import 'dashboard_grid.dart';
+import 'dashboard_listview.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -19,15 +18,7 @@ class HomeScreen extends StatelessWidget {
                 DashboardGrid(),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: ListView(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    children: <Widget>[
-                      HistoryListTile(),
-                      HistoryListTile(),
-                      HistoryListTile(),
-                    ],
-                  ),
+                  child: DashboardListView(),
                 ),
                 SizedBox(
                   height: 300,

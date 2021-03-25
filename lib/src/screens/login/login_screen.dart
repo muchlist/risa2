@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:risa2/src/providers/auth.dart';
 import 'package:risa2/src/router/routes.dart';
 import 'package:risa2/src/widgets/button.dart';
 
@@ -65,10 +67,14 @@ class _LoginFormState extends State<LoginForm> {
     super.dispose();
   }
 
-  void _login() {
+  void _login(BuildContext context) {
+    final authViewModel = Provider.of<AuthModel>(context, listen: false);
+
     if (_key.currentState?.validate() ?? false) {
       final username = usernameController.text;
       final password = passwordController.text;
+
+      authViewModel.login(username, password);
 
       if (username == password) {
         final snackBar = SnackBar(
@@ -155,7 +161,12 @@ class _LoginFormState extends State<LoginForm> {
             SizedBox(
               height: 10,
             ),
-            RisaButton(title: "Login", onPress: _login)
+            Consumer<AuthModel>(
+                builder: (_, auth, __) => RisaButton(
+                    title: "login",
+                    onPress: () {
+                      _login(context);
+                    }))
           ],
         ));
   }

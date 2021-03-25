@@ -13,7 +13,7 @@ class RisaButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         child: Text(
-          "Login",
+          title,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         onPressed: onPress,

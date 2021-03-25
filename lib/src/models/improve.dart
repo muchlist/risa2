@@ -1,8 +1,8 @@
-class ImprovePreview {
+class Improve {
   final String title;
   final String description;
   final int progress;
 
-  const ImprovePreview(
+  const Improve(
       {required this.title, required this.description, required this.progress});
 }

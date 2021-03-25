@@ -1,7 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:risa2/src/models/history_preview.dart';
 
 class HistoryListTile extends StatelessWidget {
+  final HistoryPreview history;
+
+  const HistoryListTile({Key? key, required this.history}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -16,14 +21,14 @@ class HistoryListTile extends StatelessWidget {
         title: Padding(
           padding: const EdgeInsets.only(top: 8),
           child: Text(
-            "Lorem Ipsum sir dolor amet",
+            history.title,
             style: TextStyle(fontSize: 18),
           ),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Lorem ipsum sir dolor amet\n # Lorem ipsum sir dolor amet"),
+            Text("${history.incidentNote}\n #${history.resolveNote}"),
             SizedBox(
               height: 16,
             ),
@@ -36,7 +41,7 @@ class HistoryListTile extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Text(
-                      "Progress",
+                      history.completeStatus,
                       style: TextStyle(color: Color.fromRGBO(255, 186, 130, 1)),
                     ),
                   ),
@@ -44,11 +49,11 @@ class HistoryListTile extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Text("12 Feb"),
+                Text(history.date),
                 SizedBox(
                   width: 10,
                 ),
-                Text("By Hendra")
+                Text(history.author)
               ],
             ),
           ],

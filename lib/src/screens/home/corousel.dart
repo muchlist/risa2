@@ -1,22 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/models/improve_preview.dart';
+import 'package:provider/provider.dart';
+import 'package:risa2/src/models/improve.dart';
+import 'package:risa2/src/providers/improves.dart';
 
 class Corousel extends StatelessWidget {
-  var improvementList = [
-    ImprovePreview(
-        title: "Update IOS PPU Pandu",
-        description:
-            "Update sebanyak 57 tablet pandu di lingkungan pelindo III",
-        progress: 97),
-    ImprovePreview(
-        title: "Maintnenace UPS",
-        description: "Maintenance seluruh perangkat ups",
-        progress: 50),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final improveData = Provider.of<ImproveModel>(context);
+    final improves = improveData.improveList;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0, top: 20),
       child: CarouselSlider(
@@ -33,7 +26,7 @@ class Corousel extends StatelessWidget {
           enlargeCenterPage: true,
           scrollDirection: Axis.horizontal,
         ),
-        items: improvementList.map((i) {
+        items: improves.map((i) {
           return Builder(
             builder: (BuildContext context) {
               return CorouselItem(
@@ -48,7 +41,7 @@ class Corousel extends StatelessWidget {
 }
 
 class CorouselItem extends StatelessWidget {
-  final ImprovePreview improvePreview;
+  final Improve improvePreview;
 
   const CorouselItem({required this.improvePreview});
 

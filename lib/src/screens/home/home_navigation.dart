@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:risa2/src/screens/history/history.dart';
 
 import 'home.dart';
 
@@ -10,20 +11,14 @@ class BottomNavRisa extends StatefulWidget {
 
 class _MyStatefulWidgetState extends State<BottomNavRisa> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
   //INSIDE NAVIGATION VIEW
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     Text(
-      'Index 1: Business',
-      style: optionStyle,
+      'add history',
     ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
+    History()
   ];
 
   void _onItemTapped(int index, BuildContext context) {

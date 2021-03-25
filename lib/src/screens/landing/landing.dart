@@ -12,8 +12,8 @@ class _LandingPageState extends State<LandingPage> {
   _loadToken() {
     // var prefs = await SharedPreferences.getInstance();
     // _token = (prefs.getString(tokenSaved) ?? "");
-    _token = "xx";
-    if (_token == "") {
+    _token = "";
+    if (_token == "asd") {
       Future(() {
         // Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.login,
         //     ModalRoute.withName(RouteGenerator.login));
@@ -23,7 +23,7 @@ class _LandingPageState extends State<LandingPage> {
       Future(() {
         // Navigator.pushNamedAndRemoveUntil(context, RouteGenerator.home,
         //     ModalRoute.withName(RouteGenerator.home));
-            Navigator.pushReplacementNamed(context, RouteGenerator.home);
+        Navigator.pushReplacementNamed(context, RouteGenerator.home);
       });
     }
   }
