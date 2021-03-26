@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/providers/auth.dart';
 import 'package:risa2/src/providers/histories.dart';
@@ -7,8 +6,6 @@ import 'package:risa2/src/providers/improves.dart';
 import 'package:risa2/src/router/routes.dart';
 import 'package:flutter/services.dart';
 import 'package:risa2/src/screens/landing/landing.dart';
-
-final storage = FlutterSecureStorage();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,9 +23,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AuthModel()),
-        ChangeNotifierProvider(create: (context) => HistoryModel()),
-        ChangeNotifierProvider(create: (context) => ImproveModel())
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => HistoryProvider()),
+        ChangeNotifierProvider(create: (context) => ImproveProvider())
       ],
       child: MaterialApp(
         title: _title,

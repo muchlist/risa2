@@ -67,30 +67,12 @@ class _LoginFormState extends State<LoginForm> {
     super.dispose();
   }
 
-  void _login(BuildContext context) {
-    final authViewModel = Provider.of<AuthModel>(context, listen: false);
-
+  void _login(AuthProvider authViewModel) {
     if (_key.currentState?.validate() ?? false) {
       final username = usernameController.text;
       final password = passwordController.text;
 
       authViewModel.login(username, password);
-
-      if (username == password) {
-        final snackBar = SnackBar(
-          content: Text('Yay! A SnackBar!'),
-          action: SnackBarAction(
-            label: 'Undo',
-            onPressed: () {
-              // Some code to undo the change.
-            },
-          ),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            RouteGenerator.home, ModalRoute.withName(RouteGenerator.home));
-      }
     } else {
       debugPrint("Error :(");
     }
@@ -98,6 +80,24 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    final authViewModel = context.watch<AuthProvider>();
+    context.read<AuthProvider>().addListener(() {
+      if (authViewModel.error != null) {
+        final snackBar = SnackBar(
+          content: Text(authViewModel.error!),
+          duration: Duration(seconds: 3),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        authViewModel.removeError();
+      }
+
+      if (authViewModel.isLoggedIn) {
+        Navigator.of(context).pushNamedAndRemoveUntil(
+            RouteGenerator.home, ModalRoute.withName(RouteGenerator.home));
+        authViewModel.removeLogin();
+      }
+    });
+
     const enabledOutlineInputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
         borderSide: BorderSide(color: Colors.grey, width: 1));
@@ -161,12 +161,15 @@ class _LoginFormState extends State<LoginForm> {
             SizedBox(
               height: 10,
             ),
-            Consumer<AuthModel>(
-                builder: (_, auth, __) => RisaButton(
+            (authViewModel.isLoading)
+                ? CircularProgressIndicator(
+                    backgroundColor: Colors.blue.shade700,
+                  )
+                : RisaButton(
                     title: "login",
                     onPress: () {
-                      _login(context);
-                    }))
+                      _login(authViewModel);
+                    })
           ],
         ));
   }

@@ -6,7 +6,7 @@ import 'package:risa2/src/widgets/history_item_alt.dart';
 class DashboardListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final historyData = Provider.of<HistoryModel>(context);
+    final historyData = Provider.of<HistoryProvider>(context);
     final histories = historyData.historyList;
 
     return ListView.builder(

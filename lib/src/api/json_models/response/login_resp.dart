@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:risa2/src/api/json_models/error_resp.dart';
+
+import 'error_resp.dart';
 
 part 'login_resp.g.dart';
 

@@ -1,15 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:risa2/src/models/improve.dart';
-import 'package:risa2/src/providers/improves.dart';
+import 'package:risa2/src/api/json_models/response/improve_list_resp.dart';
 
 class Corousel extends StatelessWidget {
+  final List<ImproveMinResponseData> improves;
+
+  const Corousel(this.improves);
+
   @override
   Widget build(BuildContext context) {
-    final improveData = Provider.of<ImproveModel>(context);
-    final improves = improveData.improveList;
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0, top: 20),
       child: CarouselSlider(
@@ -41,7 +40,7 @@ class Corousel extends StatelessWidget {
 }
 
 class CorouselItem extends StatelessWidget {
-  final Improve improvePreview;
+  final ImproveMinResponseData improvePreview;
 
   const CorouselItem({required this.improvePreview});
 
@@ -57,35 +56,36 @@ class CorouselItem extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
-            title: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    improvePreview.title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+              title: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      improvePreview.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            subtitle: Row(
-              children: [
-                Expanded(
-                    child: Text(improvePreview.description,
-                        maxLines: 2, overflow: TextOverflow.ellipsis)),
-              ],
-            ),
-            trailing: Container(
-                padding: EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.blueGrey),
-                  shape: BoxShape.circle,
-                ),
-                child: Text(
-                  "${improvePreview.progress}%",
-                  style: TextStyle(fontSize: 10),
-                )),
-          ),
+                ],
+              ),
+              subtitle: Row(
+                children: [
+                  Expanded(
+                      child: Text(improvePreview.description,
+                          maxLines: 2, overflow: TextOverflow.ellipsis)),
+                ],
+              ),
+              trailing: (improvePreview.goal != 0)
+                  ? Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.blueGrey),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        "${improvePreview.goalsAchieved / improvePreview.goal * 100}%",
+                        style: TextStyle(fontSize: 10),
+                      ))
+                  : SizedBox()),
         ),
       ),
     );

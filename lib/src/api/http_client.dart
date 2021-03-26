@@ -13,7 +13,8 @@ class RequestREST {
     connectTimeout: 3000, // 3 second
     receiveTimeout: 5000,
     headers: <String, String>{
-      "Authorization": "Bearer ",
+      "Authorization":
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJicmFuY2giOiJCQU5KQVJNQVNJTiIsImV4cCI6MTYxNjc5OTg5MywiZnJlc2giOnRydWUsImlkZW50aXR5IjoiMTE5MTEyMjcxMiIsIm5hbWUiOiJNVUNITElTIiwicm9sZXMiOlsiSVQiXSwidHlwZSI6MH0.UF50t1dLg28no6TjRmC7mf0s-S8PFqA8w6ImdAEfr5k",
       "Accept": "*/*",
       "Content-Type": "application/json"
     },

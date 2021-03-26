@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/screens/history/history.dart';
+import 'package:risa2/src/screens/history/history_scren_area.dart';
 
-import 'home.dart';
+import 'home_screen_area.dart';
 
 class BottomNavRisa extends StatefulWidget {
   @override
@@ -40,7 +40,7 @@ class _MyStatefulWidgetState extends State<BottomNavRisa> {
             height: MediaQuery.of(context).size.height * 0.9,
             child: Container(
               child: Center(
-                child: Text("AJHAHAHA"),
+                child: Text("TEST"),
               ),
               decoration: BoxDecoration(
                   color: Colors.white,

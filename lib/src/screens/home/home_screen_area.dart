@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'corousel.dart';
-import 'dashboard_grid.dart';
-import 'dashboard_listview.dart';
+import 'corousel_fragment.dart';
+import 'dashboard_grid_fragment.dart';
+import 'dashboard_history_fragment.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -67,34 +67,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-// Membungkus Corousel dengan warna primary sehingga blend dengan AppBar
-class CorouselContainer extends StatelessWidget {
-  const CorouselContainer({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: <Color>[
-              Theme.of(context).primaryColor,
-              Theme.of(context).primaryColor.withOpacity(0)
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        // COROUSEL
-        child: Corousel(),
       ),
     );
   }

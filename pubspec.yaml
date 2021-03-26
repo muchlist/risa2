@@ -30,7 +30,6 @@ dependencies:
   shared_preferences: ^2.0.3
   carousel_slider: ^4.0.0-nullsafety.0
   provider: ^5.0.0
-  flutter_secure_storage: ^4.1.0
   http: any
   json_annotation: any
   json_serializable: any

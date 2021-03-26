@@ -1,5 +1,5 @@
-import 'package:risa2/src/api/json_models/error_resp.dart';
-import 'package:risa2/src/api/json_models/login_resp.dart';
+import '../json_models/response/error_resp.dart';
+import '../json_models/response/login_resp.dart';
 
 import 'json_parsers.dart';
 

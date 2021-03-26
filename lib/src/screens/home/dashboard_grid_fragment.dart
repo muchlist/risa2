@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:risa2/src/models/dashboard.dart';
-import 'package:risa2/src/widgets/dashboard_icon.dart';
+import 'package:risa2/src/widgets/dashboard_icon_widget.dart';
 
 class DashboardGrid extends StatelessWidget {
   final List<Dashboard> dashboardItems = [
