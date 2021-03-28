@@ -43,6 +43,25 @@ class RequestREST {
     }
   }
 
+  // PUT <<<<<<<<<<<
+  Future<T> executePut<T>(JsonParser<T> parser) async {
+    final formData = FormData.fromMap(data);
+    try {
+      final response = await _client.put<String>(endpoint, data: formData);
+      return parser.parseFromJson(response.data ?? "");
+    } on DioError catch (e) {
+      return Future.error(_dioErrorHandler(e));
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
+  // DELETE <<<<<<<<<<<
+  Future<T> executeDelete<T>(JsonParser<T> parser) async {
+    final response = await _client.delete<String>(endpoint);
+    return parser.parseFromJson(response.data ?? "");
+  }
+
   String _dioErrorHandler(DioError e) {
     if (e.type == DioErrorType.connectTimeout ||
         e.type == DioErrorType.receiveTimeout) {
