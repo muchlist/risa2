@@ -12,8 +12,7 @@ ImproveListResponse _$ImproveListResponseFromJson(Map<String, dynamic> json) {
         ? null
         : ErrorResp.fromJson(json['error'] as Map<String, dynamic>),
     (json['data'] as List<dynamic>?)
-            ?.map((e) =>
-                ImproveMinResponseData.fromJson(e as Map<String, dynamic>))
+            ?.map((e) => ImproveMinResponse.fromJson(e as Map<String, dynamic>))
             .toList() ??
         [],
   );
@@ -26,9 +25,8 @@ Map<String, dynamic> _$ImproveListResponseToJson(
       'data': instance.data.map((e) => e.toJson()).toList(),
     };
 
-ImproveMinResponseData _$ImproveMinResponseDataFromJson(
-    Map<String, dynamic> json) {
-  return ImproveMinResponseData(
+ImproveMinResponse _$ImproveMinResponseFromJson(Map<String, dynamic> json) {
+  return ImproveMinResponse(
     json['id'] as String,
     json['created_at'] as int,
     json['updated_at'] as int,
@@ -42,8 +40,7 @@ ImproveMinResponseData _$ImproveMinResponseDataFromJson(
   );
 }
 
-Map<String, dynamic> _$ImproveMinResponseDataToJson(
-        ImproveMinResponseData instance) =>
+Map<String, dynamic> _$ImproveMinResponseToJson(ImproveMinResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
       'created_at': instance.createdAt,

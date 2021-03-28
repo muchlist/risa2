@@ -8,7 +8,7 @@ part 'improve_list_resp.g.dart';
 class ImproveListResponse {
   final ErrorResp? error;
   @JsonKey(defaultValue: [])
-  final List<ImproveMinResponseData> data;
+  final List<ImproveMinResponse> data;
 
   ImproveListResponse(this.error, this.data);
 
@@ -19,7 +19,7 @@ class ImproveListResponse {
 }
 
 @JsonSerializable()
-class ImproveMinResponseData {
+class ImproveMinResponse {
   final String id;
   @JsonKey(name: "created_at")
   final int createdAt;
@@ -36,7 +36,7 @@ class ImproveMinResponseData {
   @JsonKey(name: "complete_status")
   final int completeStatus;
 
-  ImproveMinResponseData(
+  ImproveMinResponse(
       this.id,
       this.createdAt,
       this.updatedAt,
@@ -48,7 +48,7 @@ class ImproveMinResponseData {
       this.isActive,
       this.completeStatus);
 
-  factory ImproveMinResponseData.fromJson(Map<String, dynamic> json) =>
+  factory ImproveMinResponse.fromJson(Map<String, dynamic> json) =>
       _$ImproveMinResponseDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$ImproveMinResponseDataToJson(this);

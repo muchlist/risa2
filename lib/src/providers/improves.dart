@@ -4,8 +4,8 @@ import 'package:risa2/src/api/json_models/response/improve_list_resp.dart';
 import 'package:risa2/src/api/services/improve_service.dart';
 
 class ImproveProvider extends ChangeNotifier {
-  List<ImproveMinResponseData> _improveList = [
-    ImproveMinResponseData(
+  List<ImproveMinResponse> _improveList = [
+    ImproveMinResponse(
         "",
         0,
         0,
@@ -18,7 +18,7 @@ class ImproveProvider extends ChangeNotifier {
         1)
   ];
 
-  List<ImproveMinResponseData> get improveList {
+  List<ImproveMinResponse> get improveList {
     return [..._improveList];
   }
 
