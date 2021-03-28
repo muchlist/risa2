@@ -19,7 +19,7 @@ class CctvService {
 
   Future<CctvDetailResponse> editCctv(String id, CctvEditRequest payload) {
     return RequestREST(endpoint: "/cctv/$id", data: payload.toJson())
-        .executePost<CctvDetailResponse>(CctvParser());
+        .executePut<CctvDetailResponse>(CctvParser());
   }
 
   Future<CctvDetailResponse> getCctv(String id) {

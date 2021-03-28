@@ -17,7 +17,7 @@ class CctvDetailResponse {
   Map<String, dynamic> toJson() => _$CctvDetailResponseToJson(this);
 }
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class CctvDetailResponseData {
   final String id;
   @JsonKey(name: "created_at")
