@@ -23,9 +23,10 @@ class ImproveService {
         .executePost<ImproveDetailResponse>(ImproveParser());
   }
 
-  Future<MessageResponse> editImprove(String id, ImproveEditRequest payload) {
+  Future<ImproveDetailResponse> editImprove(
+      String id, ImproveEditRequest payload) {
     return RequestREST(endpoint: "/improve/$id", data: payload.toJson())
-        .executePost<MessageResponse>(MessageParser());
+        .executePost<ImproveDetailResponse>(ImproveParser());
   }
 
   Future<ImproveDetailResponse> getImprove(String id) {
