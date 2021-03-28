@@ -49,7 +49,7 @@ class ImproveMinResponse {
       this.completeStatus);
 
   factory ImproveMinResponse.fromJson(Map<String, dynamic> json) =>
-      _$ImproveMinResponseDataFromJson(json);
+      _$ImproveMinResponseFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ImproveMinResponseDataToJson(this);
+  Map<String, dynamic> toJson() => _$ImproveMinResponseToJson(this);
 }

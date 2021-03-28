@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:risa2/src/api/json_models/response/improve_list_resp.dart';
 
 class Corousel extends StatelessWidget {
-  final List<ImproveMinResponseData> improves;
+  final List<ImproveMinResponse> improves;
 
   const Corousel(this.improves);
 
@@ -40,7 +40,7 @@ class Corousel extends StatelessWidget {
 }
 
 class CorouselItem extends StatelessWidget {
-  final ImproveMinResponseData improvePreview;
+  final ImproveMinResponse improvePreview;
 
   const CorouselItem({required this.improvePreview});
 
