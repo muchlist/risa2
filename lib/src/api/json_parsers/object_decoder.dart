@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:risa2/src/api/json_parsers/json_parsers.dart';
+import 'json_parsers.dart';
 
 mixin ObjectDecoder<T> on JsonParser<T> {
   Map<String, dynamic> decodeJsonObject(String json) =>

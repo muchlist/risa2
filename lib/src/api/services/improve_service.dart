@@ -1,14 +1,11 @@
-import 'package:risa2/src/api/json_models/request/improve_edit_req.dart';
-import 'package:risa2/src/api/json_models/request/improve_req.dart';
-import 'package:risa2/src/api/json_models/response/improve_list_resp.dart';
-import 'package:risa2/src/api/json_models/response/message_resp.dart';
-import 'package:risa2/src/api/json_parsers/message_parser.dart';
-
 import '../filter_models/improve_filter.dart';
-
 import '../http_client.dart';
+import '../json_models/request/improve_edit_req.dart';
+import '../json_models/request/improve_req.dart';
+import '../json_models/response/improve_list_resp.dart';
 import '../json_models/response/improve_resp.dart';
-import '../json_parsers/improve_parser.dart';
+import '../json_models/response/message_resp.dart';
+import '../json_parsers/json_parsers.dart';
 
 class ImproveService {
   const ImproveService();

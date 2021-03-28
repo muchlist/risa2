@@ -1,8 +1,6 @@
-import 'package:risa2/src/api/json_models/response/improve_list_resp.dart';
-import 'package:risa2/src/api/json_models/response/improve_resp.dart';
-
 import '../json_models/response/error_resp.dart';
-
+import '../json_models/response/improve_list_resp.dart';
+import '../json_models/response/improve_resp.dart';
 import 'json_parsers.dart';
 
 class ImproveParser extends JsonParser<ImproveDetailResponse>

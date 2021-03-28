@@ -1,7 +1,5 @@
-import 'package:risa2/src/api/json_models/response/message_resp.dart';
-
 import '../json_models/response/error_resp.dart';
-
+import '../json_models/response/message_resp.dart';
 import 'json_parsers.dart';
 
 class MessageParser extends JsonParser<MessageResponse>

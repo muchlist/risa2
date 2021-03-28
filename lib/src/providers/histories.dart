@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/models/history_preview.dart';
+import '../models/history_preview.dart';
 
 class HistoryProvider extends ChangeNotifier {
   List<HistoryPreview> historyList = [

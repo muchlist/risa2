@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/api/filter_models/improve_filter.dart';
-import 'package:risa2/src/api/json_models/response/improve_list_resp.dart';
-import 'package:risa2/src/api/services/improve_service.dart';
+import '../api/filter_models/improve_filter.dart';
+import '../api/json_models/response/improve_list_resp.dart';
+import '../api/services/improve_service.dart';
 
 class ImproveProvider extends ChangeNotifier {
   List<ImproveMinResponse> _improveList = [

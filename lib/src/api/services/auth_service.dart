@@ -1,6 +1,5 @@
-import 'package:risa2/src/api/json_models/response/login_resp.dart';
-
 import '../http_client.dart';
+import '../json_models/response/login_resp.dart';
 import '../json_parsers/json_parsers.dart';
 
 class AuthService {

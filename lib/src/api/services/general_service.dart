@@ -1,7 +1,7 @@
 import '../filter_models/general_filter.dart';
 import '../http_client.dart';
 import '../json_models/response/general_list_resp.dart';
-import '../json_parsers/general_parser.dart';
+import '../json_parsers/json_parsers.dart';
 
 class GeneralService {
   const GeneralService();

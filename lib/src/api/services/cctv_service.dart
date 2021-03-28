@@ -1,13 +1,11 @@
-import 'package:risa2/src/api/filter_models/cctv_filter.dart';
-import 'package:risa2/src/api/json_models/request/cctv_edit_req.dart';
-import 'package:risa2/src/api/json_models/request/cctv_req.dart';
-import 'package:risa2/src/api/json_models/response/cctv_list_resp.dart';
-import 'package:risa2/src/api/json_models/response/message_resp.dart';
-import 'package:risa2/src/api/json_parsers/message_parser.dart';
-
+import '../filter_models/cctv_filter.dart';
 import '../http_client.dart';
+import '../json_models/request/cctv_edit_req.dart';
+import '../json_models/request/cctv_req.dart';
+import '../json_models/response/cctv_list_resp.dart';
 import '../json_models/response/cctv_resp.dart';
-import '../json_parsers/cctv_parser.dart';
+import '../json_models/response/message_resp.dart';
+import '../json_parsers/json_parsers.dart';
 
 class CctvService {
   const CctvService();

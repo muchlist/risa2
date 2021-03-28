@@ -1,13 +1,11 @@
-import 'package:risa2/src/api/filter_models/history_filter.dart';
-import 'package:risa2/src/api/json_models/request/history_edit_req.dart';
-import 'package:risa2/src/api/json_models/request/history_req.dart';
-import 'package:risa2/src/api/json_models/response/history_list_resp.dart';
-import 'package:risa2/src/api/json_models/response/message_resp.dart';
-import 'package:risa2/src/api/json_parsers/message_parser.dart';
-
+import '../filter_models/history_filter.dart';
 import '../http_client.dart';
+import '../json_models/request/history_edit_req.dart';
+import '../json_models/request/history_req.dart';
+import '../json_models/response/history_list_resp.dart';
 import '../json_models/response/history_resp.dart';
-import '../json_parsers/history_parser.dart';
+import '../json_models/response/message_resp.dart';
+import '../json_parsers/json_parsers.dart';
 
 class HistoryService {
   const HistoryService();
