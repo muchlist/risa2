@@ -1,6 +1,7 @@
 library json_parser;
 
 export "cctv_parser.dart";
+export "check_parser.dart";
 export "general_parser.dart";
 export "history_parser.dart";
 export "improve_parser.dart";
