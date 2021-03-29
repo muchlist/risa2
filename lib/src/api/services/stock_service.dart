@@ -1,12 +1,11 @@
-import 'package:risa2/src/api/json_models/request/stock_change_req.dart';
-
 import '../filter_models/stock_filter.dart';
 import '../http_client.dart';
+import '../json_models/request/stock_change_req.dart';
 import '../json_models/request/stock_edit_req.dart';
 import '../json_models/request/stock_req.dart';
+import '../json_models/response/message_resp.dart';
 import '../json_models/response/stock_list_resp.dart';
 import '../json_models/response/stock_resp.dart';
-import '../json_models/response/message_resp.dart';
 import '../json_parsers/json_parsers.dart';
 
 class StockService {
