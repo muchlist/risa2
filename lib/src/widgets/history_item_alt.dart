@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/models/history_preview.dart';
+import 'package:risa2/src/api/json_models/response/history_list_resp.dart';
+import 'package:risa2/src/utils/date_unix.dart';
 
 class HistoryListTile extends StatelessWidget {
-  final HistoryPreview history;
+  final HistoryMinResponse history;
 
   const HistoryListTile({Key? key, required this.history}) : super(key: key);
 
@@ -21,14 +22,16 @@ class HistoryListTile extends StatelessWidget {
         title: Padding(
           padding: const EdgeInsets.only(top: 8),
           child: Text(
-            history.title,
+            history.parentName,
             style: TextStyle(fontSize: 18),
           ),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("${history.incidentNote}\n #${history.resolveNote}"),
+            (history.problemResolve.isEmpty)
+                ? Text("📝 ${history.problem}")
+                : Text("📝 ${history.problem} \n💡 ${history.problemResolve}"),
             SizedBox(
               height: 16,
             ),
@@ -41,7 +44,7 @@ class HistoryListTile extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Text(
-                      history.completeStatus,
+                      history.completeStatus.toString(),
                       style: TextStyle(color: Color.fromRGBO(255, 186, 130, 1)),
                     ),
                   ),
@@ -49,11 +52,11 @@ class HistoryListTile extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Text(history.date),
+                Text(DateTransform().unixToDateString(history.dateStart)),
                 SizedBox(
                   width: 10,
                 ),
-                Text(history.author)
+                Text(history.updatedBy)
               ],
             ),
           ],

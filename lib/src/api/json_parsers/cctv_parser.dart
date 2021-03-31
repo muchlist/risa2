@@ -13,7 +13,7 @@ class CctvParser extends JsonParser<CctvDetailResponse>
       final decoded = decodeJsonObject(json);
       return CctvDetailResponse.fromJson(decoded);
     } catch (e) {
-      return CctvDetailResponse(ErrorResp(0, json, "", []), null);
+      return CctvDetailResponse(ErrorResp(0, e.toString(), "", []), null);
     }
   }
 }
@@ -28,7 +28,7 @@ class CctvListParser extends JsonParser<CctvListResponse>
       final decoded = decodeJsonObject(json);
       return CctvListResponse.fromJson(decoded);
     } catch (e) {
-      return CctvListResponse(ErrorResp(0, json, "", []), []);
+      return CctvListResponse(ErrorResp(0, e.toString(), "", []), []);
     }
   }
 }

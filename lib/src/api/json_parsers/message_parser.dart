@@ -12,7 +12,7 @@ class MessageParser extends JsonParser<MessageResponse>
       final decoded = decodeJsonObject(json);
       return MessageResponse.fromJson(decoded);
     } catch (e) {
-      return MessageResponse(ErrorResp(0, json, "", []), null);
+      return MessageResponse(ErrorResp(0, e.toString(), "", []), null);
     }
   }
 }

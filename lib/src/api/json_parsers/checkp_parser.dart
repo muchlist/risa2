@@ -14,7 +14,7 @@ class CheckpParser extends JsonParser<CheckpDetailResponse>
       final decoded = decodeJsonObject(json);
       return CheckpDetailResponse.fromJson(decoded);
     } catch (e) {
-      return CheckpDetailResponse(ErrorResp(0, json, "", []), null);
+      return CheckpDetailResponse(ErrorResp(0, e.toString(), "", []), null);
     }
   }
 }
@@ -29,7 +29,7 @@ class CheckpListParser extends JsonParser<CheckpListResponse>
       final decoded = decodeJsonObject(json);
       return CheckpListResponse.fromJson(decoded);
     } catch (e) {
-      return CheckpListResponse(ErrorResp(0, json, "", []), []);
+      return CheckpListResponse(ErrorResp(0, e.toString(), "", []), []);
     }
   }
 }

@@ -33,8 +33,7 @@ dependencies:
   http: any
   json_annotation: any
   json_serializable: any
-  dartz: ^ 0.10.0-nullsafety.1
-  flutter_phoenix: "^1.0.0"
+  intl: ^0.17.0
 
 
 

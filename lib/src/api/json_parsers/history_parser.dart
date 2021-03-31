@@ -13,7 +13,7 @@ class HistoryParser extends JsonParser<HistoryDetailResponse>
       final decoded = decodeJsonObject(json);
       return HistoryDetailResponse.fromJson(decoded);
     } catch (e) {
-      return HistoryDetailResponse(ErrorResp(0, json, "", []), null);
+      return HistoryDetailResponse(ErrorResp(0, e.toString(), "", []), null);
     }
   }
 }
@@ -28,7 +28,7 @@ class HistoryListParser extends JsonParser<HistoryListResponse>
       final decoded = decodeJsonObject(json);
       return HistoryListResponse.fromJson(decoded);
     } catch (e) {
-      return HistoryListResponse(ErrorResp(0, json, "", []), []);
+      return HistoryListResponse(ErrorResp(0, e.toString(), "", []), []);
     }
   }
 }

@@ -1,14 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:risa2/src/globals.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/json_models/response/login_resp.dart';
 import '../api/services/auth_service.dart';
+import '../const.dart';
 
 class AuthProvider extends ChangeNotifier {
-  String _token = '';
-  String get token => _token;
-
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
@@ -19,53 +16,39 @@ class AuthProvider extends ChangeNotifier {
     _isLoggedIn = false;
   }
 
-  String? _error;
-  String? get error => _error;
-  void removeError() {
-    _error = null;
-  }
-
   LoginRespData? _userData;
   LoginRespData? get userData => _userData;
 
-  void login(String id, String password) async {
-    _error = null;
+  Future<bool> login(String id, String password) {
     _isLoading = true;
     notifyListeners();
 
-    await AuthService().login(id, password).then((response) {
+    return AuthService().login(id, password).then((response) {
       if (response.data != null) {
         _userData = response.data;
         if (_userData?.accessToken != "") {
           _saveDataToPersistent(_userData!.accessToken);
-          _token = _userData!.accessToken;
-          _isLoggedIn = true;
+          _isLoading = false;
+          notifyListeners();
+          return true;
         }
       } else if (response.error != null) {
-        _error = response.error!.message;
+        _isLoading = false;
+        notifyListeners();
+        return Future.error(response.error!.message);
       }
-    }, onError: (exeption) {
-      _error = exeption.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
     });
-
-    _isLoading = false;
-    notifyListeners();
   }
 
   void logout() {
     _saveDataToPersistent("");
-    _token = "";
     notifyListeners();
   }
 
   _saveDataToPersistent(String token) async {
-    await App.localStorage!.setString("token", token);
-    // var prefs = await SharedPreferences.getInstance();
-    // await prefs.setString("token", token);
+    await App.localStorage!.setString(TOKEN_SAVED, token);
   }
-
-  // loadToken() async {
-  //   var prefs = await SharedPreferences.getInstance();
-  //   _token = prefs.getString("token") ?? "";
-  // }
 }

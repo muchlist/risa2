@@ -39,7 +39,7 @@ class HistoryDetailResponseData {
   @JsonKey(name: "problem_resolve")
   final String problemResolve;
   @JsonKey(name: "complete_status")
-  final String completeStatus;
+  final int completeStatus;
   @JsonKey(name: "date_start")
   final int dateStart;
   @JsonKey(name: "date_end")

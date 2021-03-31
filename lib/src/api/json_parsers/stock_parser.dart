@@ -13,7 +13,7 @@ class StockParser extends JsonParser<StockDetailResponse>
       final decoded = decodeJsonObject(json);
       return StockDetailResponse.fromJson(decoded);
     } catch (e) {
-      return StockDetailResponse(ErrorResp(0, json, "", []), null);
+      return StockDetailResponse(ErrorResp(0, e.toString(), "", []), null);
     }
   }
 }
@@ -28,7 +28,7 @@ class StockListParser extends JsonParser<StockListResponse>
       final decoded = decodeJsonObject(json);
       return StockListResponse.fromJson(decoded);
     } catch (e) {
-      return StockListResponse(ErrorResp(0, json, "", []), []);
+      return StockListResponse(ErrorResp(0, e.toString(), "", []), []);
     }
   }
 }

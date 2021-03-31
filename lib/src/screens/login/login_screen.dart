@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/providers/auth.dart';
 import 'package:risa2/src/router/routes.dart';
@@ -50,6 +49,7 @@ class Upper extends StatelessWidget {
   }
 }
 
+// FORM -------------------------------------------------------------
 class LoginForm extends StatefulWidget {
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -73,7 +73,20 @@ class _LoginFormState extends State<LoginForm> {
       final username = usernameController.text;
       final password = passwordController.text;
 
-      authViewModel.login(username, password);
+      authViewModel.login(username, password).then((value) {
+        if (value) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              RouteGenerator.home, ModalRoute.withName(RouteGenerator.home));
+        }
+      }).onError((error, _) {
+        if (error != null) {
+          final snackBar = SnackBar(
+            content: Text(error.toString()),
+            duration: Duration(seconds: 3),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      });
     } else {
       debugPrint("Error :(");
     }
@@ -81,26 +94,7 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final authViewModel = context.watch<AuthProvider>();
-    context.read<AuthProvider>().addListener(() {
-      if (authViewModel.error != null) {
-        final snackBar = SnackBar(
-          content: Text(authViewModel.error!),
-          duration: Duration(seconds: 3),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        authViewModel.removeError();
-      }
-
-      if (authViewModel.isLoggedIn) {
-        authViewModel.removeLogin();
-        Navigator.of(context).pushNamedAndRemoveUntil(
-            RouteGenerator.home, ModalRoute.withName(RouteGenerator.home));
-        // Future.delayed(Duration(seconds: 1)).then((value) {
-        //   Phoenix.rebirth(context);
-        // });
-      }
-    });
+    final authProvider = context.watch<AuthProvider>();
 
     const enabledOutlineInputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
@@ -165,14 +159,14 @@ class _LoginFormState extends State<LoginForm> {
             SizedBox(
               height: 10,
             ),
-            (authViewModel.isLoading)
+            (authProvider.isLoading)
                 ? CircularProgressIndicator(
                     backgroundColor: Colors.blue.shade700,
                   )
                 : RisaButton(
                     title: "login",
                     onPress: () {
-                      _login(authViewModel);
+                      _login(authProvider);
                     })
           ],
         ));

@@ -13,7 +13,7 @@ class ImproveParser extends JsonParser<ImproveDetailResponse>
       final decoded = decodeJsonObject(json);
       return ImproveDetailResponse.fromJson(decoded);
     } catch (e) {
-      return ImproveDetailResponse(ErrorResp(0, json, "", []), null);
+      return ImproveDetailResponse(ErrorResp(0, e.toString(), "", []), null);
     }
   }
 }

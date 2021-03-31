@@ -13,7 +13,7 @@ class LoginParser extends JsonParser<LoginResponse>
       final decoded = decodeJsonObject(json);
       return LoginResponse.fromJson(decoded);
     } catch (e) {
-      return LoginResponse(ErrorResp(0, json, "", []), null);
+      return LoginResponse(ErrorResp(0, e.toString(), "", []), null);
     }
   }
 }

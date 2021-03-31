@@ -12,7 +12,7 @@ class GeneralListParser extends JsonParser<GeneralListResponse>
       final decoded = decodeJsonObject(json);
       return GeneralListResponse.fromJson(decoded);
     } catch (e) {
-      return GeneralListResponse(ErrorResp(0, json, "", []), []);
+      return GeneralListResponse(ErrorResp(0, e.toString(), "", []), []);
     }
   }
 }

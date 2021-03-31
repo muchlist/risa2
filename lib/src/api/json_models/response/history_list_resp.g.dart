@@ -39,7 +39,7 @@ HistoryMinResponse _$HistoryMinResponseFromJson(Map<String, dynamic> json) {
     json['status'] as String,
     json['problem'] as String,
     json['problem_resolve'] as String,
-    json['complete_status'] as String,
+    json['complete_status'] as int,
     json['date_start'] as int,
     json['date_end'] as int,
     (json['tag'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],

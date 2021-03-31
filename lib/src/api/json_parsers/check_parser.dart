@@ -13,7 +13,7 @@ class CheckParser extends JsonParser<CheckDetailResponse>
       final decoded = decodeJsonObject(json);
       return CheckDetailResponse.fromJson(decoded);
     } catch (e) {
-      return CheckDetailResponse(ErrorResp(0, json, "", []), null);
+      return CheckDetailResponse(ErrorResp(0, e.toString(), "", []), null);
     }
   }
 }
@@ -28,7 +28,7 @@ class CheckListParser extends JsonParser<CheckListResponse>
       final decoded = decodeJsonObject(json);
       return CheckListResponse.fromJson(decoded);
     } catch (e) {
-      return CheckListResponse(ErrorResp(0, json, "", []), []);
+      return CheckListResponse(ErrorResp(0, e.toString(), "", []), []);
     }
   }
 }

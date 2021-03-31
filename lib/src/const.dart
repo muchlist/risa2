@@ -1,1 +1,1 @@
-const String tokenSaved = "token";
+const TOKEN_SAVED = "token";

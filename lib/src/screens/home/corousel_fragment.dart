@@ -12,27 +12,17 @@ class CorouselContainer extends StatefulWidget {
 }
 
 class _CorouselContainerState extends State<CorouselContainer> {
-  var _initImprove = false;
-
   @override
   void initState() {
+    context.read<ImproveProvider>().findImprove().onError((error, _) {
+      final snackBar = SnackBar(
+        content: Text(error.toString()),
+        duration: Duration(seconds: 3),
+      );
+      ScaffoldMessenger.of(scaffoldHomeKey.currentContext!)
+          .showSnackBar(snackBar);
+    });
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    if (!_initImprove) {
-      context.read<ImproveProvider>().findImprove().onError((error, _) {
-        final snackBar = SnackBar(
-          content: Text(error.toString()),
-          duration: Duration(seconds: 3),
-        );
-        ScaffoldMessenger.of(scaffoldHomeKey.currentContext!)
-            .showSnackBar(snackBar);
-      });
-      _initImprove = true;
-    }
-    super.didChangeDependencies();
   }
 
   @override

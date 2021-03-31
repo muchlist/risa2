@@ -5,17 +5,8 @@ import '../api/services/improve_service.dart';
 
 class ImproveProvider extends ChangeNotifier {
   List<ImproveMinResponse> _improveList = [
-    // ImproveMinResponse(
-    //     "",
-    //     0,
-    //     0,
-    //     "",
-    //     "Welcome to Risa",
-    //     "Risa adalah porting anti life equations yang dijadikan aplikasi android. Bersembunyilah dari darkseid",
-    //     0,
-    //     0,
-    //     true,
-    //     1)
+    ImproveMinResponse(
+        "", 0, 0, "", "Loading ...", "Loading, please standby!", 0, 0, true, 1)
   ];
 
   List<ImproveMinResponse> get improveList {

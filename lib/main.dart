@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 
 import 'src/globals.dart';
@@ -17,7 +16,7 @@ void main() async {
     statusBarIconBrightness: Brightness.light,
     statusBarColor: Colors.transparent,
   ));
-  runApp(Phoenix(child: MyApp()));
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
