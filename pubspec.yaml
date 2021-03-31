@@ -34,6 +34,8 @@ dependencies:
   json_annotation: any
   json_serializable: any
   dartz: ^ 0.10.0-nullsafety.1
+  flutter_phoenix: "^1.0.0"
+
 
 
 dev_dependencies:

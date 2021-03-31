@@ -22,24 +22,17 @@ class ImproveProvider extends ChangeNotifier {
     return [..._improveList];
   }
 
-  String? _error;
-  String? get error => _error;
-  void removeError() {
-    _error = null;
-  }
-
-  findImprove() async {
-    removeError();
+  Future<void> findImprove() {
     final filter = FilterImporve(branch: "BANJARMASIN", limit: 3);
-    await ImproveService().findImprove(filter).then((response) {
-      if (response.data.length != 0) {
-        _improveList = response.data;
-      } else if (response.error != null) {
-        _error = response.error!.message;
-      }
-    }, onError: (exeption) {
-      _error = exeption.toString();
-    });
-    notifyListeners();
+    return ImproveService().findImprove(filter).then(
+      (response) {
+        if (response.data.length != 0) {
+          _improveList = response.data;
+        } else if (response.error != null) {
+          return Future.error(response.error!.message);
+        }
+        notifyListeners();
+      },
+    );
   }
 }

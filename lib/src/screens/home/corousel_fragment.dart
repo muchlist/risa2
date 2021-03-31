@@ -22,9 +22,14 @@ class _CorouselContainerState extends State<CorouselContainer> {
   @override
   void didChangeDependencies() {
     if (!_initImprove) {
-      final improveProvider = context.read<ImproveProvider>();
-      // ignore: cascade_invocations
-      improveProvider.findImprove();
+      context.read<ImproveProvider>().findImprove().onError((error, _) {
+        final snackBar = SnackBar(
+          content: Text(error.toString()),
+          duration: Duration(seconds: 3),
+        );
+        ScaffoldMessenger.of(scaffoldHomeKey.currentContext!)
+            .showSnackBar(snackBar);
+      });
       _initImprove = true;
     }
     super.didChangeDependencies();
@@ -39,17 +44,17 @@ class _CorouselContainerState extends State<CorouselContainer> {
   @override
   Widget build(BuildContext context) {
     final improveProvider = context.watch<ImproveProvider>();
-    context.read<ImproveProvider>().addListener(() {
-      if (improveProvider.error != null) {
-        final snackBar = SnackBar(
-          content: Text(improveProvider.error ?? ""),
-          duration: Duration(seconds: 3),
-        );
-        ScaffoldMessenger.of(scaffoldHomeKey.currentContext!)
-            .showSnackBar(snackBar);
-        improveProvider.removeError();
-      }
-    });
+    // context.read<ImproveProvider>().addListener(() {
+    //   if (improveProvider.error != null) {
+    // final snackBar = SnackBar(
+    //   content: Text(improveProvider.error ?? ""),
+    //   duration: Duration(seconds: 3),
+    // );
+    // ScaffoldMessenger.of(scaffoldHomeKey.currentContext!)
+    //     .showSnackBar(snackBar);
+    //     improveProvider.removeError();
+    //   }
+    // });
 
     return Center(
         child: (improveProvider.improveList.length != 0)

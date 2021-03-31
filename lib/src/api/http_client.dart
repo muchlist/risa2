@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:risa2/src/globals.dart';
 
 import 'json_parsers/json_parsers.dart';
 
@@ -7,15 +7,14 @@ class RequestREST {
   final String endpoint;
   final Map<String, dynamic> data;
 
-  const RequestREST({required this.endpoint, this.data = const {}});
+  RequestREST({required this.endpoint, this.data = const {}});
 
   static final _client = Dio(BaseOptions(
     baseUrl: "http://10.4.2.21:3500/api/v1/",
     connectTimeout: 3000, // 3 second
     receiveTimeout: 5000,
     headers: <String, String>{
-      "Authorization":
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJicmFuY2giOiJCQU5KQVJNQVNJTiIsImV4cCI6MTYxNzIzNzAwNSwiZnJlc2giOnRydWUsImlkZW50aXR5IjoiMTE5MTEyMjcxMiIsIm5hbWUiOiJNVUNITElTIiwicm9sZXMiOlsiSVQiXSwidHlwZSI6MH0._fhUuwaKT07wbqGVC0h4o-HmIKoip84u8whtep3tRGo",
+      // "Authorization": "Bearer ${App.localStorage!.getString("token") ?? ""}",
       "Accept": "*/*",
       "Content-Type": "application/json"
     },
@@ -28,7 +27,15 @@ class RequestREST {
   // GET <<<<<<<<<<<
   Future<T> executeGet<T>(JsonParser<T> parser) async {
     try {
-      final response = await _client.get<String>(endpoint);
+      final response = await _client.get<String>(
+        endpoint,
+        options: Options(
+          headers: {
+            "Authorization":
+                "Bearer ${App.localStorage!.getString("token") ?? ""}",
+          },
+        ),
+      );
       return parser.parseFromJson(response.data ?? "");
     } on DioError catch (e) {
       return Future.error(_dioErrorHandler(e));
@@ -41,7 +48,16 @@ class RequestREST {
   Future<T> executePost<T>(JsonParser<T> parser) async {
     final formData = FormData.fromMap(data);
     try {
-      final response = await _client.post<String>(endpoint, data: formData);
+      final response = await _client.post<String>(
+        endpoint,
+        data: formData,
+        options: Options(
+          headers: {
+            "Authorization":
+                "Bearer ${App.localStorage!.getString("token") ?? ""}",
+          },
+        ),
+      );
       return parser.parseFromJson(response.data ?? "");
     } on DioError catch (e) {
       return Future.error(_dioErrorHandler(e));
@@ -54,7 +70,16 @@ class RequestREST {
   Future<T> executePut<T>(JsonParser<T> parser) async {
     final formData = FormData.fromMap(data);
     try {
-      final response = await _client.put<String>(endpoint, data: formData);
+      final response = await _client.put<String>(
+        endpoint,
+        data: formData,
+        options: Options(
+          headers: {
+            "Authorization":
+                "Bearer ${App.localStorage!.getString("token") ?? ""}",
+          },
+        ),
+      );
       return parser.parseFromJson(response.data ?? "");
     } on DioError catch (e) {
       return Future.error(_dioErrorHandler(e));
@@ -65,7 +90,15 @@ class RequestREST {
 
   // DELETE <<<<<<<<<<<
   Future<T> executeDelete<T>(JsonParser<T> parser) async {
-    final response = await _client.delete<String>(endpoint);
+    final response = await _client.delete<String>(
+      endpoint,
+      options: Options(
+        headers: {
+          "Authorization":
+              "Bearer ${App.localStorage!.getString("token") ?? ""}",
+        },
+      ),
+    );
     return parser.parseFromJson(response.data ?? "");
   }
 

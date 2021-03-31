@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:risa2/src/globals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/json_models/response/login_resp.dart';
@@ -58,12 +59,13 @@ class AuthProvider extends ChangeNotifier {
   }
 
   _saveDataToPersistent(String token) async {
-    var prefs = await SharedPreferences.getInstance();
-    await prefs.setString("token", token);
+    await App.localStorage!.setString("token", token);
+    // var prefs = await SharedPreferences.getInstance();
+    // await prefs.setString("token", token);
   }
 
-  loadToken() async {
-    var prefs = await SharedPreferences.getInstance();
-    _token = prefs.getString("token") ?? "";
-  }
+  // loadToken() async {
+  //   var prefs = await SharedPreferences.getInstance();
+  //   _token = prefs.getString("token") ?? "";
+  // }
 }

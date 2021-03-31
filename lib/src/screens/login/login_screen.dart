@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/providers/auth.dart';
 import 'package:risa2/src/router/routes.dart';
@@ -92,9 +93,12 @@ class _LoginFormState extends State<LoginForm> {
       }
 
       if (authViewModel.isLoggedIn) {
+        authViewModel.removeLogin();
         Navigator.of(context).pushNamedAndRemoveUntil(
             RouteGenerator.home, ModalRoute.withName(RouteGenerator.home));
-        authViewModel.removeLogin();
+        // Future.delayed(Duration(seconds: 1)).then((value) {
+        //   Phoenix.rebirth(context);
+        // });
       }
     });
 
