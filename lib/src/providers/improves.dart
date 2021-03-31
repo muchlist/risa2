@@ -5,17 +5,17 @@ import '../api/services/improve_service.dart';
 
 class ImproveProvider extends ChangeNotifier {
   List<ImproveMinResponse> _improveList = [
-    ImproveMinResponse(
-        "",
-        0,
-        0,
-        "",
-        "Welcome to Risa",
-        "Risa adalah porting anti life equations yang dijadikan aplikasi android. Bersembunyilah dari darkseid",
-        0,
-        0,
-        true,
-        1)
+    // ImproveMinResponse(
+    //     "",
+    //     0,
+    //     0,
+    //     "",
+    //     "Welcome to Risa",
+    //     "Risa adalah porting anti life equations yang dijadikan aplikasi android. Bersembunyilah dari darkseid",
+    //     0,
+    //     0,
+    //     true,
+    //     1)
   ];
 
   List<ImproveMinResponse> get improveList {
@@ -28,7 +28,7 @@ class ImproveProvider extends ChangeNotifier {
     _error = null;
   }
 
-  void findImprove() async {
+  findImprove() async {
     removeError();
     final filter = FilterImporve(branch: "BANJARMASIN", limit: 3);
     await ImproveService().findImprove(filter).then((response) {

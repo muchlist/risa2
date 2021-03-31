@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'json_parsers/json_parsers.dart';
 
@@ -14,7 +15,7 @@ class RequestREST {
     receiveTimeout: 5000,
     headers: <String, String>{
       "Authorization":
-          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJicmFuY2giOiJCQU5KQVJNQVNJTiIsImV4cCI6MTYxNjc5OTg5MywiZnJlc2giOnRydWUsImlkZW50aXR5IjoiMTE5MTEyMjcxMiIsIm5hbWUiOiJNVUNITElTIiwicm9sZXMiOlsiSVQiXSwidHlwZSI6MH0.UF50t1dLg28no6TjRmC7mf0s-S8PFqA8w6ImdAEfr5k",
+          "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJicmFuY2giOiJCQU5KQVJNQVNJTiIsImV4cCI6MTYxNzIzNzAwNSwiZnJlc2giOnRydWUsImlkZW50aXR5IjoiMTE5MTEyMjcxMiIsIm5hbWUiOiJNVUNITElTIiwicm9sZXMiOlsiSVQiXSwidHlwZSI6MH0._fhUuwaKT07wbqGVC0h4o-HmIKoip84u8whtep3tRGo",
       "Accept": "*/*",
       "Content-Type": "application/json"
     },
@@ -26,8 +27,14 @@ class RequestREST {
 
   // GET <<<<<<<<<<<
   Future<T> executeGet<T>(JsonParser<T> parser) async {
-    final response = await _client.get<String>(endpoint);
-    return parser.parseFromJson(response.data ?? "");
+    try {
+      final response = await _client.get<String>(endpoint);
+      return parser.parseFromJson(response.data ?? "");
+    } on DioError catch (e) {
+      return Future.error(_dioErrorHandler(e));
+    } catch (e) {
+      return Future.error(e);
+    }
   }
 
   // POST <<<<<<<<<<<

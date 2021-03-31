@@ -4,6 +4,8 @@ import 'package:risa2/src/screens/history/history_scren_area.dart';
 
 import 'home_screen_area.dart';
 
+final GlobalKey<ScaffoldState> scaffoldHomeKey = GlobalKey<ScaffoldState>();
+
 class BottomNavRisa extends StatefulWidget {
   @override
   _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
@@ -55,6 +57,7 @@ class _MyStatefulWidgetState extends State<BottomNavRisa> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldHomeKey,
       appBar: AppBar(
         toolbarHeight: 80,
         actions: [

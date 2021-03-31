@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/screens/home/corousel_widget.dart';
+import 'package:risa2/src/screens/home/home_navigation.dart';
 import '../../providers/improves.dart';
 
 class CorouselContainer extends StatefulWidget {
@@ -11,34 +12,47 @@ class CorouselContainer extends StatefulWidget {
 }
 
 class _CorouselContainerState extends State<CorouselContainer> {
+  var _initImprove = false;
+
   @override
   void initState() {
-    final improveProvider = context.read<ImproveProvider>();
-    // ignore: cascade_invocations
-    improveProvider.findImprove();
-
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (!_initImprove) {
+      final improveProvider = context.read<ImproveProvider>();
+      // ignore: cascade_invocations
+      improveProvider.findImprove();
+      _initImprove = true;
+    }
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final improveProvider = context.watch<ImproveProvider>();
-    final improves = improveProvider.improveList;
-    final error = improveProvider.error;
-
     context.read<ImproveProvider>().addListener(() {
-      if (error != null) {
+      if (improveProvider.error != null) {
         final snackBar = SnackBar(
-          content: Text(error),
+          content: Text(improveProvider.error ?? ""),
           duration: Duration(seconds: 3),
         );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        ScaffoldMessenger.of(scaffoldHomeKey.currentContext!)
+            .showSnackBar(snackBar);
         improveProvider.removeError();
       }
     });
 
     return Center(
-        child: (improves.length != 0)
+        child: (improveProvider.improveList.length != 0)
             ? Container(
                 width: double.infinity,
                 decoration: BoxDecoration(
@@ -52,7 +66,7 @@ class _CorouselContainerState extends State<CorouselContainer> {
                   ),
                 ),
                 // COROUSEL
-                child: Corousel(improves),
+                child: Corousel(improveProvider.improveList),
               )
             : SizedBox(
                 height: 20,
