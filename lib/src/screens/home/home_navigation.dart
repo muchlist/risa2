@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:risa2/src/screens/history/history_scren_area.dart';
 
-import 'home_screen_area.dart';
-
-final GlobalKey<ScaffoldState> scaffoldHomeKey = GlobalKey<ScaffoldState>();
+import 'home_screen.dart';
 
 class BottomNavRisa extends StatefulWidget {
   @override
@@ -59,7 +57,6 @@ class _MyStatefulWidgetState extends State<BottomNavRisa> {
     return Scaffold(
       key: scaffoldHomeKey,
       appBar: AppBar(
-        toolbarHeight: 80,
         actions: [
           Icon(
             CupertinoIcons.search,
@@ -107,11 +104,11 @@ class _MyStatefulWidgetState extends State<BottomNavRisa> {
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
-                  color: Colors.white),
+                  color: Colors.black),
               children: <TextSpan>[
                 TextSpan(
                     text: "Welcome to RISA",
-                    style: TextStyle(fontSize: 12, color: Colors.white))
+                    style: TextStyle(fontSize: 12, color: Colors.black))
               ]),
         ),
       ),

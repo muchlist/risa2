@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/providers/histories.dart';
-import 'package:risa2/src/widgets/history_item_alt.dart';
+import 'package:risa2/src/widgets/history_item_widget.dart';
 
 class DashboardListView extends StatefulWidget {
   @override
@@ -27,15 +28,30 @@ class _DashboardListViewState extends State<DashboardListView> {
   Widget build(BuildContext context) {
     final historyProvider = context.watch<HistoryProvider>();
 
-    return ListView.builder(
-      itemCount: historyProvider.historyList.length,
-      itemBuilder: (BuildContext ctx, int index) {
-        return HistoryListTile(
-          history: historyProvider.historyList[index],
-        );
-      },
-      physics: NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-    );
+    if (historyProvider.historyList.length == 0) {
+      return CircularProgressIndicator();
+    } else {
+      return AnimationLimiter(
+        child: ListView.builder(
+          itemCount: historyProvider.historyList.length,
+          itemBuilder: (BuildContext ctx, int index) {
+            return AnimationConfiguration.staggeredList(
+              position: index,
+              duration: const Duration(milliseconds: 500),
+              child: SlideAnimation(
+                verticalOffset: 50.0,
+                child: FadeInAnimation(
+                  child: HistoryListTile(
+                    history: historyProvider.historyList[index],
+                  ),
+                ),
+              ),
+            );
+          },
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+        ),
+      );
+    }
   }
 }

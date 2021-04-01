@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/config/pallatte.dart';
 import 'package:risa2/src/providers/auth.dart';
 import 'package:risa2/src/router/routes.dart';
 import 'package:risa2/src/widgets/button.dart';
@@ -36,14 +37,14 @@ class Upper extends StatelessWidget {
       height: height,
       width: width,
       decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
+          color: Pallete.secondaryBackground,
           borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20),
               bottomRight: Radius.circular(20))),
       child: Center(
           child: const Text(
         "RISA LOGIN",
-        style: TextStyle(color: Colors.white, fontSize: 25),
+        style: TextStyle(color: Colors.black, fontSize: 25),
       )),
     );
   }
@@ -98,11 +99,11 @@ class _LoginFormState extends State<LoginForm> {
 
     const enabledOutlineInputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
-        borderSide: BorderSide(color: Colors.grey, width: 1));
+        borderSide: BorderSide(color: Pallete.green, width: 1));
 
     const focusedOutlineInputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
-        borderSide: BorderSide(color: Color(0xff4643D3), width: 1));
+        borderSide: BorderSide(color: Pallete.green, width: 1));
 
     const errorOutlineInputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),

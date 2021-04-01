@@ -19,11 +19,23 @@ class ImproveProvider extends ChangeNotifier {
       (response) {
         if (response.data.length != 0) {
           _improveList = response.data;
+          notifyListeners();
         } else if (response.error != null) {
+          _improveList = [
+            ImproveMinResponse("", 0, 0, "", "Error ...",
+                response.error!.message, 0, 0, true, 1)
+          ];
+          notifyListeners();
           return Future.error(response.error!.message);
         }
-        notifyListeners();
       },
-    );
+    ).onError((error, _) {
+      _improveList = [
+        ImproveMinResponse(
+            "", 0, 0, "", "Error ...", error.toString(), 0, 0, true, 1)
+      ];
+      notifyListeners();
+      return Future.error(error.toString());
+    });
   }
 }

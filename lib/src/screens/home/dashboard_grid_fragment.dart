@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:risa2/src/config/pallatte.dart';
 import 'package:risa2/src/models/dashboard.dart';
 import 'package:risa2/src/widgets/dashboard_icon_widget.dart';
 
@@ -9,14 +10,15 @@ class DashboardGrid extends StatelessWidget {
     Dashboard("Improvement", CupertinoIcons.rocket),
     Dashboard("Stock", CupertinoIcons.rectangle_on_rectangle_angled),
     Dashboard("Checklist", CupertinoIcons.chevron_down_square,
-        color: Color(0xffBBBAFF)),
-    Dashboard("Export", CupertinoIcons.upload_circle, color: Color(0xffBBBAFF)),
+        color: Pallete.green.withOpacity(0.4)),
+    Dashboard("Export", CupertinoIcons.upload_circle,
+        color: Pallete.green.withOpacity(0.4)),
     Dashboard("Hardware", CupertinoIcons.device_desktop,
-        color: Color(0xffBBBAFF)),
+        color: Pallete.green.withOpacity(0.4)),
     Dashboard("Software", CupertinoIcons.square_stack_3d_up,
-        color: Color(0xffBBBAFF)),
+        color: Pallete.green.withOpacity(0.4)),
     Dashboard("Incident", CupertinoIcons.smallcircle_circle,
-        color: Color(0xffBBBAFF)),
+        color: Pallete.green.withOpacity(0.4)),
   ];
 
   @override

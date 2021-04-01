@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:risa2/src/config/pallatte.dart';
 import 'package:risa2/src/models/dashboard.dart';
 
 class DashboardIcon extends StatelessWidget {
@@ -14,7 +15,7 @@ class DashboardIcon extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {},
-            splashColor: Colors.orange,
+            splashColor: Pallete.secondaryBackground,
             customBorder: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
             ),

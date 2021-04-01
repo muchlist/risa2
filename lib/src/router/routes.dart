@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:risa2/src/screens/home/home_screen.dart';
 import '../screens/home/home_navigation.dart';
 import '../screens/landing/landing.dart';
 import '../screens/login/login_screen.dart';
@@ -17,7 +18,7 @@ class RouteGenerator {
       case login:
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case home:
-        return MaterialPageRoute(builder: (_) => BottomNavRisa());
+        return MaterialPageRoute(builder: (_) => HomeScreen());
       default:
         return MaterialPageRoute(builder: (_) => LoginScreen());
     }

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:risa2/src/api/json_models/response/improve_list_resp.dart';
+import 'package:risa2/src/config/pallatte.dart';
 
 class Corousel extends StatelessWidget {
   final List<ImproveMinResponse> improves;
@@ -48,10 +49,11 @@ class CorouselItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
+        color: Colors.white,
         shadowColor: Colors.white,
         elevation: 5,
         shape: RoundedRectangleBorder(
-            side: BorderSide(color: Colors.white, width: 0.5),
+            side: BorderSide(color: Colors.black.withOpacity(0.2), width: 0.2),
             borderRadius: BorderRadius.circular(10)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -59,11 +61,10 @@ class CorouselItem extends StatelessWidget {
               title: Row(
                 children: [
                   Expanded(
-                    child: Text(
-                      improvePreview.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    child: Text(improvePreview.title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyText1!),
                   ),
                 ],
               ),

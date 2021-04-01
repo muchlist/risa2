@@ -18,7 +18,7 @@ class RisaButton extends StatelessWidget {
         ),
         onPressed: onPress,
         style: ElevatedButton.styleFrom(
-            primary: Theme.of(context).buttonColor,
+            primary: Theme.of(context).accentColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0)),
             padding: EdgeInsets.all(15.0)),

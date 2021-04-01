@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:risa2/src/api/json_models/response/history_list_resp.dart';
 import 'package:risa2/src/utils/date_unix.dart';
+import 'package:risa2/src/utils/enums.dart';
 
 class HistoryListTile extends StatelessWidget {
   final HistoryMinResponse history;
@@ -20,10 +21,10 @@ class HistoryListTile extends StatelessWidget {
       child: ListTile(
         leading: Icon(CupertinoIcons.camera_circle),
         title: Padding(
-          padding: const EdgeInsets.only(top: 8),
+          padding: const EdgeInsets.only(top: 8, bottom: 8),
           child: Text(
             history.parentName,
-            style: TextStyle(fontSize: 18),
+            style: Theme.of(context).textTheme.bodyText1!,
           ),
         ),
         subtitle: Column(
@@ -33,19 +34,25 @@ class HistoryListTile extends StatelessWidget {
                 ? Text("📝 ${history.problem}")
                 : Text("📝 ${history.problem} \n💡 ${history.problemResolve}"),
             SizedBox(
-              height: 16,
+              height: 8,
             ),
             Row(
               children: [
                 Container(
                   decoration: BoxDecoration(
-                      color: Color.fromRGBO(255, 186, 130, 0.15),
+                      color: (history.completeStatus == 4 ||
+                              history.completeStatus == 0)
+                          ? Colors.green.withOpacity(0.5)
+                          : Color.fromRGBO(255, 186, 130, 0.15),
                       borderRadius: BorderRadius.circular(5)),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Text(
-                      history.completeStatus.toString(),
-                      style: TextStyle(color: Color.fromRGBO(255, 186, 130, 1)),
+                      enumStatus.values[history.completeStatus].toShortString(),
+                      style: (history.completeStatus == 4 ||
+                              history.completeStatus == 0)
+                          ? TextStyle(color: Colors.white)
+                          : TextStyle(color: Color.fromRGBO(255, 186, 130, 1)),
                     ),
                   ),
                 ),
@@ -56,8 +63,11 @@ class HistoryListTile extends StatelessWidget {
                 SizedBox(
                   width: 10,
                 ),
-                Text(history.updatedBy)
+                Text(history.updatedBy.toLowerCase())
               ],
+            ),
+            SizedBox(
+              height: 8,
             ),
           ],
         ),

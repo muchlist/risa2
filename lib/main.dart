@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import 'src/config/pallatte.dart';
 import 'src/globals.dart';
 import 'src/providers/auth.dart';
 import 'src/providers/histories.dart';
@@ -11,11 +14,23 @@ import 'src/screens/landing/landing.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // init SharedPrefs
   await App.init();
+
+  // add font licensi
+  LicenseRegistry.addLicense(() async* {
+    final license = await rootBundle.loadString('google_fonts/OFL.txt');
+    yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+  });
+
+  // Set notification bar tot transfarent
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarIconBrightness: Brightness.light,
     statusBarColor: Colors.transparent,
   ));
+
+  // Run App
   runApp(MyApp());
 }
 
@@ -33,10 +48,13 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: _title,
         theme: ThemeData(
-            primaryColor: Color.fromRGBO(70, 67, 211, 1),
-            accentColor: Colors.white,
-            buttonColor: Color.fromRGBO(70, 67, 211, 1),
-            fontFamily: "Cascadia"),
+            appBarTheme: const AppBarTheme(backgroundColor: Pallete.background),
+            scaffoldBackgroundColor: Pallete.background,
+            primaryColor: Colors.grey,
+            accentColor: Pallete.green,
+            iconTheme: const IconThemeData(color: Colors.black),
+            fontFamily: GoogleFonts.montserrat().fontFamily,
+            textTheme: GoogleFonts.montserratTextTheme()),
         onGenerateRoute: RouteGenerator.generateRoute,
         home: LandingPage(),
         debugShowCheckedModeBanner: false,
