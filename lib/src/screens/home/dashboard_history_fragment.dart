@@ -12,6 +12,7 @@ class DashboardListView extends StatefulWidget {
 class _DashboardListViewState extends State<DashboardListView> {
   @override
   void initState() {
+    // Fetch data and handle error HISTORY
     context.read<HistoryProvider>().findHistory().onError((error, _) {
       if (error != null) {
         final snackBar = SnackBar(
@@ -26,6 +27,7 @@ class _DashboardListViewState extends State<DashboardListView> {
 
   @override
   Widget build(BuildContext context) {
+    // Provider
     final historyProvider = context.watch<HistoryProvider>();
 
     if (historyProvider.historyList.length == 0) {

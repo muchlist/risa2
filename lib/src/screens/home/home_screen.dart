@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: DashboardListView(),
                   ),
                   const SizedBox(
-                    height: 300,
+                    height: 150,
                   )
                 ],
               ),
