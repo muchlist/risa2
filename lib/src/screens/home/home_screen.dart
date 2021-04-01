@@ -43,18 +43,18 @@ class _HomeScreenState extends State<HomeScreen> {
       // APPBAR -----------------------------------------------------------
       appBar: AppBar(
         actions: [
-          Icon(
+          const Icon(
             CupertinoIcons.search,
             size: 28,
           ),
-          SizedBox(
+          const SizedBox(
             width: 16,
           ),
-          Icon(
+          const Icon(
             CupertinoIcons.app_badge,
             size: 28,
           ),
-          SizedBox(
+          const SizedBox(
             width: 16,
           ),
           Center(
@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     backgroundColor: Colors.transparent,
                     foregroundColor: Theme.of(context).primaryColor,
                     child: Icon(
-                      CupertinoIcons.person,
+                      CupertinoIcons.person_circle,
                       size: 28,
                     ),
                   ),
@@ -86,12 +86,12 @@ class _HomeScreenState extends State<HomeScreen> {
         title: RichText(
           text: TextSpan(
               text: "Hi, Muchlis\n",
-              style: TextStyle(
+              style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                   color: Colors.black),
               children: <TextSpan>[
-                TextSpan(
+                const TextSpan(
                     text: "Welcome to RISA",
                     style: TextStyle(fontSize: 12, color: Colors.black))
               ]),

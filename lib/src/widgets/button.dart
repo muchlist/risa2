@@ -9,19 +9,19 @@ class RisaButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
       width: double.infinity,
       child: ElevatedButton(
         child: Text(
           title,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         onPressed: onPress,
         style: ElevatedButton.styleFrom(
             primary: Theme.of(context).accentColor,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0)),
-            padding: EdgeInsets.all(15.0)),
+            padding: const EdgeInsets.all(15.0)),
       ),
     );
   }

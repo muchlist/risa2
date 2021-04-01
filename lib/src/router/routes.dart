@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/screens/home/home_screen.dart';
-import '../screens/home/home_navigation.dart';
+import '../screens/home/home_screen.dart';
 import '../screens/landing/landing.dart';
 import '../screens/login/login_screen.dart';
 

@@ -34,7 +34,7 @@ class DashboardIcon extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 2,
           ),
           Flexible(

@@ -36,13 +36,13 @@ class Upper extends StatelessWidget {
     return Container(
       height: height,
       width: width,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           color: Pallete.secondaryBackground,
           borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20),
               bottomRight: Radius.circular(20))),
-      child: Center(
-          child: const Text(
+      child: const Center(
+          child: Text(
         "RISA LOGIN",
         style: TextStyle(color: Colors.black, fontSize: 25),
       )),
@@ -161,9 +161,7 @@ class _LoginFormState extends State<LoginForm> {
               height: 10,
             ),
             (authProvider.isLoading)
-                ? CircularProgressIndicator(
-                    backgroundColor: Colors.blue.shade700,
-                  )
+                ? const CircularProgressIndicator()
                 : RisaButton(
                     title: "login",
                     onPress: () {

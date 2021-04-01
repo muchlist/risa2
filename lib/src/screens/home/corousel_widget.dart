@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:risa2/src/api/json_models/response/improve_list_resp.dart';
-import 'package:risa2/src/config/pallatte.dart';
 
 class Corousel extends StatelessWidget {
   final List<ImproveMinResponse> improves;
@@ -86,7 +85,7 @@ class CorouselItem extends StatelessWidget {
                         "${improvePreview.goalsAchieved / improvePreview.goal * 100}%",
                         style: TextStyle(fontSize: 10),
                       ))
-                  : SizedBox()),
+                  : const SizedBox()),
         ),
       ),
     );

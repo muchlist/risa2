@@ -29,7 +29,7 @@ class _DashboardListViewState extends State<DashboardListView> {
     final historyProvider = context.watch<HistoryProvider>();
 
     if (historyProvider.historyList.length == 0) {
-      return CircularProgressIndicator();
+      return const CircularProgressIndicator();
     } else {
       return AnimationLimiter(
         child: ListView.builder(
@@ -48,7 +48,7 @@ class _DashboardListViewState extends State<DashboardListView> {
               ),
             );
           },
-          physics: NeverScrollableScrollPhysics(),
+          physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
         ),
       );

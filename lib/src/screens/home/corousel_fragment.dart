@@ -36,7 +36,7 @@ class _CorouselContainerState extends State<CorouselContainer> {
                 width: double.infinity,
                 child: Corousel(improveProvider.improveList),
               )
-            : SizedBox(
+            : const SizedBox(
                 height: 20,
               ));
   }

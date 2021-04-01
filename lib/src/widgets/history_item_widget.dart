@@ -33,7 +33,7 @@ class HistoryListTile extends StatelessWidget {
             (history.problemResolve.isEmpty)
                 ? Text("📝 ${history.problem}")
                 : Text("📝 ${history.problem} \n💡 ${history.problemResolve}"),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
             Row(
@@ -56,17 +56,17 @@ class HistoryListTile extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Text(DateTransform().unixToDateString(history.dateStart)),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Text(history.updatedBy.toLowerCase())
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 8,
             ),
           ],
