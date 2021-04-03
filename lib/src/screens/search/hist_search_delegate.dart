@@ -33,7 +33,7 @@ class HistorySearchDelegate extends SearchDelegate {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Center(
-            child: Text(
+            child: const Text(
               "Pencarian harus lebih dari 3 karakter.",
             ),
           )
@@ -53,8 +53,12 @@ class HistorySearchDelegate extends SearchDelegate {
 
     return Consumer<GeneralProvider>(
       builder: (_, data, __) {
-        return (data.isLoading)
-            ? Center(child: CircularProgressIndicator())
+        return (data.generalList.length == 0)
+            ? Center(
+                child: Text(
+                  "$query tidak ditemukan...",
+                ),
+              )
             : ListView.builder(
                 itemCount: data.generalList.length,
                 itemBuilder: (context, index) {

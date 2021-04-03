@@ -29,8 +29,16 @@ class DashboardIcon extends StatelessWidget {
                 width: 60,
                 height: 60,
                 decoration: BoxDecoration(
-                    color: dashboardItem.color,
-                    borderRadius: BorderRadius.circular(25)),
+                  color: dashboardItem.color,
+                  borderRadius: BorderRadius.circular(25),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Pallete.secondaryBackground,
+                        blurRadius: 5,
+                        offset: Offset(0, 4),
+                        spreadRadius: 3)
+                  ],
+                ),
               ),
             ),
           ),

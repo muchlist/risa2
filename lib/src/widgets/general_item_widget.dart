@@ -27,13 +27,13 @@ class GeneralListTile extends StatelessWidget {
                   (data.ip == "0.0.0.0")
                       ? Text.rich(TextSpan(children: [
                           TextSpan(
-                              text: " ${data.category} ",
+                              text: " ${data.category.toLowerCase()} ",
                               style: TextStyle(
                                   backgroundColor: Pallete.secondaryBackground))
                         ]))
                       : Text.rich(TextSpan(children: [
                           TextSpan(
-                              text: " ${data.category} ",
+                              text: " ${data.category.toLowerCase()} ",
                               style: TextStyle(
                                   backgroundColor:
                                       Pallete.secondaryBackground)),
