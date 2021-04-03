@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:risa2/src/config/pallatte.dart';
+import 'package:risa2/src/screens/search/hist_search_delegate.dart';
 import 'corousel_fragment.dart';
 import 'dashboard_grid_fragment.dart';
 import 'dashboard_history_fragment.dart';
@@ -43,9 +44,17 @@ class _HomeScreenState extends State<HomeScreen> {
       // APPBAR -----------------------------------------------------------
       appBar: AppBar(
         actions: [
-          const Icon(
-            CupertinoIcons.search,
-            size: 28,
+          IconButton(
+            icon: Icon(
+              CupertinoIcons.search,
+              size: 28,
+            ),
+            onPressed: () {
+              showSearch(
+                context: context,
+                delegate: HistorySearchDelegate(),
+              );
+            },
           ),
           const SizedBox(
             width: 16,

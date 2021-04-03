@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'src/config/pallatte.dart';
 import 'src/globals.dart';
 import 'src/providers/auth.dart';
+import 'src/providers/generals.dart';
 import 'src/providers/histories.dart';
 import 'src/providers/improves.dart';
 import 'src/router/routes.dart';
@@ -43,7 +44,8 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (context) => AuthProvider()),
         ChangeNotifierProvider(create: (context) => HistoryProvider()),
-        ChangeNotifierProvider(create: (context) => ImproveProvider())
+        ChangeNotifierProvider(create: (context) => ImproveProvider()),
+        ChangeNotifierProvider(create: (context) => GeneralProvider())
       ],
       child: MaterialApp(
         title: _title,

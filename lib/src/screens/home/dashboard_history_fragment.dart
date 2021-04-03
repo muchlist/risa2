@@ -30,12 +30,12 @@ class _DashboardListViewState extends State<DashboardListView> {
     // Provider
     final historyProvider = context.watch<HistoryProvider>();
 
-    if (historyProvider.historyList.length == 0) {
+    if (historyProvider.historyListDashboard.length == 0) {
       return const CircularProgressIndicator();
     } else {
       return AnimationLimiter(
         child: ListView.builder(
-          itemCount: historyProvider.historyList.length,
+          itemCount: historyProvider.historyListDashboard.length,
           itemBuilder: (BuildContext ctx, int index) {
             return AnimationConfiguration.staggeredList(
               position: index,
@@ -44,7 +44,7 @@ class _DashboardListViewState extends State<DashboardListView> {
                 verticalOffset: 50.0,
                 child: FadeInAnimation(
                   child: HistoryListTile(
-                    history: historyProvider.historyList[index],
+                    history: historyProvider.historyListDashboard[index],
                   ),
                 ),
               ),

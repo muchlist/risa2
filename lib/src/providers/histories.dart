@@ -5,7 +5,8 @@ import 'package:risa2/src/api/services/history_service.dart';
 
 class HistoryProvider extends ChangeNotifier {
   List<HistoryMinResponse> _historyList = [];
-  List<HistoryMinResponse> get historyList {
+
+  List<HistoryMinResponse> get historyListDashboard {
     if (_historyList.length > 2) {
       return [..._historyList.sublist(0, 3)];
     }
@@ -16,7 +17,6 @@ class HistoryProvider extends ChangeNotifier {
     final filter = FilterHistory(branch: "BANJARMASIN", limit: 100);
     return HistoryService().findHistory(filter).then(
       (response) {
-        print(response.data.length.toString());
         if (response.data.length != 0) {
           _historyList = response.data;
         } else if (response.error != null) {
