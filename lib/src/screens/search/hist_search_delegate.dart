@@ -78,7 +78,9 @@ class HistorySearchDelegate extends SearchDelegate {
             : ListView.builder(
                 itemCount: data.generalList.length,
                 itemBuilder: (context, index) {
-                  return GeneralListTile(data: data.generalList[index]);
+                  return GeneralListTile(
+                    data: data.generalList[index],
+                  );
                 },
               );
       },

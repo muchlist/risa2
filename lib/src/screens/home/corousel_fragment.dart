@@ -15,14 +15,7 @@ class CorouselContainer extends StatefulWidget {
 class _CorouselContainerState extends State<CorouselContainer> {
   @override
   void initState() {
-    context.read<ImproveProvider>().findImprove().onError((error, _) {
-      final snackBar = SnackBar(
-        content: Text(error.toString()),
-        duration: Duration(seconds: 3),
-      );
-      ScaffoldMessenger.of(scaffoldHomeKey.currentContext!)
-          .showSnackBar(snackBar);
-    });
+    context.read<ImproveProvider>().findImprove();
     super.initState();
   }
 

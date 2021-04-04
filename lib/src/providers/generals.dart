@@ -4,10 +4,22 @@ import '../api/json_models/response/general_list_resp.dart';
 import '../api/services/general_service.dart';
 
 class GeneralProvider extends ChangeNotifier {
+  final GeneralService _generalService;
+
+  GeneralProvider(this._generalService);
+
   // general list cache
   List<GeneralMinResponse> _generalList = [];
+
   List<GeneralMinResponse> get generalList {
     return [..._generalList];
+  }
+
+  List<GeneralMinResponse> generalListFiltered(String search) {
+    final generalCopy = [..._generalList];
+    return generalCopy
+        .where((general) => general.name.contains(search))
+        .toList();
   }
 
   // is search loading
@@ -30,7 +42,7 @@ class GeneralProvider extends ChangeNotifier {
     final filter =
         FilterGeneral(name: search, category: _filterGeneral.category);
 
-    return GeneralService().findGeneral(filter).then(
+    return _generalService.findGeneral(filter).then(
       (response) {
         if (response.error != null) {
           return Future.error(response.error!.message);

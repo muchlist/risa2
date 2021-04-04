@@ -6,7 +6,11 @@ import '../api/services/auth_service.dart';
 import '../const.dart';
 
 class AuthProvider extends ChangeNotifier {
+  final AuthService _authservice;
+  AuthProvider(this._authservice);
+
   bool _isLoggedIn = false;
+
   bool get isLoggedIn => _isLoggedIn;
   void removeLogin() {
     // because builder run many time
@@ -17,7 +21,7 @@ class AuthProvider extends ChangeNotifier {
   LoginRespData? get userData => _userData;
 
   Future<bool> login(String id, String password) {
-    return AuthService().login(id, password).then((response) {
+    return _authservice.login(id, password).then((response) {
       if (response.data != null) {
         _userData = response.data;
         if (_userData?.accessToken != "") {

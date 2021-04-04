@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/api/services/auth_service.dart';
+import 'package:risa2/src/api/services/general_service.dart';
 
 import 'src/config/pallatte.dart';
 import 'src/globals.dart';
@@ -38,14 +40,18 @@ void main() async {
 class MyApp extends StatelessWidget {
   static const String _title = 'RISA';
 
+  final generalService = GeneralService();
+  final authService = AuthService();
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => AuthProvider(authService)),
         ChangeNotifierProvider(create: (context) => HistoryProvider()),
         ChangeNotifierProvider(create: (context) => ImproveProvider()),
-        ChangeNotifierProvider(create: (context) => GeneralProvider())
+        ChangeNotifierProvider(
+            create: (context) => GeneralProvider(generalService))
       ],
       child: MaterialApp(
         title: _title,

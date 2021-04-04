@@ -20,24 +20,20 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   void _startAddIncident(BuildContext context) {
     showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-        ),
-        builder: (bCtx) {
-          return Container(
-            color: Colors.transparent,
-            height: MediaQuery.of(context).size.height * 0.8,
-            child: AddHistoryDialog(),
-          );
-        });
+      isScrollControlled: true,
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      builder: (context) => AddHistoryDialog(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       key: scaffoldHomeKey,
       // APPBAR -----------------------------------------------------------
       appBar: AppBar(
@@ -66,8 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           IconButton(
               icon: Icon(
-                CupertinoIcons.person_circle,
-                size: 40,
+                CupertinoIcons.person_solid,
+                size: 28,
               ),
               onPressed: () {}),
           const SizedBox(
