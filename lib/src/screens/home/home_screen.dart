@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/config/pallatte.dart';
-import 'package:risa2/src/screens/search/hist_search_delegate.dart';
+
+import '../../config/pallatte.dart';
+import '../search/hist_search_delegate.dart';
+import 'add_history_dialog.dart';
 import 'corousel_fragment.dart';
 import 'dashboard_grid_fragment.dart';
 import 'dashboard_history_fragment.dart';
@@ -19,20 +21,16 @@ class _HomeScreenState extends State<HomeScreen> {
   void _startAddIncident(BuildContext context) {
     showModalBottomSheet(
         context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        ),
         builder: (bCtx) {
           return Container(
             color: Colors.transparent,
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: Container(
-              child: Center(
-                child: Text("TEST"),
-              ),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20))),
-            ),
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: AddHistoryDialog(),
           );
         });
   }

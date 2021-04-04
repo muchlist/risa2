@@ -13,6 +13,7 @@ class RequestREST {
     baseUrl: "http://10.4.2.21:3500/api/v1/",
     connectTimeout: 3000, // 3 second
     receiveTimeout: 5000,
+    sendTimeout: 5000,
     headers: <String, String>{
       // "Authorization": "Bearer ${App.localStorage!.getString("token") ?? ""}",
       "Accept": "*/*",
@@ -104,7 +105,8 @@ class RequestREST {
 
   String _dioErrorHandler(DioError e) {
     if (e.type == DioErrorType.connectTimeout ||
-        e.type == DioErrorType.receiveTimeout) {
+        e.type == DioErrorType.receiveTimeout ||
+        e.type == DioErrorType.sendTimeout) {
       return "Connection timeout";
     }
     if (e.message.contains("Connection refused")) {

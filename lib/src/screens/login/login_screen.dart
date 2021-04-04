@@ -60,6 +60,8 @@ class _LoginFormState extends State<LoginForm> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
+  var _isLoading = false;
+
   final _key = GlobalKey<FormState>();
 
   @override
@@ -69,17 +71,23 @@ class _LoginFormState extends State<LoginForm> {
     super.dispose();
   }
 
-  void _login(AuthProvider authViewModel) {
+  void _login() {
+    final authViewModel = context.read<AuthProvider>();
+
     if (_key.currentState?.validate() ?? false) {
+      setLoading(true);
+
       final username = usernameController.text;
       final password = passwordController.text;
 
       authViewModel.login(username, password).then((value) {
+        setLoading(false);
         if (value) {
           Navigator.of(context).pushNamedAndRemoveUntil(
               RouteGenerator.home, ModalRoute.withName(RouteGenerator.home));
         }
       }).onError((error, _) {
+        setLoading(false);
         if (error != null) {
           final snackBar = SnackBar(
             content: Text(error.toString()),
@@ -93,10 +101,14 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
+  void setLoading(bool loading) {
+    setState(() {
+      _isLoading = loading;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final authProvider = context.watch<AuthProvider>();
-
     const enabledOutlineInputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
         borderSide: BorderSide(color: Pallete.green, width: 1));
@@ -160,12 +172,12 @@ class _LoginFormState extends State<LoginForm> {
             SizedBox(
               height: 10,
             ),
-            (authProvider.isLoading)
+            (_isLoading)
                 ? const CircularProgressIndicator()
                 : RisaButton(
                     title: "login",
                     onPress: () {
-                      _login(authProvider);
+                      _login();
                     })
           ],
         ));
