@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/providers/histories.dart';
 import 'package:risa2/src/widgets/history_item_widget.dart';
@@ -10,10 +11,21 @@ class DashboardListView extends StatefulWidget {
 }
 
 class _DashboardListViewState extends State<DashboardListView> {
+  var _isLoading = false;
+
+  void setLoading(bool loading) {
+    setState(() {
+      _isLoading = loading;
+    });
+  }
+
   @override
   void initState() {
-    // Fetch data and handle error HISTORY
-    context.read<HistoryProvider>().findHistory().onError((error, _) {
+    setLoading(true);
+    context.read<HistoryProvider>().findHistory().then((_) {
+      setLoading(false);
+    }).onError((error, _) {
+      setLoading(false);
       if (error != null) {
         final snackBar = SnackBar(
           content: Text(error.toString()),
@@ -30,8 +42,14 @@ class _DashboardListViewState extends State<DashboardListView> {
     // Provider
     final historyProvider = context.watch<HistoryProvider>();
 
-    if (historyProvider.historyListDashboard.length == 0) {
+    if (_isLoading) {
       return const CircularProgressIndicator();
+    } else if (historyProvider.historyListDashboard.length == 0) {
+      return SizedBox(
+          height: 200,
+          width: 200,
+          child:
+              Center(child: Lottie.asset('assets/lottie/629-empty-box.json')));
     } else {
       return AnimationLimiter(
         child: ListView.builder(

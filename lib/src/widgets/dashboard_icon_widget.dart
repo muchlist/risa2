@@ -35,8 +35,8 @@ class DashboardIcon extends StatelessWidget {
                     BoxShadow(
                         color: Pallete.secondaryBackground,
                         blurRadius: 5,
-                        offset: Offset(0, 4),
-                        spreadRadius: 3)
+                        offset: Offset(0, 3),
+                        spreadRadius: 2)
                   ],
                 ),
               ),

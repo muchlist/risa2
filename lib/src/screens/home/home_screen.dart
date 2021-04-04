@@ -57,38 +57,24 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
           const SizedBox(
-            width: 16,
+            width: 8,
           ),
           const Icon(
             CupertinoIcons.app_badge,
             size: 28,
           ),
           const SizedBox(
-            width: 16,
+            width: 8,
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: Container(
-                width: 50,
-                height: 50,
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    foregroundColor: Theme.of(context).primaryColor,
-                    child: Icon(
-                      CupertinoIcons.person_circle,
-                      size: 28,
-                    ),
-                  ),
-                ),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20)),
+          IconButton(
+              icon: Icon(
+                CupertinoIcons.person_circle,
+                size: 40,
               ),
-            ),
-          )
+              onPressed: () {}),
+          const SizedBox(
+            width: 8,
+          ),
         ],
         automaticallyImplyLeading: false,
         elevation: 0,
