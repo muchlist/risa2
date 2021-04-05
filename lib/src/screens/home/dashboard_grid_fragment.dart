@@ -39,7 +39,6 @@ class DashboardGrid extends StatelessWidget {
         shrinkWrap: true,
         itemBuilder: (ctx, i) => GestureDetector(
             onTap: () {
-              print(dashboardItems[i].route);
               final route = dashboardItems[i].route;
               if (route.isNotEmpty) {
                 Navigator.of(context).pushNamed(RouteGenerator.check);

@@ -1,9 +1,11 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../config/pallatte.dart';
 import '../../providers/auth.dart';
 import '../../router/routes.dart';
+import '../../utils/enums.dart';
 import '../../widgets/button.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -61,13 +63,6 @@ class _LoginFormState extends State<LoginForm> {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  var _isLoading = false;
-  void setLoading(bool loading) {
-    setState(() {
-      _isLoading = loading;
-    });
-  }
-
   final _key = GlobalKey<FormState>();
 
   @override
@@ -81,26 +76,24 @@ class _LoginFormState extends State<LoginForm> {
     final authViewModel = context.read<AuthProvider>();
 
     if (_key.currentState?.validate() ?? false) {
-      setLoading(true);
-
       final username = usernameController.text;
       final password = passwordController.text;
 
-      authViewModel.login(username, password).then((value) {
-        setLoading(false);
-        if (value) {
-          Navigator.of(context).pushNamedAndRemoveUntil(
-              RouteGenerator.home, ModalRoute.withName(RouteGenerator.home));
-        }
-      }).onError((error, _) {
-        setLoading(false);
-        if (error != null) {
-          Flushbar(
-            message: error.toString(),
-            duration: Duration(seconds: 5),
-            backgroundColor: Colors.red.withOpacity(0.7),
-          )..show(context);
-        }
+      Future.delayed(Duration.zero, () {
+        authViewModel.login(username, password).then((value) {
+          if (value) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                RouteGenerator.home, ModalRoute.withName(RouteGenerator.home));
+          }
+        }).onError((error, _) {
+          if (error != null) {
+            Flushbar(
+              message: error.toString(),
+              duration: Duration(seconds: 5),
+              backgroundColor: Colors.red.withOpacity(0.7),
+            )..show(context);
+          }
+        });
       });
     } else {
       debugPrint("Error :(");
@@ -172,9 +165,13 @@ class _LoginFormState extends State<LoginForm> {
             SizedBox(
               height: 10,
             ),
-            (_isLoading)
-                ? const CircularProgressIndicator()
-                : RisaButton(title: "login", onPress: _login)
+            Consumer<AuthProvider>(
+              builder: (_, data, __) {
+                return (data.state == ViewState.busy)
+                    ? const CircularProgressIndicator()
+                    : RisaButton(title: "login", onPress: _login);
+              },
+            )
           ],
         ));
   }

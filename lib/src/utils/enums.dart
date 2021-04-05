@@ -5,3 +5,5 @@ extension ParseToString on enumStatus {
     return toString().split('.').last;
   }
 }
+
+enum ViewState { idle, busy }

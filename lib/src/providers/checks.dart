@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/api/json_models/request/check_req.dart';
+
 import '../api/filter_models/check_filter.dart';
+import '../api/json_models/request/check_req.dart';
 import '../api/json_models/response/check_list_resp.dart';
 import '../api/services/check_service.dart';
+import '../utils/enums.dart';
 
 class CheckProvider extends ChangeNotifier {
   final CheckService _checkService;
-
   CheckProvider(this._checkService);
+
+  ViewState _state = ViewState.idle;
+  ViewState get state => _state;
+  void setState(ViewState viewState) {
+    _state = viewState;
+    notifyListeners();
+  }
 
   // check list cache
   List<CheckMinResponse> _checkList = [];
@@ -21,32 +29,47 @@ class CheckProvider extends ChangeNotifier {
     _filterCheck = filter;
   }
 
-  Future<void> findCheck() {
-    return _checkService.findCheck(_filterCheck).then(
-      (response) {
-        if (response.error != null) {
-          return Future.error(response.error!.message);
-        } else {
-          _checkList = response.data;
-        }
-        notifyListeners();
-      },
-    );
+  // * Mendapatkan check
+  Future<void> findCheck() async {
+    setState(ViewState.busy);
+
+    var error = "";
+    try {
+      final response = await _checkService.findCheck(_filterCheck);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        _checkList = response.data;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
   }
 
   // return future true jika add check berhasil
   // memanggil findCheck sehigga tidak perlu notifyListener
-  Future<bool> addCheck(CheckRequest payload) {
-    return _checkService.createCheck(payload).then(
-      (response) {
-        if (response.error != null) {
-          return Future.error(response.error!.message);
-        } else if (response.data != null) {
-          findCheck();
-          return true;
-        }
-        return false;
-      },
-    );
+  Future<bool> addCheck(CheckRequest payload) async {
+    setState(ViewState.busy);
+    var error = "";
+
+    try {
+      final response = await _checkService.createCheck(payload);
+      if (response.error != null) {
+        error = response.error!.message;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+    return true;
   }
 }

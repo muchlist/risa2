@@ -58,8 +58,6 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
   final problemController = TextEditingController();
   final resolveNoteController = TextEditingController();
 
-  var _isLoading = false;
-
   final _addHistoryFormkey = GlobalKey<FormState>();
 
   @override
@@ -67,12 +65,6 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
     problemController.dispose();
     resolveNoteController.dispose();
     super.dispose();
-  }
-
-  void setLoading(bool loading) {
-    setState(() {
-      _isLoading = loading;
-    });
   }
 
   void _addHistory() {
@@ -86,7 +78,6 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
     }
 
     if (_addHistoryFormkey.currentState?.validate() ?? false) {
-      setLoading(true);
       final problemText = problemController.text;
       final resolveText = resolveNoteController.text;
 
@@ -99,26 +90,26 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
           tag: [],
           completeStatus: _selectedStatus.id.index);
 
-      // * CALL Provider -----------------------------------------------------
-      context.read<HistoryProvider>().addHistory(payload).then((value) {
-        setLoading(false);
-        if (value) {
-          Navigator.of(context).pop();
-          Flushbar(
-            message: "Berhasil menambahkan history",
-            duration: Duration(seconds: 3),
-            backgroundColor: Theme.of(context).accentColor.withOpacity(0.7),
-          )..show(context);
-        }
-      }).onError((error, _) {
-        setLoading(false);
-        if (error != null) {
-          Flushbar(
-            message: error.toString(),
-            duration: Duration(seconds: 5),
-            backgroundColor: Colors.red.withOpacity(0.7),
-          )..show(context);
-        }
+      Future.delayed(Duration.zero, () {
+        // * CALL Provider -----------------------------------------------------
+        context.read<HistoryProvider>().addHistory(payload).then((value) {
+          if (value) {
+            Navigator.of(context).pop();
+            Flushbar(
+              message: "Berhasil menambahkan history",
+              duration: Duration(seconds: 3),
+              backgroundColor: Theme.of(context).accentColor.withOpacity(0.7),
+            )..show(context);
+          }
+        }).onError((error, _) {
+          if (error != null) {
+            Flushbar(
+              message: error.toString(),
+              duration: Duration(seconds: 5),
+              backgroundColor: Colors.red.withOpacity(0.7),
+            )..show(context);
+          }
+        });
       });
     } else {
       debugPrint("Error :(");
@@ -359,35 +350,41 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                       const SizedBox(
                         height: 20,
                       ),
+                      Consumer<HistoryProvider>(
+                        builder: (_, data, __) {
+                          return (data.state == ViewState.busy)
+                              // * Button ---------------------------
+                              ? Center(child: const CircularProgressIndicator())
+                              : GestureDetector(
+                                  onTap: _addHistory,
+                                  child: Center(
+                                    child: Container(
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                          color: Theme.of(context).accentColor,
+                                          borderRadius:
+                                              BorderRadius.circular(24)),
+                                      child:
+                                          const Text.rich(TextSpan(children: [
+                                        WidgetSpan(
+                                            child: Icon(
+                                          CupertinoIcons.add,
+                                          size: 15,
+                                          color: Colors.white,
+                                        )),
+                                        TextSpan(
+                                            text: "Tambah Log",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w500))
+                                      ])),
+                                    ),
+                                  ),
+                                );
+                        },
+                      ),
 
-                      // * Button ---------------------------
-                      (_isLoading)
-                          ? Center(child: const CircularProgressIndicator())
-                          : GestureDetector(
-                              onTap: _addHistory,
-                              child: Center(
-                                child: Container(
-                                  padding: const EdgeInsets.all(12),
-                                  decoration: BoxDecoration(
-                                      color: Theme.of(context).accentColor,
-                                      borderRadius: BorderRadius.circular(24)),
-                                  child: const Text.rich(TextSpan(children: [
-                                    WidgetSpan(
-                                        child: Icon(
-                                      CupertinoIcons.add,
-                                      size: 15,
-                                      color: Colors.white,
-                                    )),
-                                    TextSpan(
-                                        text: "Tambah Log",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w500))
-                                  ])),
-                                ),
-                              ),
-                            ),
                       const SizedBox(
                         height: 20,
                       )

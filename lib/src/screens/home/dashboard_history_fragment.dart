@@ -4,6 +4,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/providers/histories.dart';
+import 'package:risa2/src/utils/enums.dart';
 import 'package:risa2/src/widgets/history_item_widget.dart';
 
 class DashboardListView extends StatefulWidget {
@@ -12,28 +13,22 @@ class DashboardListView extends StatefulWidget {
 }
 
 class _DashboardListViewState extends State<DashboardListView> {
-  var _isLoading = false;
-
-  void setLoading(bool loading) {
-    setState(() {
-      _isLoading = loading;
-    });
-  }
-
   @override
   void initState() {
-    setLoading(true);
-    context.read<HistoryProvider>().findHistory().then((_) {
-      setLoading(false);
-    }).onError((error, _) {
-      setLoading(false);
-      if (error != null) {
-        Flushbar(
-          message: error.toString(),
-          duration: Duration(seconds: 5),
-          backgroundColor: Colors.red.withOpacity(0.7),
-        )..show(context);
-      }
+    Future.delayed(Duration.zero, () {
+      context
+          .read<HistoryProvider>()
+          .findHistory()
+          .then((_) {})
+          .onError((error, _) {
+        if (error != null) {
+          Flushbar(
+            message: error.toString(),
+            duration: Duration(seconds: 5),
+            backgroundColor: Colors.red.withOpacity(0.7),
+          )..show(context);
+        }
+      });
     });
     super.initState();
   }
@@ -43,7 +38,7 @@ class _DashboardListViewState extends State<DashboardListView> {
     // Provider
     final historyProvider = context.watch<HistoryProvider>();
 
-    if (_isLoading) {
+    if (historyProvider.state == ViewState.busy) {
       return const CircularProgressIndicator();
     } else if (historyProvider.historyListDashboard.length == 0) {
       return SizedBox(

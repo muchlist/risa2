@@ -14,7 +14,9 @@ class CorouselContainer extends StatefulWidget {
 class _CorouselContainerState extends State<CorouselContainer> {
   @override
   void initState() {
-    context.read<ImproveProvider>().findImprove();
+    Future.delayed(Duration.zero, () {
+      context.read<ImproveProvider>().findImprove();
+    });
     super.initState();
   }
 
