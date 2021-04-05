@@ -184,11 +184,29 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                                   // * Setstate ------------------------------
                                   onSelected: (_) => setState(() {
                                     _selectedCategoryID = e.id;
+
+                                    // mengeset filter berdasarkan pilihan chip
                                     context.read<GeneralProvider>().setFilter(
                                         FilterGeneral(category: e.label));
+                                    // memanggil api untuk mendapatkan general yang terkait
                                     context
                                         .read<GeneralProvider>()
-                                        .findGeneral("");
+                                        .findGeneral("")
+                                        .onError((error, _) {
+                                      if (error != null) {
+                                        setState(() {
+                                          _selectedCategoryID = 0;
+                                        });
+
+                                        Flushbar(
+                                          message:
+                                              "Gagal mendapatkan data perangkat!",
+                                          duration: Duration(seconds: 5),
+                                          backgroundColor:
+                                              Colors.red.withOpacity(0.7),
+                                        )..show(context);
+                                      }
+                                    });
                                   }),
                                 ))
                             .toList(),
