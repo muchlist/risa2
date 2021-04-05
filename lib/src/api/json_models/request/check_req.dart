@@ -4,7 +4,7 @@ part 'check_req.g.dart';
 
 @JsonSerializable()
 class CheckRequest {
-  final String shift;
+  final int shift;
 
   CheckRequest({required this.shift});
 

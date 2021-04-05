@@ -62,6 +62,11 @@ class _LoginFormState extends State<LoginForm> {
   final passwordController = TextEditingController();
 
   var _isLoading = false;
+  void setLoading(bool loading) {
+    setState(() {
+      _isLoading = loading;
+    });
+  }
 
   final _key = GlobalKey<FormState>();
 
@@ -100,12 +105,6 @@ class _LoginFormState extends State<LoginForm> {
     } else {
       debugPrint("Error :(");
     }
-  }
-
-  void setLoading(bool loading) {
-    setState(() {
-      _isLoading = loading;
-    });
   }
 
   @override

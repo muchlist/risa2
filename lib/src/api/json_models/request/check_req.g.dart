@@ -8,7 +8,7 @@ part of 'check_req.dart';
 
 CheckRequest _$CheckRequestFromJson(Map<String, dynamic> json) {
   return CheckRequest(
-    shift: json['shift'] as String,
+    shift: json['shift'] as int,
   );
 }
 

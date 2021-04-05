@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/api/filter_models/history_filter.dart';
-import 'package:risa2/src/api/json_models/request/history_req.dart';
-import 'package:risa2/src/api/json_models/response/history_list_resp.dart';
-import 'package:risa2/src/api/services/history_service.dart';
+import '../api/filter_models/history_filter.dart';
+import '../api/json_models/request/history_req.dart';
+import '../api/json_models/response/history_list_resp.dart';
+import '../api/services/history_service.dart';
 
 class HistoryProvider extends ChangeNotifier {
-  final HistoryService historyService;
-  HistoryProvider(this.historyService);
+  final HistoryService _historyService;
+  HistoryProvider(this._historyService);
 
   List<HistoryMinResponse> _historyList = [];
 
@@ -19,7 +19,7 @@ class HistoryProvider extends ChangeNotifier {
 
   Future<void> findHistory() {
     final filter = FilterHistory(branch: "BANJARMASIN", limit: 100);
-    return HistoryService().findHistory(filter).then(
+    return _historyService.findHistory(filter).then(
       (response) {
         if (response.data.length != 0) {
           _historyList = response.data;
@@ -34,7 +34,7 @@ class HistoryProvider extends ChangeNotifier {
   // return future true jika add history berhasil
   // memanggil findHistory sehigga tidak perlu notifyListener
   Future<bool> addHistory(HistoryRequest payload) {
-    return HistoryService().createHistory(payload).then(
+    return _historyService.createHistory(payload).then(
       (response) {
         if (response.error != null) {
           return Future.error(response.error!.message);

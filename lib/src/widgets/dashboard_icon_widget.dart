@@ -14,7 +14,6 @@ class DashboardIcon extends StatelessWidget {
       child: Column(
         children: [
           InkWell(
-            onTap: () {},
             splashColor: Pallete.secondaryBackground,
             customBorder: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),

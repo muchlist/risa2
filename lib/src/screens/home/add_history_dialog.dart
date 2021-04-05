@@ -130,7 +130,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
     return Container(
       // height: MediaQuery.of(context).size.height * 0.8,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -387,7 +387,10 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                                   ])),
                                 ),
                               ),
-                            )
+                            ),
+                      const SizedBox(
+                        height: 20,
+                      )
                     ],
                   ),
                 ),

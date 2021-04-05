@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/api/services/check_service.dart';
 import 'src/api/services/auth_service.dart';
 import 'src/api/services/general_service.dart';
 import 'src/api/services/history_service.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
 
   final generalService = GeneralService();
   final historyService = HistoryService();
+  final checkService = CheckService();
   final authService = AuthService();
 
   @override

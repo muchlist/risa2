@@ -2,15 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:risa2/src/config/pallatte.dart';
 import 'package:risa2/src/models/dashboard.dart';
+import 'package:risa2/src/router/routes.dart';
 import 'package:risa2/src/widgets/dashboard_icon_widget.dart';
 
 class DashboardGrid extends StatelessWidget {
+  // List Icon and title
   final List<Dashboard> dashboardItems = [
     Dashboard("Dashboard", CupertinoIcons.chart_bar_circle),
     Dashboard("Improvement", CupertinoIcons.rocket),
     Dashboard("Stock", CupertinoIcons.rectangle_on_rectangle_angled),
     Dashboard("Checklist", CupertinoIcons.chevron_down_square,
-        color: Pallete.green.withOpacity(0.4)),
+        color: Pallete.green.withOpacity(0.4), route: RouteGenerator.check),
     Dashboard("Export", CupertinoIcons.upload_circle,
         color: Pallete.green.withOpacity(0.4)),
     Dashboard("Hardware", CupertinoIcons.device_desktop,
@@ -35,7 +37,15 @@ class DashboardGrid extends StatelessWidget {
         physics: NeverScrollableScrollPhysics(),
         itemCount: dashboardItems.length,
         shrinkWrap: true,
-        itemBuilder: (ctx, i) => DashboardIcon(dashboardItems[i]),
+        itemBuilder: (ctx, i) => GestureDetector(
+            onTap: () {
+              print(dashboardItems[i].route);
+              final route = dashboardItems[i].route;
+              if (route.isNotEmpty) {
+                Navigator.of(context).pushNamed(RouteGenerator.check);
+              }
+            },
+            child: DashboardIcon(dashboardItems[i])),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: width ~/ 80,
             childAspectRatio: (width < height) ? 1 / 1.1 : 1 / 1.5,

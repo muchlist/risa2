@@ -10,14 +10,13 @@ import 'corousel_fragment.dart';
 import 'dashboard_grid_fragment.dart';
 import 'dashboard_history_fragment.dart';
 
-final GlobalKey<ScaffoldState> scaffoldHomeKey = GlobalKey<ScaffoldState>();
-
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // * ADD INCIDENT (add_history_dialog)
   void _startAddIncident(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -34,7 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      key: scaffoldHomeKey,
       // APPBAR -----------------------------------------------------------
       appBar: AppBar(
         actions: [
@@ -75,10 +73,10 @@ class _HomeScreenState extends State<HomeScreen> {
         title: RichText(
           text: TextSpan(
               text: "Hi, Muchlis\n",
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
+              style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   fontSize: 20,
-                  color: Colors.black),
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold),
               children: <TextSpan>[
                 const TextSpan(
                     text: "Welcome to RISA",

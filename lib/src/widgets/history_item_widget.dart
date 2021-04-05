@@ -9,6 +9,17 @@ class HistoryListTile extends StatelessWidget {
 
   const HistoryListTile({Key? key, required this.history}) : super(key: key);
 
+  IconData getIcon() {
+    switch (history.category.toLowerCase()) {
+      case "cctv":
+        return CupertinoIcons.camera;
+      case "stock":
+        return CupertinoIcons.rectangle_on_rectangle_angled;
+      default:
+        return CupertinoIcons.smallcircle_circle;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -19,7 +30,7 @@ class HistoryListTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(10)),
       elevation: 0,
       child: ListTile(
-        leading: Icon(CupertinoIcons.camera_circle),
+        leading: Icon(getIcon()),
         title: Padding(
           padding: const EdgeInsets.only(top: 8, bottom: 8),
           child: Text(
@@ -60,9 +71,7 @@ class HistoryListTile extends StatelessWidget {
                   width: 10,
                 ),
                 Text(DateTransform().unixToDateString(history.dateStart)),
-                const SizedBox(
-                  width: 10,
-                ),
+                Spacer(),
                 Text(history.updatedBy.toLowerCase())
               ],
             ),

@@ -5,6 +5,8 @@ class Dashboard {
   final String title;
   final IconData icon;
   final Color color;
+  final String route;
 
-  const Dashboard(this.title, this.icon, {this.color = Pallete.green});
+  const Dashboard(this.title, this.icon,
+      {this.color = Pallete.green, this.route = ""});
 }
