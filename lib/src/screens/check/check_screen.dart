@@ -15,27 +15,24 @@ class CheckScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<CheckProvider>(
-      create: (_) => CheckProvider(checkService),
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          title: const Text("Checklist"),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                CupertinoIcons.square_list,
-                size: 28,
-              ),
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        title: const Text("Checklist"),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(
+              CupertinoIcons.square_list,
+              size: 28,
             ),
-            SizedBox(
-              width: 8,
-            )
-          ],
-        ),
-        body: CheckRecyclerView(),
+          ),
+          SizedBox(
+            width: 8,
+          )
+        ],
       ),
+      body: CheckRecyclerView(),
     );
   }
 }

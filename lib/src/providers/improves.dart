@@ -6,7 +6,11 @@ import '../api/services/improve_service.dart';
 import '../utils/enums.dart';
 
 class ImproveProvider extends ChangeNotifier {
+  final ImproveService _improveService;
+  ImproveProvider(this._improveService);
+
   ViewState _state = ViewState.idle;
+
   ViewState get state => _state;
   void setState(ViewState viewState) {
     _state = viewState;
@@ -29,7 +33,7 @@ class ImproveProvider extends ChangeNotifier {
     var error = "";
 
     try {
-      final response = await ImproveService().findImprove(filter);
+      final response = await _improveService.findImprove(filter);
       if (response.error != null) {
         _improveList = [
           ImproveMinResponse(

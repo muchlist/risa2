@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/api/services/check_service.dart';
+
 import 'src/api/services/auth_service.dart';
+import 'src/api/services/check_service.dart';
 import 'src/api/services/general_service.dart';
 import 'src/api/services/history_service.dart';
-
+import 'src/api/services/improve_service.dart';
 import 'src/config/pallatte.dart';
 import 'src/globals.dart';
 import 'src/providers/auth.dart';
+import 'src/providers/checks.dart';
 import 'src/providers/generals.dart';
 import 'src/providers/histories.dart';
 import 'src/providers/improves.dart';
@@ -46,6 +48,7 @@ class MyApp extends StatelessWidget {
   final historyService = HistoryService();
   final checkService = CheckService();
   final authService = AuthService();
+  final improveService = ImproveService();
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +57,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => AuthProvider(authService)),
         ChangeNotifierProvider(
             create: (context) => HistoryProvider(historyService)),
-        ChangeNotifierProvider(create: (context) => ImproveProvider()),
         ChangeNotifierProvider(
-            create: (context) => GeneralProvider(generalService))
+            create: (context) => ImproveProvider(improveService)),
+        ChangeNotifierProvider(
+            create: (context) => GeneralProvider(generalService)),
+        ChangeNotifierProvider(
+            create: (context) => CheckProvider(checkService)),
       ],
       child: MaterialApp(
         title: _title,
