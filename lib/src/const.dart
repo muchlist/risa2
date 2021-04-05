@@ -1,1 +1,1 @@
-const TOKEN_SAVED = "token";
+const tokenSaved = "token";

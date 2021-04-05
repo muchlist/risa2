@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../../providers/improves.dart';
 import 'corousel_widget.dart';
-import 'home_screen.dart';
 
 class CorouselContainer extends StatefulWidget {
   const CorouselContainer();

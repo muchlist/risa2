@@ -47,11 +47,11 @@ class RequestREST {
 
   // POST <<<<<<<<<<<
   Future<T> executePost<T>(JsonParser<T> parser) async {
-    final formData = FormData.fromMap(data);
+    // final formData = FormData.fromMap(data);
     try {
       final response = await _client.post<String>(
         endpoint,
-        data: formData,
+        data: data,
         options: Options(
           headers: {
             "Authorization":
@@ -69,11 +69,11 @@ class RequestREST {
 
   // PUT <<<<<<<<<<<
   Future<T> executePut<T>(JsonParser<T> parser) async {
-    final formData = FormData.fromMap(data);
+    // final formData = FormData.fromMap(data);
     try {
       final response = await _client.put<String>(
         endpoint,
-        data: formData,
+        data: data,
         options: Options(
           headers: {
             "Authorization":

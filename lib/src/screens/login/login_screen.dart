@@ -1,9 +1,10 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/config/pallatte.dart';
-import 'package:risa2/src/providers/auth.dart';
-import 'package:risa2/src/router/routes.dart';
-import 'package:risa2/src/widgets/button.dart';
+import '../../config/pallatte.dart';
+import '../../providers/auth.dart';
+import '../../router/routes.dart';
+import '../../widgets/button.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -89,11 +90,11 @@ class _LoginFormState extends State<LoginForm> {
       }).onError((error, _) {
         setLoading(false);
         if (error != null) {
-          final snackBar = SnackBar(
-            content: Text(error.toString()),
-            duration: Duration(seconds: 3),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          Flushbar(
+            message: error.toString(),
+            duration: Duration(seconds: 5),
+            backgroundColor: Colors.red.withOpacity(0.7),
+          )..show(context);
         }
       });
     } else {
@@ -174,11 +175,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             (_isLoading)
                 ? const CircularProgressIndicator()
-                : RisaButton(
-                    title: "login",
-                    onPress: () {
-                      _login();
-                    })
+                : RisaButton(title: "login", onPress: _login)
           ],
         ));
   }

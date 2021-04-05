@@ -1,3 +1,4 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:lottie/lottie.dart';
@@ -27,11 +28,11 @@ class _DashboardListViewState extends State<DashboardListView> {
     }).onError((error, _) {
       setLoading(false);
       if (error != null) {
-        final snackBar = SnackBar(
-          content: Text(error.toString()),
-          duration: Duration(seconds: 3),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        Flushbar(
+          message: error.toString(),
+          duration: Duration(seconds: 5),
+          backgroundColor: Colors.red.withOpacity(0.7),
+        )..show(context);
       }
     });
     super.initState();

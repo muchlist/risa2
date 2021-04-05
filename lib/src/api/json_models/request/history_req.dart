@@ -9,7 +9,7 @@ class HistoryRequest {
   final String parentID;
   final String problem;
   @JsonKey(name: "problem_resolve")
-  final int problemResolve;
+  final String problemResolve;
   final String status;
   @JsonKey(defaultValue: [])
   final List<String> tag;

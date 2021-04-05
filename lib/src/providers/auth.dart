@@ -41,6 +41,6 @@ class AuthProvider extends ChangeNotifier {
   }
 
   _saveDataToPersistent(String token) async {
-    await App.localStorage!.setString(TOKEN_SAVED, token);
+    await App.localStorage!.setString(tokenSaved, token);
   }
 }

@@ -11,7 +11,7 @@ HistoryRequest _$HistoryRequestFromJson(Map<String, dynamic> json) {
     id: json['id'] as String,
     parentID: json['parent_id'] as String,
     problem: json['problem'] as String,
-    problemResolve: json['problem_resolve'] as int,
+    problemResolve: json['problem_resolve'] as String,
     status: json['status'] as String,
     tag:
         (json['tag'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],

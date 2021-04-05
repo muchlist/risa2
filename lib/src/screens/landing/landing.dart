@@ -13,7 +13,7 @@ class _LandingPageState extends State<LandingPage> {
   String _token = "";
 
   _loadToken() async {
-    _token = App.localStorage!.getString(TOKEN_SAVED) ?? "";
+    _token = App.localStorage!.getString(tokenSaved) ?? "";
     if (_token == "") {
       await Future(() {
         Navigator.pushReplacementNamed(context, RouteGenerator.login);
