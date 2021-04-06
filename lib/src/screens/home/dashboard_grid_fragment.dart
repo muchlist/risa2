@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:risa2/src/config/pallatte.dart';
 import 'package:risa2/src/models/dashboard.dart';
 import 'package:risa2/src/router/routes.dart';
-import 'package:risa2/src/widgets/dashboard_icon_widget.dart';
+import 'package:risa2/src/shared/dashboard_icon_widget.dart';
+import 'package:risa2/src/shared/ui_helpers.dart';
 
 class DashboardGrid extends StatelessWidget {
   // List Icon and title
@@ -25,8 +26,8 @@ class DashboardGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-    var height = MediaQuery.of(context).size.height;
+    var width = screenWidth(context);
+    var height = screenHeight(context);
 
     return NotificationListener(
       onNotification: (OverscrollIndicatorNotification overScroll) {

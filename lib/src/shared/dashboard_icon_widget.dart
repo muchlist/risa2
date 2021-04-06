@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:risa2/src/config/pallatte.dart';
 import 'package:risa2/src/models/dashboard.dart';
+import 'package:risa2/src/shared/ui_helpers.dart';
 
 class DashboardIcon extends StatelessWidget {
   final Dashboard dashboardItem;
@@ -41,9 +42,7 @@ class DashboardIcon extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(
-            height: 2,
-          ),
+          verticalSpaceTiny,
           Flexible(
             child: Text(
               dashboardItem.title,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:risa2/src/screens/check/check_detail_screen.dart';
 import '../screens/check/check_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/landing/landing.dart';
@@ -9,6 +10,7 @@ class RouteGenerator {
   static const String home = '/home';
   static const String login = '/login';
   static const String check = '/check';
+  static const String checkDetail = '/check-detail';
 
   RouteGenerator._();
 
@@ -22,6 +24,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => HomeScreen());
       case check:
         return MaterialPageRoute(builder: (_) => CheckScreen());
+      case checkDetail:
+        return MaterialPageRoute(builder: (_) => CheckDetailScreen());
       default:
         return MaterialPageRoute(builder: (_) => LoginScreen());
     }

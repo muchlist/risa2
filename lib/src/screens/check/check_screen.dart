@@ -5,10 +5,12 @@ import 'package:lottie/lottie.dart';
 import 'package:risa2/src/api/services/check_service.dart';
 import 'package:risa2/src/providers/checks.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/router/routes.dart';
 import 'package:risa2/src/screens/check/add_check_dialog.dart';
+import 'package:risa2/src/shared/ui_helpers.dart';
 import 'package:risa2/src/utils/enums.dart';
-import 'package:risa2/src/widgets/check_item_widget.dart';
-import 'package:risa2/src/widgets/home_like_button.dart';
+import 'package:risa2/src/shared/check_item_widget.dart';
+import 'package:risa2/src/shared/home_like_button.dart';
 
 class CheckScreen extends StatelessWidget {
   final checkService = CheckService();
@@ -27,9 +29,7 @@ class CheckScreen extends StatelessWidget {
               size: 28,
             ),
           ),
-          SizedBox(
-            width: 8,
-          )
+          horizontalSpaceSmall
         ],
       ),
       body: CheckRecyclerView(),
@@ -84,13 +84,7 @@ class _CheckRecyclerViewState extends State<CheckRecyclerView> {
                 left: 0,
                 right: 0,
                 child: (data.checkList.length != 0)
-                    ? ListView.builder(
-                        padding: EdgeInsets.only(bottom: 60),
-                        itemCount: data.checkList.length,
-                        itemBuilder: (context, index) {
-                          return CheckListTile(data: data.checkList[index]);
-                        },
-                      )
+                    ? buildListView(data)
                     : (data.state == ViewState.idle)
                         ? Center(
                             child: SizedBox(
@@ -121,6 +115,20 @@ class _CheckRecyclerViewState extends State<CheckRecyclerView> {
             )
           ],
         );
+      },
+    );
+  }
+
+  ListView buildListView(CheckProvider data) {
+    return ListView.builder(
+      padding: EdgeInsets.only(bottom: 60),
+      itemCount: data.checkList.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+            onTap: () {
+              Navigator.of(context).pushNamed(RouteGenerator.checkDetail);
+            },
+            child: CheckListTile(data: data.checkList[index]));
       },
     );
   }

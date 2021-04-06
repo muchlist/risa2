@@ -2,6 +2,7 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/shared/ui_helpers.dart';
 
 import '../../api/filter_models/general_filter.dart';
 import '../../api/json_models/request/history_req.dart';
@@ -132,9 +133,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
               thickness: 5,
               color: Pallete.secondaryBackground,
             ),
-            const SizedBox(
-              height: 40,
-            ),
+            verticalSpaceLarge,
             Expanded(
                 child: NotificationListener(
               onNotification: (OverscrollIndicatorNotification overScroll) {
@@ -152,9 +151,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                      const SizedBox(
-                        height: 8,
-                      ),
+                      verticalSpaceSmall,
                       // * Pilih kategori text ------------------------
                       const Text(
                         "Kategori :",
@@ -204,9 +201,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                         spacing: 5,
                       ),
 
-                      const SizedBox(
-                        height: 8,
-                      ),
+                      verticalSpaceSmall,
 
                       // * Pilih perangkat text ------------------------
                       const Text(
@@ -252,9 +247,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                         ),
                       ),
 
-                      const SizedBox(
-                        height: 8,
-                      ),
+                      verticalSpaceSmall,
 
                       // * Problem text ------------------------
                       const Text(
@@ -279,9 +272,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                         controller: problemController,
                       ),
 
-                      const SizedBox(
-                        height: 8,
-                      ),
+                      verticalSpaceSmall,
 
                       // * Status pekerjaan text ------------------------
                       const Text(
@@ -315,9 +306,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                         ),
                       ),
 
-                      const SizedBox(
-                        height: 8,
-                      ),
+                      verticalSpaceSmall,
 
                       // * ResolveNote text ------------------------
 
@@ -347,9 +336,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                               controller: resolveNoteController,
                             )
                           : const SizedBox.shrink(),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      verticalSpaceRegular,
                       Consumer<HistoryProvider>(
                         builder: (_, data, __) {
                           return (data.state == ViewState.busy)
@@ -385,9 +372,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                         },
                       ),
 
-                      const SizedBox(
-                        height: 20,
-                      )
+                      verticalSpaceMedium
                     ],
                   ),
                 ),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:risa2/src/api/json_models/response/general_list_resp.dart';
-import 'package:risa2/src/providers/generals.dart';
-import 'package:risa2/src/widgets/general_item_widget.dart';
 import 'package:provider/provider.dart';
+
+import '../../api/json_models/response/general_list_resp.dart';
+import '../../providers/generals.dart';
+import '../../shared/general_item_widget.dart';
 
 class GeneralSearchDelegate extends SearchDelegate<GeneralMinResponse?> {
   Widget generateListView(List<GeneralMinResponse> generalList) {

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:risa2/src/api/json_models/response/history_list_resp.dart';
+import 'package:risa2/src/shared/ui_helpers.dart';
 import 'package:risa2/src/utils/date_unix.dart';
 import 'package:risa2/src/utils/enums.dart';
 
@@ -44,9 +45,7 @@ class HistoryListTile extends StatelessWidget {
             (history.problemResolve.isEmpty)
                 ? Text("📝 ${history.problem}")
                 : Text("📝 ${history.problem} \n💡 ${history.problemResolve}"),
-            const SizedBox(
-              height: 8,
-            ),
+            verticalSpaceSmall,
             Row(
               children: [
                 Container(
@@ -67,17 +66,13 @@ class HistoryListTile extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  width: 10,
-                ),
+                horizontalSpaceSmall,
                 Text(DateTransform().unixToDateString(history.dateStart)),
                 Spacer(),
                 Text(history.updatedBy.toLowerCase())
               ],
             ),
-            const SizedBox(
-              height: 8,
-            ),
+            verticalSpaceSmall,
           ],
         ),
       ),

@@ -1,12 +1,13 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/shared/ui_helpers.dart';
 
 import '../../config/pallatte.dart';
 import '../../providers/auth.dart';
 import '../../router/routes.dart';
+import '../../shared/button.dart';
 import '../../utils/enums.dart';
-import '../../widgets/button.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -162,9 +163,7 @@ class _LoginFormState extends State<LoginForm> {
                 controller: passwordController,
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            verticalSpaceSmall,
             Consumer<AuthProvider>(
               builder: (_, data, __) {
                 return (data.state == ViewState.busy)

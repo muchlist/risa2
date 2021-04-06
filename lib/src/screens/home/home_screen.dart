@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:risa2/src/shared/ui_helpers.dart';
 
 import '../../config/pallatte.dart';
 import '../search/hist_search_delegate.dart';
@@ -48,25 +49,19 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
-          const SizedBox(
-            width: 8,
-          ),
+          horizontalSpaceSmall,
           const Icon(
             CupertinoIcons.app_badge,
             size: 28,
           ),
-          const SizedBox(
-            width: 8,
-          ),
+          horizontalSpaceSmall,
           IconButton(
               icon: Icon(
                 CupertinoIcons.person_solid,
                 size: 28,
               ),
               onPressed: () {}),
-          const SizedBox(
-            width: 8,
-          ),
+          horizontalSpaceSmall,
         ],
         automaticallyImplyLeading: false,
         elevation: 0,

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/providers/generals.dart';
-import 'package:risa2/src/widgets/general_item_widget.dart';
 import 'package:provider/provider.dart';
+
+import '../../providers/generals.dart';
+import '../../shared/general_item_widget.dart';
 
 class HistorySearchDelegate extends SearchDelegate {
   @override

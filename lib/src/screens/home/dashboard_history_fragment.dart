@@ -5,7 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/providers/histories.dart';
 import 'package:risa2/src/utils/enums.dart';
-import 'package:risa2/src/widgets/history_item_widget.dart';
+import 'package:risa2/src/shared/history_item_widget.dart';
 
 class DashboardListView extends StatefulWidget {
   @override

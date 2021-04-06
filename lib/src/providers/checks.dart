@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:risa2/src/api/json_models/response/check_resp.dart';
 
 import '../api/filter_models/check_filter.dart';
 import '../api/json_models/request/check_req.dart';
@@ -10,6 +11,10 @@ class CheckProvider extends ChangeNotifier {
   final CheckService _checkService;
   CheckProvider(this._checkService);
 
+  // =======================================================
+  // List Check
+
+  // * state
   ViewState _state = ViewState.idle;
   ViewState get state => _state;
   void setState(ViewState viewState) {
@@ -70,6 +75,52 @@ class CheckProvider extends ChangeNotifier {
     if (error.isNotEmpty) {
       return Future.error(error);
     }
+    await findCheck();
     return true;
+  }
+
+  // ========================================================
+  // detail check
+
+  // * detail state
+  ViewState _detailState = ViewState.idle;
+  ViewState get detailState => _state;
+  void setDetailState(ViewState viewState) {
+    _detailState = viewState;
+    notifyListeners();
+  }
+
+  String _checkIDSaved = "";
+  void setCheckID(String checkID) {
+    _checkIDSaved = checkID;
+  }
+
+  // check detail cache
+  CheckDetailResponseData? _checkDetail;
+  CheckDetailResponseData? get checkDetail {
+    return _checkDetail;
+  }
+
+  // get detail check
+  // * Mendapatkan check
+  Future<void> getDetail() async {
+    setDetailState(ViewState.busy);
+
+    var error = "";
+    try {
+      final response = await _checkService.getCheck(_checkIDSaved);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        _checkDetail = response.data;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
   }
 }

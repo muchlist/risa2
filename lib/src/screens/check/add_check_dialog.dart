@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/api/json_models/request/check_req.dart';
 import 'package:risa2/src/providers/checks.dart';
+import 'package:risa2/src/shared/ui_helpers.dart';
 
 import '../../config/pallatte.dart';
 
@@ -75,8 +76,8 @@ class _AddCheckDialogState extends State<AddCheckDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+    final height = screenHeight(context);
+    var isPortrait = screenIsPortrait(context);
 
     return Container(
       height: (isPortrait) ? height * 0.35 : height,
