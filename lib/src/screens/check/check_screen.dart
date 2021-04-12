@@ -1,16 +1,18 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:risa2/src/api/services/check_service.dart';
 import 'package:risa2/src/providers/checks.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/router/routes.dart';
 import 'package:risa2/src/screens/check/add_check_dialog.dart';
+import 'package:risa2/src/shared/empty_box.dart';
 import 'package:risa2/src/shared/ui_helpers.dart';
 import 'package:risa2/src/utils/enums.dart';
 import 'package:risa2/src/shared/check_item_widget.dart';
 import 'package:risa2/src/shared/home_like_button.dart';
+
+var refreshKeyCheckSreen = GlobalKey<RefreshIndicatorState>();
 
 class CheckScreen extends StatelessWidget {
   final checkService = CheckService();
@@ -20,7 +22,7 @@ class CheckScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Checklist"),
+        title: const Text("Pengecekan shift"),
         actions: [
           IconButton(
             onPressed: () {},
@@ -56,9 +58,8 @@ class _CheckRecyclerViewState extends State<CheckRecyclerView> {
     );
   }
 
-  @override
-  void initState() {
-    Future.delayed(Duration.zero, () {
+  Future<dynamic> _loadCheck() {
+    return Future.delayed(Duration.zero, () {
       context.read<CheckProvider>().findCheck().onError((error, _) {
         Flushbar(
           message: error.toString(),
@@ -67,6 +68,11 @@ class _CheckRecyclerViewState extends State<CheckRecyclerView> {
         )..show(context);
       });
     });
+  }
+
+  @override
+  void initState() {
+    _loadCheck();
 
     super.initState();
   }
@@ -86,12 +92,7 @@ class _CheckRecyclerViewState extends State<CheckRecyclerView> {
                 child: (data.checkList.length != 0)
                     ? buildListView(data)
                     : (data.state == ViewState.idle)
-                        ? Center(
-                            child: SizedBox(
-                                width: 200,
-                                height: 200,
-                                child: Lottie.asset(
-                                    'assets/lottie/629-empty-box.json')))
+                        ? EmptyBox(loadTap: _loadCheck)
                         : Center()),
             (data.state == ViewState.busy)
                 ? Center(child: CircularProgressIndicator())
@@ -119,17 +120,22 @@ class _CheckRecyclerViewState extends State<CheckRecyclerView> {
     );
   }
 
-  ListView buildListView(CheckProvider data) {
-    return ListView.builder(
-      padding: EdgeInsets.only(bottom: 60),
-      itemCount: data.checkList.length,
-      itemBuilder: (context, index) {
-        return GestureDetector(
-            onTap: () {
-              Navigator.of(context).pushNamed(RouteGenerator.checkDetail);
-            },
-            child: CheckListTile(data: data.checkList[index]));
-      },
+  Widget buildListView(CheckProvider data) {
+    return RefreshIndicator(
+      key: refreshKeyCheckSreen,
+      onRefresh: _loadCheck,
+      child: ListView.builder(
+        padding: EdgeInsets.only(bottom: 60),
+        itemCount: data.checkList.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+              onTap: () {
+                data.setCheckID(data.checkList[index].id);
+                Navigator.of(context).pushNamed(RouteGenerator.checkDetail);
+              },
+              child: CheckListTile(data: data.checkList[index]));
+        },
+      ),
     );
   }
 }

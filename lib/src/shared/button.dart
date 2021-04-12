@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 class RisaButton extends StatelessWidget {
   final String title;
   final GestureTapCallback onPress;
+  final bool disabled;
 
-  RisaButton({required this.title, required this.onPress});
+  RisaButton(
+      {required this.title, required this.onPress, this.disabled = false});
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +18,12 @@ class RisaButton extends StatelessWidget {
           title,
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
-        onPressed: onPress,
+        onPressed: !disabled ? onPress : null,
         style: ElevatedButton.styleFrom(
-            primary: Theme.of(context).accentColor,
+            primary: !disabled ? Theme.of(context).accentColor : Colors.grey,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0)),
-            padding: const EdgeInsets.all(15.0)),
+            padding: const EdgeInsets.all(10.0)),
       ),
     );
   }

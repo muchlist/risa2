@@ -1,9 +1,9 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/providers/histories.dart';
+import 'package:risa2/src/shared/empty_box.dart';
 import 'package:risa2/src/utils/enums.dart';
 import 'package:risa2/src/shared/history_item_widget.dart';
 
@@ -15,7 +15,12 @@ class DashboardListView extends StatefulWidget {
 class _DashboardListViewState extends State<DashboardListView> {
   @override
   void initState() {
-    Future.delayed(Duration.zero, () {
+    _loadHistory();
+    super.initState();
+  }
+
+  Future<dynamic> _loadHistory() {
+    return Future.delayed(Duration.zero, () {
       context
           .read<HistoryProvider>()
           .findHistory()
@@ -30,7 +35,6 @@ class _DashboardListViewState extends State<DashboardListView> {
         }
       });
     });
-    super.initState();
   }
 
   @override
@@ -44,8 +48,9 @@ class _DashboardListViewState extends State<DashboardListView> {
       return SizedBox(
           height: 200,
           width: 200,
-          child:
-              Center(child: Lottie.asset('assets/lottie/629-empty-box.json')));
+          child: EmptyBox(
+            loadTap: _loadHistory,
+          ));
     } else {
       return AnimationLimiter(
         child: ListView.builder(

@@ -14,7 +14,7 @@ class CheckListTile extends StatelessWidget {
         child: ListTile(
       leading: (data.isFinish)
           ? Icon(CupertinoIcons.check_mark_circled)
-          : Icon(CupertinoIcons.hare),
+          : Icon(CupertinoIcons.timer_fill),
       title: Text(data.createdBy),
       subtitle: Text(DateTransform().unixToDateString(data.updatedAt)),
       trailing: Text("Shift ${data.shift}"),
