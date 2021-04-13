@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:risa2/src/utils/enums.dart';
 import '../api/filter_models/general_filter.dart';
@@ -20,11 +22,11 @@ class GeneralProvider extends ChangeNotifier {
   List<GeneralMinResponse> _generalList = [];
 
   List<GeneralMinResponse> get generalList {
-    return [..._generalList];
+    return UnmodifiableListView(_generalList);
   }
 
   List<GeneralMinResponse> generalListFiltered(String search) {
-    final generalCopy = [..._generalList];
+    final generalCopy = UnmodifiableListView(_generalList);
     return generalCopy
         .where((general) => general.name.contains(search))
         .toList();

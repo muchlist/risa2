@@ -20,13 +20,6 @@ class ItemChoice {
   ItemChoice(this.id, this.label);
 }
 
-class CompleteStatusHistory {
-  final enumStatus id;
-  final String title;
-
-  CompleteStatusHistory(this.id, this.title);
-}
-
 class AddHistoryDialog extends StatefulWidget {
   const AddHistoryDialog({
     Key? key,
@@ -43,30 +36,19 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
     ItemChoice(2, 'PC'),
   ];
 
-  // pilihan dropdown button status
-  final listCompleteStatus = <CompleteStatusHistory>[
-    CompleteStatusHistory(enumStatus.progress, "Progress"),
-    CompleteStatusHistory(enumStatus.pending, "Pending"),
-    CompleteStatusHistory(enumStatus.complete, "Complete"),
-  ];
-
+  // Default value
   var _selectedCategoryID = 0;
   var _selectedUnitID = "";
   var _selectedUnitName = "Pilih Perangkat"; // untuk tampilan saja
-  var _selectedStatus =
-      CompleteStatusHistory(enumStatus.progress, "Pilih Progress");
+  var _selectedSlider = 1.0;
+  var _selectedLabel = "Progress";
 
+  // Text controller
   final problemController = TextEditingController();
   final resolveNoteController = TextEditingController();
 
+  // Form key
   final _addHistoryFormkey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    problemController.dispose();
-    resolveNoteController.dispose();
-    super.dispose();
-  }
 
   void _addHistory() {
     if (_selectedUnitID.isEmpty) {
@@ -89,7 +71,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
           problemResolve: resolveText,
           status: "None",
           tag: [],
-          completeStatus: _selectedStatus.id.index);
+          completeStatus: _selectedSlider.toInt());
 
       Future.delayed(Duration.zero, () {
         // * CALL Provider -----------------------------------------------------
@@ -115,6 +97,13 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
     } else {
       debugPrint("Error :(");
     }
+  }
+
+  @override
+  void dispose() {
+    problemController.dispose();
+    resolveNoteController.dispose();
+    super.dispose();
   }
 
   @override
@@ -275,49 +264,38 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                       verticalSpaceSmall,
 
                       // * Status pekerjaan text ------------------------
-                      const Text(
-                        "Status pekerjaan",
+                      Text(
+                        "Status pekerjaan ($_selectedLabel)",
                         style: TextStyle(fontSize: 16),
                       ),
-
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        height: 50,
-                        width: double.infinity,
-                        alignment: Alignment.centerLeft,
-                        decoration:
-                            BoxDecoration(color: Pallete.secondaryBackground),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<CompleteStatusHistory>(
-                            isExpanded: true,
-                            hint: Text(_selectedStatus.title),
-                            items: listCompleteStatus.map((status) {
-                              return DropdownMenuItem<CompleteStatusHistory>(
-                                value: status,
-                                child: Text(status.title),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedStatus = value!;
-                              });
-                            },
-                          ),
-                        ),
+                      Slider(
+                        min: 1,
+                        max: 4,
+                        divisions: 3,
+                        value: _selectedSlider,
+                        label: _selectedLabel,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedSlider = value;
+                            _selectedLabel = context
+                                .read<HistoryProvider>()
+                                .getLabelStatus(_selectedSlider);
+                          });
+                        },
                       ),
 
                       verticalSpaceSmall,
 
                       // * ResolveNote text ------------------------
 
-                      (_selectedStatus.id == enumStatus.complete)
+                      (_selectedSlider == 4.0)
                           ? const Text(
                               "Resolve Note",
                               style: TextStyle(fontSize: 16),
                             )
                           : const SizedBox.shrink(),
 
-                      (_selectedStatus.id == enumStatus.complete)
+                      (_selectedSlider == 4.0)
                           ? TextFormField(
                               textInputAction: TextInputAction.newline,
                               maxLines: 3,
@@ -328,7 +306,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                                   border: InputBorder.none),
                               validator: (text) {
                                 if ((text == null || text.isEmpty) &&
-                                    _selectedStatus.id == enumStatus.complete) {
+                                    _selectedSlider == 4.0) {
                                   return 'resolve note tidak boleh kosong';
                                 }
                                 return null;

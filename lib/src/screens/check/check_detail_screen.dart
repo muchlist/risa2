@@ -2,25 +2,77 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/api/json_models/response/check_resp.dart';
-import 'package:risa2/src/config/pallatte.dart';
-import 'package:risa2/src/providers/checks.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
-import 'package:risa2/src/utils/date_unix.dart';
-import 'package:risa2/src/utils/enums.dart';
+import '../../api/json_models/response/check_resp.dart';
+import '../../config/pallatte.dart';
+import '../../providers/checks.dart';
+import '../../shared/ui_helpers.dart';
+import '../../utils/date_unix.dart';
+import '../../utils/enums.dart';
 
 import 'check_detail_expanse.dart';
 
 class CheckDetailScreen extends StatelessWidget {
+  // Memunculkan dialog
+  Future<bool?> _getConfirm(BuildContext context) {
+    return showDialog<bool?>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Konfirmasi"),
+            content: const Text(
+                "Apakah kamu ingin mengakhiri pengecekan pada shift ini?\nDokumen tidak bisa dirubah lagi!"),
+            actions: <Widget>[
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).accentColor),
+                  child: const Text("Tidak"),
+                  onPressed: () => Navigator.of(context).pop(false)),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text("Ya"))
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: const Text("Detail pengecekan shift"),
-      ),
-      body: CheckDetailBody(),
-    );
+        appBar: AppBar(
+          elevation: 0,
+          title: const Text("Detail pengecekan shift"),
+        ),
+        body: CheckDetailBody(),
+        floatingActionButton: Consumer<CheckProvider>(
+          builder: (_, data, __) {
+            if (data.checkDetail?.isFinish ?? false) {
+              return Center();
+            } else {
+              return FloatingActionButton.extended(
+                label: Text("Selesai shift"),
+                icon: Icon(CupertinoIcons.checkmark_alt),
+                onPressed: () async {
+                  var isFinish = await _getConfirm(context);
+                  if (isFinish != null && isFinish) {
+                    await context
+                        .read<CheckProvider>()
+                        .completeCheck()
+                        .then((value) {
+                      if (value) {
+                        Flushbar(
+                          message: "Cek selesai",
+                          duration: Duration(seconds: 5),
+                          backgroundColor: Pallete.green.withOpacity(0.7),
+                        )..show(context);
+                      }
+                    });
+                  }
+                },
+              );
+            }
+          },
+        ));
   }
 }
 
@@ -112,7 +164,7 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -132,29 +184,77 @@ Widget buildListView(CheckDetailResponseData data) {
         var checkItem = data.checkItems[index];
 
         return Card(
-          child: ExpansionTile(
-            // leading: checkItem.imagePath != ""
-            //     ? Image.network(checkItem.imagePath)
-            //     : null,
-            title: Text(checkItem.name),
-            subtitle: (checkItem.checkedAt != 0)
-                ? Text(
-                    "(${DateTransform().unixToDateString(checkItem.checkedAt)}) - ${checkItem.checkedNote}",
+            child: !data.isFinish
+                ? ExpansionTileCheck(
+                    checkItem: checkItem,
+                    parentID: data.id,
                   )
-                : null,
-            trailing: (checkItem.completeStatus == 4)
-                ? Icon(CupertinoIcons.check_mark_circled)
-                : Icon(CupertinoIcons.square),
-            expandedAlignment: Alignment.topLeft,
-            key: ValueKey(checkItem.id),
-            children: [
-              verticalSpaceSmall,
-              ExpansionChild(
-                parentID: data.id,
-                checkItem: checkItem,
-              )
-            ],
-          ),
-        );
+                : ListTileCheck(checkItem: checkItem));
       });
+}
+
+class ListTileCheck extends StatelessWidget {
+  const ListTileCheck({
+    Key? key,
+    required this.checkItem,
+  }) : super(key: key);
+
+  final CheckItem checkItem;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.all(8),
+      leading:
+          checkItem.imagePath != "" ? Image.network(checkItem.imagePath) : null,
+      title: Text(checkItem.name),
+      subtitle: (checkItem.checkedAt != 0)
+          ? Text(
+              "(${DateTransform().unixToDateString(checkItem.checkedAt)}) - ${checkItem.checkedNote}",
+            )
+          : null,
+      trailing: (checkItem.completeStatus == 4)
+          ? Icon(CupertinoIcons.check_mark_circled)
+          : Icon(CupertinoIcons.square),
+      key: ValueKey(checkItem.id),
+    );
+  }
+}
+
+// Tile yqang dapat di expansion
+class ExpansionTileCheck extends StatelessWidget {
+  const ExpansionTileCheck({
+    Key? key,
+    required this.checkItem,
+    required this.parentID,
+  }) : super(key: key);
+
+  final CheckItem checkItem;
+  final String parentID;
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      leading:
+          checkItem.imagePath != "" ? Image.network(checkItem.imagePath) : null,
+      title: Text(checkItem.name),
+      subtitle: (checkItem.checkedAt != 0)
+          ? Text(
+              "(${DateTransform().unixToDateString(checkItem.checkedAt)}) - ${checkItem.checkedNote}",
+            )
+          : null,
+      trailing: (checkItem.checkedAt != 0)
+          ? Icon(CupertinoIcons.check_mark_circled)
+          : Icon(CupertinoIcons.square),
+      expandedAlignment: Alignment.topLeft,
+      key: ValueKey(checkItem.id),
+      children: [
+        verticalSpaceSmall,
+        ExpansionChild(
+          parentID: parentID,
+          checkItem: checkItem,
+        )
+      ],
+    );
+  }
 }

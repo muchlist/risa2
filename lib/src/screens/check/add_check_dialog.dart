@@ -2,11 +2,11 @@ import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/api/json_models/request/check_req.dart';
-import 'package:risa2/src/providers/checks.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
 
+import '../../api/json_models/request/check_req.dart';
 import '../../config/pallatte.dart';
+import '../../providers/checks.dart';
+import '../../shared/ui_helpers.dart';
 
 class ItemChoice {
   final int id;

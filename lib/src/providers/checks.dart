@@ -1,4 +1,7 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
+import 'package:risa2/src/api/json_models/request/check_edit_req.dart';
 import 'package:risa2/src/api/json_models/request/check_update_req.dart';
 import 'package:risa2/src/api/json_models/response/check_resp.dart';
 
@@ -26,7 +29,7 @@ class CheckProvider extends ChangeNotifier {
   // check list cache
   List<CheckMinResponse> _checkList = [];
   List<CheckMinResponse> get checkList {
-    return [..._checkList];
+    return UnmodifiableListView(_checkList);
   }
 
   // *memasang filter pada pencarian check
@@ -161,6 +164,34 @@ class CheckProvider extends ChangeNotifier {
     if (error.isNotEmpty) {
       return Future.error(error);
     }
+    return true;
+  }
+
+  // * =======================================================
+  // Check Edit
+  // return future true jika edit check berhasil
+  // memanggil findCheck sehigga tidak perlu notifyListener
+  Future<bool> completeCheck() async {
+    setDetailState(ViewState.busy);
+    var error = "";
+
+    try {
+      final response = await _checkService.editCheck(
+          _checkDetail?.id ?? "", CheckEditRequest(isFinish: true, note: ""));
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        _checkDetail = response.data;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setDetailState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+    await findCheck();
     return true;
   }
 }

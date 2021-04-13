@@ -1,16 +1,17 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/api/services/check_service.dart';
-import 'package:risa2/src/providers/checks.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/router/routes.dart';
-import 'package:risa2/src/screens/check/add_check_dialog.dart';
-import 'package:risa2/src/shared/empty_box.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
-import 'package:risa2/src/utils/enums.dart';
-import 'package:risa2/src/shared/check_item_widget.dart';
-import 'package:risa2/src/shared/home_like_button.dart';
+
+import '../../api/services/check_service.dart';
+import '../../providers/checks.dart';
+import '../../router/routes.dart';
+import '../../shared/check_item_widget.dart';
+import '../../shared/empty_box.dart';
+import '../../shared/home_like_button.dart';
+import '../../shared/ui_helpers.dart';
+import '../../utils/enums.dart';
+import 'add_check_dialog.dart';
 
 var refreshKeyCheckSreen = GlobalKey<RefreshIndicatorState>();
 

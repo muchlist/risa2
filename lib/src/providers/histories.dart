@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
 import '../api/filter_models/history_filter.dart';
@@ -23,7 +25,7 @@ class HistoryProvider extends ChangeNotifier {
     if (_historyList.length > 2) {
       return [..._historyList.sublist(0, 3)];
     }
-    return [..._historyList];
+    return UnmodifiableListView(_historyList);
   }
 
   Future<void> findHistory({bool loading = true}) async {
@@ -76,5 +78,20 @@ class HistoryProvider extends ChangeNotifier {
       return Future.error(error);
     }
     return false;
+  }
+
+  String getLabelStatus(double number) {
+    switch (number.toInt()) {
+      case 1:
+        return "Progress";
+      case 2:
+        return "Pending";
+      case 3:
+        return "Req Pending";
+      case 4:
+        return "Complete";
+      default:
+        return "Progress";
+    }
   }
 }

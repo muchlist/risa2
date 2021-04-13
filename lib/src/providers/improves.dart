@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
 import '../api/filter_models/improve_filter.dart';
@@ -23,7 +25,7 @@ class ImproveProvider extends ChangeNotifier {
   ];
 
   List<ImproveMinResponse> get improveList {
-    return [..._improveList];
+    return UnmodifiableListView(_improveList);
   }
 
   Future<void> findImprove() async {

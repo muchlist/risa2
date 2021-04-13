@@ -1,14 +1,15 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/api/json_models/request/check_update_req.dart';
-import 'package:risa2/src/api/json_models/response/check_resp.dart';
-import 'package:risa2/src/config/pallatte.dart';
-import 'package:risa2/src/providers/checks.dart';
-import 'package:risa2/src/shared/button.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
-import 'package:risa2/src/utils/enums.dart';
+
+import '../../api/json_models/request/check_update_req.dart';
+import '../../api/json_models/response/check_resp.dart';
+import '../../config/pallatte.dart';
+import '../../providers/checks.dart';
+import '../../shared/button.dart';
+import '../../shared/ui_helpers.dart';
+import '../../utils/enums.dart';
 
 class ExpansionChild extends StatefulWidget {
   final String parentID;
@@ -23,6 +24,7 @@ class ExpansionChild extends StatefulWidget {
 class _ExpansionChildState extends State<ExpansionChild> {
   bool _haveProblem = false;
   final checkNoteController = TextEditingController();
+  // String _selectedTag = "";
 
   void _updateChild() {
     var payload = CheckUpdateRequest(
@@ -92,6 +94,31 @@ class _ExpansionChildState extends State<ExpansionChild> {
                   maxLines: 2,
                   minLines: 1,
                 ),
+                // dropdown item
+                // Container(
+                //   padding: EdgeInsets.symmetric(horizontal: 8),
+                //   height: 50,
+                //   width: double.infinity,
+                //   alignment: Alignment.centerLeft,
+                //   decoration: BoxDecoration(color: Pallete.secondaryBackground),
+                //   child: DropdownButtonHideUnderline(
+                //     child: DropdownButton<String>(
+                //       isExpanded: true,
+                //       hint: Text("Tag"),
+                //       items: widget.checkItem.tag.map((tag) {
+                //         return DropdownMenuItem<String>(
+                //           value: tag,
+                //           child: Text(tag),
+                //         );
+                //       }).toList(),
+                //       onChanged: (value) {
+                //         setState(() {
+                //           _selectedTag = value!;
+                //         });
+                //       },
+                //     ),
+                //   ),
+                // ),
                 Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                   horizontalSpaceTiny,
                   const Text("Ada kerusakan ?"),
