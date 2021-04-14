@@ -194,4 +194,11 @@ class CheckProvider extends ChangeNotifier {
     await findCheck();
     return true;
   }
+
+  // dipanggil ketika data sudah tidak dibutuhkan lagi,
+  // di on dispose
+  void onClose() {
+    removeDetail();
+    _checkList = [];
+  }
 }

@@ -1,8 +1,9 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:risa2/src/providers/checks.dart';
+import 'package:risa2/src/providers/checks_master.dart';
 import 'package:risa2/src/router/routes.dart';
-import 'package:risa2/src/shared/check_item_widget.dart';
 import 'package:risa2/src/shared/empty_box.dart';
 import 'package:risa2/src/shared/flushbar.dart';
 import 'package:risa2/src/shared/home_like_button.dart';
@@ -12,7 +13,26 @@ import 'package:risa2/src/utils/enums.dart';
 
 var refreshKeyCheckMasterSreen = GlobalKey<RefreshIndicatorState>();
 
-class CheckMasterScreen extends StatelessWidget {
+class CheckMasterScreen extends StatefulWidget {
+  @override
+  _CheckMasterScreenState createState() => _CheckMasterScreenState();
+}
+
+class _CheckMasterScreenState extends State<CheckMasterScreen> {
+  late CheckMasterProvider _checkMasterProvider;
+
+  @override
+  void initState() {
+    _checkMasterProvider = context.read<CheckMasterProvider>();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _checkMasterProvider.onClose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +77,7 @@ class _CheckMasterRecyclerViewState extends State<CheckMasterRecyclerView> {
 
   Future<dynamic> _loadCheck() {
     return Future.delayed(Duration.zero, () {
-      context.read<CheckProvider>().findCheck().onError((error, _) {
+      context.read<CheckMasterProvider>().findCheckMaster().onError((error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -72,7 +92,7 @@ class _CheckMasterRecyclerViewState extends State<CheckMasterRecyclerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CheckProvider>(
+    return Consumer<CheckMasterProvider>(
       builder: (_, data, __) {
         return Stack(
           alignment: Alignment.center,
@@ -82,7 +102,7 @@ class _CheckMasterRecyclerViewState extends State<CheckMasterRecyclerView> {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: (data.checkList.length != 0)
+                child: (data.checkpList.length != 0)
                     ? buildListView(data)
                     : (data.state == ViewState.idle)
                         ? EmptyBox(loadTap: _loadCheck)
@@ -113,22 +133,22 @@ class _CheckMasterRecyclerViewState extends State<CheckMasterRecyclerView> {
     );
   }
 
-  Widget buildListView(CheckProvider data) {
+  Widget buildListView(CheckMasterProvider data) {
     return RefreshIndicator(
       key: refreshKeyCheckMasterSreen,
       onRefresh: _loadCheck,
       child: ListView.builder(
         padding: EdgeInsets.only(bottom: 60),
-        itemCount: data.checkList.length,
+        itemCount: data.checkpList.length,
         itemBuilder: (context, index) {
           return GestureDetector(
               onTap: () {
-                data.setCheckID(data.checkList[index].id);
-                Navigator.of(context).pushNamed(RouteGenerator.checkDetail);
+                data.setCheckID(data.checkpList[index].id);
+                // Navigator.of(context).pushNamed(RouteGenerator.checkDetail); // todo
               },
               child: ListTile(
-                  // todo -----------------------------------
-                  ));
+                title: Text(data.checkpList[index].name),
+              ));
         },
       ),
     );

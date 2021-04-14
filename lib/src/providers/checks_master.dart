@@ -127,4 +127,9 @@ class CheckMasterProvider extends ChangeNotifier {
       return Future.error(error);
     }
   }
+
+  void onClose() {
+    removeDetail();
+    _checkpList = [];
+  }
 }

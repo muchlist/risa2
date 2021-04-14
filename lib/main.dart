@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import 'src/api/services/auth_service.dart';
 import 'src/api/services/check_service.dart';
+import 'src/api/services/checkp_service.dart';
 import 'src/api/services/general_service.dart';
 import 'src/api/services/history_service.dart';
 import 'src/api/services/improve_service.dart';
@@ -13,6 +14,7 @@ import 'src/config/pallatte.dart';
 import 'src/globals.dart';
 import 'src/providers/auth.dart';
 import 'src/providers/checks.dart';
+import 'src/providers/checks_master.dart';
 import 'src/providers/generals.dart';
 import 'src/providers/histories.dart';
 import 'src/providers/improves.dart';
@@ -47,6 +49,7 @@ class MyApp extends StatelessWidget {
   final generalService = GeneralService();
   final historyService = HistoryService();
   final checkService = CheckService();
+  final checkMasterService = CheckpService();
   final authService = AuthService();
   final improveService = ImproveService();
 
@@ -63,6 +66,8 @@ class MyApp extends StatelessWidget {
             create: (context) => GeneralProvider(generalService)),
         ChangeNotifierProvider(
             create: (context) => CheckProvider(checkService)),
+        ChangeNotifierProvider(
+            create: (context) => CheckMasterProvider(checkMasterService)),
       ],
       child: MaterialApp(
         title: _title,

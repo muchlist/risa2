@@ -1,3 +1,4 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +15,26 @@ import 'add_check_dialog.dart';
 
 var refreshKeyCheckSreen = GlobalKey<RefreshIndicatorState>();
 
-class CheckScreen extends StatelessWidget {
+class CheckScreen extends StatefulWidget {
+  @override
+  _CheckScreenState createState() => _CheckScreenState();
+}
+
+class _CheckScreenState extends State<CheckScreen> {
+  late CheckProvider _checkProvider;
+
+  @override
+  void initState() {
+    _checkProvider = context.read<CheckProvider>();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _checkProvider.onClose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +43,9 @@ class CheckScreen extends StatelessWidget {
         title: const Text("Pengecekan shift"),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(RouteGenerator.checkMaster);
+            },
             icon: Icon(
               CupertinoIcons.square_list,
               size: 28,
