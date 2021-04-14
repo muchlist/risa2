@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
 
 import '../../providers/improves.dart';
+import '../../shared/ui_helpers.dart';
 import 'corousel_widget.dart';
 
 class CorouselContainer extends StatefulWidget {

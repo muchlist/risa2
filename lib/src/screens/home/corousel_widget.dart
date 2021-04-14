@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/api/json_models/response/improve_list_resp.dart';
-import 'package:risa2/src/config/pallatte.dart';
+import '../../api/json_models/response/improve_list_resp.dart';
+import '../../config/pallatte.dart';
 
 class Corousel extends StatelessWidget {
   final List<ImproveMinResponse> improves;

@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/api/json_models/response/history_list_resp.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
-import 'package:risa2/src/utils/date_unix.dart';
-import 'package:risa2/src/utils/enums.dart';
+
+import '../api/json_models/response/history_list_resp.dart';
+import '../utils/date_unix.dart';
+import '../utils/enums.dart';
+import 'ui_helpers.dart';
 
 class HistoryListTile extends StatelessWidget {
   final HistoryMinResponse history;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/router/routes.dart';
 
 import '../../const.dart';
 import '../../globals.dart';
+import '../../router/routes.dart';
 
 class LandingPage extends StatefulWidget {
   @override

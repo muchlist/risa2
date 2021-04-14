@@ -1,11 +1,12 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/providers/histories.dart';
-import 'package:risa2/src/shared/empty_box.dart';
-import 'package:risa2/src/utils/enums.dart';
-import 'package:risa2/src/shared/history_item_widget.dart';
+
+import '../../providers/histories.dart';
+import '../../shared/empty_box.dart';
+import '../../shared/flushbar.dart';
+import '../../shared/history_item_widget.dart';
+import '../../utils/enums.dart';
 
 class DashboardListView extends StatefulWidget {
   @override
@@ -27,11 +28,7 @@ class _DashboardListViewState extends State<DashboardListView> {
           .then((_) {})
           .onError((error, _) {
         if (error != null) {
-          Flushbar(
-            message: error.toString(),
-            duration: Duration(seconds: 5),
-            backgroundColor: Colors.red.withOpacity(0.7),
-          )..show(context);
+          showToastError(context: context, message: error.toString());
         }
       });
     });

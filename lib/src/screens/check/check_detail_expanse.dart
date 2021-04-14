@@ -1,7 +1,7 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/shared/flushbar.dart';
 
 import '../../api/json_models/request/check_update_req.dart';
 import '../../api/json_models/response/check_resp.dart';
@@ -33,28 +33,22 @@ class _ExpansionChildState extends State<ExpansionChild> {
         checkedNote: checkNoteController.text,
         isChecked: true,
         haveProblem: _haveProblem,
-        completeStatus: enumStatus.complete.index,
+        completeStatus: enumStatus.completed.index,
         tagSelected: "",
         tagExtraSelected: "");
 
     context.read<CheckProvider>().updateChildCheck(payload)
       ..then((value) {
         if (value) {
-          Flushbar(
-            message: "Berhasil mengupdate check",
-            duration: Duration(seconds: 3),
-            backgroundColor: Theme.of(context).accentColor,
-            flushbarPosition: FlushbarPosition.TOP,
-          )..show(context);
+          showToastSuccess(
+              context: context,
+              message: "Berhasil mengupdate check",
+              onTop: true);
         }
       }).onError((error, _) {
         if (error != null) {
-          Flushbar(
-            message: error.toString(),
-            duration: Duration(seconds: 5),
-            backgroundColor: Colors.red,
-            flushbarPosition: FlushbarPosition.TOP,
-          )..show(context);
+          showToastError(
+              context: context, message: error.toString(), onTop: true);
         }
       });
   }

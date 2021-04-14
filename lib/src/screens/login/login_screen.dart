@@ -1,6 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/shared/flushbar.dart';
 import 'package:risa2/src/shared/ui_helpers.dart';
 
 import '../../config/pallatte.dart';
@@ -88,11 +89,7 @@ class _LoginFormState extends State<LoginForm> {
           }
         }).onError((error, _) {
           if (error != null) {
-            Flushbar(
-              message: error.toString(),
-              duration: Duration(seconds: 5),
-              backgroundColor: Colors.red.withOpacity(0.7),
-            )..show(context);
+            showToastError(context: context, message: error.toString());
           }
         });
       });

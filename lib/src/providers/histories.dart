@@ -85,11 +85,11 @@ class HistoryProvider extends ChangeNotifier {
       case 1:
         return "Progress";
       case 2:
-        return "Pending";
-      case 3:
         return "Req Pending";
+      case 3:
+        return "Pending";
       case 4:
-        return "Complete";
+        return "Completed";
       default:
         return "Progress";
     }

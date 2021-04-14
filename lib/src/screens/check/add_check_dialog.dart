@@ -1,4 +1,3 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../api/json_models/request/check_req.dart';
 import '../../config/pallatte.dart';
 import '../../providers/checks.dart';
+import '../../shared/flushbar.dart';
 import '../../shared/ui_helpers.dart';
 
 class ItemChoice {
@@ -42,11 +42,8 @@ class _AddCheckDialogState extends State<AddCheckDialog> {
   void _addCheck() {
     // validasi shift
     if (_shiftSelected == 0) {
-      Flushbar(
-        message: "Harap memilih shift terlebih dahulu",
-        duration: Duration(seconds: 5),
-        backgroundColor: Colors.red.withOpacity(0.7),
-      )..show(context);
+      showToastWarning(
+          context: context, message: "Harap memilih shift terlebih dahulu");
       return;
     }
 
@@ -55,20 +52,12 @@ class _AddCheckDialogState extends State<AddCheckDialog> {
       setLoading(false);
       if (value) {
         Navigator.of(context).pop();
-        Flushbar(
-          message: "Berhasil membuat check",
-          duration: Duration(seconds: 3),
-          backgroundColor: Theme.of(context).accentColor.withOpacity(0.7),
-        )..show(context);
+        showToastSuccess(context: context, message: "Berhasil membuat check");
       }
     }).onError((error, _) {
       setLoading(false);
       if (error != null) {
-        Flushbar(
-          message: error.toString(),
-          duration: Duration(seconds: 5),
-          backgroundColor: Colors.red.withOpacity(0.7),
-        )..show(context);
+        showToastError(context: context, message: error.toString());
       }
     });
     // * CALL Provider -----------------------------------------------------

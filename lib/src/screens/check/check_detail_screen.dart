@@ -1,14 +1,14 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../api/json_models/response/check_resp.dart';
 import '../../config/pallatte.dart';
 import '../../providers/checks.dart';
+import '../../shared/flushbar.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/date_unix.dart';
 import '../../utils/enums.dart';
-
 import 'check_detail_expanse.dart';
 
 class CheckDetailScreen extends StatelessWidget {
@@ -60,11 +60,8 @@ class CheckDetailScreen extends StatelessWidget {
                         .completeCheck()
                         .then((value) {
                       if (value) {
-                        Flushbar(
-                          message: "Cek selesai",
-                          duration: Duration(seconds: 5),
-                          backgroundColor: Pallete.green.withOpacity(0.7),
-                        )..show(context);
+                        showToastSuccess(
+                            context: context, message: "Cek selesai");
                       }
                     });
                   }
@@ -88,11 +85,7 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
     Future.delayed(Duration.zero, () {
       context.read<CheckProvider>().getDetail().onError((error, _) {
         Navigator.pop(context);
-        Flushbar(
-          message: error.toString(),
-          duration: Duration(seconds: 5),
-          backgroundColor: Colors.red.withOpacity(0.7),
-        )..show(context);
+        showToastError(context: context, message: error.toString());
       });
     });
 
@@ -205,8 +198,16 @@ class ListTileCheck extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: EdgeInsets.all(8),
-      leading:
-          checkItem.imagePath != "" ? Image.network(checkItem.imagePath) : null,
+      leading: checkItem.imagePath != ""
+          ? SizedBox(
+              width: 60,
+              height: 60,
+              child: Image.network(
+                "http://10.4.2.21:3500/${checkItem.imagePath}",
+                fit: BoxFit.cover,
+              ),
+            )
+          : null,
       title: Text(checkItem.name),
       subtitle: (checkItem.checkedAt != 0)
           ? Text(
@@ -235,8 +236,16 @@ class ExpansionTileCheck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      leading:
-          checkItem.imagePath != "" ? Image.network(checkItem.imagePath) : null,
+      leading: checkItem.imagePath != ""
+          ? SizedBox(
+              width: 60,
+              height: 60,
+              child: Image.network(
+                "http://10.4.2.21:3500/${checkItem.imagePath}",
+                fit: BoxFit.cover,
+              ),
+            )
+          : null,
       title: Text(checkItem.name),
       subtitle: (checkItem.checkedAt != 0)
           ? Text(

@@ -1,4 +1,4 @@
-enum enumStatus { info, progress, rpending, pending, complete }
+enum enumStatus { info, progress, rpending, pending, completed }
 
 extension ParseToString on enumStatus {
   String toShortString() {

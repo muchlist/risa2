@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/screens/check/check_detail_screen.dart';
+import '../screens/check/check_detail_screen.dart';
 import '../screens/check/check_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/landing/landing.dart';

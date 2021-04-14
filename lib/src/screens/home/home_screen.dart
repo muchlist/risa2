@@ -2,9 +2,9 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
 
 import '../../config/pallatte.dart';
+import '../../shared/ui_helpers.dart';
 import '../search/hist_search_delegate.dart';
 import 'add_history_dialog.dart';
 import 'corousel_fragment.dart';

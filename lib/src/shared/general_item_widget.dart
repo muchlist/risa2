@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/config/pallatte.dart';
+
 import '../api/json_models/response/general_list_resp.dart';
+import '../config/pallatte.dart';
 
 class GeneralListTile extends StatelessWidget {
   final GeneralMinResponse data;

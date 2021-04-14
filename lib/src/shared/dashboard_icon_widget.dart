@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/config/pallatte.dart';
-import 'package:risa2/src/models/dashboard.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
+import '../config/pallatte.dart';
+import '../models/dashboard.dart';
+import 'ui_helpers.dart';
 
 class DashboardIcon extends StatelessWidget {
   final Dashboard dashboardItem;

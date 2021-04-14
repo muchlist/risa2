@@ -1,13 +1,12 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../api/services/check_service.dart';
 import '../../providers/checks.dart';
 import '../../router/routes.dart';
 import '../../shared/check_item_widget.dart';
 import '../../shared/empty_box.dart';
+import '../../shared/flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
@@ -16,8 +15,6 @@ import 'add_check_dialog.dart';
 var refreshKeyCheckSreen = GlobalKey<RefreshIndicatorState>();
 
 class CheckScreen extends StatelessWidget {
-  final checkService = CheckService();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,11 +59,7 @@ class _CheckRecyclerViewState extends State<CheckRecyclerView> {
   Future<dynamic> _loadCheck() {
     return Future.delayed(Duration.zero, () {
       context.read<CheckProvider>().findCheck().onError((error, _) {
-        Flushbar(
-          message: error.toString(),
-          duration: Duration(seconds: 5),
-          backgroundColor: Colors.red.withOpacity(0.7),
-        )..show(context);
+        showToastError(context: context, message: error.toString());
       });
     });
   }

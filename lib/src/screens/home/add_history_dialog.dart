@@ -1,8 +1,6 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
 
 import '../../api/filter_models/general_filter.dart';
 import '../../api/json_models/request/history_req.dart';
@@ -10,6 +8,8 @@ import '../../api/json_models/response/general_list_resp.dart';
 import '../../config/pallatte.dart';
 import '../../providers/generals.dart';
 import '../../providers/histories.dart';
+import '../../shared/flushbar.dart';
+import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 import '../search/general_search_delegate.dart';
 
@@ -52,11 +52,9 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
 
   void _addHistory() {
     if (_selectedUnitID.isEmpty) {
-      Flushbar(
-        message: "Harap memilih perangkat terlebih dahulu",
-        duration: Duration(seconds: 5),
-        backgroundColor: Colors.red.withOpacity(0.7),
-      )..show(context);
+      showToastWarning(
+          context: context, message: "Harap memilih perangkat terlebih dahulu");
+
       return;
     }
 
@@ -78,19 +76,12 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
         context.read<HistoryProvider>().addHistory(payload).then((value) {
           if (value) {
             Navigator.of(context).pop();
-            Flushbar(
-              message: "Berhasil menambahkan history",
-              duration: Duration(seconds: 3),
-              backgroundColor: Theme.of(context).accentColor.withOpacity(0.7),
-            )..show(context);
+            showToastSuccess(
+                context: context, message: "Berhasil menambahkan history");
           }
         }).onError((error, _) {
           if (error != null) {
-            Flushbar(
-              message: error.toString(),
-              duration: Duration(seconds: 5),
-              backgroundColor: Colors.red.withOpacity(0.7),
-            )..show(context);
+            showToastError(context: context, message: error.toString());
           }
         });
       });
@@ -175,13 +166,10 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                                           _selectedCategoryID = 0;
                                         });
 
-                                        Flushbar(
-                                          message:
-                                              "Gagal mendapatkan data perangkat!",
-                                          duration: Duration(seconds: 5),
-                                          backgroundColor:
-                                              Colors.red.withOpacity(0.7),
-                                        )..show(context);
+                                        showToastError(
+                                            context: context,
+                                            message:
+                                                "Gagal mendapatkan data perangkat!");
                                       }
                                     });
                                   }),
