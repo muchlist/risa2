@@ -1,7 +1,5 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/api/services/check_service.dart';
 import 'package:risa2/src/providers/checks.dart';
 import 'package:risa2/src/router/routes.dart';
 import 'package:risa2/src/shared/check_item_widget.dart';
@@ -128,7 +126,9 @@ class _CheckMasterRecyclerViewState extends State<CheckMasterRecyclerView> {
                 data.setCheckID(data.checkList[index].id);
                 Navigator.of(context).pushNamed(RouteGenerator.checkDetail);
               },
-              child: CheckListTile(data: data.checkList[index]));
+              child: ListTile(
+                  // todo -----------------------------------
+                  ));
         },
       ),
     );
