@@ -8,13 +8,18 @@ part of 'checkp_req.dart';
 
 CheckpRequest _$CheckpRequestFromJson(Map<String, dynamic> json) {
   return CheckpRequest(
-    json['name'] as String,
-    json['location'] as String,
-    json['note'] as String,
-    (json['shifts'] as List<dynamic>?)?.map((e) => e as int).toList() ?? [],
-    json['type'] as String,
-    (json['tag_one'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
-    (json['tag_two'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
+    name: json['name'] as String,
+    location: json['location'] as String,
+    note: json['note'] as String,
+    shifts:
+        (json['shifts'] as List<dynamic>?)?.map((e) => e as int).toList() ?? [],
+    type: json['type'] as String,
+    tag:
+        (json['tag'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
+    tagExtra: (json['tag_extra'] as List<dynamic>?)
+            ?.map((e) => e as String)
+            .toList() ??
+        [],
   );
 }
 
@@ -25,6 +30,6 @@ Map<String, dynamic> _$CheckpRequestToJson(CheckpRequest instance) =>
       'note': instance.note,
       'shifts': instance.shifts,
       'type': instance.type,
-      'tag_one': instance.tagOne,
-      'tag_two': instance.tagTwo,
+      'tag': instance.tag,
+      'tag_extra': instance.tagExtra,
     };

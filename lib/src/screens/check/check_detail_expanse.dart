@@ -69,7 +69,7 @@ class _ExpansionChildState extends State<ExpansionChild> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: EdgeInsets.only(left: 8, right: 8, bottom: 8),
       child: Row(
         children: [
           Expanded(

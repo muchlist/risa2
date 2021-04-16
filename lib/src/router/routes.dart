@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../screens/check/check_detail_screen.dart';
 import '../screens/check/check_screen.dart';
+import '../screens/check_master/add_check_master_screen.dart';
 import '../screens/check_master/check_master_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/landing/landing.dart';
@@ -13,6 +14,7 @@ class RouteGenerator {
   static const String login = '/login';
   static const String check = '/check';
   static const String checkMaster = '/check-master';
+  static const String checkMasterAdd = '/check-master-add';
   static const String checkDetail = '/check-detail';
 
   RouteGenerator._();
@@ -29,6 +31,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => CheckScreen());
       case checkMaster:
         return MaterialPageRoute(builder: (_) => CheckMasterScreen());
+      case checkMasterAdd:
+        return MaterialPageRoute(builder: (_) => AddCheckMasterScreen());
       case checkDetail:
         return MaterialPageRoute(builder: (_) => CheckDetailScreen());
       default:

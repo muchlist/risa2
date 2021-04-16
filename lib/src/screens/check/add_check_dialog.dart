@@ -4,16 +4,12 @@ import 'package:provider/provider.dart';
 
 import '../../api/json_models/request/check_req.dart';
 import '../../config/pallatte.dart';
+import '../../models/shift_chip_models.dart';
 import '../../providers/checks.dart';
 import '../../shared/flushbar.dart';
+import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
-
-class ItemChoice {
-  final int id;
-  final String label;
-
-  ItemChoice(this.id, this.label);
-}
+import '../../utils/enums.dart';
 
 class AddCheckDialog extends StatefulWidget {
   const AddCheckDialog();
@@ -24,20 +20,9 @@ class AddCheckDialog extends StatefulWidget {
 
 class _AddCheckDialogState extends State<AddCheckDialog> {
   // pilihan chip kategory
-  final listChoices = <ItemChoice>[
-    ItemChoice(1, 'Shift 1'),
-    ItemChoice(2, 'Shift 2'),
-    ItemChoice(3, 'Shift 3'),
-  ];
+  final listChoices = getItemShiftChoice();
 
   var _shiftSelected = 0;
-
-  var _isLoading = false;
-  void setLoading(bool loading) {
-    setState(() {
-      _isLoading = loading;
-    });
-  }
 
   void _addCheck() {
     // validasi shift
@@ -48,19 +33,20 @@ class _AddCheckDialogState extends State<AddCheckDialog> {
     }
 
     final payload = CheckRequest(shift: _shiftSelected);
-    context.read<CheckProvider>().addCheck(payload).then((value) {
-      setLoading(false);
-      if (value) {
-        Navigator.of(context).pop();
-        showToastSuccess(context: context, message: "Berhasil membuat check");
-      }
-    }).onError((error, _) {
-      setLoading(false);
-      if (error != null) {
-        showToastError(context: context, message: error.toString());
-      }
-    });
-    // * CALL Provider -----------------------------------------------------
+    // Call Provider
+    Future.delayed(
+        Duration.zero,
+        () => context.read<CheckProvider>().addCheck(payload).then((value) {
+              if (value) {
+                Navigator.of(context).pop();
+                showToastSuccess(
+                    context: context, message: "Berhasil membuat check");
+              }
+            }).onError((error, _) {
+              if (error != null) {
+                showToastError(context: context, message: error.toString());
+              }
+            }));
   }
 
   @override
@@ -103,9 +89,7 @@ class _AddCheckDialogState extends State<AddCheckDialog> {
                       "Pilih shift :",
                       style: TextStyle(fontSize: 16),
                     ),
-                    const SizedBox(
-                      height: 8,
-                    ),
+                    verticalSpaceSmall,
                     // * Chip choice
                     Wrap(
                       children: listChoices
@@ -128,40 +112,20 @@ class _AddCheckDialogState extends State<AddCheckDialog> {
                       spacing: 10,
                     ),
 
-                    const SizedBox(
-                      height: 30,
-                    ),
+                    verticalSpaceMedium,
                     // * Button ---------------------------
-                    (_isLoading)
-                        ? Center(child: const CircularProgressIndicator())
-                        : GestureDetector(
-                            onTap: _addCheck,
-                            child: Center(
-                              child: Container(
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                    color: Theme.of(context).accentColor,
-                                    borderRadius: BorderRadius.circular(24)),
-                                child: const Text.rich(TextSpan(children: [
-                                  WidgetSpan(
-                                      child: Icon(
-                                    CupertinoIcons.add,
-                                    size: 15,
-                                    color: Colors.white,
-                                  )),
-                                  TextSpan(
-                                      text: "Generate Check",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w500))
-                                ])),
-                              ),
-                            ),
-                          ),
-                    const SizedBox(
-                      height: 20,
-                    )
+                    Consumer<CheckProvider>(builder: (_, data, __) {
+                      if (data.state == ViewState.busy) {
+                        return Center(child: const CircularProgressIndicator());
+                      }
+                      return Center(
+                        child: HomeLikeButton(
+                            iconData: CupertinoIcons.add,
+                            text: "Generate Check",
+                            tapTap: _addCheck),
+                      );
+                    }),
+                    verticalSpaceMedium,
                   ],
                 ),
               ),

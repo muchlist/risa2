@@ -208,10 +208,31 @@ class ListTileCheck extends StatelessWidget {
               ),
             )
           : null,
-      title: Text(checkItem.name),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(checkItem.name),
+          Text(
+            "${checkItem.type} ${checkItem.location}",
+            style: TextStyle(fontSize: 12),
+          ),
+          verticalSpaceTiny
+        ],
+      ),
       subtitle: (checkItem.checkedAt != 0)
-          ? Text(
-              "(${DateTransform().unixToDateString(checkItem.checkedAt)}) - ${checkItem.checkedNote}",
+          ? Text.rich(
+              TextSpan(children: [
+                WidgetSpan(
+                    child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.green.shade100,
+                  ),
+                  child: Text(
+                      " ${DateTransform().unixToDateString(checkItem.checkedAt)} "),
+                )),
+                TextSpan(text: " ${checkItem.checkedNote}")
+              ]),
             )
           : null,
       trailing: (checkItem.completeStatus == 4)
@@ -236,6 +257,7 @@ class ExpansionTileCheck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
+      tilePadding: EdgeInsets.all(8),
       leading: checkItem.imagePath != ""
           ? SizedBox(
               width: 60,
@@ -246,10 +268,31 @@ class ExpansionTileCheck extends StatelessWidget {
               ),
             )
           : null,
-      title: Text(checkItem.name),
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(checkItem.name),
+          Text(
+            "${checkItem.type} ${checkItem.location}",
+            style: TextStyle(fontSize: 12),
+          ),
+          verticalSpaceTiny
+        ],
+      ),
       subtitle: (checkItem.checkedAt != 0)
-          ? Text(
-              "(${DateTransform().unixToDateString(checkItem.checkedAt)}) - ${checkItem.checkedNote}",
+          ? Text.rich(
+              TextSpan(children: [
+                WidgetSpan(
+                    child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.green.shade100,
+                  ),
+                  child: Text(
+                      " ${DateTransform().unixToDateString(checkItem.checkedAt)} "),
+                )),
+                TextSpan(text: " ${checkItem.checkedNote}")
+              ]),
             )
           : null,
       trailing: (checkItem.checkedAt != 0)

@@ -1,14 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/providers/checks.dart';
-import 'package:risa2/src/providers/checks_master.dart';
-import 'package:risa2/src/router/routes.dart';
-import 'package:risa2/src/shared/empty_box.dart';
-import 'package:risa2/src/shared/flushbar.dart';
-import 'package:risa2/src/shared/home_like_button.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/utils/enums.dart';
+
+import '../../providers/checks_master.dart';
+import '../../router/routes.dart';
+import '../../shared/empty_box.dart';
+import '../../shared/flushbar.dart';
+import '../../utils/enums.dart';
 
 var refreshKeyCheckMasterSreen = GlobalKey<RefreshIndicatorState>();
 
@@ -38,18 +36,15 @@ class _CheckMasterScreenState extends State<CheckMasterScreen> {
       appBar: AppBar(
         elevation: 0,
         title: const Text("Master pengecekan"),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              CupertinoIcons.square_list,
-              size: 28,
-            ),
-          ),
-          horizontalSpaceSmall
-        ],
       ),
       body: CheckMasterRecyclerView(),
+      floatingActionButton: FloatingActionButton.extended(
+        label: Text("Tambah"),
+        icon: Icon(CupertinoIcons.add),
+        onPressed: () {
+          Navigator.of(context).pushNamed(RouteGenerator.checkMasterAdd);
+        },
+      ),
     );
   }
 }
@@ -62,18 +57,6 @@ class CheckMasterRecyclerView extends StatefulWidget {
 }
 
 class _CheckMasterRecyclerViewState extends State<CheckMasterRecyclerView> {
-  // void _startAddCheck(BuildContext context) {
-  //   showModalBottomSheet(
-  //     // isScrollControlled: true,
-  //     context: context,
-  //     shape: RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.only(
-  //           topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-  //     ),
-  //     builder: (context) => AddCheckDialog(),
-  //   );
-  // }
-
   Future<dynamic> _loadCheck() {
     return Future.delayed(Duration.zero, () {
       context.read<CheckMasterProvider>().findCheckMaster().onError((error, _) {
@@ -109,23 +92,6 @@ class _CheckMasterRecyclerViewState extends State<CheckMasterRecyclerView> {
             (data.state == ViewState.busy)
                 ? Center(child: CircularProgressIndicator())
                 : Center(),
-            Positioned(
-                bottom: 50,
-                child: HomeLikeButton(
-                    iconData: CupertinoIcons.add,
-                    text: "Membuat Check ",
-                    tapTap: () {
-                      // _startAddCheck(context);
-                    })),
-            Positioned(
-              bottom: 50,
-              right: 40,
-              child: IconButton(
-                  icon: const Icon(
-                      CupertinoIcons.square_fill_line_vertical_square,
-                      size: 28),
-                  onPressed: () {}),
-            )
           ],
         );
       },
@@ -140,13 +106,46 @@ class _CheckMasterRecyclerViewState extends State<CheckMasterRecyclerView> {
         padding: EdgeInsets.only(bottom: 60),
         itemCount: data.checkpList.length,
         itemBuilder: (context, index) {
+          final checkp = data.checkpList[index];
+
           return GestureDetector(
               onTap: () {
-                data.setCheckID(data.checkpList[index].id);
+                data.setCheckID(checkp.id);
                 // Navigator.of(context).pushNamed(RouteGenerator.checkDetail); // todo
               },
-              child: ListTile(
-                title: Text(data.checkpList[index].name),
+              child: Card(
+                child: ListTile(
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(checkp.name),
+                      Text(
+                        "${checkp.type} - ${checkp.location}",
+                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                      )
+                    ],
+                  ),
+                  trailing: checkp.shifts.length > 0
+                      ? Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: 2,
+                          children: checkp.shifts
+                              .map((e) => Container(
+                                  padding: EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.grey),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: Text(
+                                      e.toString(),
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  )))
+                              .toList(),
+                        )
+                      : null,
+                ),
               ));
         },
       ),

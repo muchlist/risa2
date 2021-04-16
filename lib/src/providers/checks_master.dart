@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
+import 'package:risa2/src/api/json_models/option/location_type.dart';
 import '../api/filter_models/checkp_filter.dart';
 import '../api/json_models/request/checkp_req.dart';
 import '../api/json_models/response/checkp_list_resp.dart';
@@ -10,6 +11,7 @@ import '../utils/enums.dart';
 
 class CheckMasterProvider extends ChangeNotifier {
   final CheckpService _checkMasterService;
+
   CheckMasterProvider(this._checkMasterService);
 
   // =======================================================
@@ -58,7 +60,7 @@ class CheckMasterProvider extends ChangeNotifier {
 
   // return future true jika add check master berhasil
   // memanggil findCheck sehingga tidak perlu notifyListener
-  Future<bool> addCheck(CheckpRequest payload) async {
+  Future<bool> addCheckMaster(CheckpRequest payload) async {
     setState(ViewState.busy);
     var error = "";
 
@@ -126,6 +128,26 @@ class CheckMasterProvider extends ChangeNotifier {
     if (error.isNotEmpty) {
       return Future.error(error);
     }
+  }
+
+  // todo implementasi option
+  // check option cache
+  OptLocationType _checkOption = OptLocationType(["None"], ["None"]);
+  OptLocationType get checkOption {
+    return _checkOption;
+  }
+
+  // * Mendapatkan check option
+  Future<void> findOptionCheckMaster() async {
+    // todo dapatkan cabang dari profile
+    try {
+      final response =
+          await _checkMasterService.getOptCreateCheckp("BANJARMASIN");
+      _checkOption = response;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+    notifyListeners();
   }
 
   void onClose() {

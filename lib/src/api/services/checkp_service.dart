@@ -1,3 +1,5 @@
+import 'package:risa2/src/api/json_models/option/location_type.dart';
+
 import '../filter_models/checkp_filter.dart';
 import '../http_client.dart';
 import '../json_models/request/checkp_edit_req.dart';
@@ -6,6 +8,7 @@ import '../json_models/response/checkp_list_resp.dart';
 import '../json_models/response/checkp_resp.dart';
 import '../json_models/response/message_resp.dart';
 import '../json_parsers/json_parsers.dart';
+import '../json_parsers/option_parser.dart';
 
 class CheckpService {
   const CheckpService();
@@ -57,5 +60,10 @@ class CheckpService {
   Future<CheckpDetailResponse> disableCheckp(String id) {
     return RequestREST(endpoint: "/check-item-avail/$id/disable")
         .executeGet<CheckpDetailResponse>(CheckpParser());
+  }
+
+  Future<OptLocationType> getOptCreateCheckp(String branch) {
+    return RequestREST(endpoint: "opt-check-item?branch=$branch")
+        .executeGet<OptLocationType>(LocationTypeParser());
   }
 }

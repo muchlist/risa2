@@ -10,13 +10,19 @@ class CheckpRequest {
   @JsonKey(defaultValue: [])
   final List<int> shifts;
   final String type;
-  @JsonKey(name: "tag_one", defaultValue: [])
-  final List<String> tagOne;
-  @JsonKey(name: "tag_two", defaultValue: [])
-  final List<String> tagTwo;
+  @JsonKey(name: "tag", defaultValue: [])
+  final List<String> tag;
+  @JsonKey(name: "tag_extra", defaultValue: [])
+  final List<String> tagExtra;
 
-  CheckpRequest(this.name, this.location, this.note, this.shifts, this.type,
-      this.tagOne, this.tagTwo);
+  CheckpRequest(
+      {required this.name,
+      required this.location,
+      required this.note,
+      required this.shifts,
+      required this.type,
+      required this.tag,
+      required this.tagExtra});
 
   factory CheckpRequest.fromJson(Map<String, dynamic> json) =>
       _$CheckpRequestFromJson(json);
