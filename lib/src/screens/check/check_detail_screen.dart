@@ -235,7 +235,7 @@ class ListTileCheck extends StatelessWidget {
               ]),
             )
           : null,
-      trailing: (checkItem.completeStatus == 4)
+      trailing: (checkItem.checkedAt != 0)
           ? Icon(CupertinoIcons.check_mark_circled)
           : Icon(CupertinoIcons.square),
       key: ValueKey(checkItem.id),

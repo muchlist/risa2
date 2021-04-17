@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:risa2/src/shared/flushbar.dart';
 import '../../config/pallatte.dart';
+import '../../globals.dart';
 import '../../models/dashboard.dart';
 import '../../router/routes.dart';
 import '../../shared/dashboard_icon_widget.dart';
@@ -43,6 +45,10 @@ class DashboardGrid extends StatelessWidget {
               final route = dashboardItems[i].route;
               if (route.isNotEmpty) {
                 Navigator.of(context).pushNamed(RouteGenerator.check);
+              } else {
+                // todo
+                showToastSuccess(
+                    context: context, message: App.getToken() ?? "kosong");
               }
             },
             child: DashboardIcon(dashboardItems[i])),

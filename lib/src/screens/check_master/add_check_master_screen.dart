@@ -29,7 +29,7 @@ class AddCheckMasterBody extends StatefulWidget {
 }
 
 class _AddCheckMasterBodyState extends State<AddCheckMasterBody> {
-  // pilihan chip kategory
+  // pilihan chip
   final listChoices = getItemShiftChoice();
   List<int> _multiShiftSelected = [];
 

@@ -2,11 +2,13 @@ import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
 import 'package:risa2/src/api/json_models/option/location_type.dart';
+import 'package:risa2/src/api/json_models/request/checkp_edit_req.dart';
 import '../api/filter_models/checkp_filter.dart';
 import '../api/json_models/request/checkp_req.dart';
 import '../api/json_models/response/checkp_list_resp.dart';
 import '../api/json_models/response/checkp_resp.dart';
 import '../api/services/checkp_service.dart';
+import '../globals.dart';
 import '../utils/enums.dart';
 
 class CheckMasterProvider extends ChangeNotifier {
@@ -109,9 +111,10 @@ class CheckMasterProvider extends ChangeNotifier {
 
   // get detail check
   // * Mendapatkan check
-  Future<void> getDetail() async {
+  Future<CheckpDetailResponseData> getDetail() async {
     setDetailState(ViewState.busy);
 
+    late CheckpDetailResponseData responseData;
     var error = "";
     try {
       final response = await _checkMasterService.getCheckp(_checkIDSaved);
@@ -119,6 +122,7 @@ class CheckMasterProvider extends ChangeNotifier {
         error = response.error!.message;
       } else {
         _checkDetail = response.data;
+        responseData = response.data!;
       }
     } catch (e) {
       error = e.toString();
@@ -128,9 +132,34 @@ class CheckMasterProvider extends ChangeNotifier {
     if (error.isNotEmpty) {
       return Future.error(error);
     }
+
+    return responseData;
   }
 
-  // todo implementasi option
+  // edit master check
+  Future<bool> editCheckMaster(String id, CheckpEditRequest payload) async {
+    setDetailState(ViewState.busy);
+    var error = "";
+
+    try {
+      final response = await _checkMasterService.editCheckp(id, payload);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        _checkDetail = response.data!;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setDetailState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+    await findCheckMaster();
+    return true;
+  }
+
   // check option cache
   OptLocationType _checkOption = OptLocationType(["None"], ["None"]);
   OptLocationType get checkOption {
@@ -139,10 +168,9 @@ class CheckMasterProvider extends ChangeNotifier {
 
   // * Mendapatkan check option
   Future<void> findOptionCheckMaster() async {
-    // todo dapatkan cabang dari profile
     try {
       final response =
-          await _checkMasterService.getOptCreateCheckp("BANJARMASIN");
+          await _checkMasterService.getOptCreateCheckp(App.getBranch() ?? "");
       _checkOption = response;
     } catch (e) {
       return Future.error(e.toString());

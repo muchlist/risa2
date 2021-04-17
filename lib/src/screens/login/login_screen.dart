@@ -89,7 +89,8 @@ class _LoginFormState extends State<LoginForm> {
           }
         }).onError((error, _) {
           if (error != null) {
-            showToastError(context: context, message: error.toString());
+            showToastError(
+                context: context, message: error.toString(), onTop: true);
           }
         });
       });

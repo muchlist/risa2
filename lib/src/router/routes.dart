@@ -4,6 +4,7 @@ import '../screens/check/check_detail_screen.dart';
 import '../screens/check/check_screen.dart';
 import '../screens/check_master/add_check_master_screen.dart';
 import '../screens/check_master/check_master_screen.dart';
+import '../screens/check_master/edit_check_master_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/landing/landing.dart';
 import '../screens/login/login_screen.dart';
@@ -15,6 +16,7 @@ class RouteGenerator {
   static const String check = '/check';
   static const String checkMaster = '/check-master';
   static const String checkMasterAdd = '/check-master-add';
+  static const String checkMasterEdit = '/check-master-edit';
   static const String checkDetail = '/check-detail';
 
   RouteGenerator._();
@@ -33,6 +35,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => CheckMasterScreen());
       case checkMasterAdd:
         return MaterialPageRoute(builder: (_) => AddCheckMasterScreen());
+      case checkMasterEdit:
+        return MaterialPageRoute(builder: (_) => EditCheckMasterScreen());
       case checkDetail:
         return MaterialPageRoute(builder: (_) => CheckDetailScreen());
       default:

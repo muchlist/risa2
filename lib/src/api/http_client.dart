@@ -32,9 +32,12 @@ class RequestREST {
         endpoint,
         options: Options(
           headers: {
-            "Authorization":
-                "Bearer ${App.localStorage!.getString("token") ?? ""}",
+            "Authorization": "Bearer ${App.getToken() ?? ""}",
           },
+          // headers: {
+          //   "Authorization":
+          //       "Bearer ${App.localStorage!.getString("token") ?? ""}",
+          // },
         ),
       );
       return parser.parseFromJson(response.data ?? "");
@@ -54,8 +57,7 @@ class RequestREST {
         data: data,
         options: Options(
           headers: {
-            "Authorization":
-                "Bearer ${App.localStorage!.getString("token") ?? ""}",
+            "Authorization": "Bearer ${App.getToken() ?? ""}",
           },
         ),
       );
@@ -76,8 +78,7 @@ class RequestREST {
         data: data,
         options: Options(
           headers: {
-            "Authorization":
-                "Bearer ${App.localStorage!.getString("token") ?? ""}",
+            "Authorization": "Bearer ${App.getToken() ?? ""}",
           },
         ),
       );
@@ -95,8 +96,7 @@ class RequestREST {
       endpoint,
       options: Options(
         headers: {
-          "Authorization":
-              "Bearer ${App.localStorage!.getString("token") ?? ""}",
+          "Authorization": "Bearer ${App.getToken() ?? ""}",
         },
       ),
     );

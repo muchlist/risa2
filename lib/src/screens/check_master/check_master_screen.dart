@@ -110,8 +110,10 @@ class _CheckMasterRecyclerViewState extends State<CheckMasterRecyclerView> {
 
           return GestureDetector(
               onTap: () {
-                data.setCheckID(checkp.id);
-                // Navigator.of(context).pushNamed(RouteGenerator.checkDetail); // todo
+                data
+                  ..removeDetail()
+                  ..setCheckID(checkp.id);
+                Navigator.of(context).pushNamed(RouteGenerator.checkMasterEdit);
               },
               child: Card(
                 child: ListTile(

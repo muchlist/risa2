@@ -1,10 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:risa2/src/globals.dart';
-import 'package:risa2/src/utils/enums.dart';
 
 import '../api/json_models/response/login_resp.dart';
 import '../api/services/auth_service.dart';
-import '../const.dart';
+import '../globals.dart';
+import '../utils/enums.dart';
 
 class AuthProvider extends ChangeNotifier {
   final AuthService _authservice;
@@ -31,7 +30,11 @@ class AuthProvider extends ChangeNotifier {
       } else {
         _userData = response.data;
         if (_userData?.accessToken != "") {
-          _saveDataToPersistent(_userData!.accessToken);
+          _saveDataToPersistent(
+              token: _userData!.accessToken,
+              branch: _userData!.branch,
+              name: _userData!.name,
+              role: _userData!.roles);
           return true;
         }
       }
@@ -48,11 +51,27 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void logout() {
-    _saveDataToPersistent("");
+    _saveDataToPersistent(token: "", branch: "", name: "", role: []);
     notifyListeners();
   }
 
-  _saveDataToPersistent(String token) async {
-    await App.localStorage!.setString(tokenSaved, token);
+  _saveDataToPersistent(
+      {required String token,
+      required String name,
+      required String branch,
+      required List<String> role}) async {
+    // // join array string to string comma separated
+    // var roleString = "";
+    // if (role.length != 0) {
+    //   roleString = role.join(",");
+    // }
+    // await App.localStorage!.setString(tokenSaved, token);
+    // await App.localStorage!.setString(nameSaved, name);
+    // await App.localStorage!.setString(branchSaved, branch);
+    // await App.localStorage!.setString(roleSaved, roleString);
+    await App.setName(name);
+    await App.setToken(token);
+    await App.setBranch(branch);
+    await App.setRoles(role);
   }
 }

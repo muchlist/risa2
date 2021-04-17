@@ -1,1 +1,0 @@
-const tokenSaved = "token";

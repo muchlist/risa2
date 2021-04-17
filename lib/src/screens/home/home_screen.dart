@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../config/pallatte.dart';
+import '../../globals.dart';
 import '../../shared/ui_helpers.dart';
 import '../search/hist_search_delegate.dart';
 import 'add_history_dialog.dart';
@@ -67,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         title: RichText(
           text: TextSpan(
-              text: "Hi, Muchlis\n",
+              text: "Hi,${App.getName() ?? "Manusia"}\n",
               style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   fontSize: 20,
                   color: Colors.black,
