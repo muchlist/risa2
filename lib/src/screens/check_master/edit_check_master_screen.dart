@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/api/json_models/request/checkp_edit_req.dart';
-import '../../api/json_models/request/checkp_req.dart';
+import '../../api/json_models/request/checkp_edit_req.dart';
 import '../../config/pallatte.dart';
 import '../../models/shift_chip_models.dart';
 import '../../providers/checks_master.dart';
@@ -10,6 +9,8 @@ import '../../shared/flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
+
+/// Dropdown button tidak boleh null . harus di inisiasi value awalnya
 
 class EditCheckMasterScreen extends StatelessWidget {
   @override
@@ -33,9 +34,8 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
   // chip shift
   final listChoices = getItemShiftChoice();
   List<int> _multiShiftSelected = [];
-
-  String? _selectedLocation;
-  String? _selectedType;
+  String _selectedLocation = "None";
+  String _selectedType = "None";
 
   final titleController = TextEditingController();
   final noteController = TextEditingController();
@@ -56,10 +56,10 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
     if (title.isEmpty) {
       errorMessage = errorMessage + "judul tidak boleh kosong. ";
     }
-    if (_selectedLocation == null) {
+    if (_selectedLocation.isEmpty) {
       errorMessage = errorMessage + "lokasi tidak boleh kosong. ";
     }
-    if (_selectedType == null) {
+    if (_selectedType.isEmpty) {
       errorMessage = errorMessage + "tipe tidak boleh kosong. ";
     }
     if (errorMessage.isNotEmpty) {
@@ -71,10 +71,10 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
     final payload = CheckpEditRequest(
         filterTimestamp: dataExisting.updatedAt,
         name: title.toUpperCase(),
-        location: _selectedLocation ?? "",
+        location: _selectedLocation,
         note: noteController.text,
         shifts: _multiShiftSelected,
-        type: _selectedType!,
+        type: _selectedType,
         tag: _getListTag(),
         tagExtra: []);
 
@@ -108,25 +108,6 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
 
   @override
   void initState() {
-    // get detail
-    Future.delayed(Duration.zero, () {
-      context.read<CheckMasterProvider>().getDetail().then((value) {
-        // init value
-        setState(() {
-          _multiShiftSelected = value.shifts;
-
-          _selectedLocation = value.location;
-          _selectedType = value.type;
-
-          titleController.text = value.name;
-          noteController.text = value.note;
-          tagController.text = value.tag.join(",");
-        });
-      }).onError((error, _) {
-        showToastError(context: context, message: error.toString());
-      });
-    });
-
     // get option
     Future.delayed(Duration.zero, () {
       context
@@ -134,6 +115,26 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
           .findOptionCheckMaster()
           .onError((error, _) {
         showToastError(context: context, message: error.toString());
+        return;
+      }).whenComplete(() {
+        // get detail when option complete
+        Future.delayed(Duration.zero, () {
+          context.read<CheckMasterProvider>().getDetail().then((value) {
+            // init value
+            setState(() {
+              _multiShiftSelected = value.shifts;
+
+              _selectedLocation = value.location;
+              _selectedType = value.type;
+
+              titleController.text = value.name;
+              noteController.text = value.note;
+              tagController.text = value.tag.join(",");
+            });
+          }).onError((error, _) {
+            showToastError(context: context, message: error.toString());
+          });
+        });
       });
     });
 
@@ -190,7 +191,7 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
                           child: DropdownButton<String>(
                             isExpanded: true,
                             hint: Text("Location"),
-                            value: (_selectedLocation != null)
+                            value: (_selectedLocation.isNotEmpty)
                                 ? _selectedLocation
                                 : null,
                             items: data.checkOption.location.map((loc) {
@@ -201,7 +202,7 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
                             }).toList(),
                             onChanged: (value) {
                               setState(() {
-                                _selectedLocation = value;
+                                _selectedLocation = value ?? "";
                               });
                             },
                           ),
@@ -226,8 +227,9 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
                           child: DropdownButton<String>(
                             isExpanded: true,
                             hint: Text("Tipe"),
-                            value:
-                                (_selectedType != null) ? _selectedType : null,
+                            value: (_selectedType.isNotEmpty)
+                                ? _selectedType
+                                : null,
                             items: data.checkOption.type.map((tipe) {
                               return DropdownMenuItem<String>(
                                 value: tipe,
@@ -236,7 +238,7 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
                             }).toList(),
                             onChanged: (value) {
                               setState(() {
-                                _selectedType = value;
+                                _selectedType = value ?? "";
                               });
                             },
                           ),
