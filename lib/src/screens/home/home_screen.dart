@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         title: RichText(
           text: TextSpan(
-              text: "Hi,${App.getName() ?? "Manusia"}\n",
+              text: "Hi ${App.getName() ?? "Manusia"}\n",
               style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   fontSize: 20,
                   color: Colors.black,

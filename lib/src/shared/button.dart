@@ -22,7 +22,7 @@ class RisaButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
             primary: !disabled ? Theme.of(context).accentColor : Colors.grey,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15.0)),
+                borderRadius: BorderRadius.circular(5.0)),
             padding: const EdgeInsets.all(10.0)),
       ),
     );

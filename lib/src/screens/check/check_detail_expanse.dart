@@ -24,7 +24,7 @@ class ExpansionChild extends StatefulWidget {
 class _ExpansionChildState extends State<ExpansionChild> {
   bool _haveProblem = false;
   final checkNoteController = TextEditingController();
-  // String _selectedTag = "";
+  String? _selectedTag;
 
   void _updateChild() {
     var payload = CheckUpdateRequest(
@@ -34,7 +34,7 @@ class _ExpansionChildState extends State<ExpansionChild> {
         isChecked: true,
         haveProblem: _haveProblem,
         completeStatus: enumStatus.completed.index,
-        tagSelected: "",
+        tagSelected: _selectedTag ?? "",
         tagExtraSelected: "");
 
     context.read<CheckProvider>().updateChildCheck(payload)
@@ -88,34 +88,40 @@ class _ExpansionChildState extends State<ExpansionChild> {
                   maxLines: 2,
                   minLines: 1,
                 ),
+
+                verticalSpaceTiny,
                 // dropdown item
-                // Container(
-                //   padding: EdgeInsets.symmetric(horizontal: 8),
-                //   height: 50,
-                //   width: double.infinity,
-                //   alignment: Alignment.centerLeft,
-                //   decoration: BoxDecoration(color: Pallete.secondaryBackground),
-                //   child: DropdownButtonHideUnderline(
-                //     child: DropdownButton<String>(
-                //       isExpanded: true,
-                //       hint: Text("Tag"),
-                //       items: widget.checkItem.tag.map((tag) {
-                //         return DropdownMenuItem<String>(
-                //           value: tag,
-                //           child: Text(tag),
-                //         );
-                //       }).toList(),
-                //       onChanged: (value) {
-                //         setState(() {
-                //           _selectedTag = value!;
-                //         });
-                //       },
-                //     ),
-                //   ),
-                // ),
+                (widget.checkItem.tag.length != 0)
+                    ? Container(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        height: 50,
+                        width: double.infinity,
+                        alignment: Alignment.centerLeft,
+                        decoration:
+                            BoxDecoration(color: Pallete.secondaryBackground),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            hint: Text("Tanda"),
+                            value: _selectedTag,
+                            items: widget.checkItem.tag.map((tag) {
+                              return DropdownMenuItem<String>(
+                                value: tag,
+                                child: Text(tag),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _selectedTag = value!;
+                              });
+                            },
+                          ),
+                        ),
+                      )
+                    : Container(),
                 Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                   horizontalSpaceTiny,
-                  const Text("Ada kerusakan ?"),
+                  const Text("Terdapat kendala / outstanding? "),
                   Spacer(),
                   Switch(
                     value: _haveProblem,
@@ -124,8 +130,8 @@ class _ExpansionChildState extends State<ExpansionChild> {
                         _haveProblem = !_haveProblem;
                       });
                     },
-                    activeTrackColor: Pallete.secondaryBackground,
-                    activeColor: Theme.of(context).accentColor,
+                    activeTrackColor: Colors.red.shade50,
+                    activeColor: Colors.redAccent,
                   ),
                 ]),
                 Row(
@@ -138,9 +144,10 @@ class _ExpansionChildState extends State<ExpansionChild> {
                         onPressed: null,
                       ),
                     ),
+                    Spacer(),
                     Consumer<CheckProvider>(
                       builder: (_, data, __) {
-                        return Expanded(
+                        return Flexible(
                           child: RisaButton(
                             title: "Update",
                             onPress: _updateChild,

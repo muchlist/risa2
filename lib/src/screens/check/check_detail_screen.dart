@@ -52,6 +52,7 @@ class CheckDetailScreen extends StatelessWidget {
               return FloatingActionButton.extended(
                 label: Text("Selesai shift"),
                 icon: Icon(CupertinoIcons.checkmark_alt),
+                backgroundColor: Colors.deepOrange.shade300,
                 onPressed: () async {
                   var isFinish = await _getConfirm(context);
                   if (isFinish != null && isFinish) {
@@ -171,7 +172,7 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
 
 Widget buildListView(CheckDetailResponseData data) {
   return ListView.builder(
-      padding: EdgeInsets.only(bottom: 60),
+      padding: EdgeInsets.only(bottom: 80),
       itemCount: data.checkItems.length,
       itemBuilder: (context, index) {
         var checkItem = data.checkItems[index];
@@ -186,6 +187,7 @@ Widget buildListView(CheckDetailResponseData data) {
       });
 }
 
+// tile yang sudah selesai shift
 class ListTileCheck extends StatelessWidget {
   const ListTileCheck({
     Key? key,
@@ -236,8 +238,24 @@ class ListTileCheck extends StatelessWidget {
             )
           : null,
       trailing: (checkItem.checkedAt != 0)
-          ? Icon(CupertinoIcons.check_mark_circled)
-          : Icon(CupertinoIcons.square),
+          ? Wrap(children: [
+              Icon(CupertinoIcons.check_mark_circled),
+              (checkItem.haveProblem)
+                  ? Icon(
+                      CupertinoIcons.exclamationmark_square,
+                      color: Colors.red.shade300,
+                    )
+                  : SizedBox.shrink(),
+            ])
+          : Wrap(children: [
+              Icon(CupertinoIcons.square),
+              (checkItem.haveProblem)
+                  ? Icon(
+                      CupertinoIcons.exclamationmark_square,
+                      color: Colors.red.shade300,
+                    )
+                  : SizedBox.shrink(),
+            ]),
       key: ValueKey(checkItem.id),
     );
   }
@@ -296,8 +314,24 @@ class ExpansionTileCheck extends StatelessWidget {
             )
           : null,
       trailing: (checkItem.checkedAt != 0)
-          ? Icon(CupertinoIcons.check_mark_circled)
-          : Icon(CupertinoIcons.square),
+          ? Wrap(children: [
+              Icon(CupertinoIcons.check_mark_circled),
+              (checkItem.haveProblem)
+                  ? Icon(
+                      CupertinoIcons.exclamationmark_square,
+                      color: Colors.red.shade300,
+                    )
+                  : SizedBox.shrink(),
+            ])
+          : Wrap(children: [
+              Icon(CupertinoIcons.square),
+              (checkItem.haveProblem)
+                  ? Icon(
+                      CupertinoIcons.exclamationmark_square,
+                      color: Colors.red.shade300,
+                    )
+                  : SizedBox.shrink(),
+            ]),
       expandedAlignment: Alignment.topLeft,
       key: ValueKey(checkItem.id),
       children: [
