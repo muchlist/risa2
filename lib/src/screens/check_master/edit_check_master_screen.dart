@@ -49,6 +49,28 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
     return [];
   }
 
+  Future<bool?> _getConfirm(BuildContext context) {
+    return showDialog<bool?>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Konfirmasi hapus"),
+            content: const Text("Apakah yakin ingin menghapus check ini!"),
+            actions: <Widget>[
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).accentColor),
+                  child: const Text("Tidak"),
+                  onPressed: () => Navigator.of(context).pop(false)),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text("Ya"))
+            ],
+          );
+        });
+  }
+
   void _editMasterCheck() {
     // validasi
     var errorMessage = "";
@@ -83,7 +105,7 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
         Duration.zero,
         () => context
                 .read<CheckMasterProvider>()
-                .editCheckMaster(dataExisting.id, payload)
+                .editCheckMaster(payload)
                 .then((value) {
               if (value) {
                 Navigator.of(context).pop();
@@ -317,13 +339,43 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
                       ),
 
                       verticalSpaceMedium,
+
                       (data.detailState == ViewState.busy)
                           ? Center(child: const CircularProgressIndicator())
-                          : Center(
-                              child: HomeLikeButton(
-                                  iconData: CupertinoIcons.add,
-                                  text: "Edit master check",
-                                  tapTap: _editMasterCheck),
+                          : Stack(
+                              children: [
+                                Center(
+                                  child: HomeLikeButton(
+                                      iconData: CupertinoIcons.add,
+                                      text: "Edit master check",
+                                      tapTap: _editMasterCheck),
+                                ),
+                                IconButton(
+                                    icon: Icon(CupertinoIcons.trash),
+                                    onPressed: () async {
+                                      var confirmDelete =
+                                          await _getConfirm(context);
+                                      if (confirmDelete != null &&
+                                          confirmDelete) {
+                                        await context
+                                            .read<CheckMasterProvider>()
+                                            .removeCheckMaster()
+                                            .then((value) {
+                                          if (value) {
+                                            Navigator.pop(context);
+                                            showToastSuccess(
+                                                context: context,
+                                                message:
+                                                    "Berhasil menghapus check");
+                                          }
+                                        }).onError((error, _) {
+                                          showToastError(
+                                              context: context,
+                                              message: error.toString());
+                                        });
+                                      }
+                                    }),
+                              ],
                             ),
 
                       verticalSpaceMedium,

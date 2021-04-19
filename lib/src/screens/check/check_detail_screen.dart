@@ -248,7 +248,6 @@ class ListTileCheck extends StatelessWidget {
                   : SizedBox.shrink(),
             ])
           : Wrap(children: [
-              Icon(CupertinoIcons.square),
               (checkItem.haveProblem)
                   ? Icon(
                       CupertinoIcons.exclamationmark_square,
@@ -324,7 +323,6 @@ class ExpansionTileCheck extends StatelessWidget {
                   : SizedBox.shrink(),
             ])
           : Wrap(children: [
-              Icon(CupertinoIcons.square),
               (checkItem.haveProblem)
                   ? Icon(
                       CupertinoIcons.exclamationmark_square,

@@ -137,16 +137,39 @@ class CheckMasterProvider extends ChangeNotifier {
   }
 
   // edit master check
-  Future<bool> editCheckMaster(String id, CheckpEditRequest payload) async {
+  Future<bool> editCheckMaster(CheckpEditRequest payload) async {
     setDetailState(ViewState.busy);
     var error = "";
 
     try {
-      final response = await _checkMasterService.editCheckp(id, payload);
+      final response =
+          await _checkMasterService.editCheckp(_checkIDSaved, payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {
         _checkDetail = response.data!;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setDetailState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+    await findCheckMaster();
+    return true;
+  }
+
+  // remove master check
+  Future<bool> removeCheckMaster() async {
+    setDetailState(ViewState.busy);
+    var error = "";
+
+    try {
+      final response = await _checkMasterService.deleteCheckp(_checkIDSaved);
+      if (response.error != null) {
+        error = response.error!.message;
       }
     } catch (e) {
       error = e.toString();

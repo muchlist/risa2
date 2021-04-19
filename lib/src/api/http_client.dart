@@ -34,10 +34,6 @@ class RequestREST {
           headers: {
             "Authorization": "Bearer ${App.getToken() ?? ""}",
           },
-          // headers: {
-          //   "Authorization":
-          //       "Bearer ${App.localStorage!.getString("token") ?? ""}",
-          // },
         ),
       );
       return parser.parseFromJson(response.data ?? "");
@@ -112,6 +108,7 @@ class RequestREST {
     if (e.message.contains("Connection refused")) {
       return "Connection refused";
     }
+
     return e.message;
   }
 }

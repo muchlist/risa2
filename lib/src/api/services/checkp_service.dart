@@ -30,7 +30,7 @@ class CheckpService {
   }
 
   Future<MessageResponse> deleteCheckp(String id) {
-    return RequestREST(endpoint: "/checkp/$id")
+    return RequestREST(endpoint: "/check-item/$id")
         .executeDelete<MessageResponse>(MessageParser());
   }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 import '../screens/check/check_detail_screen.dart';
 import '../screens/check/check_screen.dart';
@@ -30,15 +31,20 @@ class RouteGenerator {
       case home:
         return MaterialPageRoute(builder: (_) => HomeScreen());
       case check:
-        return MaterialPageRoute(builder: (_) => CheckScreen());
+        return PageTransition(
+            child: CheckScreen(), type: PageTransitionType.fade);
       case checkMaster:
-        return MaterialPageRoute(builder: (_) => CheckMasterScreen());
+        return PageTransition(
+            child: CheckMasterScreen(), type: PageTransitionType.fade);
       case checkMasterAdd:
-        return MaterialPageRoute(builder: (_) => AddCheckMasterScreen());
+        return PageTransition(
+            child: AddCheckMasterScreen(), type: PageTransitionType.fade);
       case checkMasterEdit:
-        return MaterialPageRoute(builder: (_) => EditCheckMasterScreen());
+        return PageTransition(
+            child: EditCheckMasterScreen(), type: PageTransitionType.fade);
       case checkDetail:
-        return MaterialPageRoute(builder: (_) => CheckDetailScreen());
+        return PageTransition(
+            child: CheckDetailScreen(), type: PageTransitionType.fade);
       default:
         return MaterialPageRoute(builder: (_) => LoginScreen());
     }

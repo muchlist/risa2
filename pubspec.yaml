@@ -38,6 +38,7 @@ dependencies:
   flutter_staggered_animations: ^1.0.0
   lottie: ^1.0.1
   another_flushbar: ^1.10.17
+  page_transition: 2.0.1-nullsafety.0
 
 
 
