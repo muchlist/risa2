@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+
 import '../filter_models/check_filter.dart';
 import '../http_client.dart';
 import '../json_models/request/check_edit_req.dart';
@@ -14,6 +18,16 @@ class CheckService {
   Future<MessageResponse> createCheck(CheckRequest payload) {
     return RequestREST(endpoint: "/check", data: payload.toJson())
         .executePost<MessageResponse>(MessageParser());
+  }
+
+  Future<CheckDetailResponse> uploadImage(
+      String id, String childID, File file) async {
+    // var fileName = file.path.split('/').last;
+    return RequestREST(
+        endpoint: "/check-image/$id/$childID",
+        data: <String, dynamic>{
+          "image": await MultipartFile.fromFile(file.path)
+        }).executeUpload(CheckParser());
   }
 
   Future<CheckDetailResponse> editCheck(String id, CheckEditRequest payload) {

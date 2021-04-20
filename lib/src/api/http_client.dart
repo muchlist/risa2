@@ -99,6 +99,38 @@ class RequestREST {
     return parser.parseFromJson(response.data ?? "");
   }
 
+  // UPLOAD <<<<<<<<<<<
+  Future<T> executeUpload<T>(JsonParser<T> parser) async {
+    final formData = FormData.fromMap(data);
+
+    try {
+      final response = await _client.post<String>(
+        endpoint,
+        data: formData,
+        options: Options(
+          headers: {
+            "Authorization": "Bearer ${App.getToken() ?? ""}",
+          },
+        ),
+      );
+      return parser.parseFromJson(response.data ?? "");
+    } on DioError catch (e) {
+      return Future.error(_dioErrorHandler(e));
+    } catch (e) {
+      return Future.error(e);
+    }
+  }
+
+//   Future<String> uploadImage(File file) async {
+//     String fileName = file.path.split('/').last;
+//     FormData formData = FormData.fromMap({
+//         "file":
+//             await MultipartFile.fromFile(file.path, filename:fileName),
+//     });
+//     response = await dio.post("/info", data: formData);
+//     return response.data['id'];
+// }
+
   String _dioErrorHandler(DioError e) {
     if (e.type == DioErrorType.connectTimeout ||
         e.type == DioErrorType.receiveTimeout ||

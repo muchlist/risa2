@@ -1,15 +1,17 @@
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:risa2/src/api/json_models/request/check_edit_req.dart';
-import 'package:risa2/src/api/json_models/request/check_update_req.dart';
-import 'package:risa2/src/api/json_models/response/check_resp.dart';
 
 import '../api/filter_models/check_filter.dart';
+import '../api/json_models/request/check_edit_req.dart';
 import '../api/json_models/request/check_req.dart';
+import '../api/json_models/request/check_update_req.dart';
 import '../api/json_models/response/check_list_resp.dart';
+import '../api/json_models/response/check_resp.dart';
 import '../api/services/check_service.dart';
 import '../utils/enums.dart';
+import '../utils/image_compress.dart';
 
 class CheckProvider extends ChangeNotifier {
   final CheckService _checkService;
@@ -150,6 +152,34 @@ class CheckProvider extends ChangeNotifier {
 
     try {
       final response = await _checkService.updateCheck(payload);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        _checkDetail = response.data;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setChildState(ViewState.idle);
+
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+    return true;
+  }
+
+  // * update child image
+// return future true jika update check image berhasil
+  Future<bool> uploadChildCheck(String id, String childID, File file) async {
+    setChildState(ViewState.busy);
+    var error = "";
+
+    final fileCompressed = await compressFile(file);
+
+    try {
+      final response =
+          await _checkService.uploadImage(id, childID, fileCompressed);
       if (response.error != null) {
         error = response.error!.message;
       } else {

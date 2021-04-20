@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/shared/flushbar.dart';
 
@@ -51,6 +54,35 @@ class _ExpansionChildState extends State<ExpansionChild> {
               context: context, message: error.toString(), onTop: true);
         }
       });
+  }
+
+  File? _image;
+  final picker = ImagePicker();
+
+  Future getImageAndUpload(
+      BuildContext context, String id, String childID) async {
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+    } else {
+      return;
+    }
+
+    // compress and upload
+    await context
+        .read<CheckProvider>()
+        .uploadChildCheck(id, childID, _image!)
+        .then((value) {
+      if (value) {
+        showToastSuccess(
+            context: context,
+            message: "Berhasil mengupload gambar",
+            onTop: true);
+      }
+    }).onError((error, _) {
+      showToastError(context: context, message: error.toString());
+      return Future.error(error.toString());
+    });
   }
 
   @override
@@ -140,8 +172,12 @@ class _ExpansionChildState extends State<ExpansionChild> {
                       width: 60,
                       height: 60,
                       child: IconButton(
-                        icon: Icon(CupertinoIcons.camera_fill),
-                        onPressed: null,
+                        icon: Icon(
+                          CupertinoIcons.camera_fill,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () => getImageAndUpload(
+                            context, widget.parentID, widget.checkItem.id),
                       ),
                     ),
                     Spacer(),
