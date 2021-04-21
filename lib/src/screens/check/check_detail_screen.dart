@@ -112,7 +112,7 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
                   padding: EdgeInsets.all(8),
                   decoration: BoxDecoration(
                       color: Pallete.secondaryBackground,
-                      borderRadius: BorderRadius.circular(10)),
+                      borderRadius: BorderRadius.circular(3)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -171,11 +171,23 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
 }
 
 Widget buildListView(CheckDetailResponseData data) {
+  var checkItemsGenerate = data.checkItems;
+  // checkItems sort if data isFinish
+  if (data.isFinish) {
+    checkItemsGenerate.sort((a, b) {
+      if (b.checkedAt == 0) {
+        return -1;
+      }
+      return 1;
+    });
+    // checkItemsGenerate = checkItemsGenerate.reversed.toList();
+  }
+
   return ListView.builder(
       padding: EdgeInsets.only(bottom: 80),
-      itemCount: data.checkItems.length,
+      itemCount: checkItemsGenerate.length,
       itemBuilder: (context, index) {
-        var checkItem = data.checkItems[index];
+        var checkItem = checkItemsGenerate[index];
 
         return Card(
             child: !data.isFinish
@@ -233,13 +245,23 @@ class ListTileCheck extends StatelessWidget {
                   child: Text(
                       " ${DateTransform().unixToDateString(checkItem.checkedAt)} "),
                 )),
+                (checkItem.tagSelected.isNotEmpty)
+                    ? WidgetSpan(
+                        child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.yellow.shade100,
+                        ),
+                        child: Text(" ${checkItem.tagSelected} "),
+                      ))
+                    : TextSpan(),
                 TextSpan(text: " ${checkItem.checkedNote}")
               ]),
             )
           : null,
       trailing: (checkItem.checkedAt != 0)
           ? Wrap(children: [
-              Icon(CupertinoIcons.check_mark_circled),
+              Icon(CupertinoIcons.check_mark_circled, color: Colors.green),
               (checkItem.haveProblem)
                   ? Icon(
                       CupertinoIcons.exclamationmark_square,
@@ -308,13 +330,26 @@ class ExpansionTileCheck extends StatelessWidget {
                   child: Text(
                       " ${DateTransform().unixToDateString(checkItem.checkedAt)} "),
                 )),
+                (checkItem.tagSelected.isNotEmpty)
+                    ? WidgetSpan(
+                        child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.yellow.shade100,
+                        ),
+                        child: Text(" ${checkItem.tagSelected} "),
+                      ))
+                    : TextSpan(),
                 TextSpan(text: " ${checkItem.checkedNote}")
               ]),
             )
           : null,
       trailing: (checkItem.checkedAt != 0)
           ? Wrap(children: [
-              Icon(CupertinoIcons.check_mark_circled),
+              Icon(
+                CupertinoIcons.check_mark_circled,
+                color: Colors.green,
+              ),
               (checkItem.haveProblem)
                   ? Icon(
                       CupertinoIcons.exclamationmark_square,

@@ -134,7 +134,7 @@ class _ExpansionChildState extends State<ExpansionChild> {
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             isExpanded: true,
-                            hint: Text("Tanda"),
+                            hint: Text("Tag"),
                             value: _selectedTag,
                             items: widget.checkItem.tag.map((tag) {
                               return DropdownMenuItem<String>(
