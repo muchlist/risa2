@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/shared/home_like_button.dart';
 
 import '../../api/json_models/response/check_resp.dart';
 import '../../config/pallatte.dart';
@@ -12,6 +13,37 @@ import '../../utils/enums.dart';
 import 'check_detail_expanse.dart';
 
 class CheckDetailScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          elevation: 0,
+          title: const Text("Detail pengecekan shift"),
+        ),
+        body: CheckDetailBody());
+  }
+}
+
+class CheckDetailBody extends StatefulWidget {
+  @override
+  _CheckDetailBodyState createState() => _CheckDetailBodyState();
+}
+
+class _CheckDetailBodyState extends State<CheckDetailBody> {
+  @override
+  void initState() {
+    context.read<CheckProvider>().removeDetail();
+    Future.delayed(Duration.zero, () {
+      context.read<CheckProvider>().getDetail().onError((error, _) {
+        Navigator.pop(context);
+        showToastError(context: context, message: error.toString());
+      });
+    });
+
+    super.initState();
+  }
+
   // Memunculkan dialog
   Future<bool?> _getConfirm(BuildContext context) {
     return showDialog<bool?>(
@@ -38,63 +70,6 @@ class CheckDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          title: const Text("Detail pengecekan shift"),
-        ),
-        body: CheckDetailBody(),
-        floatingActionButton: Consumer<CheckProvider>(
-          builder: (_, data, __) {
-            if (data.checkDetail?.isFinish ?? false) {
-              return Center();
-            } else {
-              return FloatingActionButton.extended(
-                label: Text("Selesai shift"),
-                icon: Icon(CupertinoIcons.checkmark_alt),
-                backgroundColor: Colors.deepOrange.shade300,
-                onPressed: () async {
-                  var isFinish = await _getConfirm(context);
-                  if (isFinish != null && isFinish) {
-                    await context
-                        .read<CheckProvider>()
-                        .completeCheck()
-                        .then((value) {
-                      if (value) {
-                        showToastSuccess(
-                            context: context, message: "Cek selesai");
-                      }
-                    });
-                  }
-                },
-              );
-            }
-          },
-        ));
-  }
-}
-
-class CheckDetailBody extends StatefulWidget {
-  @override
-  _CheckDetailBodyState createState() => _CheckDetailBodyState();
-}
-
-class _CheckDetailBodyState extends State<CheckDetailBody> {
-  @override
-  void initState() {
-    context.read<CheckProvider>().removeDetail();
-    Future.delayed(Duration.zero, () {
-      context.read<CheckProvider>().getDetail().onError((error, _) {
-        Navigator.pop(context);
-        showToastError(context: context, message: error.toString());
-      });
-    });
-
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     // Watch data ====================================================
     final data = context.watch<CheckProvider>();
     var detail = data.checkDetail ??
@@ -103,70 +78,96 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
 
     return (data.detailState == ViewState.busy)
         ? Center(child: CircularProgressIndicator())
-        : Container(
-            padding: EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-              children: [
-                // header
-                Container(
-                  padding: EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                      color: Pallete.secondaryBackground,
-                      borderRadius: BorderRadius.circular(3)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+        : Stack(
+            children: [
+              Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Column(
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Nama"),
-                          Text("Shift"),
-                          Text("Dibuat"),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("   :   "),
-                          Text("   :   "),
-                          Text("   :   "),
-                        ],
-                      ),
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      // header
+                      Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            color: Pallete.secondaryBackground,
+                            borderRadius: BorderRadius.circular(3)),
+                        child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            Text(
-                              detail.createdBy,
-                              softWrap: true,
-                              maxLines: 2,
-                              overflow: TextOverflow.clip,
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Nama"),
+                                Text("Shift"),
+                                Text("Dibuat"),
+                              ],
                             ),
-                            Text(
-                              "Shift ${detail.shift}",
-                              softWrap: true,
-                              maxLines: 2,
-                              overflow: TextOverflow.clip,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("   :   "),
+                                Text("   :   "),
+                                Text("   :   "),
+                              ],
                             ),
-                            Text(
-                              "${DateTransform().unixToDateString(detail.createdAt)}",
-                              softWrap: true,
-                              maxLines: 2,
-                              overflow: TextOverflow.clip,
+                            Flexible(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    detail.createdBy,
+                                    softWrap: true,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.clip,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    "Shift ${detail.shift}",
+                                    softWrap: true,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.clip,
+                                  ),
+                                  Text(
+                                    "${DateTransform().unixToDateString(detail.createdAt)}",
+                                    softWrap: true,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.clip,
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
 
-                // recycler view
-                Expanded(child: buildListView(detail))
-              ],
-            ));
+                      // recycler view
+                      Expanded(child: buildListView(detail))
+                    ],
+                  )),
+              (detail.isFinish)
+                  ? SizedBox.shrink()
+                  : Positioned(
+                      bottom: 15,
+                      right: 20,
+                      child: HomeLikeButton(
+                        iconData: CupertinoIcons.checkmark_alt,
+                        text: "Selesai Shift",
+                        tapTap: () async {
+                          var isFinish = await _getConfirm(context);
+                          if (isFinish != null && isFinish) {
+                            await data.completeCheck().then((value) {
+                              if (value) {
+                                showToastSuccess(
+                                    context: context, message: "Cek selesai");
+                              }
+                            });
+                          }
+                        },
+                        color: Colors.deepOrange.shade300,
+                      ))
+            ],
+          );
   }
 }
 
@@ -184,7 +185,7 @@ Widget buildListView(CheckDetailResponseData data) {
   }
 
   return ListView.builder(
-      padding: EdgeInsets.only(bottom: 80),
+      padding: EdgeInsets.only(bottom: 250),
       itemCount: checkItemsGenerate.length,
       itemBuilder: (context, index) {
         var checkItem = checkItemsGenerate[index];
@@ -228,7 +229,7 @@ class ListTileCheck extends StatelessWidget {
           Text(checkItem.name),
           Text(
             "${checkItem.type} ${checkItem.location}",
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
           ),
           verticalSpaceTiny
         ],
@@ -310,10 +311,12 @@ class ExpansionTileCheck extends StatelessWidget {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(checkItem.name),
+          Text(
+            checkItem.name,
+          ),
           Text(
             "${checkItem.type} ${checkItem.location}",
-            style: TextStyle(fontSize: 12),
+            style: TextStyle(fontSize: 12, color: Colors.grey.shade500),
           ),
           verticalSpaceTiny
         ],

@@ -1,13 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:risa2/src/config/pallatte.dart';
 
 class HomeLikeButton extends StatelessWidget {
   final IconData iconData;
   final String text;
   final GestureTapCallback tapTap;
+  final Color color;
 
   const HomeLikeButton(
-      {required this.iconData, required this.text, required this.tapTap});
+      {required this.iconData,
+      required this.text,
+      required this.tapTap,
+      this.color = Pallete.green});
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +21,7 @@ class HomeLikeButton extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-            color: Theme.of(context).accentColor,
-            borderRadius: BorderRadius.circular(24)),
+            color: color, borderRadius: BorderRadius.circular(24)),
         child: Text.rich(TextSpan(children: [
           WidgetSpan(
               child: Icon(
