@@ -42,14 +42,16 @@ class HistorySearchDelegate extends SearchDelegate {
       );
     }
 
-    context.read<GeneralProvider>().findGeneral(query).onError((error, _) {
-      if (error != null) {
-        final snackBar = SnackBar(
-          content: Text(error.toString()),
-          duration: Duration(seconds: 3),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
+    Future.delayed(Duration.zero, () {
+      context.read<GeneralProvider>().findGeneral(query).onError((error, _) {
+        if (error != null) {
+          final snackBar = SnackBar(
+            content: Text(error.toString()),
+            duration: Duration(seconds: 3),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      });
     });
 
     return Consumer<GeneralProvider>(

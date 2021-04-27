@@ -12,7 +12,7 @@ import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 import 'add_check_dialog.dart';
 
-var refreshKeyCheckSreen = GlobalKey<RefreshIndicatorState>();
+var refreshKeyCheckScreen = GlobalKey<RefreshIndicatorState>();
 
 class CheckScreen extends StatefulWidget {
   @override
@@ -137,7 +137,7 @@ class _CheckRecyclerViewState extends State<CheckRecyclerView> {
 
   Widget buildListView(CheckProvider data) {
     return RefreshIndicator(
-      key: refreshKeyCheckSreen,
+      key: refreshKeyCheckScreen,
       onRefresh: _loadCheck,
       child: ListView.builder(
         padding: EdgeInsets.only(bottom: 60),

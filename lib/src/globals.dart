@@ -1,10 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class App {
-  static final tokenSaved = "token";
-  static final branchSaved = "branch";
-  static final rolesSaved = "roles";
-  static final nameSaved = "name";
+  static final _tokenSaved = "token";
+  static final _branchSaved = "branch";
+  static final _rolesSaved = "roles";
+  static final _nameSaved = "name";
 
   static late SharedPreferences localStorage;
   static Future init() async {
@@ -12,31 +12,31 @@ class App {
   }
 
   static String? getToken() {
-    return localStorage.getString(tokenSaved);
+    return localStorage.getString(_tokenSaved);
   }
 
   static Future<bool> setToken(String value) {
-    return localStorage.setString(tokenSaved, value);
+    return localStorage.setString(_tokenSaved, value);
   }
 
   static String? getName() {
-    return localStorage.getString(nameSaved);
+    return localStorage.getString(_nameSaved);
   }
 
   static Future<bool> setName(String value) {
-    return localStorage.setString(nameSaved, value);
+    return localStorage.setString(_nameSaved, value);
   }
 
   static String? getBranch() {
-    return localStorage.getString(branchSaved);
+    return localStorage.getString(_branchSaved);
   }
 
   static Future<bool> setBranch(String value) {
-    return localStorage.setString(branchSaved, value);
+    return localStorage.setString(_branchSaved, value);
   }
 
   static List<String> getRoles() {
-    final rolesString = localStorage.getString(rolesSaved);
+    final rolesString = localStorage.getString(_rolesSaved);
     if (rolesString != null && rolesString.isNotEmpty) {
       return rolesString.split(",");
     }
@@ -48,6 +48,6 @@ class App {
     if (value.length != 0) {
       rolesString = value.join(",");
     }
-    return localStorage.setString(rolesSaved, rolesString);
+    return localStorage.setString(_rolesSaved, rolesString);
   }
 }

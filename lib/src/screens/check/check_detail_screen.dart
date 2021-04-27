@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/home_like_button.dart';
 
 import '../../api/json_models/response/check_resp.dart';
+import '../../config/constant.dart';
 import '../../config/pallatte.dart';
 import '../../providers/checks.dart';
+import '../../shared/cached_image_circle.dart';
 import '../../shared/flushbar.dart';
+import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/date_unix.dart';
 import '../../utils/enums.dart';
@@ -214,14 +216,8 @@ class ListTileCheck extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.all(8),
       leading: checkItem.imagePath != ""
-          ? SizedBox(
-              width: 60,
-              height: 60,
-              child: Image.network(
-                "http://10.4.2.21:3500/${checkItem.imagePath}",
-                fit: BoxFit.cover,
-              ),
-            )
+          ? CachedImageCircle(
+              urlPath: "${Constant.baseUrl}${checkItem.imagePath}")
           : null,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,7 +279,7 @@ class ListTileCheck extends StatelessWidget {
   }
 }
 
-// Tile yqang dapat di expansion
+// Tile yang dapat di expansion
 class ExpansionTileCheck extends StatelessWidget {
   const ExpansionTileCheck({
     Key? key,
@@ -299,14 +295,16 @@ class ExpansionTileCheck extends StatelessWidget {
     return ExpansionTile(
       tilePadding: EdgeInsets.all(8),
       leading: checkItem.imagePath != ""
-          ? SizedBox(
-              width: 60,
-              height: 60,
-              child: Image.network(
-                "http://10.4.2.21:3500/${checkItem.imagePath}",
-                fit: BoxFit.cover,
-              ),
-            )
+          ? CachedImageCircle(
+              urlPath: "${Constant.baseUrl}${checkItem.imagePath}")
+          // SizedBox(
+          //     width: 60,
+          //     height: 60,
+          //     child: Image.network(
+          //       "${Constant.baseUrl}${checkItem.imagePath}",
+          //       fit: BoxFit.cover,
+          //     ),
+          //   )
           : null,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

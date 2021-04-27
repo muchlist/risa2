@@ -1,13 +1,12 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/flushbar.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
 
 import '../../config/pallatte.dart';
 import '../../providers/auth.dart';
 import '../../router/routes.dart';
 import '../../shared/button.dart';
+import '../../shared/flushbar.dart';
+import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -102,15 +101,15 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     const enabledOutlineInputBorder = OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(25)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
         borderSide: BorderSide(color: Pallete.green, width: 1));
 
     const focusedOutlineInputBorder = OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(25)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
         borderSide: BorderSide(color: Pallete.green, width: 1));
 
     const errorOutlineInputBorder = OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(25)),
+        borderRadius: BorderRadius.all(Radius.circular(10)),
         borderSide: BorderSide(color: Colors.red, width: 1));
 
     return Form(

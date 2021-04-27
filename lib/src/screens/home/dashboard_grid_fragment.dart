@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/shared/flushbar.dart';
 import '../../config/pallatte.dart';
-import '../../globals.dart';
 import '../../models/dashboard.dart';
 import '../../router/routes.dart';
 import '../../shared/dashboard_icon_widget.dart';
@@ -13,7 +11,8 @@ class DashboardGrid extends StatelessWidget {
   final List<Dashboard> dashboardItems = [
     Dashboard("Dashboard", CupertinoIcons.chart_bar_circle),
     Dashboard("Improvement", CupertinoIcons.rocket),
-    Dashboard("Stock", CupertinoIcons.rectangle_on_rectangle_angled),
+    Dashboard("Stock", CupertinoIcons.rectangle_on_rectangle_angled,
+        route: RouteGenerator.stock),
     Dashboard("Checklist", CupertinoIcons.chevron_down_square,
         color: Pallete.green.withOpacity(0.4), route: RouteGenerator.check),
     Dashboard("Export", CupertinoIcons.upload_circle,
@@ -44,11 +43,9 @@ class DashboardGrid extends StatelessWidget {
             onTap: () {
               final route = dashboardItems[i].route;
               if (route.isNotEmpty) {
-                Navigator.of(context).pushNamed(RouteGenerator.check);
+                Navigator.of(context).pushNamed(route);
               } else {
                 // todo
-                showToastSuccess(
-                    context: context, message: App.getToken() ?? "kosong");
               }
             },
             child: DashboardIcon(dashboardItems[i])),

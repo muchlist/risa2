@@ -4,9 +4,5 @@ class FilterStock {
   final String? category;
   final String? disable;
 
-  FilterStock(
-      {required this.name,
-      required this.branch,
-      required this.category,
-      required this.disable});
+  FilterStock({this.name, this.branch, this.category, this.disable});
 }

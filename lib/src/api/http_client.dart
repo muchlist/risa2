@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:risa2/src/globals.dart';
+import '../config/constant.dart';
+import '../globals.dart';
 
 import 'json_parsers/json_parsers.dart';
 
@@ -10,7 +11,7 @@ class RequestREST {
   RequestREST({required this.endpoint, this.data = const {}});
 
   static final _client = Dio(BaseOptions(
-    baseUrl: "http://10.4.2.21:3500/api/v1/",
+    baseUrl: Constant.baseApiUrl,
     connectTimeout: 3000, // 3 second
     receiveTimeout: 5000,
     sendTimeout: 5000,

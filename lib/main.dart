@@ -10,6 +10,7 @@ import 'src/api/services/checkp_service.dart';
 import 'src/api/services/general_service.dart';
 import 'src/api/services/history_service.dart';
 import 'src/api/services/improve_service.dart';
+import 'src/api/services/stock_service.dart';
 import 'src/config/pallatte.dart';
 import 'src/globals.dart';
 import 'src/providers/auth.dart';
@@ -18,6 +19,7 @@ import 'src/providers/checks_master.dart';
 import 'src/providers/generals.dart';
 import 'src/providers/histories.dart';
 import 'src/providers/improves.dart';
+import 'src/providers/stock.dart';
 import 'src/router/routes.dart';
 import 'src/screens/landing/landing.dart';
 
@@ -52,6 +54,7 @@ class MyApp extends StatelessWidget {
   final checkMasterService = CheckpService();
   final authService = AuthService();
   final improveService = ImproveService();
+  final stockService = StockService();
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +71,8 @@ class MyApp extends StatelessWidget {
             create: (context) => CheckProvider(checkService)),
         ChangeNotifierProvider(
             create: (context) => CheckMasterProvider(checkMasterService)),
+        ChangeNotifierProvider(
+            create: (context) => StockProvider(stockService)),
       ],
       child: MaterialApp(
         title: _title,
