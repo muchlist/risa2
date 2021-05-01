@@ -13,23 +13,27 @@ class StockListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
         child: ListTile(
-      leading: (data.image.isNotEmpty)
-          ? CachedImageCircle(urlPath: "${Constant.baseUrl}${data.image}")
-          : null,
-      title: Text(data.name),
-      subtitle: Row(
-        children: [
-          Text(data.stockCategory.toLowerCase()),
-          Spacer(),
-          Text("Sisa : ${data.qty} ${data.unit}"),
-        ],
-      ),
-      trailing: (data.qty <= data.threshold)
-          ? Icon(
-              CupertinoIcons.exclamationmark_circle,
-              color: Colors.red,
-            )
-          : null,
-    ));
+            leading: (data.image.isNotEmpty)
+                ? CachedImageCircle(urlPath: "${Constant.baseUrl}${data.image}")
+                : null,
+            title: Text(data.name),
+            subtitle: Row(
+              children: [
+                Text(data.stockCategory.toLowerCase()),
+              ],
+            ),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text("${data.qty} ${data.unit}"),
+                (data.qty <= data.threshold)
+                    ? Icon(
+                        CupertinoIcons.exclamationmark_circle,
+                        color: Colors.red,
+                      )
+                    : SizedBox.shrink(),
+              ],
+            )));
   }
 }

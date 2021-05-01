@@ -81,11 +81,11 @@ class StockDetailResponseData {
 @JsonSerializable(explicitToJson: true)
 class StockChange {
   @JsonKey(name: "dummy_id")
-  final String dummyID;
-  final int author;
+  final int dummyID;
+  final String author;
   final int qty;
   @JsonKey(name: "ba_number")
-  final int baNumber;
+  final String baNumber;
   final String note;
   final int time;
 

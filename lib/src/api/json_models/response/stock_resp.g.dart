@@ -84,10 +84,10 @@ Map<String, dynamic> _$StockDetailResponseDataToJson(
 
 StockChange _$StockChangeFromJson(Map<String, dynamic> json) {
   return StockChange(
-    json['dummy_id'] as String,
-    json['author'] as int,
+    json['dummy_id'] as int,
+    json['author'] as String,
     json['qty'] as int,
-    json['ba_number'] as int,
+    json['ba_number'] as String,
     json['note'] as String,
     json['time'] as int,
   );

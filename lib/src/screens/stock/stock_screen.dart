@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/stock.dart';
+import '../../router/routes.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/flushbar.dart';
 import '../../shared/stock_item_widget.dart';
@@ -31,13 +32,14 @@ class _StockScreenState extends State<StockScreen> {
               size: 28,
             ),
             onPressed: () async {
-              // todo what to do with search result
               final searchResult = await showSearch(
                 context: context,
                 delegate: StockSearchDelegate(),
               );
               if (searchResult != null) {
-                showToastSuccess(context: context, message: searchResult);
+                context.read<StockProvider>().removeDetail();
+                context.read<StockProvider>().setStockID(searchResult);
+                await Navigator.pushNamed(context, RouteGenerator.stockDetail);
               }
             },
           ),
@@ -112,8 +114,11 @@ class _StockRecyclerViewState extends State<StockRecyclerView> {
         itemBuilder: (context, index) {
           return GestureDetector(
               onTap: () {
-                // data.setCheckID(data.checkList[index].id);
-                // Navigator.of(context).pushNamed(RouteGenerator.checkDetail);
+                context.read<StockProvider>().removeDetail();
+                context
+                    .read<StockProvider>()
+                    .setStockID(data.stockList[index].id);
+                Navigator.pushNamed(context, RouteGenerator.stockDetail);
               },
               child: StockListTile(data: data.stockList[index]));
         },
