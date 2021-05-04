@@ -77,6 +77,16 @@ class StockDetailFragment extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.clip,
                       ),
+                    ]),
+                    TableRow(children: [
+                      const Text("Catatan"),
+                      const Text("   :   "),
+                      Text(
+                        detail.note,
+                        softWrap: true,
+                        maxLines: 3,
+                        overflow: TextOverflow.clip,
+                      ),
                     ])
                   ],
                 ),
@@ -163,15 +173,21 @@ class StockDetailFragment extends StatelessWidget {
                 Expanded(
                     flex: 1,
                     child: Wrap(
+                      alignment: WrapAlignment.start,
+                      spacing: 10.0,
                       children: [
-                        TextButton.icon(
+                        ElevatedButton.icon(
                             onPressed: () {},
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.green[300],
+                            ),
                             icon: Icon(CupertinoIcons.pencil_circle),
                             label: const Text("Edit")),
-                        TextButton.icon(
+                        ElevatedButton.icon(
                             onPressed: () {},
-                            style:
-                                TextButton.styleFrom(primary: Colors.red[400]),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.red[300],
+                            ),
                             icon: Icon(CupertinoIcons.trash_circle),
                             label: const Text("Hapus")),
                       ],
@@ -179,21 +195,6 @@ class StockDetailFragment extends StatelessWidget {
               ],
             ),
             verticalSpaceMedium,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: Icon(CupertinoIcons.plus_circle),
-                    label: const Text("Tambah Stok")),
-                ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: Icon(CupertinoIcons.minus_circle),
-                    style: ElevatedButton.styleFrom(
-                        primary: Colors.deepOrange[300]),
-                    label: const Text("Kurangi Stok")),
-              ],
-            )
           ],
         ),
       ),

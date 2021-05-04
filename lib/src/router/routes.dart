@@ -9,6 +9,7 @@ import '../screens/check_master/edit_check_master_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/landing/landing.dart';
 import '../screens/login/login_screen.dart';
+import '../screens/stock/add_stock_screen.dart';
 import '../screens/stock/stock_detail_screen.dart';
 import '../screens/stock/stock_screen.dart';
 
@@ -23,6 +24,7 @@ class RouteGenerator {
   static const String checkDetail = '/check-detail';
   static const String stock = '/stock';
   static const String stockDetail = '/stock-detail';
+  static const String stockAdd = '/stock-add';
 
   RouteGenerator._();
 
@@ -55,6 +57,9 @@ class RouteGenerator {
       case stockDetail:
         return PageTransition(
             child: StockDetailScreen(), type: PageTransitionType.fade);
+      case stockAdd:
+        return PageTransition(
+            child: AddStockScreen(), type: PageTransitionType.fade);
       default:
         return MaterialPageRoute(builder: (_) => LoginScreen());
     }

@@ -1,5 +1,6 @@
 import '../filter_models/stock_filter.dart';
 import '../http_client.dart';
+import '../json_models/option/stock_category.dart';
 import '../json_models/request/stock_change_req.dart';
 import '../json_models/request/stock_edit_req.dart';
 import '../json_models/request/stock_req.dart';
@@ -63,5 +64,10 @@ class StockService {
   Future<StockDetailResponse> changeStock(StockChangeRequest payload) {
     return RequestREST(endpoint: "/stock-change", data: payload.toJson())
         .executePost<StockDetailResponse>(StockParser());
+  }
+
+  Future<OptStockCategory> getOptStock() {
+    return RequestREST(endpoint: "opt-stock")
+        .executeGet<OptStockCategory>(StockCategoryParser());
   }
 }

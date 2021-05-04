@@ -54,7 +54,11 @@ class _StockScreenState extends State<StockScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-          icon: Icon(Icons.add), onPressed: () {}, label: Text("Tambah data")),
+          icon: Icon(Icons.add),
+          onPressed: () {
+            Navigator.pushNamed(context, RouteGenerator.stockAdd);
+          },
+          label: Text("Tambah data")),
       body: StockRecyclerView(),
     );
   }

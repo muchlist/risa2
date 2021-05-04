@@ -1,9 +1,12 @@
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
-import 'package:risa2/src/api/json_models/response/stock_resp.dart';
+
 import '../api/filter_models/stock_filter.dart';
+import '../api/json_models/option/stock_category.dart';
+import '../api/json_models/request/stock_req.dart';
 import '../api/json_models/response/stock_list_resp.dart';
+import '../api/json_models/response/stock_resp.dart';
 import '../api/services/stock_service.dart';
 import '../globals.dart';
 import '../utils/enums.dart';
@@ -38,8 +41,10 @@ class StockProvider extends ChangeNotifier {
   }
 
   // * Mendapatkan stock
-  Future<void> findStock() async {
-    setState(ViewState.busy);
+  Future<void> findStock({bool loading = true}) async {
+    if (loading) {
+      setState(ViewState.busy);
+    }
 
     var error = "";
     try {
@@ -125,6 +130,62 @@ class StockProvider extends ChangeNotifier {
     for (var dec in decrement) {
       total = total + dec.qty;
     }
-    return total;
+    return -total;
+  }
+
+  // menggabungkan pemakaian stock, anatara penambahan dan pengurangan lalu sorting
+  // berdasarkan valu time unix
+  List<StockChange> getStockUse() {
+    final stockUseIncrement = _stockDetail.increment;
+    final stockUseDecrement = _stockDetail.decrement;
+
+    if (stockUseIncrement.length == 0 && stockUseDecrement.length == 0) {
+      return [];
+    }
+
+    var stockUseCombination = [...stockUseIncrement, ...stockUseDecrement]
+      ..sort((a, b) => b.time.compareTo(a.time));
+
+    return stockUseCombination;
+  }
+
+  // return future true jika add stock berhasil
+  // memanggil findStock sehingga tidak perlu notifyListener
+  Future<bool> addStock(StockRequest payload) async {
+    setState(ViewState.busy);
+    var error = "";
+
+    try {
+      final response = await _stockService.createStock(payload);
+      if (response.error != null) {
+        error = response.error!.message;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+    await findStock(loading: false);
+    return true;
+  }
+
+  // stock option cache
+  OptStockCategory _stockOption = OptStockCategory(["None"]);
+  OptStockCategory get stockOption {
+    return _stockOption;
+  }
+
+  // * Mendapatkan check option
+  Future<void> findOptionStock() async {
+    try {
+      final response = await _stockService.getOptStock();
+      _stockOption = response;
+    } catch (e) {
+      return Future.error(e.toString());
+    }
+    notifyListeners();
   }
 }

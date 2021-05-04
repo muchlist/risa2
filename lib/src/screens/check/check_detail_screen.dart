@@ -297,14 +297,6 @@ class ExpansionTileCheck extends StatelessWidget {
       leading: checkItem.imagePath != ""
           ? CachedImageCircle(
               urlPath: "${Constant.baseUrl}${checkItem.imagePath}")
-          // SizedBox(
-          //     width: 60,
-          //     height: 60,
-          //     child: Image.network(
-          //       "${Constant.baseUrl}${checkItem.imagePath}",
-          //       fit: BoxFit.cover,
-          //     ),
-          //   )
           : null,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
