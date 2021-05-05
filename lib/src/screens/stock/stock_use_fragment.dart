@@ -7,7 +7,7 @@ class StockUseRecyclerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<StockProvider>(builder: (_, data, __) {
-      final stockUse = data.getStockUse();
+      final stockUse = data.sortedStockUse;
 
       return ListView.builder(
         padding: EdgeInsets.only(bottom: 60),

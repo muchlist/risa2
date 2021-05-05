@@ -70,7 +70,7 @@ class StockRecyclerView extends StatefulWidget {
 }
 
 class _StockRecyclerViewState extends State<StockRecyclerView> {
-  Future<dynamic> _loadStock() {
+  Future<void> _loadStock() {
     return Future.delayed(Duration.zero, () {
       context.read<StockProvider>().findStock().onError((error, _) {
         showToastError(context: context, message: error.toString());

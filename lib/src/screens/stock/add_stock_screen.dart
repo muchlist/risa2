@@ -65,8 +65,8 @@ class _AddStockBodyState extends State<AddStockBody> {
       final payload = StockRequest(
           name: titleController.text,
           stockCategory: _selectedCategory ?? "",
-          location: locationController.text,
-          unit: unitController.text,
+          location: locationController.text.toUpperCase(),
+          unit: unitController.text.toLowerCase(),
           qty: qty,
           threshold: threshold,
           note: noteController.text,
@@ -83,7 +83,8 @@ class _AddStockBodyState extends State<AddStockBody> {
                 }
               }).onError((error, _) {
                 if (error != null) {
-                  showToastError(context: context, message: error.toString());
+                  showToastError(
+                      context: context, message: error.toString(), onTop: true);
                 }
               }));
     }
@@ -103,12 +104,17 @@ class _AddStockBodyState extends State<AddStockBody> {
 
   @override
   void initState() {
-    Future.delayed(
-        Duration.zero,
-        () =>
-            context.read<StockProvider>().findOptionStock().onError((error, _) {
-              showToastError(context: context, message: error.toString());
-            }));
+    // default length == 1 , if option got update length more than 1
+    if (context.read<StockProvider>().stockOption.category.length == 1) {
+      Future.delayed(
+          Duration.zero,
+          () => context
+                  .read<StockProvider>()
+                  .findOptionStock()
+                  .onError((error, _) {
+                showToastError(context: context, message: error.toString());
+              }));
+    }
     super.initState();
   }
 
@@ -116,47 +122,46 @@ class _AddStockBodyState extends State<AddStockBody> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        // Consumer ------------------------------------------------------
-        child: Consumer<StockProvider>(
-          builder: (_, data, __) {
-            return Form(
-              key: _key,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // * Judul text ------------------------
-                  const Text(
-                    "Nama Stok",
-                    style: TextStyle(fontSize: 16),
-                  ),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          // Consumer ------------------------------------------------------
+          child: Form(
+            key: _key,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // * Judul text ------------------------
+                const Text(
+                  "Nama Stok",
+                  style: TextStyle(fontSize: 16),
+                ),
 
-                  TextFormField(
-                    textInputAction: TextInputAction.newline,
-                    minLines: 1,
-                    maxLines: 2,
-                    decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Pallete.secondaryBackground,
-                        enabledBorder: InputBorder.none,
-                        border: InputBorder.none),
-                    controller: titleController,
-                    validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return 'Nama stok tidak boleh kosong';
-                      }
-                      return null;
-                    },
-                  ),
+                TextFormField(
+                  textInputAction: TextInputAction.newline,
+                  minLines: 1,
+                  maxLines: 2,
+                  decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Pallete.secondaryBackground,
+                      enabledBorder: InputBorder.none,
+                      border: InputBorder.none),
+                  controller: titleController,
+                  validator: (text) {
+                    if (text == null || text.isEmpty) {
+                      return 'Nama stok tidak boleh kosong';
+                    }
+                    return null;
+                  },
+                ),
 
-                  verticalSpaceSmall,
+                verticalSpaceSmall,
 
-                  // * Category dropdown ------------------------
-                  const Text(
-                    "Kategori",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Container(
+                // * Category dropdown ------------------------
+                const Text(
+                  "Kategori",
+                  style: TextStyle(fontSize: 16),
+                ),
+                Consumer<StockProvider>(builder: (_, data, __) {
+                  return Container(
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     height: 50,
                     width: double.infinity,
@@ -183,152 +188,160 @@ class _AddStockBodyState extends State<AddStockBody> {
                         },
                       ),
                     ),
-                  ),
+                  );
+                }),
 
-                  verticalSpaceSmall,
+                verticalSpaceSmall,
 
-                  // * Qty text ------------------------
-                  const Text(
-                    "Jumlah stok awal",
-                    style: TextStyle(fontSize: 16),
-                  ),
+                // * Qty text ------------------------
+                const Text(
+                  "Jumlah stok awal",
+                  style: TextStyle(fontSize: 16),
+                ),
 
-                  TextFormField(
-                    textInputAction: TextInputAction.newline,
-                    keyboardType: TextInputType.number,
-                    minLines: 1,
-                    maxLines: 1,
-                    decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Pallete.secondaryBackground,
-                        enabledBorder: InputBorder.none,
-                        border: InputBorder.none),
-                    controller: qtyController,
-                    validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return null;
-                      } else if (int.tryParse(text) != null &&
-                          int.parse(text) >= 0) {
-                        return null;
-                      }
-                      return "Qty harus berupa bilangan bulat";
-                    },
-                  ),
-
-                  verticalSpaceSmall,
-
-                  // * Satuan text ------------------------
-                  const Text(
-                    "Satuan",
-                    style: TextStyle(fontSize: 16),
-                  ),
-
-                  TextFormField(
-                    textInputAction: TextInputAction.newline,
-                    minLines: 1,
-                    maxLines: 1,
-                    decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Pallete.secondaryBackground,
-                        enabledBorder: InputBorder.none,
-                        border: InputBorder.none),
-                    controller: unitController,
-                    validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return "Satuan tidak boleh kosong";
-                      }
+                TextFormField(
+                  textInputAction: TextInputAction.newline,
+                  keyboardType: TextInputType.number,
+                  minLines: 1,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Pallete.secondaryBackground,
+                      enabledBorder: InputBorder.none,
+                      border: InputBorder.none),
+                  controller: qtyController,
+                  validator: (text) {
+                    if (text == null || text.isEmpty) {
                       return null;
-                    },
-                  ),
+                    } else if (int.tryParse(text) != null &&
+                        int.parse(text) >= 0) {
+                      return null;
+                    }
+                    return "Qty harus berupa bilangan bulat";
+                  },
+                ),
 
-                  verticalSpaceSmall,
+                verticalSpaceSmall,
 
-                  // * Ambang batas text ------------------------
-                  const Text(
-                    "Ambang batas",
-                    style: TextStyle(fontSize: 16),
-                  ),
+                // * Satuan text ------------------------
+                const Text(
+                  "Satuan",
+                  style: TextStyle(fontSize: 16),
+                ),
 
-                  TextFormField(
-                    textInputAction: TextInputAction.newline,
-                    keyboardType: TextInputType.number,
-                    minLines: 1,
-                    maxLines: 1,
-                    decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Pallete.secondaryBackground,
-                        enabledBorder: InputBorder.none,
-                        border: InputBorder.none),
-                    controller: thresholdController,
-                    validator: (text) {
-                      if (text == null || text.isEmpty) {
-                        return null;
-                      } else if (int.tryParse(text) != null &&
-                          int.parse(text) >= 0) {
-                        return null;
-                      }
-                      return "Ambang batas harus berupa bilangan bulat";
-                    },
-                  ),
+                TextFormField(
+                  textInputAction: TextInputAction.newline,
+                  minLines: 1,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Pallete.secondaryBackground,
+                      enabledBorder: InputBorder.none,
+                      border: InputBorder.none),
+                  controller: unitController,
+                  validator: (text) {
+                    if (text == null || text.isEmpty) {
+                      return "Satuan tidak boleh kosong";
+                    } else if (text.length > 5) {
+                      return "Satuan tidak boleh melebihi 5 karakter";
+                    }
+                    return null;
+                  },
+                ),
 
-                  verticalSpaceSmall,
+                verticalSpaceSmall,
 
-                  // * Note text ------------------------
-                  const Text(
-                    "Lokasi",
-                    style: TextStyle(fontSize: 16),
-                  ),
+                // * Ambang batas text ------------------------
+                const Text(
+                  "Ambang batas",
+                  style: TextStyle(fontSize: 16),
+                ),
 
-                  TextFormField(
-                    textInputAction: TextInputAction.newline,
-                    minLines: 1,
-                    maxLines: 2,
-                    decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Pallete.secondaryBackground,
-                        enabledBorder: InputBorder.none,
-                        border: InputBorder.none),
-                    controller: locationController,
-                  ),
+                TextFormField(
+                  textInputAction: TextInputAction.newline,
+                  keyboardType: TextInputType.number,
+                  minLines: 1,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Pallete.secondaryBackground,
+                      enabledBorder: InputBorder.none,
+                      border: InputBorder.none),
+                  controller: thresholdController,
+                  validator: (text) {
+                    if (text == null || text.isEmpty) {
+                      return null;
+                    } else if (int.tryParse(text) != null &&
+                        int.parse(text) >= 0) {
+                      return null;
+                    }
+                    return "Ambang batas harus berupa bilangan bulat";
+                  },
+                ),
 
-                  verticalSpaceSmall,
+                verticalSpaceSmall,
 
-                  // * Note text ------------------------
-                  const Text(
-                    "Catatan",
-                    style: TextStyle(fontSize: 16),
-                  ),
+                // * Note text ------------------------
+                const Text(
+                  "Lokasi",
+                  style: TextStyle(fontSize: 16),
+                ),
 
-                  TextFormField(
-                    textInputAction: TextInputAction.newline,
-                    minLines: 2,
-                    maxLines: 3,
-                    decoration: const InputDecoration(
-                        filled: true,
-                        fillColor: Pallete.secondaryBackground,
-                        enabledBorder: InputBorder.none,
-                        border: InputBorder.none),
-                    controller: unitController,
-                  ),
+                TextFormField(
+                  textInputAction: TextInputAction.newline,
+                  minLines: 1,
+                  maxLines: 2,
+                  decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Pallete.secondaryBackground,
+                      enabledBorder: InputBorder.none,
+                      border: InputBorder.none),
+                  controller: locationController,
+                  validator: (text) {
+                    if (text == null || text.isEmpty) {
+                      return "Lokasi tidak boleh kosong";
+                    }
+                    return null;
+                  },
+                ),
 
-                  verticalSpaceMedium,
+                verticalSpaceSmall,
 
-                  (data.detailState == ViewState.busy)
+                // * Note text ------------------------
+                const Text(
+                  "Catatan",
+                  style: TextStyle(fontSize: 16),
+                ),
+
+                TextFormField(
+                  textInputAction: TextInputAction.newline,
+                  minLines: 2,
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Pallete.secondaryBackground,
+                      enabledBorder: InputBorder.none,
+                      border: InputBorder.none),
+                  controller: noteController,
+                ),
+
+                verticalSpaceMedium,
+
+                Consumer<StockProvider>(builder: (_, data, __) {
+                  return (data.state == ViewState.busy)
                       ? Center(child: const CircularProgressIndicator())
                       : Center(
                           child: HomeLikeButton(
                               iconData: CupertinoIcons.add,
                               text: "Buat Stok",
                               tapTap: _addStock),
-                        ),
+                        );
+                }),
 
-                  verticalSpaceMedium,
-                ],
-              ),
-            );
-          },
-        ),
-      ),
+                verticalSpaceMedium,
+              ],
+            ),
+          )),
     );
   }
 }

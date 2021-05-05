@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
+import 'package:risa2/src/api/json_models/request/stock_edit_req.dart';
 
 import '../api/filter_models/stock_filter.dart';
 import '../api/json_models/option/stock_category.dart';
@@ -59,6 +60,7 @@ class StockProvider extends ChangeNotifier {
     }
 
     setState(ViewState.idle);
+
     if (error.isNotEmpty) {
       return Future.error(error);
     }
@@ -87,6 +89,12 @@ class StockProvider extends ChangeNotifier {
     return _stockDetail;
   }
 
+  // list Stock use cache
+  List<StockChange> _sortedStockUse = [];
+  List<StockChange> get sortedStockUse {
+    return _sortedStockUse;
+  }
+
   void removeDetail() {
     _stockDetail = StockDetailResponseData("", 0, 0, "", "", "", "", "", false,
         "", "", "", 0, 0, "", [], "", "", [], []);
@@ -103,7 +111,10 @@ class StockProvider extends ChangeNotifier {
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        _stockDetail = response.data!;
+        final stockData = response.data!;
+        _sortedStockUse =
+            _sortStockUse(stockData.increment, stockData.decrement);
+        _stockDetail = stockData;
       }
     } catch (e) {
       error = e.toString();
@@ -135,10 +146,8 @@ class StockProvider extends ChangeNotifier {
 
   // menggabungkan pemakaian stock, anatara penambahan dan pengurangan lalu sorting
   // berdasarkan valu time unix
-  List<StockChange> getStockUse() {
-    final stockUseIncrement = _stockDetail.increment;
-    final stockUseDecrement = _stockDetail.decrement;
-
+  List<StockChange> _sortStockUse(List<StockChange> stockUseIncrement,
+      List<StockChange> stockUseDecrement) {
     if (stockUseIncrement.length == 0 && stockUseDecrement.length == 0) {
       return [];
     }
@@ -187,5 +196,30 @@ class StockProvider extends ChangeNotifier {
       return Future.error(e.toString());
     }
     notifyListeners();
+  }
+
+  // return future StockDetail jika edit stock berhasil
+  Future<bool> editStock(StockEditRequest payload) async {
+    setState(ViewState.busy);
+    var error = "";
+
+    try {
+      final response = await _stockService.editStock(_stockIDSaved, payload);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        _stockDetail = response.data!;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+
+    await findStock(loading: false);
+    return true;
   }
 }

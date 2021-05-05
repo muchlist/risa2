@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/router/routes.dart';
 
 import '../../api/json_models/response/stock_resp.dart';
 import '../../config/constant.dart';
@@ -132,7 +133,7 @@ class StockDetailFragment extends StatelessWidget {
                 ),
               ),
               verticalSpaceMedium,
-              buttonContainer(detail),
+              buttonContainer(context, detail),
             ],
           ),
         ),
@@ -147,7 +148,7 @@ class StockDetailFragment extends StatelessWidget {
     ]);
   }
 
-  Widget buttonContainer(StockDetailResponseData detail) {
+  Widget buttonContainer(BuildContext context, StockDetailResponseData detail) {
     return Container(
       child: Padding(
         padding: const EdgeInsets.only(left: 16),
@@ -177,7 +178,10 @@ class StockDetailFragment extends StatelessWidget {
                       spacing: 10.0,
                       children: [
                         ElevatedButton.icon(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, RouteGenerator.stockEdit);
+                            },
                             style: ElevatedButton.styleFrom(
                               primary: Colors.green[300],
                             ),
