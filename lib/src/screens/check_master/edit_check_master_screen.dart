@@ -184,7 +184,7 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
                       ),
 
                       TextFormField(
-                        textInputAction: TextInputAction.newline,
+                        textInputAction: TextInputAction.next,
                         minLines: 1,
                         maxLines: 2,
                         decoration: const InputDecoration(
@@ -327,7 +327,7 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
                       ),
 
                       TextFormField(
-                        textInputAction: TextInputAction.newline,
+                        textInputAction: TextInputAction.next,
                         minLines: 2,
                         maxLines: 2,
                         decoration: const InputDecoration(

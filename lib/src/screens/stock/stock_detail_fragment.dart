@@ -1,18 +1,26 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/router/routes.dart';
 
-import '../../api/json_models/response/stock_resp.dart';
 import '../../config/constant.dart';
 import '../../config/pallatte.dart';
 import '../../providers/stock.dart';
+import '../../router/routes.dart';
 import '../../shared/cached_image_square.dart';
+import '../../shared/flushbar.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/date_unix.dart';
 import '../../utils/enums.dart';
 
-class StockDetailFragment extends StatelessWidget {
+class StockDetailFragment extends StatefulWidget {
+  @override
+  _StockDetailFragmentState createState() => _StockDetailFragmentState();
+}
+
+class _StockDetailFragmentState extends State<StockDetailFragment> {
   @override
   Widget build(BuildContext context) {
     final stockProvider = context.watch<StockProvider>();
@@ -133,7 +141,9 @@ class StockDetailFragment extends StatelessWidget {
                 ),
               ),
               verticalSpaceMedium,
-              buttonContainer(context, detail),
+              ButtonContainer(
+                provider: stockProvider,
+              ),
             ],
           ),
         ),
@@ -147,61 +157,118 @@ class StockDetailFragment extends StatelessWidget {
         )
     ]);
   }
+}
 
-  Widget buttonContainer(BuildContext context, StockDetailResponseData detail) {
+class ButtonContainer extends StatefulWidget {
+  final StockProvider provider;
+
+  const ButtonContainer({required this.provider});
+
+  @override
+  _ButtonContainerState createState() => _ButtonContainerState();
+}
+
+class _ButtonContainerState extends State<ButtonContainer> {
+  File? _image;
+  final picker = ImagePicker();
+
+  Future _getImageAndUpload(
+      {required BuildContext context,
+      required ImageSource source,
+      required String id}) async {
+    final pickedFile = await picker.getImage(source: source);
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+    } else {
+      return;
+    }
+
+    // compress and upload
+    await context.read<StockProvider>().uploadImage(id, _image!).then((value) {
+      if (value) {
+        showToastSuccess(
+            context: context,
+            message: "Berhasil mengupload gambar",
+            onTop: true);
+      }
+    }).onError((error, _) {
+      showToastError(context: context, message: error.toString());
+      return Future.error(error.toString());
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final detail = widget.provider.stockDetail;
     return Container(
       child: Padding(
-        padding: const EdgeInsets.only(left: 16),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                (detail.image.isNotEmpty)
+          padding: const EdgeInsets.only(left: 16),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Container(
+                child: (detail.image.isNotEmpty)
                     ? Flexible(
                         flex: 1,
-                        child: CachedImageSquare(
-                          urlPath: "${Constant.baseUrl}${detail.image}",
+                        child: GestureDetector(
+                          onTap: () => _getImageAndUpload(
+                              context: context,
+                              source: ImageSource.camera,
+                              id: detail.id),
+                          onLongPress: () => _getImageAndUpload(
+                              context: context,
+                              source: ImageSource.gallery,
+                              id: detail.id),
+                          child: CachedImageSquare(
+                            urlPath: "${Constant.baseUrl}${detail.image}",
+                          ),
                         ))
-                    : Container(
-                        decoration: BoxDecoration(
-                            color: Pallete.secondaryBackground,
-                            borderRadius: BorderRadius.circular(10.0)),
-                        width: 100,
-                        height: 100,
-                        child: Icon(CupertinoIcons.camera)),
-                horizontalSpaceMedium,
-                Expanded(
-                    flex: 1,
-                    child: Wrap(
-                      alignment: WrapAlignment.start,
-                      spacing: 10.0,
-                      children: [
-                        ElevatedButton.icon(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, RouteGenerator.stockEdit);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.green[300],
-                            ),
-                            icon: Icon(CupertinoIcons.pencil_circle),
-                            label: const Text("Edit")),
-                        ElevatedButton.icon(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.red[300],
-                            ),
-                            icon: Icon(CupertinoIcons.trash_circle),
-                            label: const Text("Hapus")),
-                      ],
-                    ))
-              ],
-            ),
-            verticalSpaceMedium,
-          ],
-        ),
-      ),
+                    : GestureDetector(
+                        onTap: () => _getImageAndUpload(
+                            context: context,
+                            source: ImageSource.camera,
+                            id: detail.id),
+                        onLongPress: () => _getImageAndUpload(
+                            context: context,
+                            source: ImageSource.gallery,
+                            id: detail.id),
+                        child: Container(
+                            decoration: BoxDecoration(
+                                color: Pallete.secondaryBackground,
+                                borderRadius: BorderRadius.circular(10.0)),
+                            width: 100,
+                            height: 100,
+                            child: Icon(CupertinoIcons.camera)),
+                      ),
+              ),
+              horizontalSpaceMedium,
+              Expanded(
+                  flex: 1,
+                  child: Wrap(
+                    alignment: WrapAlignment.start,
+                    spacing: 10.0,
+                    children: [
+                      ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, RouteGenerator.stockEdit);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.green[300],
+                          ),
+                          icon: Icon(CupertinoIcons.pencil_circle),
+                          label: const Text("Edit")),
+                      ElevatedButton.icon(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.red[300],
+                          ),
+                          icon: Icon(CupertinoIcons.trash_circle),
+                          label: const Text("Hapus")),
+                    ],
+                  ))
+            ],
+          )),
     );
   }
 }

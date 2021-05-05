@@ -52,13 +52,13 @@ class RouteGenerator {
             child: EditCheckMasterScreen(), type: PageTransitionType.fade);
       case checkDetail:
         return PageTransition(
-            child: CheckDetailScreen(), type: PageTransitionType.fade);
+            child: CheckDetailScreen(), type: PageTransitionType.rightToLeft);
       case stock:
         return PageTransition(
             child: StockScreen(), type: PageTransitionType.fade);
       case stockDetail:
         return PageTransition(
-            child: StockDetailScreen(), type: PageTransitionType.fade);
+            child: StockDetailScreen(), type: PageTransitionType.rightToLeft);
       case stockAdd:
         return PageTransition(
             child: AddStockScreen(), type: PageTransitionType.fade);

@@ -1,7 +1,9 @@
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:risa2/src/api/json_models/request/stock_edit_req.dart';
+import 'package:risa2/src/utils/image_compress.dart';
 
 import '../api/filter_models/stock_filter.dart';
 import '../api/json_models/option/stock_category.dart';
@@ -220,6 +222,32 @@ class StockProvider extends ChangeNotifier {
     }
 
     await findStock(loading: false);
+    return true;
+  }
+
+  // * update image
+  // return future true jika update image berhasil
+  Future<bool> uploadImage(String id, File file) async {
+    var error = "";
+
+    final fileCompressed = await compressFile(file);
+
+    try {
+      final response = await _stockService.uploadImage(id, fileCompressed);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        _stockDetail = response.data!;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    notifyListeners();
+
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
     return true;
   }
 }

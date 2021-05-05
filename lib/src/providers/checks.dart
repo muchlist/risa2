@@ -170,7 +170,7 @@ class CheckProvider extends ChangeNotifier {
   }
 
   // * update child image
-// return future true jika update check image berhasil
+  // return future true jika update check image berhasil
   Future<bool> uploadChildCheck(String id, String childID, File file) async {
     setChildState(ViewState.busy);
     var error = "";

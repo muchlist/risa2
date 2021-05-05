@@ -136,9 +136,9 @@ class _AddStockBodyState extends State<AddStockBody> {
                 ),
 
                 TextFormField(
-                  textInputAction: TextInputAction.newline,
+                  textInputAction: TextInputAction.next,
                   minLines: 1,
-                  maxLines: 2,
+                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Pallete.secondaryBackground,
@@ -200,7 +200,7 @@ class _AddStockBodyState extends State<AddStockBody> {
                 ),
 
                 TextFormField(
-                  textInputAction: TextInputAction.newline,
+                  textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
                   minLines: 1,
                   maxLines: 1,
@@ -230,7 +230,7 @@ class _AddStockBodyState extends State<AddStockBody> {
                 ),
 
                 TextFormField(
-                  textInputAction: TextInputAction.newline,
+                  textInputAction: TextInputAction.next,
                   minLines: 1,
                   maxLines: 1,
                   decoration: const InputDecoration(
@@ -258,7 +258,7 @@ class _AddStockBodyState extends State<AddStockBody> {
                 ),
 
                 TextFormField(
-                  textInputAction: TextInputAction.newline,
+                  textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
                   minLines: 1,
                   maxLines: 1,
@@ -288,7 +288,7 @@ class _AddStockBodyState extends State<AddStockBody> {
                 ),
 
                 TextFormField(
-                  textInputAction: TextInputAction.newline,
+                  textInputAction: TextInputAction.next,
                   minLines: 1,
                   maxLines: 2,
                   decoration: const InputDecoration(

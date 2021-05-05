@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+
 import '../filter_models/stock_filter.dart';
 import '../http_client.dart';
 import '../json_models/option/stock_category.dart';
@@ -64,6 +68,12 @@ class StockService {
   Future<StockDetailResponse> changeStock(StockChangeRequest payload) {
     return RequestREST(endpoint: "/stock-change", data: payload.toJson())
         .executePost<StockDetailResponse>(StockParser());
+  }
+
+  Future<StockDetailResponse> uploadImage(String id, File file) async {
+    return RequestREST(endpoint: "/stock-image/$id", data: <String, dynamic>{
+      "image": await MultipartFile.fromFile(file.path)
+    }).executeUpload(StockParser());
   }
 
   Future<OptStockCategory> getOptStock() {
