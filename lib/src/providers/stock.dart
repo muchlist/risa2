@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:risa2/src/api/json_models/request/stock_change_req.dart';
 import 'package:risa2/src/api/json_models/request/stock_edit_req.dart';
 import 'package:risa2/src/utils/image_compress.dart';
 
@@ -253,7 +254,6 @@ class StockProvider extends ChangeNotifier {
 
   // remove stock
   Future<bool> removeStock() async {
-    setDetailState(ViewState.busy);
     var error = "";
 
     try {
@@ -265,10 +265,47 @@ class StockProvider extends ChangeNotifier {
       error = e.toString();
     }
 
-    setDetailState(ViewState.idle);
+    notifyListeners();
     if (error.isNotEmpty) {
       return Future.error(error);
     }
+    await findStock(loading: false);
+    return true;
+  }
+
+  // * detail state
+  ViewState _stockChangeState = ViewState.idle;
+  ViewState get stockChangeState => _stockChangeState;
+  void setStockChangeState(ViewState viewState) {
+    _stockChangeState = viewState;
+    notifyListeners();
+  }
+
+  // return future true jika incremet/decrement stock berhasil
+  // perbedaan increment dan decrement adalah pada payload qty plus atau minus
+  Future<bool> changeStock(StockChangeRequest payload) async {
+    setStockChangeState(ViewState.busy);
+    var error = "";
+
+    try {
+      final response = await _stockService.changeStock(_stockIDSaved, payload);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        final stockData = response.data!;
+        _sortedStockUse =
+            _sortStockUse(stockData.increment, stockData.decrement);
+        _stockDetail = stockData;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setStockChangeState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+
     await findStock(loading: false);
     return true;
   }

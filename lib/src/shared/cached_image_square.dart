@@ -21,8 +21,12 @@ class CachedImageSquare extends StatelessWidget {
           ),
         ),
       ),
-      placeholder: (context, url) => CircularProgressIndicator(),
-      errorWidget: (context, url, error) => Icon(Icons.error),
+      placeholder: (context, url) => SizedBox(
+          width: 100,
+          height: 100,
+          child: Center(child: CircularProgressIndicator())),
+      errorWidget: (context, url, error) => SizedBox(
+          width: 100, height: 100, child: Center(child: Icon(Icons.error))),
     );
   }
 }

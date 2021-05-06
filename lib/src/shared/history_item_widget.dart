@@ -68,7 +68,7 @@ class HistoryListTile extends StatelessWidget {
                   ),
                 ),
                 horizontalSpaceSmall,
-                Text(DateTransform().unixToDateString(history.dateStart)),
+                Text(history.dateStart.getDateString()),
                 Spacer(),
                 Text(history.updatedBy.toLowerCase().split(" ")[0])
               ],

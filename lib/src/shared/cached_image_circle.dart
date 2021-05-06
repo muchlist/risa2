@@ -15,8 +15,16 @@ class CachedImageCircle extends StatelessWidget {
         backgroundImage: imageProvider,
         radius: 25,
       ),
-      placeholder: (context, url) => CircularProgressIndicator(),
-      errorWidget: (context, url, error) => Icon(Icons.error),
+      placeholder: (context, url) => CircleAvatar(
+        backgroundColor: Colors.transparent,
+        child: CircularProgressIndicator(),
+        radius: 25,
+      ),
+      errorWidget: (context, url, error) => CircleAvatar(
+        backgroundColor: Colors.transparent,
+        child: Icon(Icons.error),
+        radius: 25,
+      ),
     );
   }
 }

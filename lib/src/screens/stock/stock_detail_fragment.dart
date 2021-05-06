@@ -81,7 +81,7 @@ class _StockDetailFragmentState extends State<StockDetailFragment> {
                       const Text("Update"),
                       const Text("   :   "),
                       Text(
-                        DateTransform().unixToDateString(detail.updatedAt),
+                        detail.updatedAt.getDateString(),
                         softWrap: true,
                         maxLines: 2,
                         overflow: TextOverflow.clip,

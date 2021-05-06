@@ -65,8 +65,9 @@ class StockService {
         .executeGet<StockListResponse>(StockListParser());
   }
 
-  Future<StockDetailResponse> changeStock(StockChangeRequest payload) {
-    return RequestREST(endpoint: "/stock-change", data: payload.toJson())
+  Future<StockDetailResponse> changeStock(
+      String id, StockChangeRequest payload) {
+    return RequestREST(endpoint: "/stock-change/$id", data: payload.toJson())
         .executePost<StockDetailResponse>(StockParser());
   }
 

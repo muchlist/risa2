@@ -12,6 +12,7 @@ Future<File> compressFile(File file) async {
     file.absolute.path,
     tempTargetPath,
     quality: 70,
+    minWidth: 960,
     // rotate: 180,
   );
   if (result == null) {

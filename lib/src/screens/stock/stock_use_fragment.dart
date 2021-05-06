@@ -33,7 +33,7 @@ class StockUseRecyclerView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(DateTransform().unixToDateString(stockUseData.time),
+                      Text(stockUseData.time.getDateString(),
                           style: TextStyle(fontSize: 12, color: Colors.grey)),
                       Text(stockUseData.author.toLowerCase().split(" ")[0],
                           style: TextStyle(fontSize: 12, color: Colors.grey))

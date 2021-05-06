@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/utils/string_modifier.dart';
 
 import '../../api/json_models/response/check_resp.dart';
 import '../../config/constant.dart';
@@ -131,7 +132,7 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
                                     overflow: TextOverflow.clip,
                                   ),
                                   Text(
-                                    "${DateTransform().unixToDateString(detail.createdAt)}",
+                                    "${detail.createdAt.getDateString()}",
                                     softWrap: true,
                                     maxLines: 2,
                                     overflow: TextOverflow.clip,
@@ -217,7 +218,8 @@ class ListTileCheck extends StatelessWidget {
       contentPadding: EdgeInsets.all(8),
       leading: checkItem.imagePath != ""
           ? CachedImageCircle(
-              urlPath: "${Constant.baseUrl}${checkItem.imagePath}")
+              urlPath:
+                  "${Constant.baseUrl}${checkItem.imagePath.thumbnailMod()}")
           : null,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -239,8 +241,7 @@ class ListTileCheck extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                     color: Colors.green.shade100,
                   ),
-                  child: Text(
-                      " ${DateTransform().unixToDateString(checkItem.checkedAt)} "),
+                  child: Text(" ${checkItem.checkedAt.getDateString()} "),
                 )),
                 (checkItem.tagSelected.isNotEmpty)
                     ? WidgetSpan(
@@ -320,8 +321,7 @@ class ExpansionTileCheck extends StatelessWidget {
                     borderRadius: BorderRadius.circular(5),
                     color: Colors.green.shade100,
                   ),
-                  child: Text(
-                      " ${DateTransform().unixToDateString(checkItem.checkedAt)} "),
+                  child: Text(" ${checkItem.checkedAt.getDateString()} "),
                 )),
                 (checkItem.tagSelected.isNotEmpty)
                     ? WidgetSpan(

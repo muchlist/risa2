@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:risa2/src/utils/string_modifier.dart';
 import '../api/json_models/response/stock_list_resp.dart';
 import '../config/constant.dart';
 import 'cached_image_circle.dart';
@@ -14,7 +15,8 @@ class StockListTile extends StatelessWidget {
     return Card(
         child: ListTile(
             leading: (data.image.isNotEmpty)
-                ? CachedImageCircle(urlPath: "${Constant.baseUrl}${data.image}")
+                ? CachedImageCircle(
+                    urlPath: "${Constant.baseUrl}${data.image.thumbnailMod()}")
                 : null,
             title: Text(data.name),
             subtitle: Row(
