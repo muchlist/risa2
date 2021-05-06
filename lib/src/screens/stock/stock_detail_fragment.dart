@@ -197,6 +197,28 @@ class _ButtonContainerState extends State<ButtonContainer> {
     });
   }
 
+  Future<bool?> _deleteConfirm(BuildContext context) {
+    return showDialog<bool?>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Konfirmasi hapus"),
+            content: const Text("Apakah yakin ingin menghapus stok ini!"),
+            actions: <Widget>[
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).accentColor),
+                  child: const Text("Tidak"),
+                  onPressed: () => Navigator.of(context).pop(false)),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text("Ya"))
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     final detail = widget.provider.stockDetail;
@@ -259,7 +281,27 @@ class _ButtonContainerState extends State<ButtonContainer> {
                           icon: Icon(CupertinoIcons.pencil_circle),
                           label: const Text("Edit")),
                       ElevatedButton.icon(
-                          onPressed: () {},
+                          onPressed: () async {
+                            var confirmDelete = await _deleteConfirm(context);
+                            if (confirmDelete != null && confirmDelete) {
+                              await context
+                                  .read<StockProvider>()
+                                  .removeStock()
+                                  .then((value) {
+                                if (value) {
+                                  Navigator.pop(context);
+                                  showToastSuccess(
+                                      context: context,
+                                      message:
+                                          "Berhasil menghapus stok ${detail.name}");
+                                }
+                              }).onError((error, _) {
+                                showToastError(
+                                    context: context,
+                                    message: error.toString());
+                              });
+                            }
+                          },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.red[300],
                           ),

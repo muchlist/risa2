@@ -79,7 +79,8 @@ class _AddStockBodyState extends State<AddStockBody> {
                 if (value) {
                   Navigator.of(context).pop();
                   showToastSuccess(
-                      context: context, message: "Berhasil membuat stok");
+                      context: context,
+                      message: "Berhasil membuat stok ${payload.name}");
                 }
               }).onError((error, _) {
                 if (error != null) {

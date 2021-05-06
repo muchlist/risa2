@@ -250,4 +250,26 @@ class StockProvider extends ChangeNotifier {
     }
     return true;
   }
+
+  // remove stock
+  Future<bool> removeStock() async {
+    setDetailState(ViewState.busy);
+    var error = "";
+
+    try {
+      final response = await _stockService.deleteStock(_stockIDSaved);
+      if (response.error != null) {
+        error = response.error!.message;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setDetailState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+    await findStock(loading: false);
+    return true;
+  }
 }
