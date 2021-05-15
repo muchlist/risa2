@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import '../screens/cctv/cctv_screen.dart';
 
 import '../screens/check/check_detail_screen.dart';
 import '../screens/check/check_screen.dart';
@@ -31,6 +32,7 @@ class RouteGenerator {
   static const String stockEdit = '/stock-edit';
   static const String stockIncrement = '/stock-increment';
   static const String stockDecrement = '/stock-decrement';
+  static const String cctv = '/cctv';
 
   RouteGenerator._();
 
@@ -43,42 +45,37 @@ class RouteGenerator {
       case home:
         return MaterialPageRoute(builder: (_) => HomeScreen());
       case check:
-        return PageTransition(
-            child: CheckScreen(), type: PageTransitionType.fade);
+        return transitionFade(CheckScreen());
       case checkMaster:
-        return PageTransition(
-            child: CheckMasterScreen(), type: PageTransitionType.fade);
+        return transitionFade(CheckMasterScreen());
       case checkMasterAdd:
-        return PageTransition(
-            child: AddCheckMasterScreen(), type: PageTransitionType.fade);
+        return transitionFade(AddCheckMasterScreen());
       case checkMasterEdit:
-        return PageTransition(
-            child: EditCheckMasterScreen(), type: PageTransitionType.fade);
+        return transitionFade(EditCheckMasterScreen());
       case checkDetail:
-        return PageTransition(
-            child: CheckDetailScreen(), type: PageTransitionType.fade);
+        return transitionFade(CheckDetailScreen());
       case stock:
-        return PageTransition(
-            child: StockScreen(), type: PageTransitionType.fade);
+        return transitionFade(StockScreen());
       case stockDetail:
-        return PageTransition(
-            child: StockDetailScreen(), type: PageTransitionType.fade);
+        return transitionFade(StockDetailScreen());
       case stockAdd:
-        return PageTransition(
-            child: AddStockScreen(), type: PageTransitionType.fade);
+        return transitionFade(AddStockScreen());
       case stockEdit:
-        return PageTransition(
-            child: EditStockScreen(), type: PageTransitionType.fade);
+        return transitionFade(EditStockScreen());
       case stockIncrement:
-        return PageTransition(
-            child: IncrementStockScreen(), type: PageTransitionType.fade);
+        return transitionFade(IncrementStockScreen());
       case stockDecrement:
-        return PageTransition(
-            child: DecrementStockScreen(), type: PageTransitionType.fade);
+        return transitionFade(DecrementStockScreen());
+      case cctv:
+        return transitionFade(CctvScreen());
       default:
         return MaterialPageRoute(builder: (_) => LoginScreen());
     }
   }
+}
+
+PageTransition<dynamic> transitionFade(Widget screen) {
+  return PageTransition(child: screen, type: PageTransitionType.fade);
 }
 
 class RouteException implements Exception {

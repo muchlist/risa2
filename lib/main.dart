@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'src/api/services/auth_service.dart';
+import 'src/api/services/cctv_service.dart';
 import 'src/api/services/check_service.dart';
 import 'src/api/services/checkp_service.dart';
 import 'src/api/services/general_service.dart';
@@ -14,6 +15,7 @@ import 'src/api/services/stock_service.dart';
 import 'src/config/pallatte.dart';
 import 'src/globals.dart';
 import 'src/providers/auth.dart';
+import 'src/providers/cctvs.dart';
 import 'src/providers/checks.dart';
 import 'src/providers/checks_master.dart';
 import 'src/providers/generals.dart';
@@ -55,6 +57,7 @@ class MyApp extends StatelessWidget {
   final authService = AuthService();
   final improveService = ImproveService();
   final stockService = StockService();
+  final cctvService = CctvService();
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +76,7 @@ class MyApp extends StatelessWidget {
             create: (context) => CheckMasterProvider(checkMasterService)),
         ChangeNotifierProvider(
             create: (context) => StockProvider(stockService)),
+        ChangeNotifierProvider(create: (context) => CctvProvider(cctvService)),
       ],
       child: MaterialApp(
         title: _title,
