@@ -2,11 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../config/pallatte.dart';
 import '../../globals.dart';
+import '../../providers/generals.dart';
 import '../../shared/ui_helpers.dart';
-import '../search/hist_search_delegate.dart';
+import '../search/main_search_delegate.dart';
 import 'add_history_dialog.dart';
 import 'corousel_fragment.dart';
 import 'dashboard_grid_fragment.dart';
@@ -44,9 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
               size: 28,
             ),
             onPressed: () {
+              context.read<GeneralProvider>().removeGenerals();
               showSearch(
                 context: context,
-                delegate: HistorySearchDelegate(),
+                delegate: MainSearchDelegate(),
               );
             },
           ),

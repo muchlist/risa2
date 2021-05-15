@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../../providers/generals.dart';
 import '../../shared/general_item_widget.dart';
 
-class HistorySearchDelegate extends SearchDelegate {
+class MainSearchDelegate extends SearchDelegate {
   @override
   List<Widget> buildActions(Object context) {
     return [

@@ -25,6 +25,10 @@ class GeneralProvider extends ChangeNotifier {
     return UnmodifiableListView(_generalList);
   }
 
+  void removeGenerals() {
+    _generalList = [];
+  }
+
   List<GeneralMinResponse> generalListFiltered(String search) {
     final generalCopy = UnmodifiableListView(_generalList);
     return generalCopy
