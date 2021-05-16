@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:risa2/src/api/json_models/option/location_type.dart';
 import 'package:risa2/src/api/json_models/request/cctv_edit_req.dart';
+import 'package:risa2/src/api/json_models/response/general_list_resp.dart';
 import 'package:risa2/src/utils/image_compress.dart';
 
 import '../api/filter_models/cctv_filter.dart';
@@ -35,6 +36,12 @@ class CctvProvider extends ChangeNotifier {
     return UnmodifiableListView(_cctvList);
   }
 
+  // cctv list cache
+  List<GeneralMinResponse> _cctvExtraList = [];
+  List<GeneralMinResponse> get cctvExtraList {
+    return UnmodifiableListView(_cctvExtraList);
+  }
+
   // *memasang filter pada pencarian cctv
   FilterCctv _filterCctv = FilterCctv(
     branch: App.getBranch(),
@@ -55,7 +62,8 @@ class CctvProvider extends ChangeNotifier {
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        _cctvList = response.data;
+        _cctvList = response.data.cctvList;
+        _cctvExtraList = response.data.extraList;
       }
     } catch (e) {
       error = e.toString();
@@ -85,15 +93,57 @@ class CctvProvider extends ChangeNotifier {
   }
 
   // cctv detail cache
-  CctvDetailResponseData _cctvDetail = CctvDetailResponseData("", 0, 0, "", "",
-      "", "", "", false, "", "", "", "", "", "", 0, [], "", "", "", "");
+  CctvDetailResponseData _cctvDetail = CctvDetailResponseData(
+      "",
+      0,
+      0,
+      "",
+      "",
+      "",
+      "",
+      "",
+      false,
+      "",
+      "",
+      "",
+      "",
+      "",
+      "",
+      0,
+      [],
+      "",
+      "",
+      "",
+      "",
+      CctvExtra([], 0, [], ""));
   CctvDetailResponseData get cctvDetail {
     return _cctvDetail;
   }
 
   void removeDetail() {
-    _cctvDetail = CctvDetailResponseData("", 0, 0, "", "", "", "", "", false,
-        "", "", "", "", "", "", 0, [], "", "", "", "");
+    _cctvDetail = CctvDetailResponseData(
+        "",
+        0,
+        0,
+        "",
+        "",
+        "",
+        "",
+        "",
+        false,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0,
+        [],
+        "",
+        "",
+        "",
+        "",
+        CctvExtra([], 0, [], ""));
   }
 
   // get detail cctv

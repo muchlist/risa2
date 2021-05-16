@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:risa2/src/api/json_models/response/general_list_resp.dart';
 
 import 'error_resp.dart';
 
@@ -7,8 +8,7 @@ part 'cctv_list_resp.g.dart';
 @JsonSerializable(explicitToJson: true)
 class CctvListResponse {
   final ErrorResp? error;
-  @JsonKey(defaultValue: [])
-  final List<CctvMinResponse> data;
+  final CctvListData data;
 
   CctvListResponse(this.error, this.data);
 
@@ -16,6 +16,21 @@ class CctvListResponse {
       _$CctvListResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$CctvListResponseToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class CctvListData {
+  @JsonKey(defaultValue: [], name: "cctv_list")
+  final List<CctvMinResponse> cctvList;
+  @JsonKey(defaultValue: [], name: "extra_list")
+  final List<GeneralMinResponse> extraList;
+
+  CctvListData(this.cctvList, this.extraList);
+
+  factory CctvListData.fromJson(Map<String, dynamic> json) =>
+      _$CctvListDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CctvListDataToJson(this);
 }
 
 @JsonSerializable()

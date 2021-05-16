@@ -28,7 +28,8 @@ class CctvListParser extends JsonParser<CctvListResponse>
       final decoded = decodeJsonObject(json);
       return CctvListResponse.fromJson(decoded);
     } catch (e) {
-      return CctvListResponse(ErrorResp(0, e.toString(), "", []), []);
+      return CctvListResponse(
+          ErrorResp(0, e.toString(), "", []), CctvListData([], []));
     }
   }
 }
