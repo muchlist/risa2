@@ -2,18 +2,19 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:risa2/src/api/json_models/option/location_type.dart';
-import 'package:risa2/src/api/json_models/request/cctv_edit_req.dart';
-import 'package:risa2/src/api/json_models/response/general_list_resp.dart';
-import 'package:risa2/src/utils/image_compress.dart';
 
 import '../api/filter_models/cctv_filter.dart';
+import '../api/json_models/option/location_type.dart';
+import '../api/json_models/request/cctv_edit_req.dart';
 import '../api/json_models/request/cctv_req.dart';
 import '../api/json_models/response/cctv_list_resp.dart';
 import '../api/json_models/response/cctv_resp.dart';
+import '../api/json_models/response/general_list_resp.dart';
 import '../api/services/cctv_service.dart';
 import '../globals.dart';
+import '../models/cctv_extra_sum.dart';
 import '../utils/enums.dart';
+import '../utils/image_compress.dart';
 
 class CctvProvider extends ChangeNotifier {
   final CctvService _cctvService;
@@ -36,10 +37,28 @@ class CctvProvider extends ChangeNotifier {
     return UnmodifiableListView(_cctvList);
   }
 
-  // cctv list cache
+  // cctv extra list cache
   List<GeneralMinResponse> _cctvExtraList = [];
   List<GeneralMinResponse> get cctvExtraList {
     return UnmodifiableListView(_cctvExtraList);
+  }
+
+  // perhitungan dari data cctv extra list
+  CctvExtraSum _cctvExtraSum = CctvExtraSum(needCheck: 0, needToBeDone: 0);
+  CctvExtraSum get cctvExtraSum => _cctvExtraSum;
+
+  CctvExtraSum _calculateInfoExtra(List<GeneralMinResponse> ctvs) {
+    var cctvNeedCheck = 0;
+    var cctvInProgress = 0;
+    for (final cctv in ctvs) {
+      if (cctv.casesSize == 0 && cctv.lastPing == "DOWN") {
+        cctvNeedCheck++;
+      }
+      if (cctv.casesSize != 0) {
+        cctvInProgress++;
+      }
+    }
+    return CctvExtraSum(needCheck: cctvNeedCheck, needToBeDone: cctvInProgress);
   }
 
   // *memasang filter pada pencarian cctv
@@ -64,6 +83,7 @@ class CctvProvider extends ChangeNotifier {
       } else {
         _cctvList = response.data.cctvList;
         _cctvExtraList = response.data.extraList;
+        _cctvExtraSum = _calculateInfoExtra(response.data.extraList);
       }
     } catch (e) {
       error = e.toString();

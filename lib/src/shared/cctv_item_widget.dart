@@ -17,12 +17,6 @@ class CctvListTile extends StatelessWidget {
                 Text(data.ip.toLowerCase()),
               ],
             ),
-            trailing: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text("${data.branch}"),
-              ],
-            )));
+            trailing: Text("${data.location}")));
   }
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/providers/cctvs.dart';
+import '../../config/pallatte.dart';
+import '../../models/cctv_extra_sum.dart';
+import '../../providers/cctvs.dart';
+import '../../shared/cctv_item_action_widget.dart';
 
 import '../../shared/cctv_item_widget.dart';
 import '../../shared/empty_box.dart';
@@ -70,6 +73,8 @@ class CctvRecyclerView extends StatefulWidget {
 }
 
 class _CctvRecyclerViewState extends State<CctvRecyclerView> {
+  var extraInfoIsShow = false;
+
   Future<void> _loadCctv() {
     return Future.delayed(Duration.zero, () {
       context.read<CctvProvider>().findCctv().onError((error, _) {
@@ -112,19 +117,97 @@ class _CctvRecyclerViewState extends State<CctvRecyclerView> {
     return RefreshIndicator(
       key: refreshKeyCctvScreen,
       onRefresh: _loadCctv,
-      child: ListView.builder(
-        padding: EdgeInsets.only(bottom: 60),
-        itemCount: data.cctvList.length,
-        itemBuilder: (context, index) {
-          return GestureDetector(
+      child: CustomScrollView(
+        slivers: <Widget>[
+          if (data.cctvExtraSum.needCheck != 0 ||
+              data.cctvExtraSum.needToBeDone != 0)
+            SliverToBoxAdapter(
+                child: CctvSliverHeading(
+              data: data.cctvExtraSum,
               onTap: () {
-                context.read<CctvProvider>().removeDetail();
-                context.read<CctvProvider>().setCctvID(data.cctvList[index].id);
-                // todo create cctv detail screen
-                // Navigator.pushNamed(context, RouteGenerator.cctvDetail);
+                setState(() {
+                  extraInfoIsShow = !extraInfoIsShow;
+                });
               },
-              child: CctvListTile(data: data.cctvList[index]));
-        },
+            )),
+          if (extraInfoIsShow)
+            SliverList(
+              delegate: SliverChildBuilderDelegate((context, index) {
+                return GestureDetector(
+                    onTap: () {
+                      context.read<CctvProvider>().removeDetail();
+                      context
+                          .read<CctvProvider>()
+                          .setCctvID(data.cctvList[index].id);
+                      // todo create cctv detail screen
+                      // Navigator.pushNamed(context, RouteGenerator.cctvDetail);
+                    },
+                    child: CctvActionTile(data: data.cctvExtraList[index]));
+              }, childCount: data.cctvExtraList.length),
+            ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate((context, index) {
+              return GestureDetector(
+                  onTap: () {
+                    context.read<CctvProvider>().removeDetail();
+                    context
+                        .read<CctvProvider>()
+                        .setCctvID(data.cctvList[index].id);
+                    // todo create cctv detail screen
+                    // Navigator.pushNamed(context, RouteGenerator.cctvDetail);
+                  },
+                  child: CctvListTile(data: data.cctvList[index]));
+            }, childCount: data.cctvList.length),
+          ),
+          SliverToBoxAdapter(
+              child: SizedBox(
+            height: 100,
+          )),
+        ],
+      ),
+    );
+  }
+}
+
+class CctvSliverHeading extends StatelessWidget {
+  final CctvExtraSum data;
+  final GestureTapCallback onTap;
+  const CctvSliverHeading({required this.data, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5),
+            color: Pallete.secondaryBackground,
+          ),
+          child: Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Perlu pengecekan : ${data.needCheck} unit"),
+                  Text("Bermasalah: ${data.needToBeDone} unit"),
+                ],
+              ),
+              Spacer(),
+              CircleAvatar(
+                maxRadius: 16,
+                backgroundColor:
+                    (data.needCheck != 0) ? Colors.red.shade300 : Colors.grey,
+                child: Icon(
+                  CupertinoIcons.eyeglasses,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
