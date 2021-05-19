@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/router/routes.dart';
+import 'package:risa2/src/screens/search/cctv_search_delegate.dart';
 import '../../config/pallatte.dart';
 import '../../models/cctv_extra_sum.dart';
 import '../../providers/cctvs.dart';
@@ -33,16 +35,15 @@ class _CctvScreenState extends State<CctvScreen> {
               size: 28,
             ),
             onPressed: () async {
-              // todo create cctv search delegate
-              // final searchResult = await showSearch(
-              //   context: context,
-              //   delegate: CctvSearchDelegate(),
-              // );
-              // if (searchResult != null) {
-              //   context.read<CctvProvider>().removeDetail();
-              //   context.read<CctvProvider>().setCctvID(searchResult);
-              //   await Navigator.pushNamed(context, RouteGenerator.cctvDetail);
-              // }
+              final searchResult = await showSearch(
+                context: context,
+                delegate: CctvSearchDelegate(),
+              );
+              if (searchResult != null) {
+                context.read<CctvProvider>().removeDetail();
+                context.read<CctvProvider>().setCctvID(searchResult);
+                await Navigator.pushNamed(context, RouteGenerator.cctvDetail);
+              }
             },
           ),
           IconButton(
@@ -139,12 +140,20 @@ class _CctvRecyclerViewState extends State<CctvRecyclerView> {
                       context
                           .read<CctvProvider>()
                           .setCctvID(data.cctvList[index].id);
-                      // todo create cctv detail screen
-                      // Navigator.pushNamed(context, RouteGenerator.cctvDetail);
+                      Navigator.pushNamed(context, RouteGenerator.cctvDetail);
                     },
                     child: CctvActionTile(data: data.cctvExtraList[index]));
               }, childCount: data.cctvExtraList.length),
             ),
+          if (extraInfoIsShow)
+            SliverToBoxAdapter(
+                child: Divider(
+              height: 20,
+              color: Colors.brown[300],
+              indent: 40,
+              endIndent: 40,
+              thickness: 2,
+            )),
           SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
               return GestureDetector(
@@ -153,8 +162,7 @@ class _CctvRecyclerViewState extends State<CctvRecyclerView> {
                     context
                         .read<CctvProvider>()
                         .setCctvID(data.cctvList[index].id);
-                    // todo create cctv detail screen
-                    // Navigator.pushNamed(context, RouteGenerator.cctvDetail);
+                    Navigator.pushNamed(context, RouteGenerator.cctvDetail);
                   },
                   child: CctvListTile(data: data.cctvList[index]));
             }, childCount: data.cctvList.length),

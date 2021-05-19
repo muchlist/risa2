@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import '../screens/cctv/cctv_detail_screen.dart';
 import '../screens/cctv/cctv_screen.dart';
 
 import '../screens/check/check_detail_screen.dart';
@@ -33,6 +34,7 @@ class RouteGenerator {
   static const String stockIncrement = '/stock-increment';
   static const String stockDecrement = '/stock-decrement';
   static const String cctv = '/cctv';
+  static const String cctvDetail = '/cctv-detail';
 
   RouteGenerator._();
 
@@ -68,6 +70,8 @@ class RouteGenerator {
         return transitionFade(DecrementStockScreen());
       case cctv:
         return transitionFade(CctvScreen());
+      case cctvDetail:
+        return transitionFade(CctvDetailScreen());
       default:
         return MaterialPageRoute(builder: (_) => LoginScreen());
     }

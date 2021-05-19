@@ -1,0 +1,84 @@
+import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
+import 'package:risa2/src/providers/cctvs.dart';
+import '../../api/json_models/response/cctv_list_resp.dart';
+
+import '../../shared/cctv_item_widget.dart';
+
+class CctvSearchDelegate extends SearchDelegate<String?> {
+  Widget generateListView(List<CctvMinResponse> cctvList) {
+    if (cctvList.length == 0) {
+      return Center(
+          child: SizedBox(
+              height: 200,
+              width: 200,
+              child: Center(
+                  child: Lottie.asset('assets/lottie/629-empty-box.json'))));
+    }
+
+    return ListView.builder(
+      itemCount: cctvList.length,
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () => close(context, cctvList[index].id),
+          child: CctvListTile(
+            data: cctvList[index],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  List<Widget> buildActions(Object context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    final cctvList = context.read<CctvProvider>().cctvList;
+    if (query == "") {
+      return generateListView(cctvList);
+    } else {
+      final cctvListFiltered = cctvList
+          .where((x) =>
+              x.name.contains(query.toUpperCase()) || x.ip.contains(query))
+          .toList();
+
+      return generateListView(cctvListFiltered);
+    }
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final cctvList = context.read<CctvProvider>().cctvList;
+    if (query == "") {
+      return generateListView(cctvList);
+    } else {
+      final cctvListFiltered = cctvList
+          .where((x) =>
+              x.name.contains(query.toUpperCase()) || x.ip.contains(query))
+          .toList();
+
+      return generateListView(cctvListFiltered);
+    }
+  }
+}
