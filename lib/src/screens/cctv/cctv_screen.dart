@@ -74,8 +74,7 @@ class _CctvScreenState extends State<CctvScreen> {
       floatingActionButton: FloatingActionButton.extended(
           icon: Icon(Icons.add),
           onPressed: () {
-            // todo create add cctv screen
-            // Navigator.pushNamed(context, RouteGenerator.cctvAdd);
+            Navigator.pushNamed(context, RouteGenerator.cctvAdd);
           },
           label: Text("Tambah data")),
       body: CctvRecyclerView(),

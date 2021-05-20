@@ -6,3 +6,9 @@ extension UnixTimeStamp on int {
     return DateFormat("d MMM HH:mm").format(date.toLocal());
   }
 }
+
+extension DateMYString on DateTime {
+  String getMonthYearDisplay() {
+    return DateFormat("MMM y").format(toLocal());
+  }
+}

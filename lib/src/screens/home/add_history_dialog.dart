@@ -100,7 +100,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.95,
+      height: screenHeightPercentage(context, percentage: 0.95),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
@@ -338,7 +338,10 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                         },
                       ),
 
-                      verticalSpaceMedium
+                      SizedBox(
+                        height:
+                            screenHeightPercentage(context, percentage: 0.4),
+                      )
                     ],
                   ),
                 ),

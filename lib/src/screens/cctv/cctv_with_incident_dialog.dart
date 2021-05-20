@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/api/json_models/response/general_list_resp.dart';
 
 import '../../config/pallatte.dart';
 import '../../providers/cctvs.dart';
 import '../../shared/cctv_item_action_widget.dart';
+import '../../shared/ui_helpers.dart';
 
 class CctvWithIncidentDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16),
-      height: MediaQuery.of(context).size.height * 0.8,
+      height: screenHeightPercentage(context, percentage: 0.8),
       child: Column(children: [
         const Divider(
           height: 40,
