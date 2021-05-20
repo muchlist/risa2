@@ -1,18 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/router/routes.dart';
-import 'package:risa2/src/screens/search/cctv_search_delegate.dart';
+
 import '../../config/pallatte.dart';
 import '../../models/cctv_extra_sum.dart';
 import '../../providers/cctvs.dart';
-import '../../shared/cctv_item_action_widget.dart';
-
+import '../../router/routes.dart';
 import '../../shared/cctv_item_widget.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/flushbar.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
+import '../search/cctv_search_delegate.dart';
+import 'cctv_with_incident_dialog.dart';
 
 var refreshKeyCctvScreen = GlobalKey<RefreshIndicatorState>();
 
@@ -22,6 +22,20 @@ class CctvScreen extends StatefulWidget {
 }
 
 class _CctvScreenState extends State<CctvScreen> {
+  late CctvProvider _cctvProvider;
+
+  @override
+  void initState() {
+    _cctvProvider = context.read<CctvProvider>();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _cctvProvider.onClose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,8 +54,9 @@ class _CctvScreenState extends State<CctvScreen> {
                 delegate: CctvSearchDelegate(),
               );
               if (searchResult != null) {
-                context.read<CctvProvider>().removeDetail();
-                context.read<CctvProvider>().setCctvID(searchResult);
+                _cctvProvider
+                  ..removeDetail()
+                  ..setCctvID(searchResult);
                 await Navigator.pushNamed(context, RouteGenerator.cctvDetail);
               }
             },
@@ -74,7 +89,17 @@ class CctvRecyclerView extends StatefulWidget {
 }
 
 class _CctvRecyclerViewState extends State<CctvRecyclerView> {
-  var extraInfoIsShow = false;
+  void _showCctvWithIncident(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      builder: (context) => CctvWithIncidentDialog(),
+    );
+  }
 
   Future<void> _loadCctv() {
     return Future.delayed(Duration.zero, () {
@@ -125,35 +150,9 @@ class _CctvRecyclerViewState extends State<CctvRecyclerView> {
             SliverToBoxAdapter(
                 child: CctvSliverHeading(
               data: data.cctvExtraSum,
-              onTap: () {
-                setState(() {
-                  extraInfoIsShow = !extraInfoIsShow;
-                });
-              },
+              onTap: () => _showCctvWithIncident(context),
             )),
-          if (extraInfoIsShow)
-            SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return GestureDetector(
-                    onTap: () {
-                      context.read<CctvProvider>().removeDetail();
-                      context
-                          .read<CctvProvider>()
-                          .setCctvID(data.cctvList[index].id);
-                      Navigator.pushNamed(context, RouteGenerator.cctvDetail);
-                    },
-                    child: CctvActionTile(data: data.cctvExtraList[index]));
-              }, childCount: data.cctvExtraList.length),
-            ),
-          if (extraInfoIsShow)
-            SliverToBoxAdapter(
-                child: Divider(
-              height: 20,
-              color: Colors.brown[300],
-              indent: 40,
-              endIndent: 40,
-              thickness: 2,
-            )),
+          // LIST CCTV INVENTORY
           SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
               return GestureDetector(

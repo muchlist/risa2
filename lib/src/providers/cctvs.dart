@@ -310,4 +310,12 @@ class CctvProvider extends ChangeNotifier {
     _cctvChangeState = viewState;
     notifyListeners();
   }
+
+  // dipanggil ketika data sudah tidak dibutuhkan lagi,
+  // di on dispose
+  void onClose() {
+    removeDetail();
+    _cctvExtraList = [];
+    _cctvList = [];
+  }
 }

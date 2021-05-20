@@ -34,20 +34,22 @@ class CctvActionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-            side: BorderSide(color: Colors.deepOrange, width: 1)),
-        child: ListTile(
-            title: Text(data.name),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(data.ip.toLowerCase()),
-                (data.casesSize != 0)
-                    ? Text(_generateCase())
-                    : const Text("🔍 : Cctc down, perlu dilakukan pengecekan"),
-              ],
-            ),
-            trailing: Text("${_calculatePercentPing().toStringAsFixed(0)}%")));
+        elevation: 3,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: ListTile(
+              title: Text(data.name),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(data.ip.toLowerCase()),
+                  (data.casesSize != 0)
+                      ? Text(_generateCase())
+                      : const Text(
+                          "🔍 : Cctc down, perlu dilakukan pengecekan"),
+                ],
+              ),
+              trailing: Text("${_calculatePercentPing().toStringAsFixed(0)}%")),
+        ));
   }
 }
