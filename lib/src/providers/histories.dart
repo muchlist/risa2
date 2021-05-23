@@ -80,6 +80,40 @@ class HistoryProvider extends ChangeNotifier {
     return false;
   }
 
+  // ** PARENT HISTORY -----------------------------------------------------
+  List<HistoryMinResponse> _parentHistory = [];
+
+  List<HistoryMinResponse> get parentHistory {
+    return UnmodifiableListView(_parentHistory);
+  }
+
+  void clearParentHistory() {
+    _parentHistory = [];
+  }
+
+  Future<void> findParentHistory(
+      {required String parentID, bool loading = true}) async {
+    if (loading) {
+      setState(ViewState.busy);
+    }
+    var error = "";
+    try {
+      final response = await _historyService.findHistoryFromParent(parentID);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        _parentHistory = response.data;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+  }
+
   String getLabelStatus(double number) {
     switch (number.toInt()) {
       case 1:

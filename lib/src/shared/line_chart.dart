@@ -1,9 +1,8 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:risa2/src/api/json_models/response/cctv_resp.dart';
-import 'package:risa2/src/config/pallatte.dart';
-import 'package:risa2/src/utils/utils.dart';
+import '../api/json_models/response/cctv_resp.dart';
+import '../config/pallatte.dart';
+import '../utils/utils.dart';
 
 class CctvLineChart extends StatefulWidget {
   final CctvExtra data;
@@ -55,7 +54,7 @@ class _CctvLineChartState extends State<CctvLineChart> {
                 ),
                 Text(
                   "${widget.data.pingsState.first.time.getDateString()}",
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Color(0xff68737d),
                     fontSize: 12,
                   ),

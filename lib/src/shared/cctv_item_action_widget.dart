@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:risa2/src/config/pallatte.dart';
 import '../api/json_models/response/general_list_resp.dart';
 
 class CctvActionTile extends StatelessWidget {
@@ -34,23 +35,27 @@ class CctvActionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-        elevation: 3,
+        elevation: 0,
+        color: Pallete.background,
         child: Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: ListTile(
-              title: Text(data.name),
+              title: Text(
+                data.name,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                        color: Color.fromRGBO(255, 186, 130, 0.15),
+                        color: Pallete.secondaryBackground,
                         borderRadius: BorderRadius.circular(5)),
                     child: Padding(
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
                         data.ip.toLowerCase(),
-                        style: TextStyle(color: Colors.deepOrange[300]),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ),
                   ),

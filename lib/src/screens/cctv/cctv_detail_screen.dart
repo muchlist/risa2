@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/providers/cctvs.dart';
-import 'package:risa2/src/screens/stock/stock_use_fragment.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/flushbar.dart';
 
+import '../../providers/cctvs.dart';
+import '../../shared/flushbar.dart';
 import 'cctv_detail_fragment.dart';
+import 'cctv_history_fragment.dart';
 
 class CctvDetailScreen extends StatefulWidget {
   @override
@@ -34,7 +34,7 @@ class _CctvDetailScreenState extends State<CctvDetailScreen> {
                 text: "Detail",
               ),
               const Tab(
-                text: "Pemakaian",
+                text: "Riwayat",
               ),
             ],
           ),
@@ -43,7 +43,7 @@ class _CctvDetailScreenState extends State<CctvDetailScreen> {
         body: TabBarView(
           children: [
             CctvDetailFragment(),
-            StockUseRecyclerView(),
+            CctvHistoryRecyclerView(),
           ],
         ),
       ),

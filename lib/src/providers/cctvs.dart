@@ -112,6 +112,8 @@ class CctvProvider extends ChangeNotifier {
     _cctvIDSaved = cctvID;
   }
 
+  String getCctvId() => _cctvIDSaved;
+
   // cctv detail cache
   CctvDetailResponseData _cctvDetail = CctvDetailResponseData(
       "",
