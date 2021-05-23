@@ -5,6 +5,16 @@ extension UnixTimeStamp on int {
     var date = DateTime.fromMillisecondsSinceEpoch(this * 1000);
     return DateFormat("d MMM HH:mm").format(date.toLocal());
   }
+
+  String getHourString() {
+    var date = DateTime.fromMillisecondsSinceEpoch(this * 1000);
+    return DateFormat("HH:mm").format(date.toLocal());
+  }
+
+  String getMonthYear() {
+    var date = DateTime.fromMillisecondsSinceEpoch(this * 1000);
+    return DateFormat("MMM y").format(date.toLocal());
+  }
 }
 
 extension DateMYString on DateTime {

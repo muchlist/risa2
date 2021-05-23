@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/router/routes.dart';
 
 import '../../config/pallatte.dart';
 import '../../providers/cctvs.dart';
@@ -9,6 +10,7 @@ import '../../shared/ui_helpers.dart';
 class CctvWithIncidentDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final cctvExtraList = context.read<CctvProvider>().cctvExtraList;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16),
       height: screenHeightPercentage(context, percentage: 0.8),
@@ -40,12 +42,17 @@ class CctvWithIncidentDialog extends StatelessWidget {
                 ),
                 SliverList(
                   delegate: SliverChildBuilderDelegate((contex, index) {
-                    return CctvActionTile(
-                        data:
-                            context.read<CctvProvider>().cctvExtraList[index]);
-                  },
-                      childCount:
-                          context.read<CctvProvider>().cctvExtraList.length),
+                    return GestureDetector(
+                      onTap: () {
+                        context.read<CctvProvider>().removeDetail();
+                        context
+                            .read<CctvProvider>()
+                            .setCctvID(cctvExtraList[index].id);
+                        Navigator.pushNamed(context, RouteGenerator.cctvDetail);
+                      },
+                      child: CctvActionTile(data: cctvExtraList[index]),
+                    );
+                  }, childCount: cctvExtraList.length),
                 ),
               ],
             ),

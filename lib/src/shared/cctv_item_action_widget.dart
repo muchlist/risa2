@@ -42,7 +42,18 @@ class CctvActionTile extends StatelessWidget {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(data.ip.toLowerCase()),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(255, 186, 130, 0.15),
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        data.ip.toLowerCase(),
+                        style: TextStyle(color: Colors.deepOrange[300]),
+                      ),
+                    ),
+                  ),
                   (data.casesSize != 0)
                       ? Text(_generateCase())
                       : const Text(
