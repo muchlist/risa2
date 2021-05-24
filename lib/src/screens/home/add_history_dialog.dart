@@ -100,20 +100,20 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // height: MediaQuery.of(context).size.height * 0.8,
+      height: screenHeightPercentage(context, percentage: 0.95),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Divider(
-              indent: 70,
-              endIndent: 70,
-              height: 10,
+              height: 40,
               thickness: 5,
               color: Pallete.secondaryBackground,
+              indent: 50,
+              endIndent: 50,
             ),
-            verticalSpaceLarge,
+            verticalSpaceSmall,
             Expanded(
                 child: NotificationListener(
               onNotification: (OverscrollIndicatorNotification overScroll) {
@@ -338,7 +338,10 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                         },
                       ),
 
-                      verticalSpaceMedium
+                      SizedBox(
+                        height:
+                            screenHeightPercentage(context, percentage: 0.4),
+                      )
                     ],
                   ),
                 ),

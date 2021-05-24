@@ -63,7 +63,7 @@ class HistoryListTile extends StatelessWidget {
                       style: (history.completeStatus == 4 ||
                               history.completeStatus == 0)
                           ? TextStyle(color: Colors.white)
-                          : TextStyle(color: Color.fromRGBO(255, 186, 130, 1)),
+                          : TextStyle(color: Colors.deepOrange[300]),
                     ),
                   ),
                 ),

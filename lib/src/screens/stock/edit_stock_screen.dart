@@ -341,7 +341,7 @@ class _EditStockBodyState extends State<EditStockBody> {
                     ? Center(child: const CircularProgressIndicator())
                     : Center(
                         child: HomeLikeButton(
-                            iconData: CupertinoIcons.add,
+                            iconData: CupertinoIcons.pencil_circle,
                             text: "Edit Stok",
                             tapTap: () =>
                                 _editStock(data.stockDetail.updatedAt)),

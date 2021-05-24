@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import 'error_resp.dart';
+import 'general_list_resp.dart';
 
 part 'cctv_resp.g.dart';
 
@@ -17,7 +18,7 @@ class CctvDetailResponse {
   Map<String, dynamic> toJson() => _$CctvDetailResponseToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class CctvDetailResponseData {
   final String id;
   @JsonKey(name: "created_at")
@@ -50,6 +51,7 @@ class CctvDetailResponseData {
   final String brand;
   final String type;
   final String note;
+  final CctvExtra extra;
 
   CctvDetailResponseData(
       this.id,
@@ -72,10 +74,30 @@ class CctvDetailResponseData {
       this.image,
       this.brand,
       this.type,
-      this.note);
+      this.note,
+      this.extra);
 
   factory CctvDetailResponseData.fromJson(Map<String, dynamic> json) =>
       _$CctvDetailResponseDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$CctvDetailResponseDataToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class CctvExtra {
+  @JsonKey(defaultValue: [])
+  final List<Case> cases;
+  @JsonKey(name: "cases_size")
+  final int casesSize;
+  @JsonKey(name: "pings_state", defaultValue: [])
+  final List<PingState> pingsState;
+  @JsonKey(name: "last_ping")
+  final String lastPing;
+
+  CctvExtra(this.cases, this.casesSize, this.pingsState, this.lastPing);
+
+  factory CctvExtra.fromJson(Map<String, dynamic> json) =>
+      _$CctvExtraFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CctvExtraToJson(this);
 }

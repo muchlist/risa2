@@ -47,6 +47,7 @@ CctvDetailResponseData _$CctvDetailResponseDataFromJson(
     json['brand'] as String,
     json['type'] as String,
     json['note'] as String,
+    CctvExtra.fromJson(json['extra'] as Map<String, dynamic>),
   );
 }
 
@@ -74,4 +75,27 @@ Map<String, dynamic> _$CctvDetailResponseDataToJson(
       'brand': instance.brand,
       'type': instance.type,
       'note': instance.note,
+      'extra': instance.extra.toJson(),
+    };
+
+CctvExtra _$CctvExtraFromJson(Map<String, dynamic> json) {
+  return CctvExtra(
+    (json['cases'] as List<dynamic>?)
+            ?.map((e) => Case.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
+    json['cases_size'] as int,
+    (json['pings_state'] as List<dynamic>?)
+            ?.map((e) => PingState.fromJson(e as Map<String, dynamic>))
+            .toList() ??
+        [],
+    json['last_ping'] as String,
+  );
+}
+
+Map<String, dynamic> _$CctvExtraToJson(CctvExtra instance) => <String, dynamic>{
+      'cases': instance.cases.map((e) => e.toJson()).toList(),
+      'cases_size': instance.casesSize,
+      'pings_state': instance.pingsState.map((e) => e.toJson()).toList(),
+      'last_ping': instance.lastPing,
     };

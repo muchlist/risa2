@@ -21,10 +21,31 @@ class HistoryProvider extends ChangeNotifier {
 
   List<HistoryMinResponse> _historyList = [];
 
+  // 3 history terbaru
   List<HistoryMinResponse> get historyListDashboard {
     if (_historyList.length > 2) {
       return [..._historyList.sublist(0, 3)];
     }
+    return UnmodifiableListView(_historyList);
+  }
+
+  // history progress
+  List<HistoryMinResponse> get historyProgressList {
+    return _historyList
+        .where((hist) => hist.completeStatus == enumStatus.progress.index)
+        .toList();
+  }
+
+  // history pending
+  List<HistoryMinResponse> get historyPendingList {
+    return _historyList.where((hist) {
+      return hist.completeStatus == enumStatus.pending.index ||
+          hist.completeStatus == enumStatus.rpending.index;
+    }).toList();
+  }
+
+  // history all
+  List<HistoryMinResponse> get historyList {
     return UnmodifiableListView(_historyList);
   }
 
@@ -78,6 +99,40 @@ class HistoryProvider extends ChangeNotifier {
       return Future.error(error);
     }
     return false;
+  }
+
+  // ** PARENT HISTORY -----------------------------------------------------
+  List<HistoryMinResponse> _parentHistory = [];
+
+  List<HistoryMinResponse> get parentHistory {
+    return UnmodifiableListView(_parentHistory);
+  }
+
+  void clearParentHistory() {
+    _parentHistory = [];
+  }
+
+  Future<void> findParentHistory(
+      {required String parentID, bool loading = true}) async {
+    if (loading) {
+      setState(ViewState.busy);
+    }
+    var error = "";
+    try {
+      final response = await _historyService.findHistoryFromParent(parentID);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        _parentHistory = response.data;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
   }
 
   String getLabelStatus(double number) {

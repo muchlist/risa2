@@ -15,8 +15,7 @@ class DashboardGrid extends StatelessWidget {
         route: RouteGenerator.stock),
     Dashboard("Checklist", CupertinoIcons.chevron_down_square,
         color: Pallete.green.withOpacity(0.4), route: RouteGenerator.check),
-    Dashboard("Export", CupertinoIcons.upload_circle,
-        color: Pallete.green.withOpacity(0.4)),
+    Dashboard("Cctv", CupertinoIcons.camera, route: RouteGenerator.cctv),
     Dashboard("Hardware", CupertinoIcons.device_desktop,
         color: Pallete.green.withOpacity(0.4)),
     Dashboard("Software", CupertinoIcons.square_stack_3d_up,
@@ -45,7 +44,7 @@ class DashboardGrid extends StatelessWidget {
               if (route.isNotEmpty) {
                 Navigator.of(context).pushNamed(route);
               } else {
-                // todo
+                // todo if menu not available
               }
             },
             child: DashboardIcon(dashboardItems[i])),

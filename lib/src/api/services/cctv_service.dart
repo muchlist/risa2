@@ -1,5 +1,10 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+
 import '../filter_models/cctv_filter.dart';
 import '../http_client.dart';
+import '../json_models/option/location_type.dart';
 import '../json_models/request/cctv_edit_req.dart';
 import '../json_models/request/cctv_req.dart';
 import '../json_models/response/cctv_list_resp.dart';
@@ -60,5 +65,16 @@ class CctvService {
 
     return RequestREST(endpoint: "/cctv?$query")
         .executeGet<CctvListResponse>(CctvListParser());
+  }
+
+  Future<CctvDetailResponse> uploadImage(String id, File file) async {
+    return RequestREST(endpoint: "/cctv-image/$id", data: <String, dynamic>{
+      "image": await MultipartFile.fromFile(file.path)
+    }).executeUpload(CctvParser());
+  }
+
+  Future<OptLocationType> getOptCreateCctv(String branch) {
+    return RequestREST(endpoint: "opt-cctv?branch=$branch")
+        .executeGet<OptLocationType>(LocationTypeParser());
   }
 }

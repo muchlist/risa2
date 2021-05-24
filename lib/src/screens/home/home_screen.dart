@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/router/routes.dart';
 
 import '../../config/pallatte.dart';
 import '../../globals.dart';
@@ -180,7 +181,9 @@ class _HomeScreenState extends State<HomeScreen> {
             right: 40,
             child: IconButton(
                 icon: const Icon(CupertinoIcons.circle_grid_3x3_fill, size: 28),
-                onPressed: () {}),
+                onPressed: () {
+                  Navigator.pushNamed(context, RouteGenerator.history);
+                }),
           )
         ],
       ),
