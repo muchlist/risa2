@@ -4,13 +4,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/providers/cctvs.dart';
-import 'package:risa2/src/shared/line_chart.dart';
 
 import '../../config/constant.dart';
 import '../../config/pallatte.dart';
+import '../../providers/cctvs.dart';
+import '../../router/routes.dart';
 import '../../shared/cached_image_square.dart';
 import '../../shared/flushbar.dart';
+import '../../shared/line_chart.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/date_unix.dart';
 import '../../utils/enums.dart';
@@ -271,9 +272,8 @@ class _ButtonContainerState extends State<ButtonContainer> {
                     children: [
                       ElevatedButton.icon(
                           onPressed: () {
-                            //todo generate cctv edit screen
-                            // Navigator.pushNamed(
-                            //     context, RouteGenerator.cctvEdit);
+                            Navigator.pushNamed(
+                                context, RouteGenerator.cctvEdit);
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.green[300],

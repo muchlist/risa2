@@ -5,7 +5,7 @@ part 'cctv_edit_req.g.dart';
 @JsonSerializable()
 class CctvEditRequest {
   @JsonKey(name: "filter_timestamp")
-  final String filterTimestamp;
+  final int filterTimestamp;
   final String name;
   @JsonKey(name: "inventory_number")
   final String inventoryNumber;

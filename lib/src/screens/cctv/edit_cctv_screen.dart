@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../api/json_models/request/cctv_edit_req.dart';
 
-import '../../api/json_models/request/cctv_req.dart';
 import '../../config/pallatte.dart';
 import '../../providers/cctvs.dart';
 import '../../shared/flushbar.dart';
@@ -10,25 +10,25 @@ import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/utils.dart';
 
-class AddCctvScreen extends StatelessWidget {
+class EditCctvScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Tambah Cctv"),
+        title: const Text("Edit Cctv"),
       ),
-      body: AddCctvBody(),
+      body: EditCctvBody(),
     );
   }
 }
 
-class AddCctvBody extends StatefulWidget {
+class EditCctvBody extends StatefulWidget {
   @override
-  _AddCctvBodyState createState() => _AddCctvBodyState();
+  _EditCctvBodyState createState() => _EditCctvBodyState();
 }
 
-class _AddCctvBodyState extends State<AddCctvBody> {
+class _EditCctvBodyState extends State<EditCctvBody> {
   final _key = GlobalKey<FormState>();
 
   String? _selectedLocation;
@@ -49,7 +49,7 @@ class _AddCctvBodyState extends State<AddCctvBody> {
   final brandController = TextEditingController();
   final noteController = TextEditingController();
 
-  void _addCctv() {
+  void _editCctv(int timestamp) {
     if (_key.currentState?.validate() ?? false) {
       // validasi tambahan
       var errorMessage = "";
@@ -65,8 +65,8 @@ class _AddCctvBodyState extends State<AddCctvBody> {
         return;
       }
 
-      // Payload
-      final payload = CctvRequest(
+      final payload = CctvEditRequest(
+          filterTimestamp: timestamp,
           name: nameController.text,
           inventoryNumber: inventoryNumController.text,
           ip: ipController.text,
@@ -80,7 +80,7 @@ class _AddCctvBodyState extends State<AddCctvBody> {
       // Call Provider
       Future.delayed(
           Duration.zero,
-          () => context.read<CctvProvider>().addCctv(payload).then((value) {
+          () => context.read<CctvProvider>().editCctv(payload).then((value) {
                 if (value) {
                   Navigator.of(context).pop();
                   showToastSuccess(
@@ -114,6 +114,37 @@ class _AddCctvBodyState extends State<AddCctvBody> {
   }
 
   @override
+  void initState() {
+    final existData = context.read<CctvProvider>().cctvDetail;
+
+    nameController.text = existData.name;
+    inventoryNumController.text = existData.inventoryNumber;
+    ipController.text = existData.ip;
+    brandController.text = existData.brand;
+    noteController.text = existData.note;
+    if (existData.date != 0) {
+      _dateSelected = existData.date.toDate();
+    }
+
+    // default length == 1 , if option got update length more than 1
+    if (context.read<CctvProvider>().cctvOption.type.length == 1) {
+      Future.delayed(
+          Duration.zero,
+          () =>
+              context.read<CctvProvider>().findOptionCctv().onError((error, _) {
+                showToastError(context: context, message: error.toString());
+              })).whenComplete(() {
+        _selectedLocation = existData.location;
+        _selectedType = existData.type;
+      });
+    } else {
+      _selectedLocation = existData.location;
+      _selectedType = existData.type;
+    }
+    super.initState();
+  }
+
+  @override
   void dispose() {
     nameController.dispose();
     inventoryNumController.dispose();
@@ -122,20 +153,6 @@ class _AddCctvBodyState extends State<AddCctvBody> {
     noteController.dispose();
 
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    // default length == 1 , if option got update length more than 1
-    if (context.read<CctvProvider>().cctvOption.location.length == 1) {
-      Future.delayed(
-          Duration.zero,
-          () =>
-              context.read<CctvProvider>().findOptionCctv().onError((error, _) {
-                showToastError(context: context, message: error.toString());
-              }));
-    }
-    super.initState();
   }
 
   @override
@@ -195,9 +212,9 @@ class _AddCctvBodyState extends State<AddCctvBody> {
 
                 verticalSpaceSmall,
 
-                // * IP Address text
+                // * IP Editress text
                 const Text(
-                  "IP Address",
+                  "IP Editress",
                   style: TextStyle(fontSize: 16),
                 ),
 
@@ -216,7 +233,7 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                       return null;
                     } else {
                       if (!ValueValidator().ip(text)) {
-                        return "IP Address tidak valid";
+                        return "IP Editress tidak valid";
                       }
                     }
                     return null;
@@ -379,9 +396,10 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                       ? Center(child: const CircularProgressIndicator())
                       : Center(
                           child: HomeLikeButton(
-                              iconData: CupertinoIcons.add,
-                              text: "Tambah Cctv",
-                              tapTap: _addCctv),
+                              iconData: CupertinoIcons.pencil_circle,
+                              text: "Edit Cctv",
+                              tapTap: () =>
+                                  _editCctv(data.cctvDetail.updatedAt)),
                         );
                 }),
 

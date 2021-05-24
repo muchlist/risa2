@@ -8,7 +8,7 @@ part of 'cctv_edit_req.dart';
 
 CctvEditRequest _$CctvEditRequestFromJson(Map<String, dynamic> json) {
   return CctvEditRequest(
-    filterTimestamp: json['filter_timestamp'] as String,
+    filterTimestamp: json['filter_timestamp'] as int,
     name: json['name'] as String,
     inventoryNumber: json['inventory_number'] as String,
     ip: json['ip'] as String,
