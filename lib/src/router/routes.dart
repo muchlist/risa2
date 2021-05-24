@@ -10,6 +10,7 @@ import '../screens/check/check_screen.dart';
 import '../screens/check_master/add_check_master_screen.dart';
 import '../screens/check_master/check_master_screen.dart';
 import '../screens/check_master/edit_check_master_screen.dart';
+import '../screens/history/histories_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/landing/landing.dart';
 import '../screens/login/login_screen.dart';
@@ -24,6 +25,7 @@ class RouteGenerator {
   static const String landing = '/';
   static const String home = '/home';
   static const String login = '/login';
+  static const String history = '/histories';
   static const String check = '/check';
   static const String checkMaster = '/check-master';
   static const String checkMasterAdd = '/check-master-add';
@@ -50,6 +52,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case home:
         return MaterialPageRoute(builder: (_) => HomeScreen());
+      case history:
+        return transitionFade(HistoriesScreen());
       case check:
         return transitionFade(CheckScreen());
       case checkMaster:
