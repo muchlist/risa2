@@ -51,14 +51,7 @@ class _CctvHistoryRecyclerViewState extends State<CctvHistoryRecyclerView> {
   void initState() {
     historyProvider = context.read<HistoryProvider>();
     cctvProvider = context.read<CctvProvider>();
-    _loadHistory();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    historyProvider.clearParentHistory();
-    super.dispose();
   }
 
   @override
