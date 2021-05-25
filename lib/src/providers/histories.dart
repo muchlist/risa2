@@ -77,7 +77,9 @@ class HistoryProvider extends ChangeNotifier {
 
   // return future true jika add history berhasil
   // memanggil findHistory sehigga tidak perlu notifyListener
-  Future<bool> addHistory(HistoryRequest payload) async {
+  // jika parentID di isi maka akan memanggil findParentHistory
+  Future<bool> addHistory(HistoryRequest payload,
+      {String parentID = ""}) async {
     setState(ViewState.busy);
 
     var error = "";
@@ -86,7 +88,12 @@ class HistoryProvider extends ChangeNotifier {
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        await findHistory(loading: false);
+        if (parentID.isNotEmpty) {
+          await findParentHistory(parentID: parentID, loading: false);
+          await findHistory(loading: false);
+        } else {
+          await findHistory(loading: false);
+        }
         return true;
       }
     } catch (e) {

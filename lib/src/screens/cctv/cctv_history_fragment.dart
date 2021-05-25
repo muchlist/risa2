@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/shared/add_parent_history_dialog.dart';
 import '../../api/json_models/response/history_list_resp.dart';
 import '../../providers/cctvs.dart';
 import '../../providers/histories.dart';
@@ -19,9 +20,10 @@ class CctvHistoryRecyclerView extends StatefulWidget {
 
 class _CctvHistoryRecyclerViewState extends State<CctvHistoryRecyclerView> {
   late final HistoryProvider historyProvider;
+  late final CctvProvider cctvProvider;
 
   Future<void> _loadHistory() {
-    final parentID = context.read<CctvProvider>().getCctvId();
+    final parentID = cctvProvider.getCctvId();
     return Future.delayed(Duration.zero, () {
       historyProvider.findParentHistory(parentID: parentID).onError(
           (error, _) =>
@@ -29,9 +31,26 @@ class _CctvHistoryRecyclerViewState extends State<CctvHistoryRecyclerView> {
     });
   }
 
+  // * ADD INCIDENT (add_history_dialog)
+  void _startAddIncident(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      builder: (context) => AddParentHistoryDialog(
+        parentID: cctvProvider.getCctvId(),
+        parentName: cctvProvider.cctvDetail.name,
+      ),
+    );
+  }
+
   @override
   void initState() {
     historyProvider = context.read<HistoryProvider>();
+    cctvProvider = context.read<CctvProvider>();
     _loadHistory();
     super.initState();
   }
@@ -66,7 +85,9 @@ class _CctvHistoryRecyclerViewState extends State<CctvHistoryRecyclerView> {
           Positioned(
             bottom: 30,
             child: HomeLikeButton(
-                iconData: Icons.add, text: "Tambah History", tapTap: () {}),
+                iconData: Icons.add,
+                text: "Tambah History",
+                tapTap: () => _startAddIncident(context)),
           )
         ],
       );
