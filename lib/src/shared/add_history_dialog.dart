@@ -2,16 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../api/filter_models/general_filter.dart';
-import '../../api/json_models/request/history_req.dart';
-import '../../api/json_models/response/general_list_resp.dart';
-import '../../config/pallatte.dart';
-import '../../providers/generals.dart';
-import '../../providers/histories.dart';
-import '../../shared/flushbar.dart';
-import '../../shared/ui_helpers.dart';
-import '../../utils/enums.dart';
-import '../search/general_search_delegate.dart';
+import '../api/filter_models/general_filter.dart';
+import '../api/json_models/request/history_req.dart';
+import '../api/json_models/response/general_list_resp.dart';
+import '../config/pallatte.dart';
+import '../providers/generals.dart';
+import '../providers/histories.dart';
+import '../screens/search/general_search_delegate.dart';
+import '../utils/enums.dart';
+import 'flushbar.dart';
+import 'ui_helpers.dart';
 
 class ItemChoice {
   final int id;

@@ -31,17 +31,17 @@ class HistoryProvider extends ChangeNotifier {
 
   // history progress
   List<HistoryMinResponse> get historyProgressList {
-    return _historyList
-        .where((hist) => hist.completeStatus == enumStatus.progress.index)
-        .toList();
+    return _historyList.where((hist) {
+      return hist.completeStatus == enumStatus.progress.index ||
+          hist.completeStatus == enumStatus.rpending.index;
+    }).toList();
   }
 
   // history pending
   List<HistoryMinResponse> get historyPendingList {
-    return _historyList.where((hist) {
-      return hist.completeStatus == enumStatus.pending.index ||
-          hist.completeStatus == enumStatus.rpending.index;
-    }).toList();
+    return _historyList
+        .where((hist) => hist.completeStatus == enumStatus.pending.index)
+        .toList();
   }
 
   // history all
@@ -51,7 +51,7 @@ class HistoryProvider extends ChangeNotifier {
 
   Future<void> findHistory({bool loading = true}) async {
     // create filter
-    final filter = FilterHistory(branch: "BANJARMASIN", limit: 100);
+    final filter = FilterHistory(branch: "BANJARMASIN", limit: 200);
 
     if (loading) {
       setState(ViewState.busy);
