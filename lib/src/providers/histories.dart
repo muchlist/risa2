@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:risa2/src/api/json_models/request/history_edit_req.dart';
 
 import '../api/filter_models/history_filter.dart';
 import '../api/json_models/request/history_req.dart';
@@ -140,6 +141,42 @@ class HistoryProvider extends ChangeNotifier {
     if (error.isNotEmpty) {
       return Future.error(error);
     }
+  }
+
+  // Edit History
+  // return future true jika add history berhasil
+  // memanggil findHistory sehigga tidak perlu notifyListener
+  // jika parentID di isi maka akan memanggil findParentHistory
+  Future<bool> editHistory(
+      {required HistoryEditRequest payload,
+      required String id,
+      String parentID = ""}) async {
+    setState(ViewState.busy);
+
+    var error = "";
+    try {
+      final response = await _historyService.editHistory(id, payload);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        if (parentID.isNotEmpty) {
+          await findParentHistory(parentID: parentID, loading: false);
+          await findHistory(loading: false);
+        } else {
+          await findHistory(loading: false);
+        }
+        return true;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setState(ViewState.idle);
+
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+    return false;
   }
 
   String getLabelStatus(double number) {

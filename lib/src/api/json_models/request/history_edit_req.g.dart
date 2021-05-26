@@ -10,7 +10,7 @@ HistoryEditRequest _$HistoryEditRequestFromJson(Map<String, dynamic> json) {
   return HistoryEditRequest(
     filterTimestamp: json['filter_timestamp'] as int,
     problem: json['problem'] as String,
-    problemResolve: json['problem_resolve'] as int,
+    problemResolve: json['problem_resolve'] as String,
     status: json['status'] as String,
     tag:
         (json['tag'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
