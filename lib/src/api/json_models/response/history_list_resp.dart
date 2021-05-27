@@ -47,7 +47,7 @@ class HistoryMinResponse {
   final int dateEnd;
   @JsonKey(defaultValue: [])
   final List<String> tag;
-  final String image;
+  String image;
 
   HistoryMinResponse(
       this.id,

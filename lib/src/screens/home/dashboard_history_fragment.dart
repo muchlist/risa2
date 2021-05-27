@@ -16,7 +16,7 @@ class DashboardListView extends StatefulWidget {
 }
 
 class _DashboardListViewState extends State<DashboardListView> {
-// * ADD INCIDENT (add_history_dialog)
+  // * EDIT INCIDENT (edit_history_dialog)
   void _editIncident(BuildContext context, HistoryMinResponse history) {
     showModalBottomSheet(
       isScrollControlled: true,
@@ -25,7 +25,10 @@ class _DashboardListViewState extends State<DashboardListView> {
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      builder: (context) => EditHistoryDialog(history: history),
+      builder: (context) => EditHistoryDialog(
+        history: history,
+        forParent: false,
+      ),
     );
   }
 
