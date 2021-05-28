@@ -3,12 +3,12 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/router/routes.dart';
 
 import '../../config/pallatte.dart';
 import '../../globals.dart';
 import '../../providers/generals.dart';
-import '../../shared/add_history_dialog.dart';
+import '../../router/routes.dart';
+import '../../shared/func_history_dialog.dart';
 import '../../shared/ui_helpers.dart';
 import '../search/main_search_delegate.dart';
 import 'corousel_fragment.dart';
@@ -21,19 +21,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // * ADD INCIDENT (add_history_dialog)
-  void _startAddIncident(BuildContext context) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-      ),
-      builder: (context) => AddHistoryDialog(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
               bottom: 50,
               child: GestureDetector(
                 onTap: () {
-                  _startAddIncident(context);
+                  HistoryHelper().showAddIncident(context);
                 },
                 child: Container(
                   padding: const EdgeInsets.all(12),

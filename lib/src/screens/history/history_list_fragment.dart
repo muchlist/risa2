@@ -5,6 +5,7 @@ import '../../api/json_models/response/history_list_resp.dart';
 import '../../providers/histories.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/flushbar.dart';
+import '../../shared/func_history_dialog.dart';
 import '../../shared/history_item_widget.dart';
 import '../../utils/enums.dart';
 
@@ -81,9 +82,10 @@ class _HistoryRecyclerViewState extends State<HistoryRecyclerView> {
         itemCount: listData.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-              onTap: () {
-                // todo
-              },
+              onTap: () =>
+                  HistoryHelper().showDetailIncident(context, listData[index]),
+              onDoubleTap: () => HistoryHelper()
+                  .showEditIncident(context, listData[index], false),
               child: HistoryListTile(history: listData[index]));
         },
       ),

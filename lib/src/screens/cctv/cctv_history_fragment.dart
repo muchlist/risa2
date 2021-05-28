@@ -4,13 +4,12 @@ import 'package:provider/provider.dart';
 import '../../api/json_models/response/history_list_resp.dart';
 import '../../providers/cctvs.dart';
 import '../../providers/histories.dart';
-import '../../shared/add_parent_history_dialog.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/flushbar.dart';
+import '../../shared/func_history_dialog.dart';
 import '../../shared/history_item_widget.dart';
 import '../../shared/home_like_button.dart';
 import '../../utils/utils.dart';
-import '../history/history_edit.dart';
 
 var refreshKeyCctvHistory = GlobalKey<RefreshIndicatorState>();
 
@@ -31,38 +30,6 @@ class _CctvHistoryRecyclerViewState extends State<CctvHistoryRecyclerView> {
           (error, _) =>
               showToastError(context: context, message: error.toString()));
     });
-  }
-
-  // * ADD INCIDENT (add_history_dialog)
-  void _startAddIncident(BuildContext context) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-      ),
-      builder: (context) => AddParentHistoryDialog(
-        parentID: cctvProvider.getCctvId(),
-        parentName: cctvProvider.cctvDetail.name,
-      ),
-    );
-  }
-
-  // * EDIT INCIDENT (edit_history_dialog)
-  void _editIncident(BuildContext context, HistoryMinResponse history) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-      ),
-      builder: (context) => EditHistoryDialog(
-        history: history,
-        forParent: true,
-      ),
-    );
   }
 
   @override
@@ -98,7 +65,8 @@ class _CctvHistoryRecyclerViewState extends State<CctvHistoryRecyclerView> {
             child: HomeLikeButton(
                 iconData: Icons.add,
                 text: "Tambah History",
-                tapTap: () => _startAddIncident(context)),
+                tapTap: () => HistoryHelper().showAddParentIncident(context,
+                    cctvProvider.getCctvId(), cctvProvider.cctvDetail.name)),
           )
         ],
       );
@@ -114,7 +82,10 @@ class _CctvHistoryRecyclerViewState extends State<CctvHistoryRecyclerView> {
         itemCount: listData.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-              onTap: () => _editIncident(context, listData[index]),
+              onTap: () =>
+                  HistoryHelper().showDetailIncident(context, listData[index]),
+              onDoubleTap: () => HistoryHelper()
+                  .showEditIncident(context, listData[index], true),
               child: HistoryListTile(history: listData[index]));
         },
       ),

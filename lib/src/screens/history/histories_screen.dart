@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/screens/history/history_list_fragment.dart';
-import 'package:risa2/src/shared/add_history_dialog.dart';
-import 'package:risa2/src/utils/enums.dart';
+
+import '../../shared/func_history_dialog.dart';
+import '../../utils/enums.dart';
+import 'history_list_fragment.dart';
 
 class HistoriesScreen extends StatefulWidget {
   @override
@@ -9,19 +10,6 @@ class HistoriesScreen extends StatefulWidget {
 }
 
 class _HistoriesScreenState extends State<HistoriesScreen> {
-// * ADD INCIDENT (add_history_dialog)
-  void _startAddIncident(BuildContext context) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-      ),
-      builder: (context) => AddHistoryDialog(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -60,9 +48,9 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
         floatingActionButton: FloatingActionButton.extended(
             icon: Icon(Icons.add),
             onPressed: () {
-              _startAddIncident(context);
+              HistoryHelper().showAddIncident(context);
             },
-            label: Text("Tambah Log")),
+            label: const Text("Tambah Log")),
       ),
     );
   }

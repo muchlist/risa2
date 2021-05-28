@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:provider/provider.dart';
 
-import '../../api/json_models/response/history_list_resp.dart';
 import '../../providers/histories.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/flushbar.dart';
+import '../../shared/func_history_dialog.dart';
 import '../../shared/history_item_widget.dart';
 import '../../utils/enums.dart';
-import '../history/history_edit.dart';
 
 class DashboardListView extends StatefulWidget {
   @override
@@ -16,22 +15,6 @@ class DashboardListView extends StatefulWidget {
 }
 
 class _DashboardListViewState extends State<DashboardListView> {
-  // * EDIT INCIDENT (edit_history_dialog)
-  void _editIncident(BuildContext context, HistoryMinResponse history) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-      ),
-      builder: (context) => EditHistoryDialog(
-        history: history,
-        forParent: false,
-      ),
-    );
-  }
-
   @override
   void initState() {
     _loadHistory();
@@ -78,7 +61,9 @@ class _DashboardListViewState extends State<DashboardListView> {
                 verticalOffset: 50.0,
                 child: FadeInAnimation(
                   child: GestureDetector(
-                    onTap: () => _editIncident(
+                    onDoubleTap: () => HistoryHelper().showEditIncident(context,
+                        historyProvider.historyListDashboard[index], false),
+                    onTap: () => HistoryHelper().showDetailIncident(
                         context, historyProvider.historyListDashboard[index]),
                     child: HistoryListTile(
                       history: historyProvider.historyListDashboard[index],
