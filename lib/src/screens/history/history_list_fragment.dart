@@ -86,6 +86,8 @@ class _HistoryRecyclerViewState extends State<HistoryRecyclerView> {
                   HistoryHelper().showDetailIncident(context, listData[index]),
               onDoubleTap: () => HistoryHelper()
                   .showEditIncident(context, listData[index], false),
+              onLongPress: () =>
+                  HistoryHelper().showParent(context, listData[index]),
               child: HistoryListTile(history: listData[index]));
         },
       ),

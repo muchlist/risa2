@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/api/json_models/response/history_list_resp.dart';
-import 'package:risa2/src/screens/history/history_detail.dart';
-import 'package:risa2/src/screens/history/history_edit.dart';
-import 'package:risa2/src/utils/enums.dart';
+import 'package:provider/provider.dart';
 
+import '../api/json_models/response/history_list_resp.dart';
 import '../globals.dart';
+import '../providers/cctvs.dart';
+import '../providers/stock.dart';
+import '../router/routes.dart';
+import '../screens/history/history_detail.dart';
+import '../screens/history/history_edit.dart';
+import '../utils/enums.dart';
 import 'add_history_dialog.dart';
 import 'add_parent_history_dialog.dart';
 
@@ -88,5 +92,27 @@ class HistoryHelper {
         history: history,
       ),
     );
+  }
+
+  void showParent(BuildContext context, HistoryMinResponse history) {
+    var routeName = "";
+
+    switch (history.category.toUpperCase()) {
+      case "CCTV":
+        routeName = RouteGenerator.cctvDetail;
+        context.read<CctvProvider>()
+          ..removeDetail()
+          ..setCctvID(history.parentID);
+        break;
+      case "STOCK":
+        routeName = RouteGenerator.stockDetail;
+        context.read<StockProvider>()
+          ..removeDetail()
+          ..setStockID(history.parentID);
+        break;
+      default:
+    }
+
+    Navigator.pushNamed(context, routeName);
   }
 }
