@@ -7,7 +7,7 @@ import '../../providers/stock.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
-import '../../utils/enums.dart';
+import '../../utils/utils.dart';
 
 class IncrementStockScreen extends StatelessWidget {
   @override
@@ -35,7 +35,7 @@ class _IncrementStockBodyState extends State<IncrementStockBody> {
 
   void _incrementStock() {
     if (_key.currentState?.validate() ?? false) {
-      final timeNow = DateTime.now().millisecondsSinceEpoch;
+      final timeNow = DateTime.now().toInt();
       // Payload
       final payload = StockChangeRequest(
           baNumber: timeNow.toString(),

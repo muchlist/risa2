@@ -1,5 +1,6 @@
 import '../filter_models/improve_filter.dart';
 import '../http_client.dart';
+import '../json_models/request/improve_change_req.dart';
 import '../json_models/request/improve_edit_req.dart';
 import '../json_models/request/improve_req.dart';
 import '../json_models/response/improve_list_resp.dart';
@@ -16,7 +17,7 @@ class ImproveService {
   }
 
   Future<ImproveDetailResponse> changeImprove(
-      String id, ImproveChange payload) {
+      String id, ImproveChangeRequest payload) {
     return RequestREST(endpoint: "/improve-change/$id", data: payload.toJson())
         .executePost<ImproveDetailResponse>(ImproveParser());
   }

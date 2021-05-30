@@ -1,178 +1,203 @@
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:provider/provider.dart';
-// import '../../api/json_models/request/improve_change_req.dart';
-// import '../../config/pallatte.dart';
-// import '../../providers/improve.dart';
-// import '../../shared/flushbar.dart';
-// import '../../shared/home_like_button.dart';
-// import '../../shared/ui_helpers.dart';
-// import '../../utils/enums.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-// class IncrementImproveScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         elevation: 0,
-//         title: const Text("Menambahkan Improve"),
-//       ),
-//       body: IncrementImproveBody(),
-//     );
-//   }
-// }
+import '../../api/json_models/request/improve_change_req.dart';
+import '../../providers/improves.dart';
+import '../../shared/func_flushbar.dart';
+import '../../shared/home_like_button.dart';
+import '../../shared/ui_helpers.dart';
+import '../../utils/utils.dart';
 
-// class IncrementImproveBody extends StatefulWidget {
-//   @override
-//   _IncrementImproveBodyState createState() => _IncrementImproveBodyState();
-// }
+class IncrementImproveScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        title: const Text("Update Progress"),
+      ),
+      body: IncrementImproveBody(),
+    );
+  }
+}
 
-// class _IncrementImproveBodyState extends State<IncrementImproveBody> {
-//   final _key = GlobalKey<FormState>();
+class IncrementImproveBody extends StatefulWidget {
+  @override
+  _IncrementImproveBodyState createState() => _IncrementImproveBodyState();
+}
 
-//   final qtyController = TextEditingController();
-//   final noteController = TextEditingController();
+class _IncrementImproveBodyState extends State<IncrementImproveBody> {
+  late final ImproveProvider _improveProvider;
 
-//   void _incrementImprove() {
-//     if (_key.currentState?.validate() ?? false) {
-//       final timeNow = DateTime.now().millisecondsSinceEpoch;
-//       // Payload
-//       final payload = ImproveChangeRequest(
-//           baNumber: timeNow.toString(),
-//           note: noteController.text,
-//           qty: int.parse(qtyController.text),
-//           time: 0);
+  final _key = GlobalKey<FormState>();
+  final noteController = TextEditingController();
 
-//       // Call Provider
-//       Future.delayed(
-//           Duration.zero,
-//           () =>
-//               context.read<ImproveProvider>().changeImprove(payload).then((value) {
-//                 if (value) {
-//                   Navigator.of(context).pop();
-//                   showToastSuccess(
-//                       context: context, message: "Berhasil menambahkan stok");
-//                 }
-//               }).onError((error, _) {
-//                 if (error != null) {
-//                   showToastError(
-//                       context: context, message: error.toString(), onTop: true);
-//                 }
-//               }));
-//     }
-//   }
+  late double _selectedSlider;
+  double _numberChange = 0.0;
 
-//   @override
-//   void dispose() {
-//     noteController.dispose();
-//     qtyController.dispose();
+  String _statusIncrement() {
+    if (_numberChange >= 0) {
+      return "( Perubahan +${_numberChange.toInt()} )";
+    } else {
+      return "( Perubahan ${_numberChange.toInt()} )";
+    }
+  }
 
-//     super.dispose();
-//   }
+  void _incrementImprove() {
+    if (_key.currentState?.validate() ?? false) {
+      final timeNow = DateTime.now().toInt();
+      // Payload
+      final payload = ImproveChangeRequest(
+          increment: _numberChange.toInt(),
+          note: noteController.text,
+          time: timeNow);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return SingleChildScrollView(
-//       child: Padding(
-//           padding: const EdgeInsets.symmetric(horizontal: 16),
-//           // Consumer ------------------------------------------------------
-//           child: Form(
-//             key: _key,
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 // * Judul text ------------------------
-//                 const Text(
-//                   "Nama Stok",
-//                   style: TextStyle(fontSize: 16),
-//                 ),
+      // Call Provider
+      Future.delayed(
+          Duration.zero,
+          () => context
+                  .read<ImproveProvider>()
+                  .incrementImprovement(
+                      _improveProvider.improveDataPass?.id ?? "", payload)
+                  .then((value) {
+                if (value) {
+                  Navigator.of(context).pop();
+                  showToastSuccess(
+                      context: context,
+                      message: "Berhasil mengupdate improvement");
+                }
+              }).onError((error, _) {
+                if (error != null) {
+                  showToastError(
+                      context: context, message: error.toString(), onTop: true);
+                }
+              }));
+    }
+  }
 
-//                 TextFormField(
-//                   enabled: false,
-//                   minLines: 1,
-//                   maxLines: 1,
-//                   decoration: const InputDecoration(
-//                       filled: true,
-//                       fillColor: Pallete.secondaryBackground,
-//                       enabledBorder: InputBorder.none,
-//                       border: InputBorder.none),
-//                   initialValue: context.read<ImproveProvider>().improveDetail.name,
-//                 ),
+  @override
+  void initState() {
+    _improveProvider = context.read<ImproveProvider>();
+    _selectedSlider =
+        _improveProvider.improveDataPass?.goalsAchieved.toDouble() ?? 0.0;
+    super.initState();
+  }
 
-//                 verticalSpaceSmall,
+  @override
+  void dispose() {
+    noteController.dispose();
+    super.dispose();
+  }
 
-//                 // * Qty text ------------------------
-//                 const Text(
-//                   "Jumlah penambahan",
-//                   style: TextStyle(fontSize: 16),
-//                 ),
+  @override
+  Widget build(BuildContext context) {
+    final dataPass = _improveProvider.improveDataPass!;
 
-//                 TextFormField(
-//                   textInputAction: TextInputAction.next,
-//                   keyboardType: TextInputType.numberWithOptions(
-//                       decimal: false, signed: false),
-//                   minLines: 1,
-//                   maxLines: 1,
-//                   decoration: const InputDecoration(
-//                       filled: true,
-//                       fillColor: Pallete.secondaryBackground,
-//                       enabledBorder: InputBorder.none,
-//                       border: InputBorder.none),
-//                   controller: qtyController,
-//                   validator: (text) {
-//                     if (text == null || text.isEmpty) {
-//                       return "Qty tidak boleh kosong";
-//                     } else if (int.tryParse(text) != null &&
-//                         int.parse(text) >= 0) {
-//                       return null;
-//                     }
-//                     return "Qty harus berupa bilangan bulat positif";
-//                   },
-//                 ),
+    return SingleChildScrollView(
+      child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          // Consumer ------------------------------------------------------
+          child: Form(
+            key: _key,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // * Judul text ------------------------
+                const Text(
+                  "Judul",
+                  style: TextStyle(fontSize: 16),
+                ),
 
-//                 verticalSpaceSmall,
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(dataPass.title),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Text(
+                            dataPass.description,
+                            style: TextStyle(color: Colors.grey),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
 
-//                 // * Note text ------------------------
-//                 const Text(
-//                   "Catatan",
-//                   style: TextStyle(fontSize: 16),
-//                 ),
+                verticalSpaceSmall,
 
-//                 TextFormField(
-//                   textInputAction: TextInputAction.newline,
-//                   minLines: 2,
-//                   maxLines: 3,
-//                   decoration: const InputDecoration(
-//                       filled: true,
-//                       fillColor: Pallete.secondaryBackground,
-//                       enabledBorder: InputBorder.none,
-//                       border: InputBorder.none),
-//                   controller: noteController,
-//                   validator: (text) {
-//                     if (text == null || text.isEmpty) {
-//                       return "Catatan tidak boleh kosong";
-//                     }
-//                     return null;
-//                   },
-//                 ),
+                // * Status pekerjaan text ------------------------
+                Text(
+                  "Progress ${(dataPass.goalsAchieved / dataPass.goal * 100).toInt().toString()}%  menjadi  ${(_selectedSlider / dataPass.goal * 100).toInt().toString()}%",
+                  style: TextStyle(fontSize: 16),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: Text(
+                    _statusIncrement(),
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                ),
+                Slider(
+                  min: 0,
+                  max: dataPass.goal.toDouble(),
+                  value: _selectedSlider,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedSlider = value;
+                      _numberChange =
+                          _selectedSlider - dataPass.goalsAchieved.toDouble();
+                    });
+                  },
+                ),
 
-//                 verticalSpaceMedium,
+                // * Note text ------------------------
+                const Text(
+                  "Catatan",
+                  style: TextStyle(fontSize: 16),
+                ),
 
-//                 Consumer<ImproveProvider>(builder: (_, data, __) {
-//                   return (data.improveChangeState == ViewState.busy)
-//                       ? Center(child: const CircularProgressIndicator())
-//                       : Center(
-//                           child: HomeLikeButton(
-//                               iconData: CupertinoIcons.add,
-//                               text: "Tambahkan Stok",
-//                               tapTap: _incrementImprove),
-//                         );
-//                 }),
+                TextFormField(
+                  textInputAction: TextInputAction.newline,
+                  minLines: 2,
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      enabledBorder: InputBorder.none,
+                      border: InputBorder.none),
+                  controller: noteController,
+                ),
 
-//                 verticalSpaceMedium,
-//               ],
-//             ),
-//           )),
-//     );
-//   }
-// }
+                verticalSpaceMedium,
+
+                (dataPass.isActive)
+                    ? Consumer<ImproveProvider>(builder: (_, data, __) {
+                        return (data.detailState == ViewState.busy)
+                            ? Center(child: const CircularProgressIndicator())
+                            : Center(
+                                child: HomeLikeButton(
+                                    iconData: CupertinoIcons.check_mark_circled,
+                                    text: "Update",
+                                    tapTap: _incrementImprove),
+                              );
+                      })
+                    : const Center(
+                        child: Text(
+                        "Tidak dapat diupdate!\nimprovement item\nbelum diaktifkan",
+                        textAlign: TextAlign.center,
+                      )),
+
+                verticalSpaceMedium,
+              ],
+            ),
+          )),
+    );
+  }
+}

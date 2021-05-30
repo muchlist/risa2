@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:risa2/src/api/json_models/request/improve_change_req.dart';
 import 'package:risa2/src/api/json_models/response/improve_resp.dart';
 
 import '../api/filter_models/improve_filter.dart';
@@ -83,14 +84,21 @@ class ImproveProvider extends ChangeNotifier {
     return _improveDetail;
   }
 
+  // Passing data dari corousel ke change Improve
+  ImproveMinResponse? _improveDataPass;
+  ImproveMinResponse? get improveDataPass => _improveDataPass;
+  void setImproveDataPass(ImproveMinResponse payload) {
+    _improveDataPass = payload;
+  }
+
   // return future true jika incremet/decrement improve berhasil
-  Future<bool> incrementImprovement(ImproveChange payload) async {
+  Future<bool> incrementImprovement(
+      String id, ImproveChangeRequest payload) async {
     setState(ViewState.busy);
     var error = "";
 
     try {
-      final response =
-          await _improveService.changeImprove(_detailIDSaved, payload);
+      final response = await _improveService.changeImprove(id, payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {
