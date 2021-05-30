@@ -83,7 +83,7 @@ class CorouselItem extends StatelessWidget {
                         shape: BoxShape.circle,
                       ),
                       child: Text(
-                        "${improvePreview.goalsAchieved / improvePreview.goal * 100}%",
+                        "${(improvePreview.goalsAchieved / improvePreview.goal * 100).toInt()}%",
                         style: TextStyle(fontSize: 10),
                       ))
                   : const SizedBox()),
