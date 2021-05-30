@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/providers/histories.dart';
 
 import '../../providers/cctvs.dart';
 import '../../shared/flushbar.dart';
@@ -12,13 +13,38 @@ class CctvDetailScreen extends StatefulWidget {
 }
 
 class _CctvDetailScreenState extends State<CctvDetailScreen> {
-  @override
-  void initState() {
-    Future.delayed(Duration.zero, () {
+  late final HistoryProvider historyProvider;
+  late final CctvProvider cctvProvider;
+
+  Future<void> _loadHistory() {
+    final parentID = cctvProvider.getCctvId();
+    return Future.delayed(Duration.zero, () {
+      historyProvider.findParentHistory(parentID: parentID).onError(
+          (error, _) =>
+              showToastError(context: context, message: error.toString()));
+    });
+  }
+
+  Future<void> _loadDetail() {
+    return Future.delayed(Duration.zero, () {
       context.read<CctvProvider>().getDetail().onError((error, _) =>
           showToastError(context: context, message: error.toString()));
     });
+  }
+
+  @override
+  void initState() {
+    historyProvider = context.read<HistoryProvider>();
+    cctvProvider = context.read<CctvProvider>();
+    _loadDetail();
+    _loadHistory();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    historyProvider.clearParentHistory();
+    super.dispose();
   }
 
   @override

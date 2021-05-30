@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../providers/histories.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/flushbar.dart';
+import '../../shared/func_history_dialog.dart';
 import '../../shared/history_item_widget.dart';
 import '../../utils/enums.dart';
 
@@ -59,8 +60,16 @@ class _DashboardListViewState extends State<DashboardListView> {
               child: SlideAnimation(
                 verticalOffset: 50.0,
                 child: FadeInAnimation(
-                  child: HistoryListTile(
-                    history: historyProvider.historyListDashboard[index],
+                  child: GestureDetector(
+                    onDoubleTap: () => HistoryHelper().showEditIncident(context,
+                        historyProvider.historyListDashboard[index], false),
+                    onTap: () => HistoryHelper().showDetailIncident(
+                        context, historyProvider.historyListDashboard[index]),
+                    onLongPress: () => HistoryHelper().showParent(
+                        context, historyProvider.historyListDashboard[index]),
+                    child: HistoryListTile(
+                      history: historyProvider.historyListDashboard[index],
+                    ),
                   ),
                 ),
               ),

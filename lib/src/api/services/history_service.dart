@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+
 import '../filter_models/history_filter.dart';
 import '../http_client.dart';
 import '../json_models/request/history_edit_req.dart';
@@ -76,5 +80,11 @@ class HistoryService {
   Future<MessageResponse> deleteHistory(String id) {
     return RequestREST(endpoint: "/histories/$id")
         .executeDelete<MessageResponse>(MessageParser());
+  }
+
+  Future<HistoryDetailResponse> uploadImage(String id, File file) async {
+    return RequestREST(endpoint: "/history-image/$id", data: <String, dynamic>{
+      "image": await MultipartFile.fromFile(file.path)
+    }).executeUpload(HistoryParser());
   }
 }

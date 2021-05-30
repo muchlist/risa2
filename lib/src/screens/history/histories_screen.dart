@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/screens/history/history_list_fragment.dart';
-import 'package:risa2/src/utils/enums.dart';
+
+import '../../shared/func_history_dialog.dart';
+import '../../utils/enums.dart';
+import 'history_list_fragment.dart';
 
 class HistoriesScreen extends StatefulWidget {
   @override
@@ -46,9 +48,9 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
         floatingActionButton: FloatingActionButton.extended(
             icon: Icon(Icons.add),
             onPressed: () {
-              // Navigator.pushNamed(context, RouteGenerator.cctvAdd);
+              HistoryHelper().showAddIncident(context);
             },
-            label: Text("Tambah Log")),
+            label: const Text("Tambah Log")),
       ),
     );
   }

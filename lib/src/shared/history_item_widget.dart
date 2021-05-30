@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../api/json_models/response/history_list_resp.dart';
-import '../utils/date_unix.dart';
-import '../utils/enums.dart';
+import '../config/constant.dart';
+import '../config/pallatte.dart';
+import '../utils/utils.dart';
+import 'cached_image_circle.dart';
 import 'ui_helpers.dart';
 
 class HistoryListTile extends StatelessWidget {
@@ -32,7 +34,15 @@ class HistoryListTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(10)),
       elevation: 0,
       child: ListTile(
-        leading: Icon(getIcon()),
+        leading: (history.image.isNotEmpty)
+            ? CachedImageCircle(
+                urlPath: "${Constant.baseUrl}${history.image.thumbnailMod()}")
+            : CircleAvatar(
+                backgroundColor: Pallete.background,
+                foregroundColor: Colors.grey,
+                child: Icon(getIcon()),
+                radius: 25,
+              ),
         title: Padding(
           padding: const EdgeInsets.only(top: 8, bottom: 8),
           child: Text(

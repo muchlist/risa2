@@ -8,7 +8,7 @@ class HistoryEditRequest {
   final int filterTimestamp;
   final String problem;
   @JsonKey(name: "problem_resolve")
-  final int problemResolve;
+  final String problemResolve;
   final String status;
   @JsonKey(defaultValue: [])
   final List<String> tag;

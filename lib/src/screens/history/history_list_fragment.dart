@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:risa2/src/api/json_models/response/history_list_resp.dart';
-import 'package:risa2/src/providers/histories.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/empty_box.dart';
-import 'package:risa2/src/shared/flushbar.dart';
-import 'package:risa2/src/shared/history_item_widget.dart';
-import 'package:risa2/src/shared/home_like_button.dart';
-import 'package:risa2/src/utils/enums.dart';
+
+import '../../api/json_models/response/history_list_resp.dart';
+import '../../providers/histories.dart';
+import '../../shared/empty_box.dart';
+import '../../shared/flushbar.dart';
+import '../../shared/func_history_dialog.dart';
+import '../../shared/history_item_widget.dart';
+import '../../utils/enums.dart';
 
 class HistoryRecyclerView extends StatefulWidget {
   final enumStatus status;
@@ -81,9 +82,12 @@ class _HistoryRecyclerViewState extends State<HistoryRecyclerView> {
         itemCount: listData.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-              onTap: () {
-                // todo
-              },
+              onTap: () =>
+                  HistoryHelper().showDetailIncident(context, listData[index]),
+              onDoubleTap: () => HistoryHelper()
+                  .showEditIncident(context, listData[index], false),
+              onLongPress: () =>
+                  HistoryHelper().showParent(context, listData[index]),
               child: HistoryListTile(history: listData[index]));
         },
       ),
