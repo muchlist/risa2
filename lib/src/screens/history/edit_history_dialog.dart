@@ -1,69 +1,145 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-import '../api/json_models/request/history_req.dart';
-import '../config/pallatte.dart';
-import '../providers/histories.dart';
-import '../utils/enums.dart';
-import 'flushbar.dart';
-import 'ui_helpers.dart';
+import '../../api/json_models/request/history_edit_req.dart';
+import '../../api/json_models/response/history_list_resp.dart';
+import '../../config/constant.dart';
+import '../../config/pallatte.dart';
+import '../../providers/histories.dart';
+import '../../shared/cached_image_square.dart';
+import '../../shared/func_flushbar.dart';
+import '../../shared/home_like_button.dart';
+import '../../shared/ui_helpers.dart';
+import '../../utils/enums.dart';
+import '../../utils/utils.dart';
 
-class AddParentHistoryDialog extends StatefulWidget {
-  final String parentID;
-  final String parentName;
+class EditHistoryDialog extends StatefulWidget {
+  final HistoryMinResponse history;
+  final bool forParent;
 
-  const AddParentHistoryDialog(
-      {Key? key, required this.parentID, required this.parentName})
+  const EditHistoryDialog(
+      {Key? key, required this.history, required this.forParent})
       : super(key: key);
 
   @override
-  _AddParentHistoryDialogState createState() => _AddParentHistoryDialogState();
+  _EditHistoryDialogState createState() => _EditHistoryDialogState();
 }
 
-class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
-  // Default value
-  // var _selectedUnitName = widget.history.parentName; // untuk tampilan saja
-  var _selectedSlider = 1.0;
-  var _selectedLabel = "Progress";
-
+class _EditHistoryDialogState extends State<EditHistoryDialog> {
+  late double _selectedSlider;
+  late String _selectedLabel;
   // Text controller
   final problemController = TextEditingController();
   final resolveNoteController = TextEditingController();
 
+  String imageUrl = "";
+
+  File? _image;
+  final picker = ImagePicker();
+
+  @override
+  void initState() {
+    var history = widget.history;
+    _selectedSlider = history.completeStatus.toDouble();
+    _selectedLabel = enumStatus.values[history.completeStatus].toShortString();
+    problemController.text = history.problem;
+    resolveNoteController.text = history.problemResolve;
+    imageUrl = history.image;
+    super.initState();
+  }
+
+  Future _getImageAndUpload(
+      {required BuildContext context,
+      required ImageSource source,
+      required String id}) async {
+    final pickedFile = await picker.getImage(source: source);
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+    } else {
+      return;
+    }
+
+    // compress and upload
+    await context
+        .read<HistoryProvider>()
+        .uploadImage(id, _image!)
+        .then((value) {
+      if (value.isNotEmpty) {
+        showToastSuccess(
+            context: context,
+            message: "Berhasil mengupload gambar",
+            onTop: true);
+        setState(() {
+          imageUrl = value;
+        });
+      }
+    }).onError((error, _) {
+      showToastError(context: context, message: error.toString());
+      return Future.error(error.toString());
+    });
+  }
+
   // Form key
   final _addHistoryFormkey = GlobalKey<FormState>();
 
-  void _addHistory() {
+  void _editHistory() {
     if (_addHistoryFormkey.currentState?.validate() ?? false) {
       final problemText = problemController.text;
       final resolveText = resolveNoteController.text;
 
-      final payload = HistoryRequest(
-          id: "",
-          parentID: widget.parentID,
+      final payload = HistoryEditRequest(
+          filterTimestamp: widget.history.updatedAt,
           problem: problemText,
           problemResolve: resolveText,
           status: "None",
           tag: [],
-          completeStatus: _selectedSlider.toInt());
+          completeStatus: _selectedSlider.toInt(),
+          dateEnd: DateTime.now().toInt());
 
       Future.delayed(Duration.zero, () {
         // * CALL Provider -----------------------------------------------------
-        context
-            .read<HistoryProvider>()
-            .addHistory(payload, parentID: widget.parentID)
-            .then((value) {
-          if (value) {
-            Navigator.of(context).pop();
-            showToastSuccess(
-                context: context, message: "Berhasil menambahkan history");
-          }
-        }).onError((error, _) {
-          if (error != null) {
-            showToastError(context: context, message: error.toString());
-          }
-        });
+
+        if (widget.forParent) {
+          context
+              .read<HistoryProvider>()
+              .editHistoryForParent(
+                  id: widget.history.id,
+                  payload: payload,
+                  parentID: widget.history.parentID)
+              .then((value) {
+            if (value) {
+              Navigator.of(context).pop();
+              showToastSuccess(
+                  context: context, message: "Berhasil memperbarui history");
+            }
+          }).onError((error, _) {
+            if (error != null) {
+              showToastError(context: context, message: error.toString());
+            }
+          });
+        } else {
+          context
+              .read<HistoryProvider>()
+              .editHistory(
+                id: widget.history.id,
+                payload: payload,
+              )
+              .then((value) {
+            if (value) {
+              Navigator.of(context).pop();
+              showToastSuccess(
+                  context: context, message: "Berhasil memperbarui history");
+            }
+          }).onError((error, _) {
+            if (error != null) {
+              showToastError(context: context, message: error.toString());
+            }
+          });
+        }
       });
     } else {
       debugPrint("Error :(");
@@ -107,7 +183,7 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "Menambahkan Incident",
+                        "Update Incident",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -127,7 +203,7 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
                         decoration:
                             BoxDecoration(color: Pallete.secondaryBackground),
                         child: Text(
-                          widget.parentName,
+                          widget.history.parentName,
                         ),
                       ),
 
@@ -182,7 +258,6 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
                       verticalSpaceSmall,
 
                       // * ResolveNote text ------------------------
-
                       (_selectedSlider == 4.0)
                           ? const Text(
                               "Resolve Note",
@@ -210,39 +285,44 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
                             )
                           : const SizedBox.shrink(),
                       verticalSpaceRegular,
-                      Consumer<HistoryProvider>(
-                        builder: (_, data, __) {
-                          return (data.state == ViewState.busy)
-                              // * Button ---------------------------
-                              ? Center(child: const CircularProgressIndicator())
-                              : GestureDetector(
-                                  onTap: _addHistory,
-                                  child: Center(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(12),
-                                      decoration: BoxDecoration(
-                                          color: Theme.of(context).accentColor,
-                                          borderRadius:
-                                              BorderRadius.circular(24)),
-                                      child:
-                                          const Text.rich(TextSpan(children: [
-                                        WidgetSpan(
-                                            child: Icon(
-                                          CupertinoIcons.add,
-                                          size: 15,
-                                          color: Colors.white,
-                                        )),
-                                        TextSpan(
-                                            text: "Tambah Log",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500))
-                                      ])),
-                                    ),
-                                  ),
-                                );
-                        },
+                      if (imageUrl.isNotEmpty)
+                        Center(
+                          child: CachedImageSquare(
+                            urlPath: "${Constant.baseUrl}${imageUrl}",
+                            width: 200,
+                            height: 200,
+                          ),
+                        ),
+                      verticalSpaceRegular,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: IconButton(
+                                onPressed: () => _getImageAndUpload(
+                                    context: context,
+                                    source: ImageSource.camera,
+                                    id: widget.history.id),
+                                icon: Icon(CupertinoIcons.camera)),
+                          ),
+                          Expanded(
+                            child: Consumer<HistoryProvider>(
+                              builder: (_, data, __) {
+                                return (data.state == ViewState.busy)
+                                    // * Button ---------------------------
+                                    ? Center(
+                                        child:
+                                            const CircularProgressIndicator())
+                                    : HomeLikeButton(
+                                        iconData: CupertinoIcons.pencil_circle,
+                                        text: "Edit Log",
+                                        tapTap: _editHistory);
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: SizedBox(),
+                          )
+                        ],
                       ),
 
                       SizedBox(

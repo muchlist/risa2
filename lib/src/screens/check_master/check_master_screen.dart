@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../providers/checks_master.dart';
 import '../../router/routes.dart';
 import '../../shared/empty_box.dart';
-import '../../shared/flushbar.dart';
+import '../../shared/func_flushbar.dart';
 import '../../utils/enums.dart';
 
 var refreshKeyCheckMasterSreen = GlobalKey<RefreshIndicatorState>();

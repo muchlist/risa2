@@ -1,6 +1,6 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/config/pallatte.dart';
+import '../config/pallatte.dart';
 
 Flushbar showToastError(
     {required BuildContext context,

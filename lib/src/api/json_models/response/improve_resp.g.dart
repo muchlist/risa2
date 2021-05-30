@@ -73,11 +73,11 @@ Map<String, dynamic> _$ImproveDetailResponseDataToJson(
 
 ImproveChange _$ImproveChangeFromJson(Map<String, dynamic> json) {
   return ImproveChange(
-    json['dummy_id'] as int,
-    json['author'] as String,
-    json['increment'] as int,
-    json['note'] as String,
-    json['time'] as int,
+    dummyId: json['dummy_id'] as int,
+    author: json['author'] as String,
+    increment: json['increment'] as int,
+    note: json['note'] as String,
+    time: json['time'] as int,
   );
 }
 

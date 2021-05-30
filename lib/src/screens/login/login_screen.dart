@@ -5,7 +5,7 @@ import '../../config/pallatte.dart';
 import '../../providers/auth.dart';
 import '../../router/routes.dart';
 import '../../shared/button.dart';
-import '../../shared/flushbar.dart';
+import '../../shared/func_flushbar.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 

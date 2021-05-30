@@ -8,7 +8,7 @@ import '../../providers/cctvs.dart';
 import '../../router/routes.dart';
 import '../../shared/cctv_item_widget.dart';
 import '../../shared/empty_box.dart';
-import '../../shared/flushbar.dart';
+import '../../shared/func_flushbar.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 import '../search/cctv_search_delegate.dart';

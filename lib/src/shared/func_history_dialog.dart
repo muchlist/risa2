@@ -6,11 +6,11 @@ import '../globals.dart';
 import '../providers/cctvs.dart';
 import '../providers/stock.dart';
 import '../router/routes.dart';
-import '../screens/history/history_detail.dart';
-import '../screens/history/history_edit.dart';
+import '../screens/history/add_history_dialog.dart';
+import '../screens/history/add_parent_history_dialog.dart';
+import '../screens/history/detail_history_dialog.dart';
+import '../screens/history/edit_history_dialog.dart';
 import '../utils/enums.dart';
-import 'add_history_dialog.dart';
-import 'add_parent_history_dialog.dart';
 
 class HistoryHelper {
   static final HistoryHelper _historyHelper = HistoryHelper._internal();

@@ -2,44 +2,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../api/filter_models/general_filter.dart';
-import '../api/json_models/request/history_req.dart';
-import '../api/json_models/response/general_list_resp.dart';
-import '../config/pallatte.dart';
-import '../providers/generals.dart';
-import '../providers/histories.dart';
-import '../screens/search/general_search_delegate.dart';
-import '../utils/enums.dart';
-import 'flushbar.dart';
-import 'ui_helpers.dart';
+import '../../api/json_models/request/history_req.dart';
+import '../../config/pallatte.dart';
+import '../../providers/histories.dart';
+import '../../shared/func_flushbar.dart';
+import '../../shared/ui_helpers.dart';
+import '../../utils/enums.dart';
 
-class ItemChoice {
-  final int id;
-  final String label;
+class AddParentHistoryDialog extends StatefulWidget {
+  final String parentID;
+  final String parentName;
 
-  ItemChoice(this.id, this.label);
-}
-
-class AddHistoryDialog extends StatefulWidget {
-  const AddHistoryDialog({
-    Key? key,
-  }) : super(key: key);
+  const AddParentHistoryDialog(
+      {Key? key, required this.parentID, required this.parentName})
+      : super(key: key);
 
   @override
-  _AddHistoryDialogState createState() => _AddHistoryDialogState();
+  _AddParentHistoryDialogState createState() => _AddParentHistoryDialogState();
 }
 
-class _AddHistoryDialogState extends State<AddHistoryDialog> {
-  // pilihan chip kategory
-  final listChoices = <ItemChoice>[
-    ItemChoice(1, 'CCTV'),
-    ItemChoice(2, 'PC'),
-  ];
-
+class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
   // Default value
-  var _selectedCategoryID = 0;
-  var _selectedUnitID = "";
-  var _selectedUnitName = "Pilih Perangkat"; // untuk tampilan saja
+  // var _selectedUnitName = widget.history.parentName; // untuk tampilan saja
   var _selectedSlider = 1.0;
   var _selectedLabel = "Progress";
 
@@ -51,20 +35,13 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
   final _addHistoryFormkey = GlobalKey<FormState>();
 
   void _addHistory() {
-    if (_selectedUnitID.isEmpty) {
-      showToastWarning(
-          context: context, message: "Harap memilih perangkat terlebih dahulu");
-
-      return;
-    }
-
     if (_addHistoryFormkey.currentState?.validate() ?? false) {
       final problemText = problemController.text;
       final resolveText = resolveNoteController.text;
 
       final payload = HistoryRequest(
           id: "",
-          parentID: _selectedUnitID,
+          parentID: widget.parentID,
           problem: problemText,
           problemResolve: resolveText,
           status: "None",
@@ -73,7 +50,10 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
 
       Future.delayed(Duration.zero, () {
         // * CALL Provider -----------------------------------------------------
-        context.read<HistoryProvider>().addHistory(payload).then((value) {
+        context
+            .read<HistoryProvider>()
+            .addHistory(payload, parentID: widget.parentID)
+            .then((value) {
           if (value) {
             Navigator.of(context).pop();
             showToastSuccess(
@@ -131,52 +111,6 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                      verticalSpaceSmall,
-                      // * Pilih kategori text ------------------------
-                      const Text(
-                        "Kategori :",
-                        style: TextStyle(fontSize: 16),
-                      ),
-                      // * Chip choice
-                      Wrap(
-                        children: listChoices
-                            .map((e) => ChoiceChip(
-                                  label: Text(
-                                    e.label,
-                                    style: (_selectedCategoryID == e.id)
-                                        ? TextStyle(color: Colors.white)
-                                        : TextStyle(),
-                                  ),
-                                  selected: _selectedCategoryID == e.id,
-                                  selectedColor: Theme.of(context).accentColor,
-                                  // * Setstate ------------------------------
-                                  onSelected: (_) => setState(() {
-                                    _selectedCategoryID = e.id;
-
-                                    // mengeset filter berdasarkan pilihan chip
-                                    context.read<GeneralProvider>().setFilter(
-                                        FilterGeneral(category: e.label));
-                                    // memanggil api untuk mendapatkan general yang terkait
-                                    context
-                                        .read<GeneralProvider>()
-                                        .findGeneral("")
-                                        .onError((error, _) {
-                                      if (error != null) {
-                                        setState(() {
-                                          _selectedCategoryID = 0;
-                                        });
-
-                                        showToastError(
-                                            context: context,
-                                            message:
-                                                "Gagal mendapatkan data perangkat!");
-                                      }
-                                    });
-                                  }),
-                                ))
-                            .toList(),
-                        spacing: 5,
-                      ),
 
                       verticalSpaceSmall,
 
@@ -185,42 +119,15 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                         "Perangkat / Software :",
                         style: TextStyle(fontSize: 16),
                       ),
-                      GestureDetector(
-                        onTap: () async {
-                          if (_selectedCategoryID == 0) {
-                            setState(() {
-                              _selectedUnitName =
-                                  "Harap memilih kategori terlebih dahulu";
-                            });
-                            return;
-                          }
-                          final searchResult =
-                              await showSearch<GeneralMinResponse?>(
-                            context: context,
-                            delegate: GeneralSearchDelegate(),
-                          );
-                          if (searchResult != null) {
-                            setState(() {
-                              _selectedUnitName = searchResult.name;
-                              _selectedUnitID = searchResult.id;
-                            });
-                          }
-                        },
-                        child: Container(
-                          height: 50,
-                          padding: EdgeInsets.symmetric(horizontal: 8),
-                          width: double.infinity,
-                          alignment: Alignment.centerLeft,
-                          decoration:
-                              BoxDecoration(color: Pallete.secondaryBackground),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  _selectedUnitName,
-                                ),
-                                Icon(CupertinoIcons.search),
-                              ]),
+                      Container(
+                        height: 50,
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        width: double.infinity,
+                        alignment: Alignment.centerLeft,
+                        decoration:
+                            BoxDecoration(color: Pallete.secondaryBackground),
+                        child: Text(
+                          widget.parentName,
                         ),
                       ),
 

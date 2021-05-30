@@ -10,7 +10,7 @@ import '../../config/pallatte.dart';
 import '../../providers/stock.dart';
 import '../../router/routes.dart';
 import '../../shared/cached_image_square.dart';
-import '../../shared/flushbar.dart';
+import '../../shared/func_flushbar.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/date_unix.dart';
 import '../../utils/enums.dart';

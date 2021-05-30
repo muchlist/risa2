@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:risa2/src/router/routes.dart';
 
 import '../../providers/stock.dart';
-import '../../shared/flushbar.dart';
+import '../../shared/func_flushbar.dart';
 import 'stock_detail_fragment.dart';
 import 'stock_use_fragment.dart';
 

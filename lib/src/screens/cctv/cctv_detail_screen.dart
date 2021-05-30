@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:risa2/src/providers/histories.dart';
 
 import '../../providers/cctvs.dart';
-import '../../shared/flushbar.dart';
+import '../../shared/func_flushbar.dart';
 import 'cctv_detail_fragment.dart';
 import 'cctv_history_fragment.dart';
 

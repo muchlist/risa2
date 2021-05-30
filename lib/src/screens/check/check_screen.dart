@@ -6,7 +6,7 @@ import '../../providers/checks.dart';
 import '../../router/routes.dart';
 import '../../shared/check_item_widget.dart';
 import '../../shared/empty_box.dart';
-import '../../shared/flushbar.dart';
+import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';

@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../providers/stock.dart';
 import '../../router/routes.dart';
 import '../../shared/empty_box.dart';
-import '../../shared/flushbar.dart';
+import '../../shared/func_flushbar.dart';
 import '../../shared/stock_item_widget.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';

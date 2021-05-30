@@ -6,7 +6,7 @@ import '../../api/json_models/request/check_req.dart';
 import '../../config/pallatte.dart';
 import '../../models/shift_chip_models.dart';
 import '../../providers/checks.dart';
-import '../../shared/flushbar.dart';
+import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
