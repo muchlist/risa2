@@ -10,7 +10,8 @@ class DashboardGrid extends StatelessWidget {
   // List Icon and title
   final List<Dashboard> dashboardItems = [
     Dashboard("Dashboard", CupertinoIcons.chart_bar_circle),
-    Dashboard("Improvement", CupertinoIcons.rocket),
+    Dashboard("Improvement", CupertinoIcons.rocket,
+        route: RouteGenerator.improve),
     Dashboard("Stock", CupertinoIcons.rectangle_on_rectangle_angled,
         route: RouteGenerator.stock),
     Dashboard("Checklist", CupertinoIcons.chevron_down_square,

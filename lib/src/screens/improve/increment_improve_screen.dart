@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/config/pallatte.dart';
 
 import '../../api/json_models/request/improve_change_req.dart';
 import '../../providers/improves.dart';
@@ -38,9 +39,9 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
 
   String _statusIncrement() {
     if (_numberChange >= 0) {
-      return "( Perubahan +${_numberChange.toInt()} )";
+      return "( perubahan +${_numberChange.toInt()} )";
     } else {
-      return "( Perubahan ${_numberChange.toInt()} )";
+      return "( perubahan ${_numberChange.toInt()} )";
     }
   }
 
@@ -114,18 +115,26 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                   decoration: BoxDecoration(color: Colors.white),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(dataPass.title),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: Text(
-                            dataPass.description,
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        )
-                      ],
+                    child: Text(dataPass.title),
+                  ),
+                ),
+
+                verticalSpaceSmall,
+
+                // * Judul text ------------------------
+                const Text(
+                  "Deskripsi",
+                  style: TextStyle(fontSize: 16),
+                ),
+
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(color: Colors.white),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      dataPass.description,
+                      style: TextStyle(color: Colors.grey),
                     ),
                   ),
                 ),
@@ -138,10 +147,14 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                   style: TextStyle(fontSize: 16),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(top: 4.0),
                   child: Text(
                     _statusIncrement(),
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                    style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            (_numberChange >= 0) ? Pallete.green : Colors.red,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
                 Slider(

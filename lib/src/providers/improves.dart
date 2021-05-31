@@ -84,6 +84,11 @@ class ImproveProvider extends ChangeNotifier {
     return _improveDetail;
   }
 
+  void removeDetail() {
+    _improveDetail = ImproveDetailResponseData(
+        "", 0, 0, "", "", "", "", "", "", "", 0, 0, false, 0, []);
+  }
+
   // Passing data dari corousel ke change Improve
   ImproveMinResponse? _improveDataPass;
   ImproveMinResponse? get improveDataPass => _improveDataPass;
