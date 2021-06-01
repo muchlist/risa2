@@ -1,5 +1,6 @@
 import '../filter_models/improve_filter.dart';
 import '../http_client.dart';
+import '../json_models/request/improve_change_req.dart';
 import '../json_models/request/improve_edit_req.dart';
 import '../json_models/request/improve_req.dart';
 import '../json_models/response/improve_list_resp.dart';
@@ -15,15 +16,16 @@ class ImproveService {
         .executePost<MessageResponse>(MessageParser());
   }
 
-  Future<ImproveDetailResponse> changeImprove(ImproveChange payload) {
-    return RequestREST(endpoint: "/improve-change", data: payload.toJson())
+  Future<ImproveDetailResponse> changeImprove(
+      String id, ImproveChangeRequest payload) {
+    return RequestREST(endpoint: "/improve-change/$id", data: payload.toJson())
         .executePost<ImproveDetailResponse>(ImproveParser());
   }
 
   Future<ImproveDetailResponse> editImprove(
       String id, ImproveEditRequest payload) {
     return RequestREST(endpoint: "/improve/$id", data: payload.toJson())
-        .executePost<ImproveDetailResponse>(ImproveParser());
+        .executePut<ImproveDetailResponse>(ImproveParser());
   }
 
   Future<ImproveDetailResponse> getImprove(String id) {

@@ -102,9 +102,10 @@ class _DetailHistoryDialogState extends State<DetailHistoryDialog> {
                     ),
 
                     TextFormField(
-                      textInputAction: TextInputAction.newline,
                       enabled: false,
                       initialValue: widget.history.problem,
+                      maxLines: null,
+                      minLines: null,
                       decoration: const InputDecoration(
                           filled: true,
                           fillColor: Pallete.secondaryBackground,
@@ -144,6 +145,8 @@ class _DetailHistoryDialogState extends State<DetailHistoryDialog> {
                             textInputAction: TextInputAction.newline,
                             initialValue: widget.history.problemResolve,
                             enabled: false,
+                            maxLines: null,
+                            minLines: null,
                             decoration: const InputDecoration(
                                 filled: true,
                                 fillColor: Pallete.secondaryBackground,

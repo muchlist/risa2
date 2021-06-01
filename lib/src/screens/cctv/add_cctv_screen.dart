@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../api/json_models/request/cctv_req.dart';
 import '../../config/pallatte.dart';
 import '../../providers/cctvs.dart';
-import '../../shared/flushbar.dart';
+import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/utils.dart';

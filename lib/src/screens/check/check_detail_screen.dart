@@ -8,7 +8,7 @@ import '../../config/constant.dart';
 import '../../config/pallatte.dart';
 import '../../providers/checks.dart';
 import '../../shared/cached_image_circle.dart';
-import '../../shared/flushbar.dart';
+import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/date_unix.dart';

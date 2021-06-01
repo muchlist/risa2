@@ -12,6 +12,11 @@ import '../screens/check_master/check_master_screen.dart';
 import '../screens/check_master/edit_check_master_screen.dart';
 import '../screens/history/histories_screen.dart';
 import '../screens/home/home_screen.dart';
+import '../screens/improve/add_improve_screen.dart';
+import '../screens/improve/edit_improve_screen.dart';
+import '../screens/improve/improve_detail_screen.dart';
+import '../screens/improve/improves_screen.dart';
+import '../screens/improve/increment_improve_screen.dart';
 import '../screens/landing/landing.dart';
 import '../screens/login/login_screen.dart';
 import '../screens/stock/add_stock_screen.dart';
@@ -41,6 +46,11 @@ class RouteGenerator {
   static const String cctvDetail = '/cctv-detail';
   static const String cctvAdd = '/cctv-add';
   static const String cctvEdit = '/cctv-edit';
+  static const String improveChange = '/improve-change';
+  static const String improve = '/improve';
+  static const String improveDetail = '/improve-detail';
+  static const String improveAdd = '/improve-add';
+  static const String improveEdit = '/improve-edit';
 
   RouteGenerator._();
 
@@ -84,6 +94,16 @@ class RouteGenerator {
         return transitionFade(AddCctvScreen());
       case cctvEdit:
         return transitionFade(EditCctvScreen());
+      case improve:
+        return transitionFade(ImproveScreen());
+      case improveDetail:
+        return transitionFade(ImproveDetailScreen());
+      case improveChange:
+        return transitionFade(IncrementImproveScreen());
+      case improveAdd:
+        return transitionFade(AddImproveScreen());
+      case improveEdit:
+        return transitionFade(EditImproveScreen());
       default:
         return MaterialPageRoute(builder: (_) => LoginScreen());
     }

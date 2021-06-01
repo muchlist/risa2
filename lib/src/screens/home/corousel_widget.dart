@@ -1,7 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../../api/json_models/response/improve_list_resp.dart';
 import '../../config/pallatte.dart';
+import '../../providers/improves.dart';
+import '../../router/routes.dart';
 
 class Corousel extends StatelessWidget {
   final List<ImproveMinResponse> improves;
@@ -28,9 +32,15 @@ class Corousel extends StatelessWidget {
         ),
         items: improves.map((i) {
           return Builder(
-            builder: (BuildContext context) {
-              return CorouselItem(
-                improvePreview: i,
+            builder: (BuildContext ctx) {
+              return GestureDetector(
+                onTap: () {
+                  ctx.read<ImproveProvider>().setImproveDataPass(i);
+                  Navigator.pushNamed(context, RouteGenerator.improveChange);
+                },
+                child: CorouselItem(
+                  improvePreview: i,
+                ),
               );
             },
           );

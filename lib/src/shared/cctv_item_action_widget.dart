@@ -37,6 +37,7 @@ class CctvActionTile extends StatelessWidget {
     return Card(
         elevation: 0,
         color: Pallete.background,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: ListTile(

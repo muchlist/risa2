@@ -78,7 +78,11 @@ class ImproveChange {
   final int time;
 
   ImproveChange(
-      this.dummyId, this.author, this.increment, this.note, this.time);
+      {required this.dummyId,
+      required this.author,
+      required this.increment,
+      required this.note,
+      required this.time});
 
   factory ImproveChange.fromJson(Map<String, dynamic> json) =>
       _$ImproveChangeFromJson(json);

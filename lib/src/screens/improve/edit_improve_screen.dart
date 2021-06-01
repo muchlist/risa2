@@ -1,57 +1,70 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../api/json_models/request/stock_change_req.dart';
+import 'package:risa2/src/api/json_models/request/improve_edit_req.dart';
+
+import '../../api/json_models/request/improve_req.dart';
 import '../../config/pallatte.dart';
-import '../../providers/stock.dart';
+import '../../providers/improves.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
-import '../../utils/utils.dart';
+import '../../utils/enums.dart';
 
-class IncrementStockScreen extends StatelessWidget {
+class EditImproveScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Menambahkan Stock"),
+        title: const Text("Edit Improve"),
       ),
-      body: IncrementStockBody(),
+      body: EditImproveBody(),
     );
   }
 }
 
-class IncrementStockBody extends StatefulWidget {
+class EditImproveBody extends StatefulWidget {
   @override
-  _IncrementStockBodyState createState() => _IncrementStockBodyState();
+  _EditImproveBodyState createState() => _EditImproveBodyState();
 }
 
-class _IncrementStockBodyState extends State<IncrementStockBody> {
+class _EditImproveBodyState extends State<EditImproveBody> {
   final _key = GlobalKey<FormState>();
 
-  final qtyController = TextEditingController();
-  final noteController = TextEditingController();
+  final titleController = TextEditingController();
+  final descController = TextEditingController();
+  final goalController = TextEditingController();
 
-  void _incrementStock() {
+  void _editImprove() {
     if (_key.currentState?.validate() ?? false) {
-      final timeNow = DateTime.now().toInt();
+      var goal = 0;
+      if (goalController.text.isNotEmpty) {
+        goal = int.parse(goalController.text);
+      }
+
       // Payload
-      final payload = StockChangeRequest(
-          baNumber: timeNow.toString(),
-          note: noteController.text,
-          qty: int.parse(qtyController.text),
-          time: 0);
+      final payload = ImproveEditRequest(
+        filterTimestamp:
+            context.read<ImproveProvider>().improveDetail.updatedAt,
+        title: titleController.text,
+        description: descController.text,
+        completeStatus: 0,
+        goal: goal,
+      );
 
       // Call Provider
       Future.delayed(
           Duration.zero,
-          () =>
-              context.read<StockProvider>().changeStock(payload).then((value) {
+          () => context
+                  .read<ImproveProvider>()
+                  .editImprove(payload)
+                  .then((value) {
                 if (value) {
                   Navigator.of(context).pop();
                   showToastSuccess(
-                      context: context, message: "Berhasil menambahkan stok");
+                      context: context,
+                      message: "Berhasil membuat ${payload.title}");
                 }
               }).onError((error, _) {
                 if (error != null) {
@@ -63,10 +76,20 @@ class _IncrementStockBodyState extends State<IncrementStockBody> {
   }
 
   @override
-  void dispose() {
-    noteController.dispose();
-    qtyController.dispose();
+  void initState() {
+    final existData = context.read<ImproveProvider>().improveDetail;
+    titleController.text = existData.title;
+    descController.text = existData.description;
+    goalController.text = existData.goal.toString();
 
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    descController.dispose();
+    goalController.dispose();
     super.dispose();
   }
 
@@ -83,34 +106,12 @@ class _IncrementStockBodyState extends State<IncrementStockBody> {
               children: [
                 // * Judul text ------------------------
                 const Text(
-                  "Nama Stok",
-                  style: TextStyle(fontSize: 16),
-                ),
-
-                TextFormField(
-                  enabled: false,
-                  minLines: 1,
-                  maxLines: 1,
-                  decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Pallete.secondaryBackground,
-                      enabledBorder: InputBorder.none,
-                      border: InputBorder.none),
-                  initialValue: context.read<StockProvider>().stockDetail.name,
-                ),
-
-                verticalSpaceSmall,
-
-                // * Qty text ------------------------
-                const Text(
-                  "Jumlah penambahan",
+                  "Judul",
                   style: TextStyle(fontSize: 16),
                 ),
 
                 TextFormField(
                   textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.numberWithOptions(
-                      decimal: false, signed: false),
                   minLines: 1,
                   maxLines: 1,
                   decoration: const InputDecoration(
@@ -118,23 +119,20 @@ class _IncrementStockBodyState extends State<IncrementStockBody> {
                       fillColor: Pallete.secondaryBackground,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
-                  controller: qtyController,
+                  controller: titleController,
                   validator: (text) {
                     if (text == null || text.isEmpty) {
-                      return "Qty tidak boleh kosong";
-                    } else if (int.tryParse(text) != null &&
-                        int.parse(text) >= 0) {
-                      return null;
+                      return 'Judul tidak boleh kosong';
                     }
-                    return "Qty harus berupa bilangan bulat positif";
+                    return null;
                   },
                 ),
 
                 verticalSpaceSmall,
 
-                // * Note text ------------------------
+                // * Detail text ------------------------
                 const Text(
-                  "Catatan",
+                  "Detail",
                   style: TextStyle(fontSize: 16),
                 ),
 
@@ -147,25 +145,49 @@ class _IncrementStockBodyState extends State<IncrementStockBody> {
                       fillColor: Pallete.secondaryBackground,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
-                  controller: noteController,
+                  controller: descController,
+                ),
+
+                verticalSpaceSmall,
+
+                // * Qty text ------------------------
+                const Text(
+                  "Goal (Optional)",
+                  style: TextStyle(fontSize: 16),
+                ),
+
+                TextFormField(
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.number,
+                  minLines: 1,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Pallete.secondaryBackground,
+                      enabledBorder: InputBorder.none,
+                      border: InputBorder.none),
+                  controller: goalController,
                   validator: (text) {
                     if (text == null || text.isEmpty) {
-                      return "Catatan tidak boleh kosong";
+                      return null;
+                    } else if (int.tryParse(text) != null &&
+                        int.parse(text) >= 0) {
+                      return null;
                     }
-                    return null;
+                    return "Goal harus berupa bilangan bulat positif";
                   },
                 ),
 
-                verticalSpaceMedium,
+                verticalSpaceSmall,
 
-                Consumer<StockProvider>(builder: (_, data, __) {
-                  return (data.stockChangeState == ViewState.busy)
+                Consumer<ImproveProvider>(builder: (_, data, __) {
+                  return (data.state == ViewState.busy)
                       ? Center(child: const CircularProgressIndicator())
                       : Center(
                           child: HomeLikeButton(
-                              iconData: CupertinoIcons.add,
-                              text: "Tambahkan Stok",
-                              tapTap: _incrementStock),
+                              iconData: CupertinoIcons.pencil_circle,
+                              text: "Edit Improvement Item",
+                              tapTap: _editImprove),
                         );
                 }),
 

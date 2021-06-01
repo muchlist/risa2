@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/flushbar.dart';
+import 'package:risa2/src/shared/func_flushbar.dart';
 
 import '../../api/json_models/request/check_update_req.dart';
 import '../../api/json_models/response/check_resp.dart';

@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../api/json_models/request/stock_req.dart';
 import '../../config/pallatte.dart';
 import '../../providers/stock.dart';
-import '../../shared/flushbar.dart';
+import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';

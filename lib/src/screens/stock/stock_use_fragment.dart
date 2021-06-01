@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../api/json_models/response/stock_resp.dart';
 import '../../providers/stock.dart';
+import '../../shared/increment_decrement_icon.dart';
 import '../../utils/date_unix.dart';
 
 class StockUseRecyclerView extends StatelessWidget {
@@ -15,32 +18,9 @@ class StockUseRecyclerView extends StatelessWidget {
         itemBuilder: (context, index) {
           final stockUseData = stockUse[index];
 
-          return GestureDetector(
-              onTap: () {},
-              child: Card(
-                child: ListTile(
-                  title: (stockUseData.qty < 0)
-                      ? TxtBox(
-                          text: " Dikurangi ${-stockUseData.qty} ",
-                          color: Colors.deepOrange.shade100,
-                        )
-                      : TxtBox(
-                          text: " Ditambahkan ${stockUseData.qty} ",
-                          color: Colors.green.shade100,
-                        ),
-                  subtitle: Text("${stockUseData.note}"),
-                  trailing: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(stockUseData.time.getDateString(),
-                          style: TextStyle(fontSize: 12, color: Colors.grey)),
-                      Text(stockUseData.author.toLowerCase().split(" ")[0],
-                          style: TextStyle(fontSize: 12, color: Colors.grey))
-                    ],
-                  ),
-                ),
-              ));
+          return ChangeStockTile(
+            dataTile: stockUseData,
+          );
         },
       );
     });
@@ -66,6 +46,30 @@ class TxtBox extends StatelessWidget {
         ),
         Spacer(),
       ],
+    );
+  }
+}
+
+class ChangeStockTile extends StatelessWidget {
+  final StockChange dataTile;
+
+  const ChangeStockTile({Key? key, required this.dataTile}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: ListTile(
+          leading: IncDecIcon(value: dataTile.qty),
+          title: Text(dataTile.author.toLowerCase()),
+          subtitle: Text(dataTile.note),
+          trailing: Text(
+            dataTile.time.getDateString(),
+            style: TextStyle(fontSize: 12),
+          ),
+        ),
+      ),
     );
   }
 }

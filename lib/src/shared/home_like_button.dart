@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/config/pallatte.dart';
+import '../config/pallatte.dart';
 
 class HomeLikeButton extends StatelessWidget {
   final IconData iconData;
@@ -30,7 +30,7 @@ class HomeLikeButton extends StatelessWidget {
             color: Colors.white,
           )),
           TextSpan(
-              text: text,
+              text: " $text",
               style: const TextStyle(
                   color: Colors.white,
                   fontSize: 16,

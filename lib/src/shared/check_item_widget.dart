@@ -11,13 +11,14 @@ class CheckListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: ListTile(
-      leading: (data.isFinish)
-          ? Icon(CupertinoIcons.check_mark_circled)
-          : Icon(CupertinoIcons.timer_fill),
-      title: Text(data.createdBy),
-      subtitle: Text(data.updatedAt.getDateString()),
-      trailing: Text("Shift ${data.shift}"),
-    ));
+          leading: (data.isFinish)
+              ? Icon(CupertinoIcons.check_mark_circled)
+              : Icon(CupertinoIcons.timer_fill),
+          title: Text(data.createdBy),
+          subtitle: Text(data.updatedAt.getDateString()),
+          trailing: Text("Shift ${data.shift}"),
+        ));
   }
 }

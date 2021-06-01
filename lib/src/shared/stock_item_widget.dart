@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/utils/string_modifier.dart';
+
 import '../api/json_models/response/stock_list_resp.dart';
 import '../config/constant.dart';
+import '../utils/string_modifier.dart';
 import 'cached_image_circle.dart';
 
 class StockListTile extends StatelessWidget {
@@ -13,6 +14,7 @@ class StockListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: ListTile(
             leading: (data.image.isNotEmpty)
                 ? CachedImageCircle(

@@ -5,7 +5,7 @@ import '../../api/json_models/response/history_list_resp.dart';
 import '../../providers/cctvs.dart';
 import '../../providers/histories.dart';
 import '../../shared/empty_box.dart';
-import '../../shared/flushbar.dart';
+import '../../shared/func_flushbar.dart';
 import '../../shared/func_history_dialog.dart';
 import '../../shared/history_item_widget.dart';
 import '../../shared/home_like_button.dart';
