@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:risa2/src/api/json_models/request/improve_change_req.dart';
+import 'package:risa2/src/api/json_models/request/improve_req.dart';
 import 'package:risa2/src/api/json_models/response/improve_resp.dart';
 
 import '../api/filter_models/improve_filter.dart';
@@ -140,6 +141,29 @@ class ImproveProvider extends ChangeNotifier {
       return Future.error(error);
     }
 
+    await findImprove(loading: false);
+    return true;
+  }
+
+  // return future true jika add improve berhasil
+  // memanggil findimprove sehingga tidak perlu notifyListener
+  Future<bool> addImprove(ImproveRequest payload) async {
+    setState(ViewState.busy);
+    var error = "";
+
+    try {
+      final response = await _improveService.createImprove(payload);
+      if (response.error != null) {
+        error = response.error!.message;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
     await findImprove(loading: false);
     return true;
   }

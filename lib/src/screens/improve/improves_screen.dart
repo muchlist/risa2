@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/router/routes.dart';
-import 'package:risa2/src/shared/improve_item_widget.dart';
 
 import '../../providers/improves.dart';
+import '../../router/routes.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/func_flushbar.dart';
+import '../../shared/improve_item_widget.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 
@@ -36,7 +36,7 @@ class _ImproveScreenState extends State<ImproveScreen> {
       floatingActionButton: FloatingActionButton.extended(
           icon: Icon(Icons.add),
           onPressed: () {
-            // Navigator.pushNamed(context, RouteGenerator.improveAdd);
+            Navigator.pushNamed(context, RouteGenerator.improveAdd);
           },
           label: Text("Tambah data")),
       body: ImproveRecyclerView(),
