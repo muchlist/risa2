@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:risa2/src/api/json_models/request/improve_change_req.dart';
+import 'package:risa2/src/api/json_models/request/improve_edit_req.dart';
 import 'package:risa2/src/api/json_models/request/improve_req.dart';
 import 'package:risa2/src/api/json_models/response/improve_resp.dart';
 
@@ -166,6 +167,55 @@ class ImproveProvider extends ChangeNotifier {
     }
     await findImprove(loading: false);
     return true;
+  }
+
+  // return future ImproveDetail jika edit improve berhasil
+  Future<bool> editImprove(ImproveEditRequest payload) async {
+    setState(ViewState.busy);
+    var error = "";
+
+    try {
+      final response =
+          await _improveService.editImprove(_detailIDSaved, payload);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        _improveDetail = response.data!;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+
+    await findImprove(loading: false);
+    return true;
+  }
+
+  // enabling improve
+  // * mengubah status enable  improve
+  Future<void> enabling() async {
+    setDetailState(ViewState.busy);
+
+    var error = "";
+    try {
+      final response = await _improveService.enableImprove(_detailIDSaved);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        _improveDetail = response.data!;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setDetailState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
   }
 
   void onClose() {

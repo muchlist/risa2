@@ -21,26 +21,24 @@ class ImproveDetailScreen extends StatefulWidget {
 }
 
 class _ImproveDetailScreenState extends State<ImproveDetailScreen> {
-  late ImproveProvider _improveProvider;
-
-  @override
-  void initState() {
-    _improveProvider = context.read<ImproveProvider>();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _improveProvider.onClose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         title: const Text("Improve Detail"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, RouteGenerator.improveEdit);
+            },
+            icon: Icon(
+              CupertinoIcons.pencil_circle,
+              size: 28,
+            ),
+          ),
+          horizontalSpaceSmall
+        ],
       ),
       body: ImproveRecyclerView(),
     );
@@ -56,6 +54,14 @@ class _ImproveRecyclerViewState extends State<ImproveRecyclerView> {
   Future<void> _loadDetailImprove() {
     return Future.delayed(Duration.zero, () {
       context.read<ImproveProvider>().getDetail().onError((error, _) {
+        showToastError(context: context, message: error.toString());
+      });
+    });
+  }
+
+  Future<void> _enablingImprove() {
+    return Future.delayed(Duration.zero, () {
+      context.read<ImproveProvider>().enabling().onError((error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -102,8 +108,13 @@ class _ImproveRecyclerViewState extends State<ImproveRecyclerView> {
       child: CustomScrollView(
         slivers: <Widget>[
           SliverToBoxAdapter(
-              child: ImproveHeaderTile(
-            data: detail,
+              child: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, RouteGenerator.improveEdit);
+            },
+            child: ImproveHeaderTile(
+              data: detail,
+            ),
           )),
           SliverToBoxAdapter(
               child: Column(
@@ -113,13 +124,19 @@ class _ImproveRecyclerViewState extends State<ImproveRecyclerView> {
                 color: Pallete.secondaryBackground,
                 thickness: 5.0,
               ),
-              HomeLikeButton(
-                  iconData: Icons.add,
-                  text: "Tambah Progress",
-                  tapTap: () {
-                    data.setImproveDataPass(improveMinRess);
-                    Navigator.pushNamed(context, RouteGenerator.improveChange);
-                  }),
+              (detail.isActive)
+                  ? HomeLikeButton(
+                      iconData: Icons.add,
+                      text: "Tambah Progress",
+                      tapTap: () {
+                        data.setImproveDataPass(improveMinRess);
+                        Navigator.pushNamed(
+                            context, RouteGenerator.improveChange);
+                      })
+                  : HomeLikeButton(
+                      iconData: CupertinoIcons.rocket,
+                      text: "Aktifkan",
+                      tapTap: _enablingImprove),
               verticalSpaceSmall
             ],
           )),

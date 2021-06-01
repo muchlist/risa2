@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../api/json_models/request/improve_change_req.dart';
 import '../../config/pallatte.dart';
+import '../../globals.dart';
 import '../../providers/improves.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
@@ -30,6 +31,7 @@ class IncrementImproveBody extends StatefulWidget {
 
 class _IncrementImproveBodyState extends State<IncrementImproveBody> {
   late final ImproveProvider _improveProvider;
+  late bool _approver;
 
   final _key = GlobalKey<FormState>();
   final noteController = TextEditingController();
@@ -45,6 +47,14 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
     }
   }
 
+  Future<void> _enablingImprove() {
+    return Future.delayed(Duration.zero, () {
+      _improveProvider.enabling().onError((error, _) {
+        showToastError(context: context, message: error.toString());
+      });
+    });
+  }
+
   void _incrementImprove() {
     if (_key.currentState?.validate() ?? false) {
       final timeNow = DateTime.now().toInt();
@@ -57,8 +67,7 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
       // Call Provider
       Future.delayed(
           Duration.zero,
-          () => context
-                  .read<ImproveProvider>()
+          () => _improveProvider
                   .incrementImprovement(
                       _improveProvider.improveDataPass?.id ?? "", payload)
                   .then((value) {
@@ -82,6 +91,9 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
     _improveProvider = context.read<ImproveProvider>();
     _selectedSlider =
         _improveProvider.improveDataPass?.goalsAchieved.toDouble() ?? 0.0;
+    _approver = App.getRoles().any((element) {
+      return element == "APPROVE";
+    });
     super.initState();
   }
 
@@ -201,11 +213,27 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                                     tapTap: _incrementImprove),
                               );
                       })
-                    : const Center(
-                        child: Text(
-                        "Belum aktif",
-                        textAlign: TextAlign.center,
-                      )),
+                    : Center(
+                        child: (_approver)
+                            ? OutlinedButton.icon(
+                                style: OutlinedButton.styleFrom(
+                                  primary: Pallete.green,
+                                  shape: const StadiumBorder(),
+                                  side: const BorderSide(color: Pallete.green),
+                                ),
+                                onPressed: _enablingImprove,
+                                icon: const Icon(CupertinoIcons.rocket),
+                                label: const Text("Aktifkan"))
+                            : OutlinedButton.icon(
+                                style: OutlinedButton.styleFrom(
+                                  primary: Colors.grey,
+                                  shape: const StadiumBorder(),
+                                  side: const BorderSide(color: Colors.grey),
+                                ),
+                                onPressed: () {},
+                                icon: const Icon(CupertinoIcons.xmark_circle),
+                                label: const Text("Item belum diaktifkan")),
+                      ),
 
                 verticalSpaceMedium,
               ],
