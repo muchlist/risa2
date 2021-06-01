@@ -20,22 +20,10 @@ class ImproveListTile extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
-              title: Row(
-                children: [
-                  Expanded(
-                    child: Text(data.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyText1!),
-                  ),
-                ],
-              ),
-              subtitle: Row(
-                children: [
-                  Expanded(
-                      child: Text(data.description,
-                          maxLines: 2, overflow: TextOverflow.ellipsis)),
-                ],
+              title: Text(data.title,
+                  style: Theme.of(context).textTheme.bodyText1!),
+              subtitle: Text(
+                data.description,
               ),
               leading: (!data.isActive)
                   ? Icon(Icons.disabled_by_default_rounded)

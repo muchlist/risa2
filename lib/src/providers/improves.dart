@@ -84,6 +84,29 @@ class ImproveProvider extends ChangeNotifier {
     return _improveDetail;
   }
 
+  // get detail improve
+  // * Mendapatkan improve
+  Future<void> getDetail() async {
+    setDetailState(ViewState.busy);
+
+    var error = "";
+    try {
+      final response = await _improveService.getImprove(_detailIDSaved);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        _improveDetail = response.data!;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setDetailState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+  }
+
   void removeDetail() {
     _improveDetail = ImproveDetailResponseData(
         "", 0, 0, "", "", "", "", "", "", "", 0, 0, false, 0, []);
@@ -119,5 +142,9 @@ class ImproveProvider extends ChangeNotifier {
 
     await findImprove(loading: false);
     return true;
+  }
+
+  void onClose() {
+    removeDetail();
   }
 }

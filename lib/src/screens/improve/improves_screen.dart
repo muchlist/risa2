@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/router/routes.dart';
 import 'package:risa2/src/shared/improve_item_widget.dart';
 
 import '../../providers/improves.dart';
@@ -8,8 +9,6 @@ import '../../shared/empty_box.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
-
-var refreshKeyImproveScreen = GlobalKey<RefreshIndicatorState>();
 
 class ImproveScreen extends StatefulWidget {
   @override
@@ -51,6 +50,8 @@ class ImproveRecyclerView extends StatefulWidget {
 }
 
 class _ImproveRecyclerViewState extends State<ImproveRecyclerView> {
+  final refreshKeyImproveScreen = GlobalKey<RefreshIndicatorState>();
+
   Future<void> _loadImprove() {
     return Future.delayed(Duration.zero, () {
       context.read<ImproveProvider>().findImprove().onError((error, _) {
@@ -103,7 +104,7 @@ class _ImproveRecyclerViewState extends State<ImproveRecyclerView> {
                 context
                     .read<ImproveProvider>()
                     .setDetailID(data.improveList[index].id);
-                // Navigator.pushNamed(context, RouteGenerator.improveDetail);
+                Navigator.pushNamed(context, RouteGenerator.improveDetail);
               },
               child: ImproveListTile(data: data.improveList[index]));
         },

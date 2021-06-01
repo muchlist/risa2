@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/config/pallatte.dart';
 
 import '../../api/json_models/request/improve_change_req.dart';
+import '../../config/pallatte.dart';
 import '../../providers/improves.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
@@ -203,7 +203,7 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                       })
                     : const Center(
                         child: Text(
-                        "Tidak dapat diupdate!\nimprovement item\nbelum diaktifkan",
+                        "Belum aktif",
                         textAlign: TextAlign.center,
                       )),
 
