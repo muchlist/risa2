@@ -167,7 +167,7 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                   controller: nameController,
                   validator: (text) {
                     if (text == null || text.isEmpty) {
-                      return 'Nama stok tidak boleh kosong';
+                      return 'Nama cctv tidak boleh kosong';
                     }
                     return null;
                   },

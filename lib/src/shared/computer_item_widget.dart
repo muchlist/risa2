@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:risa2/src/config/pallatte.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
+
 import '../api/json_models/response/computer_list_resp.dart';
+import 'ui_helpers.dart';
 
 class ComputerListTile extends StatelessWidget {
   final ComputerMinResponse data;

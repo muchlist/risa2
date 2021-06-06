@@ -45,11 +45,12 @@ class ComputerWithIncidentDialog extends StatelessWidget {
                   delegate: SliverChildBuilderDelegate((contex, index) {
                     return GestureDetector(
                       onTap: () {
-                        // context.read<ComputerProvider>().removeDetail();
-                        // context
-                        //     .read<ComputerProvider>()
-                        //     .setComputerID(computerExtraList[index].id);
-                        // Navigator.pushNamed(context, RouteGenerator.computerDetail);
+                        context.read<ComputerProvider>().removeDetail();
+                        context
+                            .read<ComputerProvider>()
+                            .setComputerID(computerExtraList[index].id);
+                        Navigator.pushNamed(
+                            context, RouteGenerator.computerDetail);
                       },
                       child: OtherActionTile(data: computerExtraList[index]),
                     );

@@ -9,7 +9,6 @@ import '../api/json_models/request/other_edit_req.dart';
 import '../api/json_models/request/other_req.dart';
 import '../api/json_models/response/other_list_resp.dart';
 import '../api/json_models/response/other_resp.dart';
-import '../api/json_models/response/general_list_resp.dart';
 import '../api/services/other_service.dart';
 import '../globals.dart';
 import '../utils/enums.dart';
@@ -45,10 +44,10 @@ class OtherProvider extends ChangeNotifier {
   }
 
   // other extra list cache
-  List<GeneralMinResponse> _otherExtraList = [];
-  List<GeneralMinResponse> get otherExtraList {
-    return UnmodifiableListView(_otherExtraList);
-  }
+  // List<GeneralMinResponse> _otherExtraList = [];
+  // List<GeneralMinResponse> get otherExtraList {
+  //   return UnmodifiableListView(_otherExtraList);
+  // }
 
   // *memasang filter pada pencarian other
   FilterOther _filterOther = FilterOther(
@@ -72,7 +71,7 @@ class OtherProvider extends ChangeNotifier {
         error = response.error!.message;
       } else {
         _otherList = response.data.otherList;
-        _otherExtraList = response.data.extraList;
+        // _otherExtraList = response.data.extraList;
       }
     } catch (e) {
       error = e.toString();

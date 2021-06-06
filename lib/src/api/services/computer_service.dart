@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:risa2/src/api/json_models/option/computer_option.dart';
 
 import '../filter_models/computer_filter.dart';
 import '../http_client.dart';
@@ -80,8 +81,8 @@ class ComputerService {
     }).executeUpload(ComputerParser());
   }
 
-  Future<OptLocationType> getOptCreateComputer(String branch) {
+  Future<OptComputerType> getOptCreateComputer(String branch) {
     return RequestREST(endpoint: "opt-computer?branch=$branch")
-        .executeGet<OptLocationType>(LocationTypeParser());
+        .executeGet<OptComputerType>(ComputerOptParser());
   }
 }

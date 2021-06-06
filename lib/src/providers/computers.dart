@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:risa2/src/api/json_models/option/computer_option.dart';
 
 import '../api/filter_models/computer_filter.dart';
 import '../api/json_models/option/location_type.dart';
@@ -210,8 +211,9 @@ class ComputerProvider extends ChangeNotifier {
   }
 
   // computer option cache
-  OptLocationType _computerOption = OptLocationType(["None"], ["None"]);
-  OptLocationType get computerOption {
+  OptComputerType _computerOption = OptComputerType(
+      ["None"], ["None"], ["None"], ["None"], [0], [0], ["None"]);
+  OptComputerType get computerOption {
     return _computerOption;
   }
 

@@ -1,15 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/screens/search/computer_search_delegate.dart';
 
 import '../../config/pallatte.dart';
 import '../../providers/computers.dart';
+import '../../router/routes.dart';
 import '../../shared/computer_item_widget.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
+import '../search/computer_search_delegate.dart';
 import 'computer_with_incident_dialog.dart';
 
 var refreshKeyComputerScreen = GlobalKey<RefreshIndicatorState>();
@@ -51,13 +52,13 @@ class _ComputerScreenState extends State<ComputerScreen> {
                 context: context,
                 delegate: ComputerSearchDelegate(),
               );
-              // if (searchResult != null) {
-              //   _computerProvider
-              //     ..removeDetail()
-              //     ..setComputerID(searchResult);
-              //   await Navigator.pushNamed(
-              //       context, RouteGenerator.computerDetail);
-              // }
+              if (searchResult != null) {
+                _computerProvider
+                  ..removeDetail()
+                  ..setComputerID(searchResult);
+                await Navigator.pushNamed(
+                    context, RouteGenerator.computerDetail);
+              }
             },
           ),
           IconButton(
@@ -73,7 +74,7 @@ class _ComputerScreenState extends State<ComputerScreen> {
       floatingActionButton: FloatingActionButton.extended(
           icon: Icon(Icons.add),
           onPressed: () {
-            // Navigator.pushNamed(context, RouteGenerator.computerAdd);
+            Navigator.pushNamed(context, RouteGenerator.computerAdd);
           },
           label: Text("Tambah Komputer")),
       body: ComputerRecyclerView(),
@@ -154,11 +155,11 @@ class _ComputerRecyclerViewState extends State<ComputerRecyclerView> {
             delegate: SliverChildBuilderDelegate((context, index) {
               return GestureDetector(
                   onTap: () {
-                    // context.read<ComputerProvider>().removeDetail();
-                    // context
-                    //     .read<ComputerProvider>()
-                    //     .setComputerID(data.computerList[index].id);
-                    // Navigator.pushNamed(context, RouteGenerator.computerDetail);
+                    context.read<ComputerProvider>().removeDetail();
+                    context
+                        .read<ComputerProvider>()
+                        .setComputerID(data.computerList[index].id);
+                    Navigator.pushNamed(context, RouteGenerator.computerDetail);
                   },
                   child: ComputerListTile(data: data.computerList[index]));
             }, childCount: data.computerList.length),
