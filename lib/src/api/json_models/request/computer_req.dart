@@ -5,8 +5,8 @@ part 'computer_req.g.dart';
 @JsonSerializable()
 class ComputerRequest {
   final String name;
-  @JsonKey(name: "inventory_number")
   final String hostname;
+  @JsonKey(name: "inventory_number")
   final String inventoryNumber;
   final String ip;
   final String location;

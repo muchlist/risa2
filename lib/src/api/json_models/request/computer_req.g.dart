@@ -9,8 +9,8 @@ part of 'computer_req.dart';
 ComputerRequest _$ComputerRequestFromJson(Map<String, dynamic> json) {
   return ComputerRequest(
     name: json['name'] as String,
-    hostname: json['inventory_number'] as String,
-    inventoryNumber: json['inventoryNumber'] as String,
+    hostname: json['hostname'] as String,
+    inventoryNumber: json['inventory_number'] as String,
     ip: json['ip'] as String,
     location: json['location'] as String,
     division: json['division'] as String,
@@ -31,8 +31,8 @@ ComputerRequest _$ComputerRequestFromJson(Map<String, dynamic> json) {
 Map<String, dynamic> _$ComputerRequestToJson(ComputerRequest instance) =>
     <String, dynamic>{
       'name': instance.name,
-      'inventory_number': instance.hostname,
-      'inventoryNumber': instance.inventoryNumber,
+      'hostname': instance.hostname,
+      'inventory_number': instance.inventoryNumber,
       'ip': instance.ip,
       'location': instance.location,
       'division': instance.division,

@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/api/json_models/request/improve_edit_req.dart';
+import '../../api/json_models/request/improve_edit_req.dart';
 
-import '../../api/json_models/request/improve_req.dart';
 import '../../config/pallatte.dart';
 import '../../providers/improves.dart';
 import '../../shared/func_flushbar.dart';
