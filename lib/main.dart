@@ -8,6 +8,7 @@ import 'src/api/services/auth_service.dart';
 import 'src/api/services/cctv_service.dart';
 import 'src/api/services/check_service.dart';
 import 'src/api/services/checkp_service.dart';
+import 'src/api/services/computer_service.dart';
 import 'src/api/services/general_service.dart';
 import 'src/api/services/history_service.dart';
 import 'src/api/services/improve_service.dart';
@@ -18,6 +19,7 @@ import 'src/providers/auth.dart';
 import 'src/providers/cctvs.dart';
 import 'src/providers/checks.dart';
 import 'src/providers/checks_master.dart';
+import 'src/providers/computers.dart';
 import 'src/providers/generals.dart';
 import 'src/providers/histories.dart';
 import 'src/providers/improves.dart';
@@ -58,6 +60,7 @@ class MyApp extends StatelessWidget {
   final improveService = ImproveService();
   final stockService = StockService();
   final cctvService = CctvService();
+  final computerService = ComputerService();
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +80,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
             create: (context) => StockProvider(stockService)),
         ChangeNotifierProvider(create: (context) => CctvProvider(cctvService)),
+        ChangeNotifierProvider(
+            create: (context) => ComputerProvider(computerService)),
       ],
       child: MaterialApp(
         title: _title,

@@ -10,6 +10,7 @@ import '../screens/check/check_screen.dart';
 import '../screens/check_master/add_check_master_screen.dart';
 import '../screens/check_master/check_master_screen.dart';
 import '../screens/check_master/edit_check_master_screen.dart';
+import '../screens/computer/computer_screen.dart';
 import '../screens/history/histories_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/improve/add_improve_screen.dart';
@@ -51,6 +52,7 @@ class RouteGenerator {
   static const String improveDetail = '/improve-detail';
   static const String improveAdd = '/improve-add';
   static const String improveEdit = '/improve-edit';
+  static const String computer = '/computer';
 
   RouteGenerator._();
 
@@ -104,6 +106,8 @@ class RouteGenerator {
         return transitionFade(AddImproveScreen());
       case improveEdit:
         return transitionFade(EditImproveScreen());
+      case computer:
+        return transitionFade(ComputerScreen());
       default:
         return MaterialPageRoute(builder: (_) => LoginScreen());
     }

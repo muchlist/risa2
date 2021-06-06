@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../../api/json_models/response/cctv_list_resp.dart';
-import '../../providers/cctvs.dart';
-import '../../shared/cctv_item_widget.dart';
+import '../../api/json_models/response/computer_list_resp.dart';
+import '../../providers/computers.dart';
+import '../../shared/computer_item_widget.dart';
 
-class CctvSearchDelegate extends SearchDelegate<String?> {
-  Widget generateListView(List<CctvMinResponse> cctvList) {
-    if (cctvList.length == 0) {
+class ComputerSearchDelegate extends SearchDelegate<String?> {
+  Widget generateListView(List<ComputerMinResponse> computerList) {
+    if (computerList.length == 0) {
       return Center(
           child: SizedBox(
               height: 200,
@@ -18,12 +18,12 @@ class CctvSearchDelegate extends SearchDelegate<String?> {
     }
 
     return ListView.builder(
-      itemCount: cctvList.length,
+      itemCount: computerList.length,
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: () => close(context, cctvList[index].id),
-          child: CctvListTile(
-            data: cctvList[index],
+          onTap: () => close(context, computerList[index].id),
+          child: ComputerListTile(
+            data: computerList[index],
           ),
         );
       },
@@ -54,31 +54,31 @@ class CctvSearchDelegate extends SearchDelegate<String?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final cctvList = context.read<CctvProvider>().cctvList;
+    final computerList = context.read<ComputerProvider>().computerList;
     if (query == "") {
-      return generateListView(cctvList);
+      return generateListView(computerList);
     } else {
-      final cctvListFiltered = cctvList
+      final computerListFiltered = computerList
           .where((x) =>
               x.name.contains(query.toUpperCase()) || x.ip.contains(query))
           .toList();
 
-      return generateListView(cctvListFiltered);
+      return generateListView(computerListFiltered);
     }
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final cctvList = context.read<CctvProvider>().cctvList;
+    final computerList = context.read<ComputerProvider>().computerList;
     if (query == "") {
-      return generateListView(cctvList);
+      return generateListView(computerList);
     } else {
-      final cctvListFiltered = cctvList
+      final computerListFiltered = computerList
           .where((x) =>
               x.name.contains(query.toUpperCase()) || x.ip.contains(query))
           .toList();
 
-      return generateListView(cctvListFiltered);
+      return generateListView(computerListFiltered);
     }
   }
 }

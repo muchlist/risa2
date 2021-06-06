@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import '../api/json_models/response/general_list_resp.dart';
 import '../config/pallatte.dart';
 
-class CctvActionTile extends StatelessWidget {
+class OtherActionTile extends StatelessWidget {
   final GeneralMinResponse data;
 
-  const CctvActionTile({Key? key, required this.data}) : super(key: key);
+  const OtherActionTile({Key? key, required this.data}) : super(key: key);
 
   double _calculatePercentPing() {
     var pingSum = 0;
@@ -64,10 +64,12 @@ class CctvActionTile extends StatelessWidget {
                   (data.casesSize != 0)
                       ? Text(_generateCase())
                       : const Text(
-                          "🔍 : Cctc down, perlu dilakukan pengecekan"),
+                          "🔍 : Instance down, perlu dilakukan pengecekan"),
                 ],
               ),
-              trailing: Text("${_calculatePercentPing().toStringAsFixed(0)}%")),
+              trailing: (data.pingsState.length != 0)
+                  ? Text("${_calculatePercentPing().toStringAsFixed(0)}%")
+                  : SizedBox.shrink()),
         ));
   }
 }
