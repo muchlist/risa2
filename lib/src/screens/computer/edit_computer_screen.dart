@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../api/json_models/request/computer_edit_req.dart';
 
-import '../../api/json_models/request/computer_req.dart';
 import '../../config/pallatte.dart';
 import '../../providers/computers.dart';
 import '../../shared/func_flushbar.dart';
@@ -10,25 +10,25 @@ import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/utils.dart';
 
-class AddComputerScreen extends StatelessWidget {
+class EditComputerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Tambah Komputer"),
+        title: const Text("Edit Komputer"),
       ),
-      body: AddComputerBody(),
+      body: EditComputerBody(),
     );
   }
 }
 
-class AddComputerBody extends StatefulWidget {
+class EditComputerBody extends StatefulWidget {
   @override
-  _AddComputerBodyState createState() => _AddComputerBodyState();
+  _EditComputerBodyState createState() => _EditComputerBodyState();
 }
 
-class _AddComputerBodyState extends State<AddComputerBody> {
+class _EditComputerBodyState extends State<EditComputerBody> {
   final _key = GlobalKey<FormState>();
 
   bool _isSeatManagement = false;
@@ -56,7 +56,7 @@ class _AddComputerBodyState extends State<AddComputerBody> {
   final brandController = TextEditingController();
   final noteController = TextEditingController();
 
-  void _addComputer() {
+  void _editComputer(int timestamp) {
     if (_key.currentState?.validate() ?? false) {
       // validasi tambahan
       var errorMessage = "";
@@ -82,7 +82,8 @@ class _AddComputerBodyState extends State<AddComputerBody> {
       }
 
       // Payload
-      final payload = ComputerRequest(
+      final payload = ComputerEditRequest(
+          filterTimestamp: timestamp,
           name: nameController.text,
           inventoryNumber: inventoryNumController.text,
           ip: ipController.text,
@@ -105,7 +106,7 @@ class _AddComputerBodyState extends State<AddComputerBody> {
           Duration.zero,
           () => context
                   .read<ComputerProvider>()
-                  .addComputer(payload)
+                  .editComputer(payload)
                   .then((value) {
                 if (value) {
                   Navigator.of(context).pop();
@@ -142,18 +143,31 @@ class _AddComputerBodyState extends State<AddComputerBody> {
   @override
   void dispose() {
     nameController.dispose();
-    hostnameController.dispose();
     inventoryNumController.dispose();
     ipController.dispose();
     brandController.dispose();
     noteController.dispose();
+
     super.dispose();
   }
 
   @override
   void initState() {
+    final existData = context.read<ComputerProvider>().computerDetail;
+
+    nameController.text = existData.name;
+    hostnameController.text = existData.hostname;
+    inventoryNumController.text = existData.inventoryNumber;
+    ipController.text = existData.ip;
+    brandController.text = existData.brand;
+    noteController.text = existData.note;
+    if (existData.date != 0) {
+      _dateSelected = existData.date.toDate();
+    }
+    _isSeatManagement = existData.seatManagement;
+
     // default length == 1 , if option got update length more than 1
-    if (context.read<ComputerProvider>().computerOption.location.length == 1) {
+    if (context.read<ComputerProvider>().computerOption.type.length == 1) {
       Future.delayed(
           Duration.zero,
           () => context
@@ -161,7 +175,23 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                   .findOptionComputer()
                   .onError((error, _) {
                 showToastError(context: context, message: error.toString());
-              }));
+              })).whenComplete(() {
+        _selectedLocation = existData.location;
+        _selectedDivision = existData.division;
+        _selectedType = existData.type;
+        _selectedOS = existData.os;
+        _selectedProcessor = existData.processor;
+        _selectedRAM = existData.ram;
+        _selectedHardisk = existData.hardisk;
+      });
+    } else {
+      _selectedLocation = existData.location;
+      _selectedDivision = existData.division;
+      _selectedType = existData.type;
+      _selectedOS = existData.os;
+      _selectedProcessor = existData.processor;
+      _selectedRAM = existData.ram;
+      _selectedHardisk = existData.hardisk;
     }
     super.initState();
   }
@@ -243,9 +273,9 @@ class _AddComputerBodyState extends State<AddComputerBody> {
 
                 verticalSpaceSmall,
 
-                // * IP Address text
+                // * IP Editress text
                 const Text(
-                  "IP Address",
+                  "IP Editress",
                   style: TextStyle(fontSize: 16),
                 ),
 
@@ -264,7 +294,7 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                       return null;
                     } else {
                       if (!ValueValidator().ip(text)) {
-                        return "IP Address tidak valid";
+                        return "IP Editress tidak valid";
                       }
                     }
                     return null;
@@ -632,9 +662,10 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                       ? Center(child: const CircularProgressIndicator())
                       : Center(
                           child: HomeLikeButton(
-                              iconData: CupertinoIcons.add,
-                              text: "Tambah Computer",
-                              tapTap: _addComputer),
+                              iconData: CupertinoIcons.pencil_circle,
+                              text: "Edit Komputer",
+                              tapTap: () =>
+                                  _editComputer(data.computerDetail.updatedAt)),
                         );
                 }),
 

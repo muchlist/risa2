@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import '../../config/constant.dart';
 import '../../config/pallatte.dart';
 import '../../providers/computers.dart';
+import '../../router/routes.dart';
 import '../../shared/cached_image_square.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/ui_helpers.dart';
@@ -345,8 +346,8 @@ class _ButtonContainerState extends State<ButtonContainer> {
                     children: [
                       ElevatedButton.icon(
                           onPressed: () {
-                            // Navigator.pushNamed(
-                            //     context, RouteGenerator.computerEdit);
+                            Navigator.pushNamed(
+                                context, RouteGenerator.computerEdit);
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.green[300],
