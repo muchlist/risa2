@@ -312,7 +312,7 @@ class OtherProvider extends ChangeNotifier {
   // di on dispose
   void onClose() {
     removeDetail();
-    _otherExtraList = [];
+    // _otherExtraList = [];
     _otherList = [];
   }
 }

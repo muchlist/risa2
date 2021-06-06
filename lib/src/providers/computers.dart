@@ -2,10 +2,9 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:risa2/src/api/json_models/option/computer_option.dart';
 
 import '../api/filter_models/computer_filter.dart';
-import '../api/json_models/option/location_type.dart';
+import '../api/json_models/option/computer_option.dart';
 import '../api/json_models/request/computer_edit_req.dart';
 import '../api/json_models/request/computer_req.dart';
 import '../api/json_models/response/computer_list_resp.dart';
