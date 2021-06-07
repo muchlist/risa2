@@ -61,6 +61,9 @@ class OtherActionTile extends StatelessWidget {
                       ),
                     ),
                   ),
+                  (data.casesSize != 0)
+                      ? Text(_generateCase())
+                      : const SizedBox.shrink(),
                 ],
               ),
               trailing: (data.pingsState.length != 0)
