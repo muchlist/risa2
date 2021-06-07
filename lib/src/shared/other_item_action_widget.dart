@@ -61,10 +61,6 @@ class OtherActionTile extends StatelessWidget {
                       ),
                     ),
                   ),
-                  (data.casesSize != 0)
-                      ? Text(_generateCase())
-                      : const Text(
-                          "🔍 : Instance down, perlu dilakukan pengecekan"),
                 ],
               ),
               trailing: (data.pingsState.length != 0)

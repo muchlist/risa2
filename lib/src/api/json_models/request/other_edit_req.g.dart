@@ -9,7 +9,7 @@ part of 'other_edit_req.dart';
 OtherEditRequest _$OtherEditRequestFromJson(Map<String, dynamic> json) {
   return OtherEditRequest(
     filterTimestamp: json['filter_timestamp'] as int,
-    filterSubCategory: json['filter_sub_category'] as int,
+    filterSubCategory: json['filter_sub_category'] as String,
     name: json['name'] as String,
     detail: json['detail'] as String,
     inventoryNumber: json['inventory_number'] as String,

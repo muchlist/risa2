@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../../config/pallatte.dart';
 import '../../models/dashboard.dart';
+import '../../providers/others.dart';
 import '../../router/routes.dart';
 import '../../shared/dashboard_icon_widget.dart';
 import '../../shared/ui_helpers.dart';
@@ -22,7 +25,7 @@ class DashboardGrid extends StatelessWidget {
     Dashboard("Software", CupertinoIcons.square_stack_3d_up,
         color: Pallete.green.withOpacity(0.4)),
     Dashboard("Incident", CupertinoIcons.smallcircle_circle,
-        color: Pallete.green.withOpacity(0.4)),
+        color: Pallete.green.withOpacity(0.4), route: RouteGenerator.other),
   ];
 
   @override
@@ -43,6 +46,9 @@ class DashboardGrid extends StatelessWidget {
             onTap: () {
               final route = dashboardItems[i].route;
               if (route.isNotEmpty) {
+                context
+                    .read<OtherProvider>()
+                    .setSubCategory("UPS"); //todo rubah boss
                 Navigator.of(context).pushNamed(route);
               } else {
                 // todo if menu not available

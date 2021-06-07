@@ -12,6 +12,7 @@ import 'src/api/services/computer_service.dart';
 import 'src/api/services/general_service.dart';
 import 'src/api/services/history_service.dart';
 import 'src/api/services/improve_service.dart';
+import 'src/api/services/other_service.dart';
 import 'src/api/services/stock_service.dart';
 import 'src/config/pallatte.dart';
 import 'src/globals.dart';
@@ -23,6 +24,7 @@ import 'src/providers/computers.dart';
 import 'src/providers/generals.dart';
 import 'src/providers/histories.dart';
 import 'src/providers/improves.dart';
+import 'src/providers/others.dart';
 import 'src/providers/stock.dart';
 import 'src/router/routes.dart';
 import 'src/screens/landing/landing.dart';
@@ -61,6 +63,7 @@ class MyApp extends StatelessWidget {
   final stockService = StockService();
   final cctvService = CctvService();
   final computerService = ComputerService();
+  final otherService = OtherService();
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +85,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => CctvProvider(cctvService)),
         ChangeNotifierProvider(
             create: (context) => ComputerProvider(computerService)),
+        ChangeNotifierProvider(
+            create: (context) => OtherProvider(otherService)),
       ],
       child: MaterialApp(
         title: _title,

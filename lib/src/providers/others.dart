@@ -2,11 +2,12 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:risa2/src/api/json_models/option/location_division.dart';
 
 import '../api/filter_models/other_filter.dart';
-import '../api/json_models/option/location_type.dart';
 import '../api/json_models/request/other_edit_req.dart';
 import '../api/json_models/request/other_req.dart';
+import '../api/json_models/response/general_list_resp.dart';
 import '../api/json_models/response/other_list_resp.dart';
 import '../api/json_models/response/other_resp.dart';
 import '../api/services/other_service.dart';
@@ -44,10 +45,10 @@ class OtherProvider extends ChangeNotifier {
   }
 
   // other extra list cache
-  // List<GeneralMinResponse> _otherExtraList = [];
-  // List<GeneralMinResponse> get otherExtraList {
-  //   return UnmodifiableListView(_otherExtraList);
-  // }
+  List<GeneralMinResponse> _otherExtraList = [];
+  List<GeneralMinResponse> get otherExtraList {
+    return UnmodifiableListView(_otherExtraList);
+  }
 
   // *memasang filter pada pencarian other
   FilterOther _filterOther = FilterOther(
@@ -71,7 +72,7 @@ class OtherProvider extends ChangeNotifier {
         error = response.error!.message;
       } else {
         _otherList = response.data.otherList;
-        // _otherExtraList = response.data.extraList;
+        _otherExtraList = response.data.extraList;
       }
     } catch (e) {
       error = e.toString();
@@ -210,8 +211,8 @@ class OtherProvider extends ChangeNotifier {
   }
 
   // other option cache
-  OptLocationType _otherOption = OptLocationType(["None"], ["None"]);
-  OptLocationType get otherOption {
+  OptLocationDivison _otherOption = OptLocationDivison(["None"], ["None"]);
+  OptLocationDivison get otherOption {
     return _otherOption;
   }
 

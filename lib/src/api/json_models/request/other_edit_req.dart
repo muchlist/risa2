@@ -7,7 +7,7 @@ class OtherEditRequest {
   @JsonKey(name: "filter_timestamp")
   final int filterTimestamp;
   @JsonKey(name: "filter_sub_category")
-  final int filterSubCategory;
+  final String filterSubCategory;
   final String name;
   final String detail;
   @JsonKey(name: "inventory_number")

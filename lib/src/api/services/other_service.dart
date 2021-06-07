@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 
 import '../filter_models/other_filter.dart';
 import '../http_client.dart';
-import '../json_models/option/location_type.dart';
+import '../json_models/option/location_division.dart';
 import '../json_models/request/other_edit_req.dart';
 import '../json_models/request/other_req.dart';
 import '../json_models/response/message_resp.dart';
@@ -66,7 +66,7 @@ class OtherService {
       query = query + "division=${f.division}";
     }
 
-    return RequestREST(endpoint: "/other/$subCategory?$query")
+    return RequestREST(endpoint: "/others/$subCategory?$query")
         .executeGet<OtherListResponse>(OtherListParser());
   }
 
@@ -76,8 +76,8 @@ class OtherService {
     }).executeUpload(OtherParser());
   }
 
-  Future<OptLocationType> getOptCreateOther(String branch) {
+  Future<OptLocationDivison> getOptCreateOther(String branch) {
     return RequestREST(endpoint: "opt-other?branch=$branch")
-        .executeGet<OptLocationType>(LocationTypeParser());
+        .executeGet<OptLocationDivison>(LocationDivisionParser());
   }
 }
