@@ -7,25 +7,24 @@ import 'package:provider/provider.dart';
 
 import '../../config/constant.dart';
 import '../../config/pallatte.dart';
-import '../../providers/cctvs.dart';
+import '../../providers/computers.dart';
 import '../../router/routes.dart';
 import '../../shared/cached_image_square.dart';
 import '../../shared/func_flushbar.dart';
-import '../../shared/line_chart.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/date_unix.dart';
 import '../../utils/enums.dart';
 
-class CctvDetailFragment extends StatefulWidget {
+class ComputerDetailFragment extends StatefulWidget {
   @override
-  _CctvDetailFragmentState createState() => _CctvDetailFragmentState();
+  _ComputerDetailFragmentState createState() => _ComputerDetailFragmentState();
 }
 
-class _CctvDetailFragmentState extends State<CctvDetailFragment> {
+class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
   @override
   Widget build(BuildContext context) {
-    final cctvProvider = context.watch<CctvProvider>();
-    final detail = cctvProvider.cctvDetail;
+    final computerProvider = context.watch<ComputerProvider>();
+    final detail = computerProvider.computerDetail;
 
     return Stack(children: [
       SingleChildScrollView(
@@ -48,6 +47,16 @@ class _CctvDetailFragmentState extends State<CctvDetailFragment> {
                     2: FlexColumnWidth(3.0)
                   },
                   children: [
+                    TableRow(children: [
+                      const Text("Host"),
+                      const Text("   :   "),
+                      Text(
+                        detail.hostname,
+                        softWrap: true,
+                        maxLines: 1,
+                        overflow: TextOverflow.clip,
+                      ),
+                    ]),
                     TableRow(children: [
                       const Text("IP"),
                       const Text("   :   "),
@@ -99,6 +108,16 @@ class _CctvDetailFragmentState extends State<CctvDetailFragment> {
                       ),
                     ]),
                     TableRow(children: [
+                      const Text("Sewa"),
+                      const Text("   :   "),
+                      Text(
+                        (detail.seatManagement) ? "Ya" : "Tidak",
+                        softWrap: true,
+                        maxLines: 1,
+                        overflow: TextOverflow.clip,
+                      ),
+                    ]),
+                    TableRow(children: [
                       const Text("Tahun"),
                       const Text("   :   "),
                       (detail.date != 0)
@@ -134,22 +153,74 @@ class _CctvDetailFragmentState extends State<CctvDetailFragment> {
                 ),
               ),
               verticalSpaceMedium,
-
-              if (detail.extra.pingsState.length != 0)
-                CctvLineChart(
-                  data: detail.extra,
+              // Bottom table
+              Text(
+                "Spesifikasi",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 16),
+                child: Table(
+                  columnWidths: {
+                    0: FlexColumnWidth(1.0),
+                    1: FlexColumnWidth(0.5),
+                    2: FlexColumnWidth(3.0)
+                  },
+                  children: [
+                    TableRow(children: [
+                      const Text("OS"),
+                      const Text("   :   "),
+                      Text(
+                        detail.os,
+                        softWrap: true,
+                        maxLines: 1,
+                        overflow: TextOverflow.clip,
+                      ),
+                    ]),
+                    TableRow(children: [
+                      const Text("Prosesor"),
+                      const Text("   :   "),
+                      Text(
+                        detail.processor,
+                        softWrap: true,
+                        maxLines: 1,
+                        overflow: TextOverflow.clip,
+                      ),
+                    ]),
+                    TableRow(children: [
+                      const Text("RAM"),
+                      const Text("   :   "),
+                      Text(
+                        "${detail.ram} MB",
+                        softWrap: true,
+                        maxLines: 2,
+                        overflow: TextOverflow.clip,
+                      ),
+                    ]),
+                    TableRow(children: [
+                      const Text("Hardisk"),
+                      const Text("   :   "),
+                      Text(
+                        "${detail.hardisk} MB",
+                        softWrap: true,
+                        maxLines: 2,
+                        overflow: TextOverflow.clip,
+                      ),
+                    ]),
+                  ],
                 ),
+              ),
 
               verticalSpaceMedium,
               ButtonContainer(
-                provider: cctvProvider,
+                provider: computerProvider,
               ),
             ],
           ),
         ),
       ),
       // Loading Screen
-      if (cctvProvider.detailState == ViewState.busy)
+      if (computerProvider.detailState == ViewState.busy)
         Scaffold(
           body: Center(
             child: CircularProgressIndicator(),
@@ -160,7 +231,7 @@ class _CctvDetailFragmentState extends State<CctvDetailFragment> {
 }
 
 class ButtonContainer extends StatefulWidget {
-  final CctvProvider provider;
+  final ComputerProvider provider;
 
   const ButtonContainer({required this.provider});
 
@@ -184,7 +255,10 @@ class _ButtonContainerState extends State<ButtonContainer> {
     }
 
     // compress and upload
-    await context.read<CctvProvider>().uploadImage(id, _image!).then((value) {
+    await context
+        .read<ComputerProvider>()
+        .uploadImage(id, _image!)
+        .then((value) {
       if (value) {
         showToastSuccess(
             context: context,
@@ -204,7 +278,7 @@ class _ButtonContainerState extends State<ButtonContainer> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Konfirmasi hapus"),
-            content: const Text("Apakah yakin ingin menghapus cctv ini!"),
+            content: const Text("Apakah yakin ingin menghapus komputer ini!"),
             actions: <Widget>[
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -221,7 +295,7 @@ class _ButtonContainerState extends State<ButtonContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final detail = widget.provider.cctvDetail;
+    final detail = widget.provider.computerDetail;
     return Container(
       child: Padding(
           padding: const EdgeInsets.only(left: 16),
@@ -273,7 +347,7 @@ class _ButtonContainerState extends State<ButtonContainer> {
                       ElevatedButton.icon(
                           onPressed: () {
                             Navigator.pushNamed(
-                                context, RouteGenerator.cctvEdit);
+                                context, RouteGenerator.computerEdit);
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.green[300],
@@ -285,15 +359,15 @@ class _ButtonContainerState extends State<ButtonContainer> {
                             var confirmDelete = await _deleteConfirm(context);
                             if (confirmDelete != null && confirmDelete) {
                               await context
-                                  .read<CctvProvider>()
-                                  .removeCctv()
+                                  .read<ComputerProvider>()
+                                  .removeComputer()
                                   .then((value) {
                                 if (value) {
                                   Navigator.pop(context);
                                   showToastSuccess(
                                       context: context,
                                       message:
-                                          "Berhasil menghapus cctv ${detail.name}");
+                                          "Berhasil menghapus computer ${detail.name}");
                                 }
                               }).onError((error, _) {
                                 showToastError(

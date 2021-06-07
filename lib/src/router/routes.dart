@@ -10,6 +10,10 @@ import '../screens/check/check_screen.dart';
 import '../screens/check_master/add_check_master_screen.dart';
 import '../screens/check_master/check_master_screen.dart';
 import '../screens/check_master/edit_check_master_screen.dart';
+import '../screens/computer/add_computer_screen.dart';
+import '../screens/computer/computer_detail_screen.dart';
+import '../screens/computer/computer_screen.dart';
+import '../screens/computer/edit_computer_screen.dart';
 import '../screens/history/histories_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/improve/add_improve_screen.dart';
@@ -19,6 +23,10 @@ import '../screens/improve/improves_screen.dart';
 import '../screens/improve/increment_improve_screen.dart';
 import '../screens/landing/landing.dart';
 import '../screens/login/login_screen.dart';
+import '../screens/other/add_other_screen.dart';
+import '../screens/other/edit_other_screen.dart';
+import '../screens/other/other_detail_screen.dart';
+import '../screens/other/other_screen.dart';
 import '../screens/stock/add_stock_screen.dart';
 import '../screens/stock/decrement_stock_screen.dart';
 import '../screens/stock/edit_stock_screen.dart';
@@ -51,6 +59,14 @@ class RouteGenerator {
   static const String improveDetail = '/improve-detail';
   static const String improveAdd = '/improve-add';
   static const String improveEdit = '/improve-edit';
+  static const String computer = '/computer';
+  static const String computerDetail = '/computer-detail';
+  static const String computerAdd = '/computer-add';
+  static const String computerEdit = '/computer-edit';
+  static const String other = '/other';
+  static const String otherDetail = '/other-detail';
+  static const String otherAdd = '/other-add';
+  static const String otherEdit = '/other-edit';
 
   RouteGenerator._();
 
@@ -104,6 +120,22 @@ class RouteGenerator {
         return transitionFade(AddImproveScreen());
       case improveEdit:
         return transitionFade(EditImproveScreen());
+      case computer:
+        return transitionFade(ComputerScreen());
+      case computerDetail:
+        return transitionFade(ComputerDetailScreen());
+      case computerAdd:
+        return transitionFade(AddComputerScreen());
+      case computerEdit:
+        return transitionFade(EditComputerScreen());
+      case other:
+        return transitionFade(OtherScreen());
+      case otherDetail:
+        return transitionFade(OtherDetailScreen());
+      case otherAdd:
+        return transitionFade(AddOtherScreen());
+      case otherEdit:
+        return transitionFade(EditOtherScreen());
       default:
         return MaterialPageRoute(builder: (_) => LoginScreen());
     }

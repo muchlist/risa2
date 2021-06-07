@@ -2,38 +2,36 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../api/json_models/request/cctv_req.dart';
-import '../../config/pallatte.dart';
-import '../../providers/cctvs.dart';
+import '../../api/json_models/request/other_req.dart';
+import '../../providers/others.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/utils.dart';
 
-class AddCctvScreen extends StatelessWidget {
+class AddOtherScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Tambah Cctv"),
+        title: Text("Tambah ${context.read<OtherProvider>().subCategory}"),
       ),
-      body: AddCctvBody(),
+      body: AddOtherBody(),
     );
   }
 }
 
-class AddCctvBody extends StatefulWidget {
+class AddOtherBody extends StatefulWidget {
   @override
-  _AddCctvBodyState createState() => _AddCctvBodyState();
+  _AddOtherBodyState createState() => _AddOtherBodyState();
 }
 
-class _AddCctvBodyState extends State<AddCctvBody> {
+class _AddOtherBodyState extends State<AddOtherBody> {
   final _key = GlobalKey<FormState>();
 
   String? _selectedLocation;
-  String? _selectedType;
-
+  String? _selectedDivision;
   DateTime? _dateSelected;
 
   String getDateString() {
@@ -44,20 +42,19 @@ class _AddCctvBodyState extends State<AddCctvBody> {
   }
 
   final nameController = TextEditingController();
+  final detailController = TextEditingController();
   final inventoryNumController = TextEditingController();
   final ipController = TextEditingController();
   final brandController = TextEditingController();
   final noteController = TextEditingController();
+  final tipeController = TextEditingController();
 
-  void _addCctv() {
+  void _addOther() {
     if (_key.currentState?.validate() ?? false) {
       // validasi tambahan
       var errorMessage = "";
       if (_selectedLocation == null) {
-        errorMessage = errorMessage + "lokasi tidak boleh kosong. ";
-      }
-      if (_selectedType == null) {
-        errorMessage = errorMessage + "tipe tidak boleh kosong. ";
+        errorMessage = errorMessage + "Lokasi tidak boleh kosong. ";
       }
 
       if (errorMessage.isNotEmpty) {
@@ -66,26 +63,30 @@ class _AddCctvBodyState extends State<AddCctvBody> {
       }
 
       // Payload
-      final payload = CctvRequest(
-          name: nameController.text,
-          inventoryNumber: inventoryNumController.text,
-          ip: ipController.text,
-          location: _selectedLocation!,
-          brand: brandController.text,
-          date: (_dateSelected != null) ? _dateSelected!.toInt() : 0,
-          tag: [],
-          note: noteController.text,
-          type: _selectedType!);
+      final payload = OtherRequest(
+        subCategory: context.read<OtherProvider>().subCategory,
+        name: nameController.text,
+        detail: detailController.text,
+        inventoryNumber: inventoryNumController.text,
+        ip: ipController.text,
+        location: _selectedLocation ?? "",
+        brand: brandController.text,
+        date: (_dateSelected != null) ? _dateSelected!.toInt() : 0,
+        tag: [],
+        note: noteController.text,
+        type: tipeController.text,
+        division: _selectedDivision ?? "",
+      );
 
       // Call Provider
       Future.delayed(
           Duration.zero,
-          () => context.read<CctvProvider>().addCctv(payload).then((value) {
+          () => context.read<OtherProvider>().addOther(payload).then((value) {
                 if (value) {
                   Navigator.of(context).pop();
                   showToastSuccess(
                       context: context,
-                      message: "Berhasil membuat cctv ${payload.name}");
+                      message: "Berhasil membuat ${payload.name}");
                 }
               }).onError((error, _) {
                 if (error != null) {
@@ -116,22 +117,25 @@ class _AddCctvBodyState extends State<AddCctvBody> {
   @override
   void dispose() {
     nameController.dispose();
+    detailController.dispose();
     inventoryNumController.dispose();
     ipController.dispose();
     brandController.dispose();
     noteController.dispose();
-
+    tipeController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     // default length == 1 , if option got update length more than 1
-    if (context.read<CctvProvider>().cctvOption.location.length == 1) {
+    if (context.read<OtherProvider>().otherOption.location.length == 1) {
       Future.delayed(
           Duration.zero,
-          () =>
-              context.read<CctvProvider>().findOptionCctv().onError((error, _) {
+          () => context
+                  .read<OtherProvider>()
+                  .findOptionOther()
+                  .onError((error, _) {
                 showToastError(context: context, message: error.toString());
               }));
     }
@@ -151,7 +155,7 @@ class _AddCctvBodyState extends State<AddCctvBody> {
               children: [
                 // * Judul text ------------------------
                 const Text(
-                  "Nama Cctv",
+                  "Nama item",
                   style: TextStyle(fontSize: 16),
                 ),
 
@@ -161,16 +165,36 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                   maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
-                      fillColor: Pallete.secondaryBackground,
+                      fillColor: Colors.white,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: nameController,
                   validator: (text) {
                     if (text == null || text.isEmpty) {
-                      return 'Nama cctv tidak boleh kosong';
+                      return 'Nama item tidak boleh kosong';
                     }
                     return null;
                   },
+                ),
+
+                verticalSpaceSmall,
+
+                // * detail text ------------------------
+                const Text(
+                  "Detail",
+                  style: TextStyle(fontSize: 16),
+                ),
+
+                TextFormField(
+                  textInputAction: TextInputAction.next,
+                  minLines: null,
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      enabledBorder: InputBorder.none,
+                      border: InputBorder.none),
+                  controller: detailController,
                 ),
 
                 verticalSpaceSmall,
@@ -187,7 +211,7 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                   maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
-                      fillColor: Pallete.secondaryBackground,
+                      fillColor: Colors.white,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: inventoryNumController,
@@ -207,7 +231,7 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                   maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
-                      fillColor: Pallete.secondaryBackground,
+                      fillColor: Colors.white,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: ipController,
@@ -230,14 +254,13 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                   "Lokasi",
                   style: TextStyle(fontSize: 16),
                 ),
-                Consumer<CctvProvider>(builder: (_, data, __) {
+                Consumer<OtherProvider>(builder: (_, data, __) {
                   return Container(
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     height: 50,
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
-                    decoration:
-                        BoxDecoration(color: Pallete.secondaryBackground),
+                    decoration: BoxDecoration(color: Colors.white),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isExpanded: true,
@@ -245,7 +268,7 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                         value: (_selectedLocation != null)
                             ? _selectedLocation
                             : null,
-                        items: data.cctvOption.location.map((loc) {
+                        items: data.otherOption.location.map((loc) {
                           return DropdownMenuItem<String>(
                             value: loc,
                             child: Text(loc),
@@ -254,6 +277,45 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                         onChanged: (value) {
                           setState(() {
                             _selectedLocation = value;
+                            FocusScope.of(context).requestFocus(FocusNode());
+                          });
+                        },
+                      ),
+                    ),
+                  );
+                }),
+
+                verticalSpaceSmall,
+
+                // * Divisi dropdown ------------------------
+                const Text(
+                  "Divisi",
+                  style: TextStyle(fontSize: 16),
+                ),
+                Consumer<OtherProvider>(builder: (_, data, __) {
+                  return Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    height: 50,
+                    width: double.infinity,
+                    alignment: Alignment.centerLeft,
+                    decoration: BoxDecoration(color: Colors.white),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        hint: Text("Divisi"),
+                        value: (_selectedDivision != null)
+                            ? _selectedDivision
+                            : null,
+                        items: data.otherOption.division.map((loc) {
+                          return DropdownMenuItem<String>(
+                            value: loc,
+                            child: Text(loc),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedDivision = value;
+                            FocusScope.of(context).requestFocus(FocusNode());
                           });
                         },
                       ),
@@ -276,16 +338,10 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                   maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
-                      fillColor: Pallete.secondaryBackground,
+                      fillColor: Colors.white,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: brandController,
-                  validator: (text) {
-                    if (text == null || text.isEmpty) {
-                      return "merk tidak boleh kosong";
-                    }
-                    return null;
-                  },
                 ),
 
                 verticalSpaceSmall,
@@ -303,8 +359,7 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
-                    decoration:
-                        BoxDecoration(color: Pallete.secondaryBackground),
+                    decoration: BoxDecoration(color: Colors.white),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -318,39 +373,24 @@ class _AddCctvBodyState extends State<AddCctvBody> {
 
                 verticalSpaceSmall,
 
-                // * Type dropdown ------------------------
+                // * Brand text ------------------------
                 const Text(
-                  "Tipe Cctv",
+                  "Tipe",
                   style: TextStyle(fontSize: 16),
                 ),
-                Consumer<CctvProvider>(builder: (_, data, __) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    height: 50,
-                    width: double.infinity,
-                    alignment: Alignment.centerLeft,
-                    decoration:
-                        BoxDecoration(color: Pallete.secondaryBackground),
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        hint: Text("Tipe"),
-                        value: (_selectedType != null) ? _selectedType : null,
-                        items: data.cctvOption.type.map((loc) {
-                          return DropdownMenuItem<String>(
-                            value: loc,
-                            child: Text(loc),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedType = value;
-                          });
-                        },
-                      ),
-                    ),
-                  );
-                }),
+
+                TextFormField(
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.text,
+                  minLines: 1,
+                  maxLines: 1,
+                  decoration: const InputDecoration(
+                      filled: true,
+                      fillColor: Colors.white,
+                      enabledBorder: InputBorder.none,
+                      border: InputBorder.none),
+                  controller: tipeController,
+                ),
 
                 verticalSpaceSmall,
 
@@ -366,7 +406,7 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                   maxLines: 3,
                   decoration: const InputDecoration(
                       filled: true,
-                      fillColor: Pallete.secondaryBackground,
+                      fillColor: Colors.white,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: noteController,
@@ -374,14 +414,15 @@ class _AddCctvBodyState extends State<AddCctvBody> {
 
                 verticalSpaceMedium,
 
-                Consumer<CctvProvider>(builder: (_, data, __) {
+                Consumer<OtherProvider>(builder: (_, data, __) {
                   return (data.state == ViewState.busy)
                       ? Center(child: const CircularProgressIndicator())
                       : Center(
                           child: HomeLikeButton(
                               iconData: CupertinoIcons.add,
-                              text: "Tambah Cctv",
-                              tapTap: _addCctv),
+                              text:
+                                  "Tambah ${context.read<OtherProvider>().subCategory}",
+                              tapTap: _addOther),
                         );
                 }),
 

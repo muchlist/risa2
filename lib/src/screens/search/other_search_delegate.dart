@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
-import '../../api/json_models/response/cctv_list_resp.dart';
-import '../../providers/cctvs.dart';
-import '../../shared/cctv_item_widget.dart';
+import '../../api/json_models/response/other_list_resp.dart';
+import '../../providers/others.dart';
+import '../../shared/other_item_widget.dart';
 
-class CctvSearchDelegate extends SearchDelegate<String?> {
-  Widget generateListView(List<CctvMinResponse> cctvList) {
-    if (cctvList.length == 0) {
+class OtherSearchDelegate extends SearchDelegate<String?> {
+  Widget generateListView(List<OtherMinResponse> otherList) {
+    if (otherList.length == 0) {
       return Center(
           child: SizedBox(
               height: 200,
@@ -18,12 +18,12 @@ class CctvSearchDelegate extends SearchDelegate<String?> {
     }
 
     return ListView.builder(
-      itemCount: cctvList.length,
+      itemCount: otherList.length,
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: () => close(context, cctvList[index].id),
-          child: CctvListTile(
-            data: cctvList[index],
+          onTap: () => close(context, otherList[index].id),
+          child: OtherListTile(
+            data: otherList[index],
           ),
         );
       },
@@ -54,31 +54,31 @@ class CctvSearchDelegate extends SearchDelegate<String?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final cctvList = context.read<CctvProvider>().cctvList;
+    final otherList = context.read<OtherProvider>().otherList;
     if (query == "") {
-      return generateListView(cctvList);
+      return generateListView(otherList);
     } else {
-      final cctvListFiltered = cctvList
+      final otherListFiltered = otherList
           .where((x) =>
               x.name.contains(query.toUpperCase()) || x.ip.contains(query))
           .toList();
 
-      return generateListView(cctvListFiltered);
+      return generateListView(otherListFiltered);
     }
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final cctvList = context.read<CctvProvider>().cctvList;
+    final otherList = context.read<OtherProvider>().otherList;
     if (query == "") {
-      return generateListView(cctvList);
+      return generateListView(otherList);
     } else {
-      final cctvListFiltered = cctvList
+      final otherListFiltered = otherList
           .where((x) =>
               x.name.contains(query.toUpperCase()) || x.ip.contains(query))
           .toList();
 
-      return generateListView(cctvListFiltered);
+      return generateListView(otherListFiltered);
     }
   }
 }

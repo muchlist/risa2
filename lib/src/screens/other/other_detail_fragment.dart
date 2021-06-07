@@ -4,28 +4,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/router/routes.dart';
 
 import '../../config/constant.dart';
 import '../../config/pallatte.dart';
-import '../../providers/cctvs.dart';
-import '../../router/routes.dart';
+import '../../providers/others.dart';
 import '../../shared/cached_image_square.dart';
 import '../../shared/func_flushbar.dart';
-import '../../shared/line_chart.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/date_unix.dart';
 import '../../utils/enums.dart';
 
-class CctvDetailFragment extends StatefulWidget {
+class OtherDetailFragment extends StatefulWidget {
   @override
-  _CctvDetailFragmentState createState() => _CctvDetailFragmentState();
+  _OtherDetailFragmentState createState() => _OtherDetailFragmentState();
 }
 
-class _CctvDetailFragmentState extends State<CctvDetailFragment> {
+class _OtherDetailFragmentState extends State<OtherDetailFragment> {
   @override
   Widget build(BuildContext context) {
-    final cctvProvider = context.watch<CctvProvider>();
-    final detail = cctvProvider.cctvDetail;
+    final otherProvider = context.watch<OtherProvider>();
+    final detail = otherProvider.otherDetail;
 
     return Stack(children: [
       SingleChildScrollView(
@@ -49,15 +48,26 @@ class _CctvDetailFragmentState extends State<CctvDetailFragment> {
                   },
                   children: [
                     TableRow(children: [
-                      const Text("IP"),
+                      const Text("Detail"),
                       const Text("   :   "),
                       Text(
-                        detail.ip,
+                        detail.detail,
                         softWrap: true,
-                        maxLines: 1,
+                        maxLines: 3,
                         overflow: TextOverflow.clip,
                       ),
                     ]),
+                    if (detail.ip.isNotEmpty || detail.ip != "0.0.0.0")
+                      TableRow(children: [
+                        const Text("IP"),
+                        const Text("   :   "),
+                        Text(
+                          detail.ip,
+                          softWrap: true,
+                          maxLines: 1,
+                          overflow: TextOverflow.clip,
+                        ),
+                      ]),
                     TableRow(children: [
                       const Text("No Invent"),
                       const Text("   :   "),
@@ -78,26 +88,28 @@ class _CctvDetailFragmentState extends State<CctvDetailFragment> {
                         overflow: TextOverflow.clip,
                       ),
                     ]),
-                    TableRow(children: [
-                      const Text("Lokasi"),
-                      const Text("   :   "),
-                      Text(
-                        detail.location,
-                        softWrap: true,
-                        maxLines: 2,
-                        overflow: TextOverflow.clip,
-                      ),
-                    ]),
-                    TableRow(children: [
-                      const Text("Merk Tipe"),
-                      const Text("   :   "),
-                      Text(
-                        "${detail.brand} ${detail.type}",
-                        softWrap: true,
-                        maxLines: 2,
-                        overflow: TextOverflow.clip,
-                      ),
-                    ]),
+                    if (detail.location.isNotEmpty)
+                      TableRow(children: [
+                        const Text("Lokasi"),
+                        const Text("   :   "),
+                        Text(
+                          detail.location,
+                          softWrap: true,
+                          maxLines: 2,
+                          overflow: TextOverflow.clip,
+                        ),
+                      ]),
+                    if (detail.brand.isNotEmpty || detail.type.isNotEmpty)
+                      TableRow(children: [
+                        const Text("Merk Tipe"),
+                        const Text("   :   "),
+                        Text(
+                          "${detail.brand} ${detail.type}",
+                          softWrap: true,
+                          maxLines: 2,
+                          overflow: TextOverflow.clip,
+                        ),
+                      ]),
                     TableRow(children: [
                       const Text("Tahun"),
                       const Text("   :   "),
@@ -134,22 +146,15 @@ class _CctvDetailFragmentState extends State<CctvDetailFragment> {
                 ),
               ),
               verticalSpaceMedium,
-
-              if (detail.extra.pingsState.length != 0)
-                CctvLineChart(
-                  data: detail.extra,
-                ),
-
-              verticalSpaceMedium,
               ButtonContainer(
-                provider: cctvProvider,
+                provider: otherProvider,
               ),
             ],
           ),
         ),
       ),
       // Loading Screen
-      if (cctvProvider.detailState == ViewState.busy)
+      if (otherProvider.detailState == ViewState.busy)
         Scaffold(
           body: Center(
             child: CircularProgressIndicator(),
@@ -160,7 +165,7 @@ class _CctvDetailFragmentState extends State<CctvDetailFragment> {
 }
 
 class ButtonContainer extends StatefulWidget {
-  final CctvProvider provider;
+  final OtherProvider provider;
 
   const ButtonContainer({required this.provider});
 
@@ -184,7 +189,7 @@ class _ButtonContainerState extends State<ButtonContainer> {
     }
 
     // compress and upload
-    await context.read<CctvProvider>().uploadImage(id, _image!).then((value) {
+    await context.read<OtherProvider>().uploadImage(id, _image!).then((value) {
       if (value) {
         showToastSuccess(
             context: context,
@@ -204,7 +209,7 @@ class _ButtonContainerState extends State<ButtonContainer> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text("Konfirmasi hapus"),
-            content: const Text("Apakah yakin ingin menghapus cctv ini!"),
+            content: const Text("Apakah yakin ingin menghapus item ini!"),
             actions: <Widget>[
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -221,7 +226,7 @@ class _ButtonContainerState extends State<ButtonContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final detail = widget.provider.cctvDetail;
+    final detail = widget.provider.otherDetail;
     return Container(
       child: Padding(
           padding: const EdgeInsets.only(left: 16),
@@ -273,7 +278,7 @@ class _ButtonContainerState extends State<ButtonContainer> {
                       ElevatedButton.icon(
                           onPressed: () {
                             Navigator.pushNamed(
-                                context, RouteGenerator.cctvEdit);
+                                context, RouteGenerator.otherEdit);
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.green[300],
@@ -285,15 +290,15 @@ class _ButtonContainerState extends State<ButtonContainer> {
                             var confirmDelete = await _deleteConfirm(context);
                             if (confirmDelete != null && confirmDelete) {
                               await context
-                                  .read<CctvProvider>()
-                                  .removeCctv()
+                                  .read<OtherProvider>()
+                                  .removeOther()
                                   .then((value) {
                                 if (value) {
                                   Navigator.pop(context);
                                   showToastSuccess(
                                       context: context,
                                       message:
-                                          "Berhasil menghapus cctv ${detail.name}");
+                                          "Berhasil menghapus ${detail.name}");
                                 }
                               }).onError((error, _) {
                                 showToastError(

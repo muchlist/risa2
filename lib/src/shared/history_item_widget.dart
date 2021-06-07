@@ -19,6 +19,8 @@ class HistoryListTile extends StatelessWidget {
         return CupertinoIcons.camera;
       case "stock":
         return CupertinoIcons.rectangle_on_rectangle_angled;
+      case "pc":
+        return CupertinoIcons.desktopcomputer;
       default:
         return CupertinoIcons.smallcircle_circle;
     }
