@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/providers/computers.dart';
 
 import '../api/json_models/response/history_list_resp.dart';
 import '../globals.dart';
@@ -109,6 +110,12 @@ class HistoryHelper {
         context.read<StockProvider>()
           ..removeDetail()
           ..setStockID(history.parentID);
+        break;
+      case "PC":
+        routeName = RouteGenerator.computerDetail;
+        context.read<ComputerProvider>()
+          ..removeDetail()
+          ..setComputerID(history.parentID);
         break;
       default:
     }
