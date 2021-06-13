@@ -5,6 +5,7 @@ import '../api/json_models/response/history_list_resp.dart';
 import '../globals.dart';
 import '../providers/cctvs.dart';
 import '../providers/computers.dart';
+import '../providers/others.dart';
 import '../providers/stock.dart';
 import '../router/routes.dart';
 import '../screens/history/add_history_dialog.dart';
@@ -116,6 +117,13 @@ class HistoryHelper {
         context.read<ComputerProvider>()
           ..removeDetail()
           ..setComputerID(history.parentID);
+        break;
+      case "UPS":
+        routeName = RouteGenerator.otherDetail;
+        context.read<OtherProvider>()
+          ..setSubCategory("UPS")
+          ..removeDetail()
+          ..setOtherID(history.parentID);
         break;
       default:
     }

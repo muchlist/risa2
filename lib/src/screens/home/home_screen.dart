@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +9,7 @@ import '../../config/pallatte.dart';
 import '../../globals.dart';
 import '../../providers/generals.dart';
 import '../../router/routes.dart';
+import '../../shared/func_flushbar.dart';
 import '../../shared/func_history_dialog.dart';
 import '../../shared/ui_helpers.dart';
 import '../search/main_search_delegate.dart';
@@ -21,6 +23,39 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late FirebaseMessaging messaging;
+
+  @override
+  void initState() {
+    messaging = FirebaseMessaging.instance;
+
+    messaging.getToken().then((value) async {
+      final firebaseTokenSaved = App.getFireToken();
+      if (value != firebaseTokenSaved) {
+        if (value != null) {
+          await App.setFireToken(value);
+          // todo set token firebase to server
+        }
+      }
+      print(value);
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        showToastWarning(
+            context: context,
+            message: message.notification?.body ?? "",
+            onTop: true);
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      // notifikasi di klik
+    });
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
         elevation: 0,
         title: RichText(
           text: TextSpan(
-              text: "Hi ${App.getName() ?? "Manusia"}\n",
+              text: "Hi ${App.getName() ?? "User"}\n",
               style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   fontSize: 20,
                   color: Colors.black,

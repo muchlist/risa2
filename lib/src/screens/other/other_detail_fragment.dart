@@ -57,7 +57,7 @@ class _OtherDetailFragmentState extends State<OtherDetailFragment> {
                         overflow: TextOverflow.clip,
                       ),
                     ]),
-                    if (detail.ip.isNotEmpty || detail.ip != "0.0.0.0")
+                    if (detail.ip.isNotEmpty && detail.ip != "0.0.0.0")
                       TableRow(children: [
                         const Text("IP"),
                         const Text("   :   "),

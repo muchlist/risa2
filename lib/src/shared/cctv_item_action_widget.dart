@@ -63,8 +63,7 @@ class CctvActionTile extends StatelessWidget {
                   ),
                   (data.casesSize != 0)
                       ? Text(_generateCase())
-                      : const Text(
-                          "🔍 : Cctc down, perlu dilakukan pengecekan"),
+                      : const SizedBox.shrink(),
                 ],
               ),
               trailing: Text("${_calculatePercentPing().toStringAsFixed(0)}%")),

@@ -34,6 +34,15 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
   final listChoices = <ItemChoice>[
     ItemChoice(1, 'CCTV'),
     ItemChoice(2, 'PC'),
+    ItemChoice(3, 'UPS'),
+    ItemChoice(4, 'PRINTER'),
+    ItemChoice(5, 'HANDHELD'),
+    ItemChoice(6, 'APPLICATION'),
+    ItemChoice(7, 'ROUTER_SWITCH'),
+    ItemChoice(8, 'ALTAI'),
+    ItemChoice(9, 'SERVER'),
+    ItemChoice(10, 'GATE'),
+    ItemChoice(11, 'OTHER'),
   ];
 
   // Default value

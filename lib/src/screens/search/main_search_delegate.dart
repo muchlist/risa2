@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../api/json_models/response/general_list_resp.dart';
 
 import '../../providers/generals.dart';
 import '../../shared/general_item_widget.dart';
 
+/// digunakan di home search
 class MainSearchDelegate extends SearchDelegate {
+  void _goToDetail(GeneralMinResponse data) {
+    // todo
+  }
+
   @override
   List<Widget> buildActions(Object context) {
     return [
@@ -65,7 +71,9 @@ class MainSearchDelegate extends SearchDelegate {
             : ListView.builder(
                 itemCount: data.generalList.length,
                 itemBuilder: (context, index) {
-                  return GeneralListTile(data: data.generalList[index]);
+                  return GestureDetector(
+                      onTap: () {},
+                      child: GeneralListTile(data: data.generalList[index]));
                 },
               );
       },

@@ -49,21 +49,20 @@ class OtherActionTile extends StatelessWidget {
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Pallete.secondaryBackground,
-                        borderRadius: BorderRadius.circular(5)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        data.ip.toLowerCase(),
-                        style: TextStyle(color: Colors.black),
+                  if (data.ip.isNotEmpty)
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Pallete.secondaryBackground,
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          data.ip.toLowerCase(),
+                          style: TextStyle(color: Colors.black),
+                        ),
                       ),
                     ),
-                  ),
-                  (data.casesSize != 0)
-                      ? Text(_generateCase())
-                      : const SizedBox.shrink(),
+                  Text(_generateCase())
                 ],
               ),
               trailing: (data.pingsState.length != 0)

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "115980791636",
+    "project_id": "risa2-d1955",
+    "storage_bucket": "risa2-d1955.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115980791636:android:58b7d69c5ba21e1cc8e2c1",
+        "android_client_info": {
+          "package_name": "dev.muchlis.risa2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "115980791636-eoel4it1hatnbuuoeeccb9la8tli2rvb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHuzXpo9V8WWdruRb5eqvAC30z9MfYp6k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "115980791636-eoel4it1hatnbuuoeeccb9la8tli2rvb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

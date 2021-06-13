@@ -5,6 +5,7 @@ class App {
   static final _branchSaved = "branch";
   static final _rolesSaved = "roles";
   static final _nameSaved = "name";
+  static final _fireTokenSaved = "firebaseToken";
 
   static late SharedPreferences localStorage;
   static Future init() async {
@@ -17,6 +18,14 @@ class App {
 
   static Future<bool> setToken(String value) {
     return localStorage.setString(_tokenSaved, value);
+  }
+
+  static String? getFireToken() {
+    return localStorage.getString(_fireTokenSaved);
+  }
+
+  static Future<bool> setFireToken(String value) {
+    return localStorage.setString(_fireTokenSaved, value);
   }
 
   static String? getName() {

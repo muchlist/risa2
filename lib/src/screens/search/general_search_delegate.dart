@@ -6,6 +6,7 @@ import '../../api/json_models/response/general_list_resp.dart';
 import '../../providers/generals.dart';
 import '../../shared/general_item_widget.dart';
 
+/// digunakan saat penambahan history halaman depan
 class GeneralSearchDelegate extends SearchDelegate<GeneralMinResponse?> {
   Widget generateListView(List<GeneralMinResponse> generalList) {
     if (generalList.length == 0) {
