@@ -50,6 +50,20 @@ class AuthProvider extends ChangeNotifier {
     return false;
   }
 
+  // sendFCMToken mengirimkan token firebase ke server, return true if success
+  Future<bool> sendFCMToken(String token) async {
+    try {
+      final response = await _authservice.sendFCMToken(token);
+      if (response.error != null) {
+        return false;
+      }
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
+  }
+
   void logout() {
     _saveDataToPersistent(token: "", branch: "", name: "", role: []);
     notifyListeners();

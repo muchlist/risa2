@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/providers/auth.dart';
 
 import '../../config/pallatte.dart';
 import '../../globals.dart';
@@ -33,11 +34,13 @@ class _HomeScreenState extends State<HomeScreen> {
       final firebaseTokenSaved = App.getFireToken();
       if (value != firebaseTokenSaved) {
         if (value != null) {
-          await App.setFireToken(value);
-          // todo set token firebase to server
+          final success =
+              await context.read<AuthProvider>().sendFCMToken(value);
+          if (success) {
+            await App.setFireToken(value);
+          }
         }
       }
-      print(value);
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {

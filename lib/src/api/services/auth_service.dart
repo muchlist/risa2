@@ -10,4 +10,9 @@ class AuthService {
             endpoint: "/login", data: {"id": id, "password": password})
         .executePost<LoginResponse>(LoginParser());
   }
+
+  Future<LoginResponse> sendFCMToken(String token) {
+    return RequestREST(endpoint: "/update-fcm", data: {"fcm_token": token})
+        .executePost<LoginResponse>(LoginParser());
+  }
 }

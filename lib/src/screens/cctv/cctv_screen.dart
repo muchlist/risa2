@@ -41,7 +41,7 @@ class _CctvScreenState extends State<CctvScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Inventaris Cctv"),
+        title: const Text("Daftar Cctv"),
         actions: [
           IconButton(
             icon: Icon(

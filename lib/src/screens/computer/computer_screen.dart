@@ -40,7 +40,7 @@ class _ComputerScreenState extends State<ComputerScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Inventaris Computer"),
+        title: const Text("Daftar Computer"),
         actions: [
           IconButton(
             icon: Icon(

@@ -40,7 +40,7 @@ class _OtherScreenState extends State<OtherScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text("Inventaris ${_otherProvider.subCategory}"),
+        title: Text("Daftar ${_otherProvider.subCategory}"),
         actions: [
           IconButton(
             icon: Icon(

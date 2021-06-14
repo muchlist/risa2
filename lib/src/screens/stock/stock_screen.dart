@@ -24,7 +24,7 @@ class _StockScreenState extends State<StockScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Inventaris Stock"),
+        title: const Text("Daftar Stock"),
         actions: [
           IconButton(
             icon: Icon(
