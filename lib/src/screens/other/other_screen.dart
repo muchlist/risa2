@@ -195,7 +195,7 @@ class OtherSliverHeading extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Bermasalah: $totalIncident unit"),
+                  Text("Bermasalah: $totalIncident item"),
                 ],
               ),
               Spacer(),
