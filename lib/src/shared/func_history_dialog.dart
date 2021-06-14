@@ -96,34 +96,86 @@ class HistoryHelper {
     );
   }
 
-  void showParent(BuildContext context, HistoryMinResponse history) {
+  void showParent(
+      {required BuildContext context,
+      required String category,
+      required String parentID}) {
     var routeName = "";
 
-    switch (history.category.toUpperCase()) {
+    switch (category.toUpperCase()) {
       case "CCTV":
         routeName = RouteGenerator.cctvDetail;
         context.read<CctvProvider>()
           ..removeDetail()
-          ..setCctvID(history.parentID);
+          ..setCctvID(parentID);
         break;
       case "STOCK":
         routeName = RouteGenerator.stockDetail;
         context.read<StockProvider>()
           ..removeDetail()
-          ..setStockID(history.parentID);
+          ..setStockID(parentID);
         break;
       case "PC":
         routeName = RouteGenerator.computerDetail;
         context.read<ComputerProvider>()
           ..removeDetail()
-          ..setComputerID(history.parentID);
+          ..setComputerID(parentID);
         break;
       case "UPS":
         routeName = RouteGenerator.otherDetail;
         context.read<OtherProvider>()
           ..setSubCategory("UPS")
           ..removeDetail()
-          ..setOtherID(history.parentID);
+          ..setOtherID(parentID);
+        break;
+      case "APPLICATION":
+        routeName = RouteGenerator.otherDetail;
+        context.read<OtherProvider>()
+          ..setSubCategory("APPLICATION")
+          ..removeDetail()
+          ..setOtherID(parentID);
+        break;
+      case "PRINTER":
+        routeName = RouteGenerator.otherDetail;
+        context.read<OtherProvider>()
+          ..setSubCategory("PRINTER")
+          ..removeDetail()
+          ..setOtherID(parentID);
+        break;
+      case "HANDHELD":
+        routeName = RouteGenerator.otherDetail;
+        context.read<OtherProvider>()
+          ..setSubCategory("HANDHELD")
+          ..removeDetail()
+          ..setOtherID(parentID);
+        break;
+      case "ALTAI":
+        routeName = RouteGenerator.otherDetail;
+        context.read<OtherProvider>()
+          ..setSubCategory("ALTAI")
+          ..removeDetail()
+          ..setOtherID(parentID);
+        break;
+      case "SERVER":
+        routeName = RouteGenerator.otherDetail;
+        context.read<OtherProvider>()
+          ..setSubCategory("SERVER")
+          ..removeDetail()
+          ..setOtherID(parentID);
+        break;
+      case "GATE":
+        routeName = RouteGenerator.otherDetail;
+        context.read<OtherProvider>()
+          ..setSubCategory("GATE")
+          ..removeDetail()
+          ..setOtherID(parentID);
+        break;
+      case "OTHER":
+        routeName = RouteGenerator.otherDetail;
+        context.read<OtherProvider>()
+          ..setSubCategory("OTHER")
+          ..removeDetail()
+          ..setOtherID(parentID);
         break;
       default:
     }

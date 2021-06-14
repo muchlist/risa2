@@ -68,16 +68,17 @@ class _OtherDetailFragmentState extends State<OtherDetailFragment> {
                           overflow: TextOverflow.clip,
                         ),
                       ]),
-                    TableRow(children: [
-                      const Text("No Invent"),
-                      const Text("   :   "),
-                      Text(
-                        detail.inventoryNumber,
-                        softWrap: true,
-                        maxLines: 1,
-                        overflow: TextOverflow.clip,
-                      ),
-                    ]),
+                    if (detail.inventoryNumber.isNotEmpty)
+                      TableRow(children: [
+                        const Text("No Invent"),
+                        const Text("   :   "),
+                        Text(
+                          detail.inventoryNumber,
+                          softWrap: true,
+                          maxLines: 1,
+                          overflow: TextOverflow.clip,
+                        ),
+                      ]),
                     TableRow(children: [
                       const Text("Cabang"),
                       const Text("   :   "),
@@ -110,18 +111,17 @@ class _OtherDetailFragmentState extends State<OtherDetailFragment> {
                           overflow: TextOverflow.clip,
                         ),
                       ]),
-                    TableRow(children: [
-                      const Text("Tahun"),
-                      const Text("   :   "),
-                      (detail.date != 0)
-                          ? Text(
-                              "${detail.date.getMonthYear()}",
-                              softWrap: true,
-                              maxLines: 2,
-                              overflow: TextOverflow.clip,
-                            )
-                          : Text(""),
-                    ]),
+                    if (detail.date != 0)
+                      TableRow(children: [
+                        const Text("Tahun"),
+                        const Text("   :   "),
+                        Text(
+                          "${detail.date.getMonthYear()}",
+                          softWrap: true,
+                          maxLines: 2,
+                          overflow: TextOverflow.clip,
+                        ),
+                      ]),
                     TableRow(children: [
                       const Text("Update"),
                       const Text("   :   "),

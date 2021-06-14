@@ -66,7 +66,11 @@ class _DashboardListViewState extends State<DashboardListView> {
                     onTap: () => HistoryHelper().showDetailIncident(
                         context, historyProvider.historyListDashboard[index]),
                     onLongPress: () => HistoryHelper().showParent(
-                        context, historyProvider.historyListDashboard[index]),
+                        context: context,
+                        category: historyProvider
+                            .historyListDashboard[index].category,
+                        parentID: historyProvider
+                            .historyListDashboard[index].parentID),
                     child: HistoryListTile(
                       history: historyProvider.historyListDashboard[index],
                     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/shared/func_history_dialog.dart';
 import '../../api/json_models/response/general_list_resp.dart';
 
 import '../../providers/generals.dart';
@@ -7,10 +8,6 @@ import '../../shared/general_item_widget.dart';
 
 /// digunakan di home search
 class MainSearchDelegate extends SearchDelegate {
-  void _goToDetail(GeneralMinResponse data) {
-    // todo
-  }
-
   @override
   List<Widget> buildActions(Object context) {
     return [
@@ -72,7 +69,12 @@ class MainSearchDelegate extends SearchDelegate {
                 itemCount: data.generalList.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        HistoryHelper().showParent(
+                            context: context,
+                            category: data.generalList[index].category,
+                            parentID: data.generalList[index].id);
+                      },
                       child: GeneralListTile(data: data.generalList[index]));
                 },
               );
@@ -89,8 +91,16 @@ class MainSearchDelegate extends SearchDelegate {
             : ListView.builder(
                 itemCount: data.generalList.length,
                 itemBuilder: (context, index) {
-                  return GeneralListTile(
-                    data: data.generalList[index],
+                  return GestureDetector(
+                    onTap: () {
+                      HistoryHelper().showParent(
+                          context: context,
+                          category: data.generalList[index].category,
+                          parentID: data.generalList[index].id);
+                    },
+                    child: GeneralListTile(
+                      data: data.generalList[index],
+                    ),
                   );
                 },
               );

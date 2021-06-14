@@ -23,7 +23,6 @@ Flushbar showToastSuccess(
     message: message,
     duration: Duration(seconds: 5),
     backgroundColor: Pallete.green,
-    borderColor: Colors.white,
     flushbarPosition: onTop ? FlushbarPosition.TOP : FlushbarPosition.BOTTOM,
     flushbarStyle: FlushbarStyle.GROUNDED,
   )..show(context);
