@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../config/pallatte.dart';
@@ -45,10 +46,21 @@ class Upper extends StatelessWidget {
           borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20),
               bottomRight: Radius.circular(20))),
-      child: const Center(
-          child: Text(
-        "RISA LOGIN",
-        style: TextStyle(color: Colors.black, fontSize: 25),
+      child: Center(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          if (screenIsPortrait(context))
+            SizedBox(
+                height: 100,
+                child:
+                    Lottie.asset('assets/lottie/150-android-fingerprint.json')),
+          const Text(
+            "LOGIN",
+            style: TextStyle(color: Colors.black, fontSize: 25),
+          ),
+          verticalSpaceLarge
+        ],
       )),
     );
   }
@@ -102,11 +114,11 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     const enabledOutlineInputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        borderSide: BorderSide(color: Pallete.green, width: 1));
+        borderSide: BorderSide(color: Pallete.secondaryBackground, width: 1));
 
     const focusedOutlineInputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        borderSide: BorderSide(color: Pallete.green, width: 1));
+        borderSide: BorderSide(color: Colors.grey, width: 1));
 
     const errorOutlineInputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10)),

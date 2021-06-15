@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/providers/auth.dart';
+import 'package:risa2/src/providers/histories.dart';
+import 'package:risa2/src/providers/improves.dart';
 
 import '../../config/pallatte.dart';
 import '../../globals.dart';
@@ -24,7 +26,28 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  var refreshKeyHome = GlobalKey<RefreshIndicatorState>();
   late FirebaseMessaging messaging;
+
+  Future<dynamic> _loadHistory() {
+    return Future.delayed(Duration.zero, () {
+      context
+          .read<HistoryProvider>()
+          .findHistory()
+          .then((_) {})
+          .onError((error, _) {
+        if (error != null) {
+          showToastError(context: context, message: error.toString());
+        }
+      });
+    });
+  }
+
+  Future<dynamic> _loadImprove() {
+    return Future.delayed(Duration.zero, () {
+      context.read<ImproveProvider>().findImprove();
+    });
+  }
 
   @override
   void initState() {
@@ -118,19 +141,26 @@ class _HomeScreenState extends State<HomeScreen> {
             top: 0,
             right: 0,
             left: 0,
-            child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  CorouselContainer(),
-                  DashboardGrid(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: DashboardListView(),
-                  ),
-                  const SizedBox(
-                    height: 150,
-                  )
-                ],
+            child: RefreshIndicator(
+              onRefresh: () async {
+                await _loadHistory();
+                await _loadImprove();
+              },
+              key: refreshKeyHome,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    CorouselContainer(),
+                    DashboardGrid(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      child: DashboardListView(),
+                    ),
+                    const SizedBox(
+                      height: 150,
+                    )
+                  ],
+                ),
               ),
             ),
           ),

@@ -83,6 +83,7 @@ flutter:
     - assets/images/logo.png
     - assets/icon/icon.png
     - assets/lottie/629-empty-box.json
+    - assets/lottie/150-android-fingerprint.json
     - google_fonts/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

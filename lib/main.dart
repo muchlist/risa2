@@ -151,6 +151,7 @@ class _MyAppState extends State<MyApp> {
             scaffoldBackgroundColor: Pallete.background,
             primaryColor: Colors.grey,
             accentColor: Pallete.green,
+            primarySwatch: Colors.green,
             iconTheme: const IconThemeData(color: Colors.black),
             fontFamily: GoogleFonts.montserrat().fontFamily,
             textTheme: GoogleFonts.montserratTextTheme()),
