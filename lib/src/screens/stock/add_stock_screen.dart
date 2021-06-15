@@ -185,6 +185,7 @@ class _AddStockBodyState extends State<AddStockBody> {
                         onChanged: (value) {
                           setState(() {
                             _selectedCategory = value;
+                            FocusScope.of(context).requestFocus(FocusNode());
                           });
                         },
                       ),

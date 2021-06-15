@@ -175,6 +175,7 @@ class _AddCheckMasterBodyState extends State<AddCheckMasterBody> {
                       onChanged: (value) {
                         setState(() {
                           _selectedLocation = value;
+                          FocusScope.of(context).requestFocus(FocusNode());
                         });
                       },
                     ),
@@ -208,6 +209,7 @@ class _AddCheckMasterBodyState extends State<AddCheckMasterBody> {
                       onChanged: (value) {
                         setState(() {
                           _selectedType = value;
+                          FocusScope.of(context).requestFocus(FocusNode());
                         });
                       },
                     ),

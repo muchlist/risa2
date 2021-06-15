@@ -110,6 +110,7 @@ class _AddCctvBodyState extends State<AddCctvBody> {
     }
     setState(() {
       _dateSelected = newDate;
+      FocusScope.of(context).requestFocus(FocusNode());
     });
   }
 
@@ -254,6 +255,7 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                         onChanged: (value) {
                           setState(() {
                             _selectedLocation = value;
+                            FocusScope.of(context).requestFocus(FocusNode());
                           });
                         },
                       ),
@@ -345,6 +347,7 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                         onChanged: (value) {
                           setState(() {
                             _selectedType = value;
+                            FocusScope.of(context).requestFocus(FocusNode());
                           });
                         },
                       ),
