@@ -197,7 +197,7 @@ class _DetailHistoryDialogState extends State<DetailHistoryDialog> {
                       initialValue: (widget.history.createdBy ==
                               widget.history.updatedBy)
                           ? widget.history.createdBy
-                          : "${widget.history.createdBy} / ${widget.history.createdBy}",
+                          : "${widget.history.createdBy} / ${widget.history.updatedBy}",
                       decoration: const InputDecoration(
                           filled: true,
                           fillColor: Pallete.secondaryBackground,

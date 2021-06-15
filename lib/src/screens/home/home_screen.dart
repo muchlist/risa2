@@ -49,6 +49,29 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future<bool?> _logoutConfirm(BuildContext context) {
+    return showDialog<bool?>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Konfirmasi logout"),
+            content: const Text(
+                "Apakah anda yakin ingin ingin logout? salah pencet? maaf karena kami meletakkan tombol logout didekat tombol pencarian."),
+            actions: <Widget>[
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).accentColor),
+                  child: const Text("Jangan Logout"),
+                  onPressed: () => Navigator.of(context).pop(false)),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text("Logout"))
+            ],
+          );
+        });
+  }
+
   @override
   void initState() {
     messaging = FirebaseMessaging.instance;
@@ -102,18 +125,19 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
           ),
-          horizontalSpaceSmall,
-          const Icon(
-            CupertinoIcons.app_badge,
-            size: 28,
-          ),
-          horizontalSpaceSmall,
           IconButton(
               icon: Icon(
-                CupertinoIcons.person_solid,
+                CupertinoIcons.square_arrow_right,
                 size: 28,
               ),
-              onPressed: () {}),
+              onPressed: () async {
+                final logout = await _logoutConfirm(context);
+                if (logout != null && logout) {
+                  await App.setToken("");
+                  await Navigator.pushNamedAndRemoveUntil(
+                      context, RouteGenerator.login, (route) => false);
+                }
+              }),
           horizontalSpaceSmall,
         ],
         automaticallyImplyLeading: false,

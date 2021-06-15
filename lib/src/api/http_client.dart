@@ -12,9 +12,9 @@ class RequestREST {
 
   static final _client = Dio(BaseOptions(
     baseUrl: Constant.baseApiUrl,
-    connectTimeout: 3000, // 3 second
-    receiveTimeout: 5000,
-    sendTimeout: 5000,
+    connectTimeout: 10000, // 10 second
+    receiveTimeout: 10000,
+    sendTimeout: 10000,
     headers: <String, String>{
       // "Authorization": "Bearer ${App.localStorage!.getString("token") ?? ""}",
       "Accept": "*/*",

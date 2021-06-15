@@ -26,7 +26,7 @@ class _DashboardGridState extends State<DashboardGrid> {
     Dashboard("Checklist", CupertinoIcons.chevron_down_square,
         route: RouteGenerator.check),
     Dashboard("Cctv", CupertinoIcons.camera, route: RouteGenerator.cctv),
-    Dashboard("Komputer", CupertinoIcons.device_desktop,
+    Dashboard("Computer", CupertinoIcons.device_desktop,
         route: RouteGenerator.computer),
     Dashboard("Application", CupertinoIcons.square_stack_3d_up,
         route: RouteGenerator.other),

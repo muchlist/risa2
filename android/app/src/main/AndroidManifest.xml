@@ -6,7 +6,6 @@
    <application
         android:label="RISA"
         android:icon="@mipmap/launcher_icon"
-        android:usesCleartextTraffic="true"
         android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
