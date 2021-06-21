@@ -60,7 +60,8 @@ class GeneralSearchDelegate extends SearchDelegate<GeneralMinResponse?> {
       return generateListView(generalList);
     } else {
       final generalListFiltered = generalList
-          .where((x) => x.name.contains(query.toUpperCase()))
+          .where((x) =>
+              x.name.contains(query.toUpperCase()) || x.ip.contains(query))
           .toList();
 
       return generateListView(generalListFiltered);
@@ -74,7 +75,8 @@ class GeneralSearchDelegate extends SearchDelegate<GeneralMinResponse?> {
       return generateListView(generalList);
     } else {
       final generalListFiltered = generalList
-          .where((x) => x.name.contains(query.toUpperCase()))
+          .where((x) =>
+              x.name.contains(query.toUpperCase()) || x.ip.contains(query))
           .toList();
 
       return generateListView(generalListFiltered);
