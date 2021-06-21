@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../api/json_models/response/history_list_resp.dart';
 import '../config/constant.dart';
-import '../config/pallatte.dart';
 import '../utils/utils.dart';
 import 'cached_image_circle.dart';
 import 'ui_helpers.dart';
@@ -54,8 +53,8 @@ class HistoryListTile extends StatelessWidget {
             ? CachedImageCircle(
                 urlPath: "${Constant.baseUrl}${history.image.thumbnailMod()}")
             : CircleAvatar(
-                backgroundColor: Pallete.background,
-                foregroundColor: Colors.grey,
+                backgroundColor: Colors.blueGrey.shade300,
+                foregroundColor: Colors.white,
                 child: Icon(getIcon()),
                 radius: 25,
               ),

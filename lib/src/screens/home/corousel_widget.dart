@@ -28,6 +28,7 @@ class Corousel extends StatelessWidget {
           autoPlayAnimationDuration: Duration(milliseconds: 800),
           autoPlayCurve: Curves.fastOutSlowIn,
           enlargeCenterPage: true,
+          // pageSnapping: false,
           scrollDirection: Axis.horizontal,
         ),
         items: improves.map((i) {
@@ -92,12 +93,12 @@ class CorouselItem extends StatelessWidget {
               ),
               trailing: (improvePreview.goal != 0)
                   ? Container(
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Colors.white), //  Colors.blueGrey),
-                        shape: BoxShape.circle,
-                      ),
+                          // border: Border.all(
+                          //     color: Colors.white), //  Colors.blueGrey),
+                          shape: BoxShape.circle,
+                          color: Pallete.green),
                       child: Text(
                         "${(improvePreview.goalsAchieved / improvePreview.goal * 100).toInt()}%",
                         style: TextStyle(fontSize: 10, color: Colors.white),
