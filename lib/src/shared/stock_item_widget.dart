@@ -23,7 +23,12 @@ class StockListTile extends StatelessWidget {
             title: Text(data.name),
             subtitle: Row(
               children: [
-                Text(data.stockCategory.toLowerCase()),
+                Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.green.shade100,
+                    ),
+                    child: Text(" ${data.stockCategory.toLowerCase()} ")),
               ],
             ),
             trailing: Column(
