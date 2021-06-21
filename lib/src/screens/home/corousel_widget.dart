@@ -19,7 +19,7 @@ class Corousel extends StatelessWidget {
       child: CarouselSlider(
         options: CarouselOptions(
           height: 90,
-          viewportFraction: 0.83,
+          viewportFraction: 0.70,
           initialPage: 0,
           enableInfiniteScroll: true,
           reverse: false,

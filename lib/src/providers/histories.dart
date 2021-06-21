@@ -26,8 +26,8 @@ class HistoryProvider extends ChangeNotifier {
 
   // 3 history terbaru
   List<HistoryMinResponse> get historyListDashboard {
-    if (_historyList.length > 2) {
-      return [..._historyList.sublist(0, 3)];
+    if (_historyList.length > 4) {
+      return [..._historyList.sublist(0, 5)];
     }
     return UnmodifiableListView(_historyList);
   }
