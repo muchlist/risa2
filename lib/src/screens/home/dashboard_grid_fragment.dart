@@ -31,7 +31,7 @@ class _DashboardGridState extends State<DashboardGrid> {
     Dashboard("Application", CupertinoIcons.square_stack_3d_up,
         route: RouteGenerator.other),
     Dashboard("Switch", CupertinoIcons.arrow_2_squarepath,
-        color: Colors.brown.shade300),
+        color: Colors.blueGrey.shade300),
   ];
 
   final List<Dashboard> dashboardItems2 = [
@@ -47,7 +47,7 @@ class _DashboardGridState extends State<DashboardGrid> {
     Dashboard("Other", CupertinoIcons.question_circle,
         color: Pallete.green.withOpacity(0.4), route: RouteGenerator.other),
     Dashboard("Switch", CupertinoIcons.arrow_2_squarepath,
-        color: Colors.brown.shade300),
+        color: Colors.blueGrey.shade300),
   ];
 
   @override
