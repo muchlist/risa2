@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:risa2/src/config/pallatte.dart';
 
 import '../api/json_models/response/computer_list_resp.dart';
 import 'ui_helpers.dart';
@@ -26,7 +27,12 @@ class ComputerListTile extends StatelessWidget {
                     child: Text(" Seat "),
                   ),
                 if (data.seatManagement) horizontalSpaceTiny,
-                Text(data.ip.toLowerCase()),
+                Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.deepOrange.shade50,
+                    ),
+                    child: Text(" ${data.ip.toLowerCase()} ")),
               ],
             ),
             trailing: Column(
