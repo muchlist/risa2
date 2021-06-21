@@ -38,11 +38,10 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
     ItemChoice(4, 'PRINTER'),
     ItemChoice(5, 'HANDHELD'),
     ItemChoice(6, 'APPLICATION'),
-    ItemChoice(7, 'ROUTER_SWITCH'),
-    ItemChoice(8, 'ALTAI'),
-    ItemChoice(9, 'SERVER'),
-    ItemChoice(10, 'GATE'),
-    ItemChoice(11, 'OTHER'),
+    ItemChoice(7, 'ALTAI'),
+    ItemChoice(8, 'SERVER'),
+    ItemChoice(9, 'GATE'),
+    ItemChoice(10, 'OTHER'),
   ];
 
   // Default value
@@ -159,9 +158,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                                   selected: _selectedCategoryID == e.id,
                                   selectedColor: Theme.of(context).accentColor,
                                   // * Setstate ------------------------------
-                                  onSelected: (_) => setState(() {
-                                    _selectedCategoryID = e.id;
-
+                                  onSelected: (_) {
                                     // mengeset filter berdasarkan pilihan chip
                                     context.read<GeneralProvider>().setFilter(
                                         FilterGeneral(category: e.label));
@@ -169,7 +166,11 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                                     context
                                         .read<GeneralProvider>()
                                         .findGeneral("")
-                                        .onError((error, _) {
+                                        .then((_) {
+                                      setState(() {
+                                        _selectedCategoryID = e.id;
+                                      });
+                                    }).onError((error, _) {
                                       if (error != null) {
                                         setState(() {
                                           _selectedCategoryID = 0;
@@ -181,7 +182,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                                                 "Gagal mendapatkan data perangkat!");
                                       }
                                     });
-                                  }),
+                                  },
                                 ))
                             .toList(),
                         spacing: 5,

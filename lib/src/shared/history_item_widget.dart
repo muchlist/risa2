@@ -94,7 +94,7 @@ class HistoryListTile extends StatelessWidget {
                   ),
                 ),
                 horizontalSpaceSmall,
-                Text(history.dateStart.getDateString()),
+                Text(history.updatedAt.getDateString()),
                 Spacer(),
                 Text(history.updatedBy.toLowerCase().split(" ")[0])
               ],

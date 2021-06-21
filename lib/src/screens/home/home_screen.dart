@@ -4,13 +4,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/providers/auth.dart';
-import 'package:risa2/src/providers/histories.dart';
-import 'package:risa2/src/providers/improves.dart';
 
+import '../../api/filter_models/general_filter.dart';
 import '../../config/pallatte.dart';
 import '../../globals.dart';
+import '../../providers/auth.dart';
 import '../../providers/generals.dart';
+import '../../providers/histories.dart';
+import '../../providers/improves.dart';
 import '../../router/routes.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/func_history_dialog.dart';
@@ -119,6 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             onPressed: () {
               context.read<GeneralProvider>().removeGenerals();
+              context.read<GeneralProvider>().setFilter(FilterGeneral());
               showSearch(
                 context: context,
                 delegate: MainSearchDelegate(),
