@@ -175,7 +175,13 @@ class LineChartSpeedTestState extends State<LineChartSpeedTest> {
               return widget.data[intValue].time.getHourString();
             }
             if (intValue % 5 == 0) {
-              return widget.data[intValue].time.getHourString();
+              SpeedData validSpeed;
+              try {
+                validSpeed = widget.data[intValue];
+              } catch (e) {
+                return '';
+              }
+              return validSpeed.time.getHourString();
             }
             return '';
           },
