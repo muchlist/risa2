@@ -1,6 +1,6 @@
-import 'package:risa2/src/api/http_client.dart';
-import 'package:risa2/src/api/json_models/response/speed_list_resp.dart';
-import 'package:risa2/src/api/json_parsers/json_parsers.dart';
+import '../http_client.dart';
+import '../json_models/response/speed_list_resp.dart';
+import '../json_parsers/json_parsers.dart';
 
 class SpeedService {
   const SpeedService();

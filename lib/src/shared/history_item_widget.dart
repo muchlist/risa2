@@ -85,6 +85,7 @@ class HistoryListTile extends StatelessWidget {
                     padding: const EdgeInsets.all(4.0),
                     child: Text(
                       enumStatus.values[history.completeStatus].toShortString(),
+                      maxLines: 1,
                       style: (history.completeStatus == 4 ||
                               history.completeStatus == 0)
                           ? TextStyle(color: Colors.white)
@@ -93,9 +94,15 @@ class HistoryListTile extends StatelessWidget {
                   ),
                 ),
                 horizontalSpaceSmall,
-                Text(history.updatedAt.getDateString()),
+                Text(
+                  history.updatedAt.getDateString(),
+                  maxLines: 1,
+                ),
                 Spacer(),
-                Text(history.updatedBy.toLowerCase().split(" ")[0])
+                Text(
+                  history.updatedBy.toLowerCase().split(" ")[0],
+                  maxLines: 1,
+                )
               ],
             ),
             verticalSpaceSmall,

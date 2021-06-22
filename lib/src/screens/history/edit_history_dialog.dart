@@ -314,7 +314,7 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
                                             const CircularProgressIndicator())
                                     : HomeLikeButton(
                                         iconData: CupertinoIcons.pencil_circle,
-                                        text: "Edit Log",
+                                        text: "Update",
                                         tapTap: _editHistory);
                               },
                             ),

@@ -18,7 +18,8 @@ class _DashboardGridState extends State<DashboardGrid> {
   var _primaryList = true;
 
   final List<Dashboard> dashboardItems = [
-    Dashboard("Dashboard", CupertinoIcons.chart_bar_circle),
+    Dashboard("Dashboard", CupertinoIcons.chart_bar_circle,
+        route: RouteGenerator.dashboard),
     Dashboard("Improvement", CupertinoIcons.rocket,
         route: RouteGenerator.improve),
     Dashboard("Stock", CupertinoIcons.rectangle_on_rectangle_angled,

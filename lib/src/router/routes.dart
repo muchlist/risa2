@@ -14,6 +14,7 @@ import '../screens/computer/add_computer_screen.dart';
 import '../screens/computer/computer_detail_screen.dart';
 import '../screens/computer/computer_screen.dart';
 import '../screens/computer/edit_computer_screen.dart';
+import '../screens/dashboard/dashboard_screen.dart';
 import '../screens/history/histories_screen.dart';
 import '../screens/home/home_screen.dart';
 import '../screens/improve/add_improve_screen.dart';
@@ -67,6 +68,7 @@ class RouteGenerator {
   static const String otherDetail = '/other-detail';
   static const String otherAdd = '/other-add';
   static const String otherEdit = '/other-edit';
+  static const String dashboard = '/dashboard';
 
   RouteGenerator._();
 
@@ -136,6 +138,8 @@ class RouteGenerator {
         return transitionFade(AddOtherScreen());
       case otherEdit:
         return transitionFade(EditOtherScreen());
+      case dashboard:
+        return transitionFade(DashboardScreen());
       default:
         return MaterialPageRoute(builder: (_) => LoginScreen());
     }

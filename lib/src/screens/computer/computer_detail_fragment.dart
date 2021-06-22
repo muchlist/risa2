@@ -42,7 +42,7 @@ class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
                 padding: const EdgeInsets.only(left: 16, top: 16),
                 child: Table(
                   columnWidths: {
-                    0: FlexColumnWidth(1.0),
+                    0: FlexColumnWidth(2.0),
                     1: FlexColumnWidth(0.5),
                     2: FlexColumnWidth(3.0)
                   },
