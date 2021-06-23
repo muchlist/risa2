@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 import '../api/json_models/response/history_list_resp.dart';
 import '../config/constant.dart';
-import '../config/pallatte.dart';
 import '../utils/utils.dart';
 import 'cached_image_circle.dart';
 import 'ui_helpers.dart';
@@ -54,8 +53,8 @@ class HistoryListTile extends StatelessWidget {
             ? CachedImageCircle(
                 urlPath: "${Constant.baseUrl}${history.image.thumbnailMod()}")
             : CircleAvatar(
-                backgroundColor: Pallete.background,
-                foregroundColor: Colors.grey,
+                backgroundColor: Colors.blueGrey.shade300,
+                foregroundColor: Colors.white,
                 child: Icon(getIcon()),
                 radius: 25,
               ),
@@ -86,6 +85,7 @@ class HistoryListTile extends StatelessWidget {
                     padding: const EdgeInsets.all(4.0),
                     child: Text(
                       enumStatus.values[history.completeStatus].toShortString(),
+                      maxLines: 1,
                       style: (history.completeStatus == 4 ||
                               history.completeStatus == 0)
                           ? TextStyle(color: Colors.white)
@@ -94,9 +94,15 @@ class HistoryListTile extends StatelessWidget {
                   ),
                 ),
                 horizontalSpaceSmall,
-                Text(history.updatedAt.getDateString()),
+                Text(
+                  history.updatedAt.getDateString(),
+                  maxLines: 1,
+                ),
                 Spacer(),
-                Text(history.updatedBy.toLowerCase().split(" ")[0])
+                Text(
+                  history.updatedBy.toLowerCase().split(" ")[0],
+                  maxLines: 1,
+                )
               ],
             ),
             verticalSpaceSmall,

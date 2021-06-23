@@ -26,7 +26,12 @@ class ComputerListTile extends StatelessWidget {
                     child: Text(" Seat "),
                   ),
                 if (data.seatManagement) horizontalSpaceTiny,
-                Text(data.ip.toLowerCase()),
+                Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.deepOrange.shade50,
+                    ),
+                    child: Text(" ${data.ip.toLowerCase()} ")),
               ],
             ),
             trailing: Column(

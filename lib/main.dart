@@ -16,6 +16,7 @@ import 'src/api/services/general_service.dart';
 import 'src/api/services/history_service.dart';
 import 'src/api/services/improve_service.dart';
 import 'src/api/services/other_service.dart';
+import 'src/api/services/speed_service.dart';
 import 'src/api/services/stock_service.dart';
 import 'src/config/pallatte.dart';
 import 'src/globals.dart';
@@ -24,6 +25,7 @@ import 'src/providers/cctvs.dart';
 import 'src/providers/checks.dart';
 import 'src/providers/checks_master.dart';
 import 'src/providers/computers.dart';
+import 'src/providers/dashboard.dart';
 import 'src/providers/generals.dart';
 import 'src/providers/histories.dart';
 import 'src/providers/improves.dart';
@@ -115,6 +117,7 @@ class _MyAppState extends State<MyApp> {
   final cctvService = CctvService();
   final computerService = ComputerService();
   final otherService = OtherService();
+  final speedService = SpeedService();
 
   @override
   void initState() {
@@ -143,6 +146,8 @@ class _MyAppState extends State<MyApp> {
             create: (context) => ComputerProvider(computerService)),
         ChangeNotifierProvider(
             create: (context) => OtherProvider(otherService)),
+        ChangeNotifierProvider(
+            create: (context) => DashboardProvider(speedService)),
       ],
       child: MaterialApp(
         title: MyApp._title,

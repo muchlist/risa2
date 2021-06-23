@@ -18,8 +18,8 @@ class Corousel extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 12.0, top: 20),
       child: CarouselSlider(
         options: CarouselOptions(
-          height: 100,
-          viewportFraction: 0.8,
+          height: 90,
+          viewportFraction: 0.70,
           initialPage: 0,
           enableInfiniteScroll: true,
           reverse: false,
@@ -28,6 +28,7 @@ class Corousel extends StatelessWidget {
           autoPlayAnimationDuration: Duration(milliseconds: 800),
           autoPlayCurve: Curves.fastOutSlowIn,
           enlargeCenterPage: true,
+          // pageSnapping: false,
           scrollDirection: Axis.horizontal,
         ),
         items: improves.map((i) {
@@ -59,8 +60,8 @@ class CorouselItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        color: Colors.white,
-        shadowColor: Colors.white,
+        color: Colors.blueGrey.shade400,
+        shadowColor: Colors.black54,
         elevation: 5,
         shape: RoundedRectangleBorder(
             side: BorderSide(color: Pallete.secondaryBackground, width: 0.2),
@@ -74,27 +75,33 @@ class CorouselItem extends StatelessWidget {
                     child: Text(improvePreview.title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyText1!),
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
                 ],
               ),
               subtitle: Row(
                 children: [
                   Expanded(
-                      child: Text(improvePreview.description,
-                          maxLines: 2, overflow: TextOverflow.ellipsis)),
+                      child: Text(
+                    improvePreview.description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.white),
+                  )),
                 ],
               ),
               trailing: (improvePreview.goal != 0)
                   ? Container(
-                      padding: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        border: Border.all(color: Colors.blueGrey),
-                        shape: BoxShape.circle,
-                      ),
+                          // border: Border.all(
+                          //     color: Colors.white), //  Colors.blueGrey),
+                          shape: BoxShape.circle,
+                          color: Pallete.green),
                       child: Text(
                         "${(improvePreview.goalsAchieved / improvePreview.goal * 100).toInt()}%",
-                        style: TextStyle(fontSize: 10),
+                        style: TextStyle(fontSize: 10, color: Colors.white),
                       ))
                   : const SizedBox()),
         ),

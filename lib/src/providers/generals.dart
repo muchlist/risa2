@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:risa2/src/utils/enums.dart';
+import 'package:risa2/src/utils/utils.dart';
 import '../api/filter_models/general_filter.dart';
 import '../api/json_models/response/general_list_resp.dart';
 import '../api/services/general_service.dart';
@@ -51,12 +52,13 @@ class GeneralProvider extends ChangeNotifier {
   Future<void> findGeneral(String search) async {
     setState(ViewState.busy);
 
-    // todo string yang masuk di validasi apakah ip address atau bukan dengan regex
-    // sehingga pencarian menjadi lebih pintar.
-
     // *copy value dari cache filter general dan ganti namanya dengan input
-    final filter =
-        FilterGeneral(name: search, category: _filterGeneral.category);
+    var filter = FilterGeneral(name: search, category: _filterGeneral.category);
+
+    if (ValueValidator().ip(search) && search != "0.0.0.0") {
+      filter = FilterGeneral(
+          name: "", ip: search, category: _filterGeneral.category);
+    }
 
     setState(ViewState.busy);
 

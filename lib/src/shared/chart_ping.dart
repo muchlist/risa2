@@ -4,16 +4,16 @@ import '../api/json_models/response/cctv_resp.dart';
 import '../config/pallatte.dart';
 import '../utils/utils.dart';
 
-class CctvLineChart extends StatefulWidget {
+class PingLineChart extends StatefulWidget {
   final CctvExtra data;
 
-  const CctvLineChart({Key? key, required this.data}) : super(key: key);
+  const PingLineChart({Key? key, required this.data}) : super(key: key);
 
   @override
-  _CctvLineChartState createState() => _CctvLineChartState();
+  _PingLineChartState createState() => _PingLineChartState();
 }
 
-class _CctvLineChartState extends State<CctvLineChart> {
+class _PingLineChartState extends State<PingLineChart> {
   List<Color> gradientColors = [
     const Color(0xff23b6e6),
     const Color(0xff02d39a),

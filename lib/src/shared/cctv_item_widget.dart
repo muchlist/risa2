@@ -15,7 +15,12 @@ class CctvListTile extends StatelessWidget {
             title: Text(data.name),
             subtitle: Row(
               children: [
-                Text(data.ip.toLowerCase()),
+                Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.deepOrange.shade50,
+                    ),
+                    child: Text(" ${data.ip.toLowerCase()} ")),
               ],
             ),
             trailing: Text("${data.location}")));

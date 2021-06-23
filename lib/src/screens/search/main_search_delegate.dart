@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/shared/func_history_dialog.dart';
-import '../../api/json_models/response/general_list_resp.dart';
 
 import '../../providers/generals.dart';
 import '../../shared/general_item_widget.dart';

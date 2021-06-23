@@ -18,7 +18,8 @@ class _DashboardGridState extends State<DashboardGrid> {
   var _primaryList = true;
 
   final List<Dashboard> dashboardItems = [
-    Dashboard("Dashboard", CupertinoIcons.chart_bar_circle),
+    Dashboard("Dashboard", CupertinoIcons.chart_bar_circle,
+        route: RouteGenerator.dashboard),
     Dashboard("Improvement", CupertinoIcons.rocket,
         route: RouteGenerator.improve),
     Dashboard("Stock", CupertinoIcons.rectangle_on_rectangle_angled,
@@ -31,7 +32,7 @@ class _DashboardGridState extends State<DashboardGrid> {
     Dashboard("Application", CupertinoIcons.square_stack_3d_up,
         route: RouteGenerator.other),
     Dashboard("Switch", CupertinoIcons.arrow_2_squarepath,
-        color: Colors.brown.shade300),
+        color: Colors.blueGrey.shade300),
   ];
 
   final List<Dashboard> dashboardItems2 = [
@@ -47,7 +48,7 @@ class _DashboardGridState extends State<DashboardGrid> {
     Dashboard("Other", CupertinoIcons.question_circle,
         color: Pallete.green.withOpacity(0.4), route: RouteGenerator.other),
     Dashboard("Switch", CupertinoIcons.arrow_2_squarepath,
-        color: Colors.brown.shade300),
+        color: Colors.blueGrey.shade300),
   ];
 
   @override
