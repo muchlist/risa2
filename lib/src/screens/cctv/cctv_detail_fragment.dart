@@ -35,9 +35,22 @@ class _CctvDetailFragmentState extends State<CctvDetailFragment> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Upper table
-              Text(
-                detail.name,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      detail.name,
+                      maxLines: 2,
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: cctvProvider.getDetail,
+                    icon: Icon(Icons.refresh),
+                  )
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 16),

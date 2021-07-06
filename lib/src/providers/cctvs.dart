@@ -170,8 +170,10 @@ class CctvProvider extends ChangeNotifier {
 
   // get detail cctv
   // * Mendapatkan cctv
-  Future<void> getDetail() async {
-    setDetailState(ViewState.busy);
+  Future<void> getDetail({bool loading = true}) async {
+    if (loading) {
+      setDetailState(ViewState.busy);
+    }
 
     var error = "";
     try {
