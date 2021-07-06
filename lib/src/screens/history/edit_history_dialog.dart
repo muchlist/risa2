@@ -297,12 +297,16 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
                       Row(
                         children: [
                           Expanded(
-                            child: IconButton(
-                                onPressed: () => _getImageAndUpload(
+                            child: GestureDetector(
+                                onTap: () => _getImageAndUpload(
                                     context: context,
                                     source: ImageSource.camera,
                                     id: widget.history.id),
-                                icon: Icon(CupertinoIcons.camera)),
+                                onLongPress: () => _getImageAndUpload(
+                                    context: context,
+                                    source: ImageSource.gallery,
+                                    id: widget.history.id),
+                                child: Icon(CupertinoIcons.camera)),
                           ),
                           Expanded(
                             child: Consumer<HistoryProvider>(

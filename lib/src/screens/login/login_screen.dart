@@ -95,8 +95,10 @@ class _LoginFormState extends State<LoginForm> {
       Future.delayed(Duration.zero, () {
         authViewModel.login(username, password).then((value) {
           if (value) {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                RouteGenerator.home, ModalRoute.withName(RouteGenerator.home));
+            Future.delayed(Duration(milliseconds: 500), () {
+              Navigator.of(context).pushNamedAndRemoveUntil(RouteGenerator.home,
+                  ModalRoute.withName(RouteGenerator.home));
+            });
           }
         }).onError((error, _) {
           if (error != null) {
