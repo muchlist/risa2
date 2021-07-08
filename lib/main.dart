@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/api/services/pdf_service.dart';
 
 import 'src/api/services/auth_service.dart';
 import 'src/api/services/cctv_service.dart';
@@ -118,6 +119,7 @@ class _MyAppState extends State<MyApp> {
   final computerService = ComputerService();
   final otherService = OtherService();
   final speedService = SpeedService();
+  final pdfService = PdfService();
 
   @override
   void initState() {
@@ -147,7 +149,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(
             create: (context) => OtherProvider(otherService)),
         ChangeNotifierProvider(
-            create: (context) => DashboardProvider(speedService)),
+            create: (context) => DashboardProvider(speedService, pdfService)),
       ],
       child: MaterialApp(
         title: MyApp._title,

@@ -265,6 +265,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: () {
                   Navigator.pushNamed(context, RouteGenerator.history);
                 }),
+          ),
+          Positioned(
+            bottom: 50,
+            left: 40,
+            child: IconButton(
+                icon: const Icon(CupertinoIcons.square_arrow_down, size: 28),
+                onPressed: () {
+                  Navigator.pushNamed(context, RouteGenerator.pdf);
+                }),
           )
         ],
       ),

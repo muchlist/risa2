@@ -28,6 +28,7 @@ import '../screens/other/add_other_screen.dart';
 import '../screens/other/edit_other_screen.dart';
 import '../screens/other/other_detail_screen.dart';
 import '../screens/other/other_screen.dart';
+import '../screens/pdf/pdf_screen.dart';
 import '../screens/stock/add_stock_screen.dart';
 import '../screens/stock/decrement_stock_screen.dart';
 import '../screens/stock/edit_stock_screen.dart';
@@ -69,6 +70,7 @@ class RouteGenerator {
   static const String otherAdd = '/other-add';
   static const String otherEdit = '/other-edit';
   static const String dashboard = '/dashboard';
+  static const String pdf = '/pdf';
 
   RouteGenerator._();
 
@@ -140,6 +142,8 @@ class RouteGenerator {
         return transitionFade(EditOtherScreen());
       case dashboard:
         return transitionFade(DashboardScreen());
+      case pdf:
+        return transitionFade(PdfScreen());
       default:
         return MaterialPageRoute(builder: (_) => LoginScreen());
     }
