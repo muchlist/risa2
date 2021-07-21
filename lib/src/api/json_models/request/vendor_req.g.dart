@@ -25,3 +25,18 @@ Map<String, dynamic> _$VendorUpdateRequestToJson(
       'is_blur': instance.isBlur,
       'is_offline': instance.isOffline,
     };
+
+BulkVendorUpdateRequest _$BulkVendorUpdateRequestFromJson(
+    Map<String, dynamic> json) {
+  return BulkVendorUpdateRequest(
+    (json['items'] as List<dynamic>)
+        .map((e) => VendorUpdateRequest.fromJson(e as Map<String, dynamic>))
+        .toList(),
+  );
+}
+
+Map<String, dynamic> _$BulkVendorUpdateRequestToJson(
+        BulkVendorUpdateRequest instance) =>
+    <String, dynamic>{
+      'items': instance.items.map((e) => e.toJson()).toList(),
+    };

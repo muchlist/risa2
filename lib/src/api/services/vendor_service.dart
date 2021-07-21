@@ -53,4 +53,10 @@ class VendorCheckService {
     return RequestREST(endpoint: "/vendor-check-update", data: payload.toJson())
         .executePost<VendorCheckDetailResponse>(VendorCheckParser());
   }
+
+  Future<MessageResponse> bulkUpdateVendorCheck(
+      BulkVendorUpdateRequest payload) {
+    return RequestREST(endpoint: "/bulk-vendor-update", data: payload.toJson())
+        .executePost<MessageResponse>(MessageParser());
+  }
 }

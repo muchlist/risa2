@@ -28,3 +28,15 @@ class VendorUpdateRequest {
 
   Map<String, dynamic> toJson() => _$VendorUpdateRequestToJson(this);
 }
+
+@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
+class BulkVendorUpdateRequest {
+  BulkVendorUpdateRequest(this.items);
+  final List<VendorUpdateRequest> items;
+
+  factory BulkVendorUpdateRequest.fromJson(Map<String, dynamic> json) =>
+      _$BulkVendorUpdateRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$BulkVendorUpdateRequestToJson(this);
+}
