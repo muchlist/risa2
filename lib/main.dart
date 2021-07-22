@@ -6,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/api/services/pdf_service.dart';
 
 import 'src/api/services/auth_service.dart';
 import 'src/api/services/cctv_service.dart';
@@ -17,8 +16,10 @@ import 'src/api/services/general_service.dart';
 import 'src/api/services/history_service.dart';
 import 'src/api/services/improve_service.dart';
 import 'src/api/services/other_service.dart';
+import 'src/api/services/pdf_service.dart';
 import 'src/api/services/speed_service.dart';
 import 'src/api/services/stock_service.dart';
+import 'src/api/services/vendor_service.dart';
 import 'src/config/pallatte.dart';
 import 'src/globals.dart';
 import 'src/providers/auth.dart';
@@ -32,6 +33,7 @@ import 'src/providers/histories.dart';
 import 'src/providers/improves.dart';
 import 'src/providers/others.dart';
 import 'src/providers/stock.dart';
+import 'src/providers/vendor_check.dart';
 import 'src/router/routes.dart';
 import 'src/screens/landing/landing.dart';
 
@@ -111,6 +113,7 @@ class _MyAppState extends State<MyApp> {
   final generalService = GeneralService();
   final historyService = HistoryService();
   final checkService = CheckService();
+  final vendorCheckService = VendorCheckService();
   final checkMasterService = CheckpService();
   final authService = AuthService();
   final improveService = ImproveService();
@@ -139,6 +142,8 @@ class _MyAppState extends State<MyApp> {
             create: (context) => GeneralProvider(generalService)),
         ChangeNotifierProvider(
             create: (context) => CheckProvider(checkService)),
+        ChangeNotifierProvider(
+            create: (context) => VendorCheckProvider(vendorCheckService)),
         ChangeNotifierProvider(
             create: (context) => CheckMasterProvider(checkMasterService)),
         ChangeNotifierProvider(

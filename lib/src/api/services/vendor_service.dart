@@ -25,6 +25,12 @@ class VendorCheckService {
         .executeGet<VendorCheckDetailResponse>(VendorCheckParser());
   }
 
+  // {{url}}/api/v1/vendor-check-finish/60f7bd8d52ffaa4bbb3c3997
+  Future<VendorCheckDetailResponse> finishVendorCheck(String id) {
+    return RequestREST(endpoint: "/vendor-check-finish/$id")
+        .executeGet<VendorCheckDetailResponse>(VendorCheckParser());
+  }
+
   Future<MessageResponse> deleteVendorCheck(String id) {
     return RequestREST(endpoint: "/vendor-check/$id")
         .executeDelete<MessageResponse>(MessageParser());
