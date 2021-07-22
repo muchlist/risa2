@@ -44,6 +44,15 @@ class _CctvScreenState extends State<CctvScreen> {
         title: const Text("Daftar Cctv"),
         actions: [
           IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, RouteGenerator.vendorCheck);
+            },
+            icon: Icon(
+              CupertinoIcons.checkmark_alt_circle,
+              size: 28,
+            ),
+          ),
+          IconButton(
             icon: Icon(
               CupertinoIcons.search,
               size: 28,
@@ -60,13 +69,6 @@ class _CctvScreenState extends State<CctvScreen> {
                 await Navigator.pushNamed(context, RouteGenerator.cctvDetail);
               }
             },
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              CupertinoIcons.decrease_indent,
-              size: 28,
-            ),
           ),
           horizontalSpaceSmall
         ],

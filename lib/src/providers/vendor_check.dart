@@ -10,8 +10,8 @@ import '../api/services/vendor_service.dart';
 import '../utils/enums.dart';
 
 class VendorCheckProvider extends ChangeNotifier {
-  final VendorCheckService _vendorVendorCheckService;
-  VendorCheckProvider(this._vendorVendorCheckService);
+  final VendorCheckService _vendorCheckService;
+  VendorCheckProvider(this._vendorCheckService);
 
   // =======================================================
   // List VendorCheck
@@ -24,13 +24,13 @@ class VendorCheckProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // vendorVendorCheck list cache
-  List<VendorCheckMinResponse> _vendorVendorCheckList = [];
-  List<VendorCheckMinResponse> get vendorVendorCheckList {
-    return UnmodifiableListView(_vendorVendorCheckList);
+  // vendorCheck list cache
+  List<VendorCheckMinResponse> _vendorCheckList = [];
+  List<VendorCheckMinResponse> get vendorCheckList {
+    return UnmodifiableListView(_vendorCheckList);
   }
 
-  // *memasang filter pada pencarian vendorVendorCheck
+  // *memasang filter pada pencarian vendorCheck
   FilterCheck _filterVendorCheck = FilterCheck();
   void setFilter(FilterCheck filter) {
     _filterVendorCheck = filter;
@@ -43,11 +43,11 @@ class VendorCheckProvider extends ChangeNotifier {
     var error = "";
     try {
       final response =
-          await _vendorVendorCheckService.findVendorCheck(_filterVendorCheck);
+          await _vendorCheckService.findVendorCheck(_filterVendorCheck);
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        _vendorVendorCheckList = response.data;
+        _vendorCheckList = response.data;
       }
     } catch (e) {
       error = e.toString();
@@ -66,8 +66,7 @@ class VendorCheckProvider extends ChangeNotifier {
     var error = "";
 
     try {
-      final response =
-          await _vendorVendorCheckService.createVendorCheck(isVirtual);
+      final response = await _vendorCheckService.createVendorCheck(isVirtual);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -94,19 +93,19 @@ class VendorCheckProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  String _vendorVendorCheckIDSaved = "";
-  void setVendorCheckID(String vendorVendorCheckID) {
-    _vendorVendorCheckIDSaved = vendorVendorCheckID;
+  String _vendorCheckIDSaved = "";
+  void setVendorCheckID(String vendorCheckID) {
+    _vendorCheckIDSaved = vendorCheckID;
   }
 
   // vendorVendorCheck detail cache
-  VendorCheckDetailResponseData? _vendorVendorCheckDetail;
-  VendorCheckDetailResponseData? get vendorVendorCheckDetail {
-    return _vendorVendorCheckDetail;
+  VendorCheckDetailResponseData? _vendorCheckDetail;
+  VendorCheckDetailResponseData? get vendorCheckDetail {
+    return _vendorCheckDetail;
   }
 
   void removeDetail() {
-    _vendorVendorCheckDetail = null;
+    _vendorCheckDetail = null;
   }
 
   // get detail vendorVendorCheck
@@ -116,12 +115,12 @@ class VendorCheckProvider extends ChangeNotifier {
 
     var error = "";
     try {
-      final response = await _vendorVendorCheckService
-          .getVendorCheck(_vendorVendorCheckIDSaved);
+      final response =
+          await _vendorCheckService.getVendorCheck(_vendorCheckIDSaved);
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        _vendorVendorCheckDetail = response.data;
+        _vendorCheckDetail = response.data;
       }
     } catch (e) {
       error = e.toString();
@@ -150,12 +149,11 @@ class VendorCheckProvider extends ChangeNotifier {
     var error = "";
 
     try {
-      final response =
-          await _vendorVendorCheckService.updateVendorCheck(payload);
+      final response = await _vendorCheckService.updateVendorCheck(payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        _vendorVendorCheckDetail = response.data;
+        _vendorCheckDetail = response.data;
       }
     } catch (e) {
       error = e.toString();
@@ -177,12 +175,12 @@ class VendorCheckProvider extends ChangeNotifier {
     var error = "";
 
     try {
-      final response = await _vendorVendorCheckService
-          .finishVendorCheck(_vendorVendorCheckIDSaved);
+      final response =
+          await _vendorCheckService.finishVendorCheck(_vendorCheckIDSaved);
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        _vendorVendorCheckDetail = response.data;
+        _vendorCheckDetail = response.data;
       }
     } catch (e) {
       error = e.toString();
@@ -200,6 +198,6 @@ class VendorCheckProvider extends ChangeNotifier {
   // di on dispose
   void onClose() {
     removeDetail();
-    _vendorVendorCheckList = [];
+    _vendorCheckList = [];
   }
 }
