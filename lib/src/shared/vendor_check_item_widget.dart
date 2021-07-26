@@ -14,11 +14,11 @@ class VendorCheckListTile extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: ListTile(
           leading: (data.isFinish)
-              ? Icon(CupertinoIcons.check_mark_circled)
-              : Icon(CupertinoIcons.timer_fill),
+              ? const Icon(CupertinoIcons.check_mark_circled)
+              : const Icon(CupertinoIcons.timer_fill),
           title: (data.isVirtualCheck)
-              ? Text("Pengecekan virtual")
-              : Text("Pengecekan Fisik"),
+              ? const Text("Pengecekan virtual")
+              : const Text("Pengecekan Fisik"),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

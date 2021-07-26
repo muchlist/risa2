@@ -1,17 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/api/json_models/request/vendor_req.dart';
-import 'package:risa2/src/api/json_models/response/vendor_check_resp.dart';
-import 'package:risa2/src/providers/vendor_check.dart';
-import 'package:risa2/src/shared/disable_glow.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
-import 'package:risa2/src/shared/vendor_check_grid.dart';
 
+import '../../api/json_models/request/vendor_req.dart';
+import '../../api/json_models/response/vendor_check_resp.dart';
 import '../../config/pallatte.dart';
+import '../../providers/vendor_check.dart';
+import '../../shared/disable_glow.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
+import '../../shared/vendor_check_grid.dart';
 import '../../utils/date_unix.dart';
 import '../../utils/enums.dart';
 
@@ -91,41 +89,42 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   CheckboxListTile(
-                      title: Text(
+                      title: const Text(
                         "Sudah dicek",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      subtitle: Text("tandai jika cctv sudah dicek"),
+                      subtitle: const Text("tandai jika cctv sudah dicek"),
                       value: itemState.isChecked,
                       onChanged: (checked) {
                         setState(() {
                           itemState.isChecked = checked ?? false;
                         });
                       }),
-                  Divider(
+                  const Divider(
                     thickness: 1,
                   ),
                   CheckboxListTile(
-                      title: Text(
+                      title: const Text(
                         "Cctv offline",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      subtitle: Text("perangkat mati atau tidak dapat di ping"),
+                      subtitle:
+                          const Text("perangkat mati atau tidak dapat di ping"),
                       value: itemState.isOffline,
                       onChanged: (checked) {
                         setState(() {
                           itemState.isOffline = checked ?? false;
                         });
                       }),
-                  Divider(
+                  const Divider(
                     thickness: 1,
                   ),
                   CheckboxListTile(
-                      title: Text(
+                      title: const Text(
                         "Cctv blur",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      subtitle: Text(
+                      subtitle: const Text(
                           "kamera mengalami gangguan dari segi tangkapan gambar"),
                       value: itemState.isBlur,
                       onChanged: (checked) {
@@ -164,7 +163,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
     final data = context.watch<VendorCheckProvider>();
 
     return (data.detailState == ViewState.busy)
-        ? Center(child: CircularProgressIndicator())
+        ? const Center(child: CircularProgressIndicator())
         : Stack(
             children: [
               buildBody(data),
@@ -210,7 +209,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                 const EdgeInsets.only(left: 8, right: 8, top: 15, bottom: 8),
             child: Text(
               loc,
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
           ),
         ))
@@ -219,7 +218,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
 
     // end sliver
     slivers.add(SliverToBoxAdapter(
-      child: SizedBox(
+      child: const SizedBox(
         height: 100,
       ),
     ));
@@ -237,13 +236,14 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
   }
 
   SliverToBoxAdapter buildHeaderSliver(VendorCheckDetailResponseData detail) {
-    var cctvNotCheck = 0;
+    var cctvChecked = 0;
     var cctvOffline = 0;
     var cctvBlur = 0;
+    var cctvTotal = 0;
 
     for (final cctv in detail.vendorCheckItems) {
-      if (!cctv.isChecked) {
-        cctvNotCheck++;
+      if (cctv.isChecked) {
+        cctvChecked++;
       }
       if (cctv.isBlur) {
         cctvBlur++;
@@ -251,6 +251,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
       if (cctv.isOffline) {
         cctvOffline++;
       }
+      cctvTotal++;
     }
 
     return SliverToBoxAdapter(
@@ -258,6 +259,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
             color: Pallete.secondaryBackground,
+            border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(3)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -265,27 +267,27 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Dibuat / update"),
-                Text("Tipe cek"),
-                Text("Cabang"),
-                Text("Mulai cek"),
-                Text("Selesai cek"),
-                Text("Belum dicek"),
-                Text("Cctv offline"),
-                Text("Cctv buram"),
+                const Text("Dibuat / update"),
+                const Text("Tipe cek"),
+                const Text("Cabang"),
+                const Text("Mulai cek"),
+                const Text("Selesai cek"),
+                const Text("Sudah dicek"),
+                const Text("Cctv offline"),
+                const Text("Cctv buram"),
               ],
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("   :   "),
-                Text("   :   "),
-                Text("   :   "),
-                Text("   :   "),
-                Text("   :   "),
-                Text("   :   "),
-                Text("   :   "),
-                Text("   :   "),
+                const Text("   :   "),
+                const Text("   :   "),
+                const Text("   :   "),
+                const Text("   :   "),
+                const Text("   :   "),
+                const Text("   :   "),
+                const Text("   :   "),
+                const Text("   :   "),
               ],
             ),
             Flexible(
@@ -331,7 +333,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                     overflow: TextOverflow.clip,
                   ),
                   Text(
-                    "$cctvNotCheck unit",
+                    "$cctvChecked dari $cctvTotal unit",
                     softWrap: true,
                     maxLines: 2,
                     overflow: TextOverflow.clip,

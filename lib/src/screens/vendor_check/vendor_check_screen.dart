@@ -1,16 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/providers/vendor_check.dart';
-import 'package:risa2/src/screens/vendor_check/add_check_dialog.dart';
-import 'package:risa2/src/shared/vendor_check_item_widget.dart';
 
+import '../../providers/vendor_check.dart';
 import '../../router/routes.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
-import '../../shared/ui_helpers.dart';
+import '../../shared/vendor_check_item_widget.dart';
 import '../../utils/enums.dart';
+import 'add_check_dialog.dart';
 
 var refreshKeyVendorCheckScreen = GlobalKey<RefreshIndicatorState>();
 
