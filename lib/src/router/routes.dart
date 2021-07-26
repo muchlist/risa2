@@ -35,6 +35,7 @@ import '../screens/stock/edit_stock_screen.dart';
 import '../screens/stock/increment_stock_screen.dart';
 import '../screens/stock/stock_detail_screen.dart';
 import '../screens/stock/stock_screen.dart';
+import '../screens/vendor_check/vendor_check_detail_screen.dart';
 import '../screens/vendor_check/vendor_check_screen.dart';
 
 class RouteGenerator {
@@ -44,6 +45,7 @@ class RouteGenerator {
   static const String history = '/histories';
   static const String check = '/check';
   static const String vendorCheck = '/vendor-check';
+  static const String vendorCheckDetail = '/vendor-check-detail';
   static const String checkMaster = '/check-master';
   static const String checkMasterAdd = '/check-master-add';
   static const String checkMasterEdit = '/check-master-edit';
@@ -144,6 +146,8 @@ class RouteGenerator {
         return transitionFade(EditOtherScreen());
       case vendorCheck:
         return transitionFade(VendorCheckScreen());
+      case vendorCheckDetail:
+        return transitionFade(VendorCheckDetailScreen());
       case dashboard:
         return transitionFade(DashboardScreen());
       case pdf:

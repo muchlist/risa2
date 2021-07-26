@@ -75,7 +75,7 @@ VendorCheckItem _$VendorCheckItemFromJson(Map<String, dynamic> json) {
     json['name'] as String,
     json['location'] as String,
     json['checked_at'] as int,
-    json['checked_by'] as int,
+    json['checked_by'] as String,
     json['is_checked'] as bool,
     json['is_blur'] as bool,
     json['is_offline'] as bool,

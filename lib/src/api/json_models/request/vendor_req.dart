@@ -17,11 +17,11 @@ class VendorUpdateRequest {
   @JsonKey(name: "child_id")
   final String childID;
   @JsonKey(name: "is_checked")
-  final bool isChecked;
+  bool isChecked;
   @JsonKey(name: "is_blur")
-  final bool isBlur;
+  bool isBlur;
   @JsonKey(name: "is_offline")
-  final bool isOffline;
+  bool isOffline;
 
   factory VendorUpdateRequest.fromJson(Map<String, dynamic> json) =>
       _$VendorUpdateRequestFromJson(json);

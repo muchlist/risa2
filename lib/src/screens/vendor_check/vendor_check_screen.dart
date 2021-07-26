@@ -126,7 +126,8 @@ class _VendorCheckRecyclerViewState extends State<VendorCheckRecyclerView> {
           return GestureDetector(
               onTap: () {
                 data.setVendorCheckID(data.vendorCheckList[index].id);
-                // Navigator.of(context).pushNamed(RouteGenerator.vendorCheckDetail);
+                Navigator.of(context)
+                    .pushNamed(RouteGenerator.vendorCheckDetail);
               },
               child: VendorCheckListTile(data: data.vendorCheckList[index]));
         },

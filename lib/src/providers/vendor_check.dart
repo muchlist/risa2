@@ -100,8 +100,12 @@ class VendorCheckProvider extends ChangeNotifier {
 
   // vendorVendorCheck detail cache
   VendorCheckDetailResponseData? _vendorCheckDetail;
-  VendorCheckDetailResponseData? get vendorCheckDetail {
-    return _vendorCheckDetail;
+  VendorCheckDetailResponseData get vendorCheckDetail {
+    if (_vendorCheckDetail == null) {
+      return VendorCheckDetailResponseData(
+          "", 0, "", "", 0, "", "", "", 0, 0, false, false, "", []);
+    }
+    return _vendorCheckDetail!;
   }
 
   void removeDetail() {
@@ -130,6 +134,36 @@ class VendorCheckProvider extends ChangeNotifier {
     if (error.isNotEmpty) {
       return Future.error(error);
     }
+  }
+
+  // =============================
+  // get distinct location
+  List<String> getLocationList() {
+    var checkItems =
+        _vendorCheckDetail?.vendorCheckItems ?? <VendorCheckItem>[];
+    var allLocation = <String>[];
+    if (checkItems.isEmpty) {
+      return <String>[];
+    }
+    for (final check in checkItems) {
+      allLocation.add(check.location);
+    }
+    return allLocation.toSet().toList();
+  }
+
+  Map<String, List<VendorCheckItem>> getCheckItemPerLocation(
+      List<String> locations) {
+    var checkMap = Map<String, List<VendorCheckItem>>();
+    if (_vendorCheckDetail == null) {
+      return checkMap;
+    }
+    for (final loc in locations) {
+      checkMap[loc] = _vendorCheckDetail!.vendorCheckItems
+          .where((cctv) => cctv.location == loc)
+          .toList();
+      print(checkMap[loc]?.length);
+    }
+    return checkMap;
   }
 
   // =====================================================================

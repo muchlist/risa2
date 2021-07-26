@@ -85,7 +85,7 @@ class VendorCheckItem {
   @JsonKey(name: "checked_at")
   final int checkedAt;
   @JsonKey(name: "checked_by")
-  final int checkedBy;
+  final String checkedBy;
   @JsonKey(name: "is_checked")
   final bool isChecked;
   @JsonKey(name: "is_blur")
