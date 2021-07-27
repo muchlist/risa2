@@ -9,7 +9,7 @@ import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../shared/vendor_check_item_widget.dart';
 import '../../utils/enums.dart';
-import 'add_check_dialog.dart';
+import 'add_vendor_check_dialog.dart';
 
 var refreshKeyVendorCheckScreen = GlobalKey<RefreshIndicatorState>();
 

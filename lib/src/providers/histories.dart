@@ -203,6 +203,32 @@ class HistoryProvider extends ChangeNotifier {
     return false;
   }
 
+  // return future true jika delete history berhasil
+  // memanggil findHistory sehigga tidak perlu notifyListener
+  Future<bool> deleteHistory(String historyID) async {
+    setState(ViewState.busy);
+
+    var error = "";
+    try {
+      final response = await _historyService.deleteHistory(historyID);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        await findHistory(loading: false);
+        return true;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setState(ViewState.idle);
+
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+    return false;
+  }
+
   // * update image
   // return image url tanpa base jika update image berhasil
   Future<String> uploadImage(String id, File file) async {

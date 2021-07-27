@@ -85,54 +85,58 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
               title: Text(cctvname),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CheckboxListTile(
-                      title: const Text(
-                        "Sudah dicek",
-                        style: TextStyle(fontWeight: FontWeight.bold),
+              content: DisableOverScrollGlow(
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      CheckboxListTile(
+                          title: const Text(
+                            "Sudah dicek",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: const Text("tandai jika cctv sudah dicek"),
+                          value: itemState.isChecked,
+                          onChanged: (checked) {
+                            setState(() {
+                              itemState.isChecked = checked ?? false;
+                            });
+                          }),
+                      const Divider(
+                        thickness: 1,
                       ),
-                      subtitle: const Text("tandai jika cctv sudah dicek"),
-                      value: itemState.isChecked,
-                      onChanged: (checked) {
-                        setState(() {
-                          itemState.isChecked = checked ?? false;
-                        });
-                      }),
-                  const Divider(
-                    thickness: 1,
+                      CheckboxListTile(
+                          title: const Text(
+                            "Cctv offline",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: const Text(
+                              "perangkat mati atau tidak dapat di ping"),
+                          value: itemState.isOffline,
+                          onChanged: (checked) {
+                            setState(() {
+                              itemState.isOffline = checked ?? false;
+                            });
+                          }),
+                      const Divider(
+                        thickness: 1,
+                      ),
+                      CheckboxListTile(
+                          title: const Text(
+                            "Cctv blur",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: const Text(
+                              "kamera mengalami gangguan dari segi tangkapan gambar"),
+                          value: itemState.isBlur,
+                          onChanged: (checked) {
+                            setState(() {
+                              itemState.isBlur = checked ?? false;
+                            });
+                          })
+                    ],
                   ),
-                  CheckboxListTile(
-                      title: const Text(
-                        "Cctv offline",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle:
-                          const Text("perangkat mati atau tidak dapat di ping"),
-                      value: itemState.isOffline,
-                      onChanged: (checked) {
-                        setState(() {
-                          itemState.isOffline = checked ?? false;
-                        });
-                      }),
-                  const Divider(
-                    thickness: 1,
-                  ),
-                  CheckboxListTile(
-                      title: const Text(
-                        "Cctv blur",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      subtitle: const Text(
-                          "kamera mengalami gangguan dari segi tangkapan gambar"),
-                      value: itemState.isBlur,
-                      onChanged: (checked) {
-                        setState(() {
-                          itemState.isBlur = checked ?? false;
-                        });
-                      })
-                ],
+                ),
               ),
               actions: <Widget>[
                 ElevatedButton(
@@ -186,7 +190,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                             });
                           }
                         },
-                        color: Colors.deepOrange.shade300,
+                        color: Pallete.green,
                       ))
             ],
           );

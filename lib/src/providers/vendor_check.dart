@@ -161,7 +161,6 @@ class VendorCheckProvider extends ChangeNotifier {
       checkMap[loc] = _vendorCheckDetail!.vendorCheckItems
           .where((cctv) => cctv.location == loc)
           .toList();
-      print(checkMap[loc]?.length);
     }
     return checkMap;
   }
