@@ -5,6 +5,7 @@ class App {
   static final _branchSaved = "branch";
   static final _rolesSaved = "roles";
   static final _nameSaved = "name";
+  static final _expiredSaved = "expired";
   static final _fireTokenSaved = "firebaseToken";
 
   static late SharedPreferences localStorage;
@@ -18,6 +19,14 @@ class App {
 
   static Future<bool> setToken(String value) {
     return localStorage.setString(_tokenSaved, value);
+  }
+
+  static int getExpired() {
+    return localStorage.getInt(_expiredSaved) ?? 0;
+  }
+
+  static Future<bool> setExpired(int value) {
+    return localStorage.setInt(_expiredSaved, value);
   }
 
   static String? getFireToken() {

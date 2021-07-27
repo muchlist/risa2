@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../globals.dart';
 import '../../router/routes.dart';
+import '../../utils/utils.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -9,11 +10,13 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  String _token = "";
+  int _expired = 0;
+  int _epochNow = DateTime.now().toInt();
 
-  _loadToken() async {
-    _token = App.getToken() ?? "";
-    if (_token == "") {
+  _loadExpired() async {
+    _expired = App.getExpired();
+    print("$_expired  ::: $_epochNow");
+    if (_expired < _epochNow) {
       await Future(() {
         Navigator.pushReplacementNamed(context, RouteGenerator.login);
       });
@@ -27,7 +30,7 @@ class _LandingPageState extends State<LandingPage> {
   @override
   void initState() {
     super.initState();
-    _loadToken();
+    _loadExpired();
   }
 
   @override

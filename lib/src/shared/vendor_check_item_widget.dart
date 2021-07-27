@@ -10,22 +10,23 @@ class VendorCheckListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var dateDescription = data.timeStarted.getDateString();
+    if (data.timeEnded != 0) {
+      dateDescription += "   ~   ${data.timeEnded.getDateString()}";
+    }
+
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: ListTile(
-          leading: (data.isFinish)
-              ? const Icon(CupertinoIcons.check_mark_circled)
-              : const Icon(CupertinoIcons.timer_fill),
-          title: (data.isVirtualCheck)
-              ? const Text("Pengecekan virtual")
-              : const Text("Pengecekan Fisik"),
-          subtitle: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Dimulai : ${data.timeStarted.getDateString()}"),
-              if (data.timeEnded != 0)
-                Text("Selesai : ${data.timeEnded.getDateString()}"),
-            ],
+        child: Padding(
+          padding: const EdgeInsets.only(top: 4, bottom: 4),
+          child: ListTile(
+            leading: (data.isFinish)
+                ? const Icon(CupertinoIcons.check_mark_circled)
+                : const Icon(CupertinoIcons.timer_fill),
+            title: (data.isVirtualCheck)
+                ? const Text("Pengecekan Virtual")
+                : const Text("Pengecekan Fisik"),
+            subtitle: Text(dateDescription),
           ),
         ));
   }

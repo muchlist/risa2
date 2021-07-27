@@ -178,6 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: <Widget>[
                     CorouselContainer(),
                     DashboardGrid(),
+                    verticalSpaceMedium,
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: DashboardListView(),

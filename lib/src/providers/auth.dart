@@ -34,7 +34,8 @@ class AuthProvider extends ChangeNotifier {
               token: _userData!.accessToken,
               branch: _userData!.branch,
               name: _userData!.name,
-              role: _userData!.roles);
+              role: _userData!.roles,
+              expired: _userData!.expired);
           return true;
         }
       }
@@ -65,7 +66,8 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void logout() {
-    _saveDataToPersistent(token: "", branch: "", name: "", role: []);
+    _saveDataToPersistent(
+        token: "", branch: "", name: "", role: [], expired: 0);
     notifyListeners();
   }
 
@@ -73,19 +75,12 @@ class AuthProvider extends ChangeNotifier {
       {required String token,
       required String name,
       required String branch,
-      required List<String> role}) async {
-    // // join array string to string comma separated
-    // var roleString = "";
-    // if (role.length != 0) {
-    //   roleString = role.join(",");
-    // }
-    // await App.localStorage!.setString(tokenSaved, token);
-    // await App.localStorage!.setString(nameSaved, name);
-    // await App.localStorage!.setString(branchSaved, branch);
-    // await App.localStorage!.setString(roleSaved, roleString);
+      required List<String> role,
+      required int expired}) async {
     await App.setName(name);
     await App.setToken(token);
     await App.setBranch(branch);
     await App.setRoles(role);
+    await App.setExpired(expired);
   }
 }
