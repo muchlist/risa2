@@ -2,6 +2,8 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:risa2/src/config/histo_category.dart';
+import 'package:risa2/src/globals.dart';
 
 import '../api/filter_models/history_filter.dart';
 import '../api/json_models/request/history_edit_req.dart';
@@ -52,17 +54,34 @@ class HistoryProvider extends ChangeNotifier {
     return UnmodifiableListView(_historyList);
   }
 
-  Future<void> findHistory({bool loading = true}) async {
-    // create filter
-    final filter = FilterHistory(branch: "BANJARMASIN", limit: 200);
+  // FILTER HISTORY
+  FilterHistory _filter = FilterHistory(branch: App.getBranch(), limit: 200);
+  FilterHistory get filter {
+    return _filter;
+  }
 
+  void setFilter(FilterHistory value) {
+    if (value.category == HistCategory.all) {
+      value.category = "";
+    }
+    _filter = value;
+  }
+
+  void resetFilter() {
+    if (_filter.category?.isNotEmpty ?? false) {
+      _filter = FilterHistory(branch: App.getBranch(), limit: 200);
+      findHistory(loading: false);
+    }
+  }
+
+  Future<void> findHistory({bool loading = true}) async {
     if (loading) {
       setState(ViewState.busy);
     }
 
     var error = "";
     try {
-      final response = await _historyService.findHistory(filter);
+      final response = await _historyService.findHistory(_filter);
       if (response.error != null) {
         error = response.error!.message;
       } else {

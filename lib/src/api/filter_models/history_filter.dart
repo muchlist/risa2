@@ -1,10 +1,10 @@
 class FilterHistory {
-  final String? branch;
-  final String? category;
-  final int? completeStatus;
-  final int? start;
-  final int? end;
-  final int? limit;
+  String? branch;
+  String? category;
+  int? completeStatus;
+  int? start;
+  int? end;
+  int? limit;
 
   FilterHistory(
       {this.branch,

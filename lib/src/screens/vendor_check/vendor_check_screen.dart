@@ -119,7 +119,7 @@ class _VendorCheckRecyclerViewState extends State<VendorCheckRecyclerView> {
       key: refreshKeyVendorCheckScreen,
       onRefresh: _loadVendorCheck,
       child: ListView.builder(
-        padding: EdgeInsets.only(bottom: 60),
+        padding: EdgeInsets.only(bottom: 120),
         itemCount: data.vendorCheckList.length,
         itemBuilder: (context, index) {
           return GestureDetector(

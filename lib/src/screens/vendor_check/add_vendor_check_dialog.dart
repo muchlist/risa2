@@ -107,7 +107,7 @@ class _AddVendorCheckDialogState extends State<AddVendorCheckDialog> {
                           onTap: () => showToastWarning(
                               context: context,
                               message:
-                                  "tahan lama tombol untuk membuat daftar cek !"),
+                                  "Tahan lama tombol untuk membuat daftar cek !"),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [

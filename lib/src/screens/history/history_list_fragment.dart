@@ -11,29 +11,26 @@ import '../../utils/enums.dart';
 
 class HistoryRecyclerView extends StatefulWidget {
   final enumStatus status;
+  final HistoryProvider provider;
 
-  const HistoryRecyclerView({Key? key, this.status = enumStatus.info})
-      : super(key: key);
+  const HistoryRecyclerView({
+    Key? key,
+    required this.provider,
+    this.status = enumStatus.info,
+  }) : super(key: key);
 
   @override
   _HistoryRecyclerViewState createState() => _HistoryRecyclerViewState();
 }
 
 class _HistoryRecyclerViewState extends State<HistoryRecyclerView> {
-  late final HistoryProvider historyProvider;
   var refreshKeyProgressHistory = GlobalKey<RefreshIndicatorState>();
 
   Future<void> _loadHistories() {
     return Future.delayed(Duration.zero, () {
-      historyProvider.findHistory().onError((error, _) =>
+      widget.provider.findHistory().onError((error, _) =>
           showToastError(context: context, message: error.toString()));
     });
-  }
-
-  @override
-  void initState() {
-    historyProvider = context.read<HistoryProvider>();
-    super.initState();
   }
 
   @override

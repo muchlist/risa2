@@ -88,7 +88,7 @@ class _EditOtherBodyState extends State<EditOtherBody> {
                   Navigator.of(context).pop();
                   showToastSuccess(
                       context: context,
-                      message: "Berhasil membuat ${payload.name}");
+                      message: "Berhasil mengubah ${payload.name}");
                 }
               }).onError((error, _) {
                 if (error != null) {
