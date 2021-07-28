@@ -7,6 +7,7 @@ import '../api/json_models/response/vendor_check_list_resp.dart';
 import '../api/json_models/response/vendor_check_resp.dart';
 import '../api/services/vendor_service.dart';
 
+import '../globals.dart';
 import '../utils/enums.dart';
 
 class VendorCheckProvider extends ChangeNotifier {
@@ -31,7 +32,7 @@ class VendorCheckProvider extends ChangeNotifier {
   }
 
   // *memasang filter pada pencarian vendorCheck
-  FilterCheck _filterVendorCheck = FilterCheck();
+  FilterCheck _filterVendorCheck = FilterCheck(branch: App.getBranch());
   void setFilter(FilterCheck filter) {
     _filterVendorCheck = filter;
   }

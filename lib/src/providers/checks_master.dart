@@ -34,7 +34,7 @@ class CheckMasterProvider extends ChangeNotifier {
   }
 
   // *memasang filter pada pencarian check master
-  FilterCheckp _filterCheck = FilterCheckp();
+  FilterCheckp _filterCheck = FilterCheckp(branch: App.getBranch());
   void setFilter(FilterCheckp filter) {
     _filterCheck = filter;
   }

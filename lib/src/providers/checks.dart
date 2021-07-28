@@ -10,6 +10,7 @@ import '../api/json_models/request/check_update_req.dart';
 import '../api/json_models/response/check_list_resp.dart';
 import '../api/json_models/response/check_resp.dart';
 import '../api/services/check_service.dart';
+import '../globals.dart';
 import '../utils/enums.dart';
 import '../utils/image_compress.dart';
 
@@ -35,7 +36,7 @@ class CheckProvider extends ChangeNotifier {
   }
 
   // *memasang filter pada pencarian check
-  FilterCheck _filterCheck = FilterCheck();
+  FilterCheck _filterCheck = FilterCheck(branch: App.getBranch());
   void setFilter(FilterCheck filter) {
     _filterCheck = filter;
   }
