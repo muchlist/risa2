@@ -1,9 +1,10 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
-import 'package:risa2/src/api/json_models/option/location_type.dart';
-import 'package:risa2/src/api/json_models/request/checkp_edit_req.dart';
+
 import '../api/filter_models/checkp_filter.dart';
+import '../api/json_models/option/location_type.dart';
+import '../api/json_models/request/checkp_edit_req.dart';
 import '../api/json_models/request/checkp_req.dart';
 import '../api/json_models/response/checkp_list_resp.dart';
 import '../api/json_models/response/checkp_resp.dart';

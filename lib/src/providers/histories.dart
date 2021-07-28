@@ -2,14 +2,14 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:risa2/src/config/histo_category.dart';
-import 'package:risa2/src/globals.dart';
 
 import '../api/filter_models/history_filter.dart';
 import '../api/json_models/request/history_edit_req.dart';
 import '../api/json_models/request/history_req.dart';
 import '../api/json_models/response/history_list_resp.dart';
 import '../api/services/history_service.dart';
+import '../config/histo_category.dart';
+import '../globals.dart';
 import '../utils/enums.dart';
 import '../utils/image_compress.dart';
 

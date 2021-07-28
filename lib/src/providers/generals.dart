@@ -1,11 +1,12 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:risa2/src/utils/enums.dart';
-import 'package:risa2/src/utils/utils.dart';
+
 import '../api/filter_models/general_filter.dart';
 import '../api/json_models/response/general_list_resp.dart';
 import '../api/services/general_service.dart';
+import '../utils/enums.dart';
+import '../utils/utils.dart';
 
 class GeneralProvider extends ChangeNotifier {
   final GeneralService _generalService;
