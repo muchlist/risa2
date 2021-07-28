@@ -32,6 +32,11 @@ class ImproveProvider extends ChangeNotifier {
     return UnmodifiableListView(_improveList);
   }
 
+  List<ImproveMinResponse> get improveListFront {
+    return UnmodifiableListView(
+        _improveList.where((el) => el.isActive && el.completeStatus != 2));
+  }
+
   Future<void> findImprove({bool loading = true}) async {
     if (loading) {
       setState(ViewState.busy);

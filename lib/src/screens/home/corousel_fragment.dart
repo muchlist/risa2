@@ -26,10 +26,10 @@ class _CorouselContainerState extends State<CorouselContainer> {
     final improveProvider = context.watch<ImproveProvider>();
 
     return Center(
-        child: (improveProvider.improveList.length != 0)
+        child: (improveProvider.improveListFront.length != 0)
             ? Container(
                 width: double.infinity,
-                child: Corousel(improveProvider.improveList),
+                child: Corousel(improveProvider.improveListFront),
               )
             : verticalSpaceMedium);
   }
