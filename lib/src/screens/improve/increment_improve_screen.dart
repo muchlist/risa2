@@ -41,9 +41,9 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
 
   String _statusIncrement() {
     if (_numberChange >= 0) {
-      return "( perubahan +${_numberChange.toInt()} )";
+      return "Perubahan +${_numberChange.toInt()}";
     } else {
-      return "( perubahan ${_numberChange.toInt()} )";
+      return "Perubahan ${_numberChange.toInt()}";
     }
   }
 
@@ -151,17 +151,48 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                   ),
                 ),
 
-                verticalSpaceSmall,
-
+                verticalSpaceMedium,
+                if (dataPass.goal != 0)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                            color: Pallete.green.withOpacity(0.8),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30))),
+                        child: Center(
+                            child: Text(
+                          "${(dataPass.goalsAchieved / dataPass.goal * 100).toInt().toString()} %",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        )),
+                      ),
+                      horizontalSpaceMedium,
+                      Icon(Icons.arrow_forward),
+                      horizontalSpaceMedium,
+                      Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                            color: Pallete.green,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(30))),
+                        child: Center(
+                            child: Text(
+                          "${(_selectedSlider / dataPass.goal * 100).toInt().toString()} %",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        )),
+                      )
+                    ],
+                  ),
+                verticalSpaceMedium,
                 // * Status pekerjaan text ------------------------
                 if (dataPass.goal != 0)
-                  Text(
-                    "Progress ${(dataPass.goalsAchieved / dataPass.goal * 100).toInt().toString()}%  menjadi  ${(_selectedSlider / dataPass.goal * 100).toInt().toString()}%",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                if (dataPass.goal != 0)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 4.0),
+                  Center(
                     child: Text(
                       _statusIncrement(),
                       style: TextStyle(

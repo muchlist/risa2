@@ -72,7 +72,7 @@ class _AddVendorCheckDialogState extends State<AddVendorCheckDialog> {
                     ),
                     // * Pilih kategori text ------------------------
                     const Text(
-                      "Pilih jenis pengecekan :",
+                      "Tahan tombol untuk memilih jenis pengecekan :",
                       style: TextStyle(fontSize: 16),
                     ),
                     verticalSpaceMedium,
@@ -82,10 +82,6 @@ class _AddVendorCheckDialogState extends State<AddVendorCheckDialog> {
                       children: [
                         GestureDetector(
                           onLongPress: () => _generateCheck(true),
-                          onTap: () => showToastWarning(
-                              context: context,
-                              message:
-                                  "tahan lama tombol untuk membuat daftar cek !"),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -104,10 +100,6 @@ class _AddVendorCheckDialogState extends State<AddVendorCheckDialog> {
                         ),
                         GestureDetector(
                           onLongPress: () => _generateCheck(false),
-                          onTap: () => showToastWarning(
-                              context: context,
-                              message:
-                                  "Tahan lama tombol untuk membuat daftar cek !"),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [

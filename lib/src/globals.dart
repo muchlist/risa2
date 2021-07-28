@@ -13,8 +13,8 @@ class App {
     localStorage = await SharedPreferences.getInstance();
   }
 
-  static String? getToken() {
-    return localStorage.getString(_tokenSaved);
+  static String getToken() {
+    return localStorage.getString(_tokenSaved) ?? "";
   }
 
   static Future<bool> setToken(String value) {

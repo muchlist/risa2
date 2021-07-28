@@ -15,7 +15,7 @@ class _LandingPageState extends State<LandingPage> {
 
   _loadExpired() async {
     _expired = App.getExpired();
-    if (_expired < _epochNow) {
+    if (_expired < _epochNow || App.getToken() == "") {
       await Future(() {
         Navigator.pushReplacementNamed(context, RouteGenerator.login);
       });
