@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../config/pallatte.dart';
@@ -42,7 +41,7 @@ class Upper extends StatelessWidget {
       height: height,
       width: width,
       decoration: const BoxDecoration(
-          color: Pallete.secondaryBackground,
+          color: Pallete.background,
           borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20),
               bottomRight: Radius.circular(20))),
@@ -52,14 +51,15 @@ class Upper extends StatelessWidget {
         children: [
           if (screenIsPortrait(context))
             SizedBox(
-                height: 100,
-                child:
-                    Lottie.asset('assets/lottie/150-android-fingerprint.json')),
+              height: 100,
+              child: Image.asset('assets/icon/icon.png'),
+            ),
+          verticalSpaceSmall,
           const Text(
-            "LOGIN",
+            "RISA",
             style: TextStyle(color: Colors.black, fontSize: 25),
           ),
-          verticalSpaceLarge
+          verticalSpaceMedium
         ],
       )),
     );
