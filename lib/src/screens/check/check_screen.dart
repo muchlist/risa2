@@ -116,19 +116,19 @@ class _CheckRecyclerViewState extends State<CheckRecyclerView> {
                 bottom: 50,
                 child: HomeLikeButton(
                     iconData: CupertinoIcons.add,
-                    text: "Membuat Check ",
+                    text: "Buat Check ",
                     tapTap: () {
                       _startAddCheck(context);
                     })),
-            Positioned(
-              bottom: 50,
-              right: 40,
-              child: IconButton(
-                  icon: const Icon(
-                      CupertinoIcons.square_fill_line_vertical_square,
-                      size: 28),
-                  onPressed: () {}),
-            )
+            // Positioned(
+            //   bottom: 50,
+            //   right: 40,
+            //   child: IconButton(
+            //       icon: const Icon(
+            //           CupertinoIcons.square_fill_line_vertical_square,
+            //           size: 28),
+            //       onPressed: () {}),
+            // )
           ],
         );
       },

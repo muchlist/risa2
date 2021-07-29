@@ -121,6 +121,7 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                   "Judul",
                   style: TextStyle(fontSize: 16),
                 ),
+                verticalSpaceTiny,
 
                 Container(
                   width: double.infinity,
@@ -138,6 +139,7 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                   "Deskripsi",
                   style: TextStyle(fontSize: 16),
                 ),
+                verticalSpaceTiny,
 
                 Container(
                   width: double.infinity,
@@ -177,7 +179,9 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                         height: 60,
                         width: 60,
                         decoration: BoxDecoration(
-                            color: Pallete.green,
+                            color: (_numberChange >= 0)
+                                ? Pallete.green
+                                : Colors.red[400],
                             borderRadius:
                                 BorderRadius.all(Radius.circular(30))),
                         child: Center(
@@ -192,14 +196,16 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                 verticalSpaceMedium,
                 // * Status pekerjaan text ------------------------
                 if (dataPass.goal != 0)
-                  Center(
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Text(
                       _statusIncrement(),
                       style: TextStyle(
-                          fontSize: 16,
-                          color:
-                              (_numberChange >= 0) ? Pallete.green : Colors.red,
-                          fontWeight: FontWeight.bold),
+                        fontSize: 16,
+                        color: (_numberChange >= 0)
+                            ? Colors.blueGrey
+                            : Colors.red[400],
+                      ),
                     ),
                   ),
                 if (dataPass.goal != 0)
@@ -222,6 +228,7 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                     "Catatan",
                     style: TextStyle(fontSize: 16),
                   ),
+                verticalSpaceTiny,
                 if (dataPass.goal != 0)
                   TextFormField(
                     textInputAction: TextInputAction.newline,

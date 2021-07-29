@@ -154,7 +154,7 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
                       bottom: 15,
                       right: 20,
                       child: HomeLikeButton(
-                        iconData: CupertinoIcons.checkmark_alt,
+                        iconData: CupertinoIcons.check_mark_circled_solid,
                         text: "Selesai Shift",
                         tapTap: () async {
                           var isFinish = await _getConfirm(context);
