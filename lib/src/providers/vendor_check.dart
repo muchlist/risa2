@@ -228,6 +228,30 @@ class VendorCheckProvider extends ChangeNotifier {
     return true;
   }
 
+  // return future true jika delete vendorVendorCheck berhasil
+  // memanggil findVendorCheck sehigga tidak perlu notifyListener
+  Future<bool> deleteVendorCheck() async {
+    setState(ViewState.busy);
+    var error = "";
+
+    try {
+      final response =
+          await _vendorCheckService.deleteVendorCheck(_vendorCheckIDSaved);
+      if (response.error != null) {
+        error = response.error!.message;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+    await findVendorCheck();
+    return true;
+  }
+
   // dipanggil ketika data sudah tidak dibutuhkan lagi,
   // di on dispose
   void onClose() {

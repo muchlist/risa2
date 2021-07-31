@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/shared/func_confirm.dart';
 import 'package:risa2/src/utils/string_modifier.dart';
 
 import '../../api/json_models/response/check_resp.dart';
@@ -47,30 +48,6 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
     super.initState();
   }
 
-  // Memunculkan dialog
-  Future<bool?> _getConfirm(BuildContext context) {
-    return showDialog<bool?>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Konfirmasi"),
-            content: const Text(
-                "Apakah kamu ingin mengakhiri pengecekan pada shift ini?\nDokumen tidak bisa dirubah lagi!"),
-            actions: <Widget>[
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).accentColor),
-                  child: const Text("Tidak"),
-                  onPressed: () => Navigator.of(context).pop(false)),
-              TextButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: const Text("Ya"))
-            ],
-          );
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     // Watch data ====================================================
@@ -94,11 +71,12 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
                             color: Pallete.secondaryBackground,
                             borderRadius: BorderRadius.circular(3)),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                              children: const [
                                 Text("Nama"),
                                 Text("Shift"),
                                 Text("Dibuat"),
@@ -107,12 +85,12 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("   :   "),
+                                const Text("   :   "),
                                 Text("   :   "),
                                 Text("   :   "),
                               ],
                             ),
-                            Flexible(
+                            Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
@@ -140,6 +118,34 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
                                 ],
                               ),
                             ),
+                            if (!detail.isFinish)
+                              IconButton(
+                                onPressed: () async {
+                                  var isDeleted = await getConfirm(
+                                      context,
+                                      "Konfirmasi",
+                                      "Yakin ingin menghapus daftar cek ini?");
+                                  if (isDeleted != null && isDeleted) {
+                                    await data.deleteCheck().then((value) {
+                                      if (value) {
+                                        Navigator.pop(context);
+                                        showToastSuccess(
+                                            context: context,
+                                            message:
+                                                "Berhasil menghapus ceklist");
+                                      }
+                                    }).onError((error, stackTrace) {
+                                      showToastError(
+                                          context: context,
+                                          message: error.toString());
+                                    });
+                                  }
+                                },
+                                icon: const Icon(
+                                  CupertinoIcons.trash_circle,
+                                  color: Colors.redAccent,
+                                ),
+                              )
                           ],
                         ),
                       ),
@@ -157,7 +163,8 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
                         iconData: CupertinoIcons.check_mark_circled_solid,
                         text: "Selesai Shift",
                         tapTap: () async {
-                          var isFinish = await _getConfirm(context);
+                          var isFinish = await getConfirm(context, "Konfirmasi",
+                              "Apakah kamu ingin mengakhiri pengecekan pada shift ini?\nDokumen tidak bisa dirubah lagi!");
                           if (isFinish != null && isFinish) {
                             await data.completeCheck().then((value) {
                               if (value) {

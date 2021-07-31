@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/shared/func_confirm.dart';
 
 import '../../api/json_models/request/vendor_req.dart';
 import '../../api/json_models/response/vendor_check_resp.dart';
@@ -202,7 +203,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
     var cctvs = data.getCheckItemPerLocation(locations);
 
     var slivers = <Widget>[
-      buildHeaderSliver(detail),
+      buildHeaderSliver(data),
     ];
 
     for (final loc in locations) {
@@ -239,7 +240,9 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
     );
   }
 
-  SliverToBoxAdapter buildHeaderSliver(VendorCheckDetailResponseData detail) {
+  SliverToBoxAdapter buildHeaderSliver(VendorCheckProvider data) {
+    var detail = data.vendorCheckDetail;
+
     var cctvChecked = 0;
     var cctvOffline = 0;
     var cctvBlur = 0;
@@ -266,6 +269,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(3)),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Column(
@@ -294,7 +298,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                 const Text("   :   "),
               ],
             ),
-            Flexible(
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -357,6 +361,30 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                 ],
               ),
             ),
+            if (!detail.isFinish)
+              IconButton(
+                onPressed: () async {
+                  var isDeleted = await getConfirm(context, "Konfirmasi",
+                      "Yakin ingin menghapus daftar cek ini?");
+                  if (isDeleted != null && isDeleted) {
+                    await data.deleteVendorCheck().then((value) {
+                      if (value) {
+                        Navigator.pop(context);
+                        showToastSuccess(
+                            context: context,
+                            message: "Berhasil menghapus ceklist");
+                      }
+                    }).onError((error, stackTrace) {
+                      showToastError(
+                          context: context, message: error.toString());
+                    });
+                  }
+                },
+                icon: const Icon(
+                  CupertinoIcons.trash_circle,
+                  color: Colors.redAccent,
+                ),
+              )
           ],
         ),
       ),

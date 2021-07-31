@@ -226,6 +226,29 @@ class CheckProvider extends ChangeNotifier {
     return true;
   }
 
+  // return future true jika delete check berhasil
+  // memanggil findCheck sehigga tidak perlu notifyListener
+  Future<bool> deleteCheck() async {
+    setState(ViewState.busy);
+    var error = "";
+
+    try {
+      final response = await _checkService.deleteCheck(_checkIDSaved);
+      if (response.error != null) {
+        error = response.error!.message;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+    await findCheck();
+    return true;
+  }
+
   // dipanggil ketika data sudah tidak dibutuhkan lagi,
   // di on dispose
   void onClose() {
