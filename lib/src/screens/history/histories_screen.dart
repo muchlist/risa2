@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/globals.dart';
 
 import '../../config/histo_category.dart';
 import '../../config/pallatte.dart';
+import '../../globals.dart';
 import '../../providers/histories.dart';
 import '../../shared/disable_glow.dart';
 import '../../shared/func_flushbar.dart';
@@ -20,6 +20,8 @@ class HistoriesScreen extends StatefulWidget {
 
 class _HistoriesScreenState extends State<HistoriesScreen> {
   late final HistoryProvider historyProvider;
+  late bool _progressIsZero = historyProvider.historyProgressList.length == 0;
+  late bool _isVendor = App.getRoles().contains("VENDOR");
 
   // Memunculkan dialog
   Future<void> _dialogChangeFilter(BuildContext context) async {
@@ -105,7 +107,7 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
 
   @override
   void dispose() {
-    if (!App.getRoles().contains("VENDOR")) {
+    if (!_isVendor) {
       historyProvider.resetFilter();
     }
     super.dispose();
@@ -114,7 +116,11 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      initialIndex: 1,
+      initialIndex: (_isVendor)
+          ? 0
+          : (_progressIsZero)
+              ? 0
+              : 1,
       length: 3,
       child: Scaffold(
         appBar: AppBar(
@@ -133,7 +139,7 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
           ),
           title: const Text('History'),
           actions: [
-            if (!App.getRoles().contains("VENDOR"))
+            if (!_isVendor)
               IconButton(
                 onPressed: () async {
                   await _dialogChangeFilter(context);

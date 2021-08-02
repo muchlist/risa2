@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/func_confirm.dart';
 
 import '../../api/json_models/request/vendor_req.dart';
 import '../../api/json_models/response/vendor_check_resp.dart';
 import '../../config/pallatte.dart';
+import '../../globals.dart';
 import '../../providers/vendor_check.dart';
 import '../../shared/disable_glow.dart';
+import '../../shared/func_confirm.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../shared/vendor_check_grid.dart';
@@ -361,7 +362,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                 ],
               ),
             ),
-            if (!detail.isFinish)
+            if (!detail.isFinish && detail.createdBy == App.getName())
               IconButton(
                 onPressed: () async {
                   var isDeleted = await getConfirm(context, "Konfirmasi",

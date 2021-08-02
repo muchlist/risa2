@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../api/json_models/response/check_resp.dart';
 import '../../config/constant.dart';
 import '../../config/pallatte.dart';
+import '../../globals.dart';
 import '../../providers/checks.dart';
 import '../../shared/cached_image_square.dart';
 import '../../shared/func_confirm.dart';
@@ -118,7 +119,8 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
                                 ],
                               ),
                             ),
-                            if (!detail.isFinish)
+                            if (!detail.isFinish &&
+                                detail.updatedBy == App.getName())
                               IconButton(
                                 onPressed: () async {
                                   var isDeleted = await getConfirm(

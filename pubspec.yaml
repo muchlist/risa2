@@ -3,7 +3,7 @@ description: IT Pelindo III Regional Banjarmasin Tools.
 
 publish_to: 'none'
 
-version: 1.1.4+6
+version: 1.1.5+7
 
 environment:
   sdk: '>=2.12.2 <3.0.0'
