@@ -20,9 +20,15 @@ class _LandingPageState extends State<LandingPage> {
         Navigator.pushReplacementNamed(context, RouteGenerator.login);
       });
     } else {
-      await Future(() {
-        Navigator.pushReplacementNamed(context, RouteGenerator.home);
-      });
+      if (App.getRoles().contains("VENDOR")) {
+        await Future(() {
+          Navigator.pushReplacementNamed(context, RouteGenerator.homeVendor);
+        });
+      } else {
+        await Future(() {
+          Navigator.pushReplacementNamed(context, RouteGenerator.home);
+        });
+      }
     }
   }
 

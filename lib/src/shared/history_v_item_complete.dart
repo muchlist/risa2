@@ -3,15 +3,14 @@ import 'package:flutter/material.dart';
 
 import '../api/json_models/response/history_list_resp.dart';
 import '../config/constant.dart';
-import '../config/histo_icon.dart';
 import '../utils/utils.dart';
-import 'cached_image_circle.dart';
+import 'cached_image_square.dart';
 import 'ui_helpers.dart';
 
-class HistoryListTile extends StatelessWidget {
+class HistoryVCListTile extends StatelessWidget {
   final HistoryMinResponse history;
 
-  const HistoryListTile({Key? key, required this.history}) : super(key: key);
+  const HistoryVCListTile({Key? key, required this.history}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,17 +19,21 @@ class HistoryListTile extends StatelessWidget {
           side: BorderSide(
               color: Theme.of(context).primaryColor.withOpacity(0.2),
               width: 0.5),
-          borderRadius: BorderRadius.circular(10)),
+          borderRadius: BorderRadius.circular(5)),
       elevation: 0,
       child: ListTile(
         leading: (history.image.isNotEmpty)
-            ? CachedImageCircle(
-                urlPath: "${Constant.baseUrl}${history.image.thumbnailMod()}")
-            : CircleAvatar(
-                backgroundColor: Colors.blueGrey.shade300,
-                foregroundColor: Colors.white,
-                child: Icon(getIcon(history.category)),
-                radius: 25,
+            ? CachedImageSquare(
+                urlPath: "${Constant.baseUrl}${history.image.thumbnailMod()}",
+                height: 40,
+                width: 40,
+              )
+            : Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                    color: Colors.blueGrey.shade300,
+                    borderRadius: BorderRadius.circular(5)),
               ),
         title: Padding(
           padding: const EdgeInsets.only(top: 8, bottom: 8),

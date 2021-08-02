@@ -49,6 +49,13 @@ class HistoryProvider extends ChangeNotifier {
         .toList();
   }
 
+  // history complete
+  List<HistoryMinResponse> get historyCompletedList {
+    return _historyList.where((hist) {
+      return hist.completeStatus == enumStatus.completed.index;
+    }).toList();
+  }
+
   // history all
   List<HistoryMinResponse> get historyList {
     return UnmodifiableListView(_historyList);

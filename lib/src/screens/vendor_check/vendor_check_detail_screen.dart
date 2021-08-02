@@ -214,7 +214,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                 const EdgeInsets.only(left: 8, right: 8, top: 15, bottom: 8),
             child: Text(
               loc,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
         ))

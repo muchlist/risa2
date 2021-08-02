@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../config/pallatte.dart';
+import '../../globals.dart';
 import '../../providers/auth.dart';
 import '../../router/routes.dart';
 import '../../shared/button.dart';
@@ -96,8 +97,15 @@ class _LoginFormState extends State<LoginForm> {
         authViewModel.login(username, password).then((value) {
           if (value) {
             Future.delayed(Duration(milliseconds: 500), () {
-              Navigator.of(context).pushNamedAndRemoveUntil(RouteGenerator.home,
-                  ModalRoute.withName(RouteGenerator.home));
+              if (App.getRoles().contains("VENDOR")) {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    RouteGenerator.homeVendor,
+                    ModalRoute.withName(RouteGenerator.homeVendor));
+              } else {
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    RouteGenerator.home,
+                    ModalRoute.withName(RouteGenerator.home));
+              }
             });
           }
         }).onError((error, _) {

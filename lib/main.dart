@@ -39,8 +39,6 @@ import 'src/screens/landing/landing.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-
-  print("Handling a background message: ${message.messageId}");
 }
 
 // Create a [AndroidNotificationChannel] for heads up notifications

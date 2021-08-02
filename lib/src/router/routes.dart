@@ -17,6 +17,7 @@ import '../screens/computer/edit_computer_screen.dart';
 import '../screens/dashboard/dashboard_screen.dart';
 import '../screens/history/histories_screen.dart';
 import '../screens/home/home_screen.dart';
+import '../screens/home_vendor/home_vendor_screen.dart';
 import '../screens/improve/add_improve_screen.dart';
 import '../screens/improve/edit_improve_screen.dart';
 import '../screens/improve/improve_detail_screen.dart';
@@ -41,6 +42,7 @@ import '../screens/vendor_check/vendor_check_screen.dart';
 class RouteGenerator {
   static const String landing = '/';
   static const String home = '/home';
+  static const String homeVendor = '/home-vendor';
   static const String login = '/login';
   static const String history = '/histories';
   static const String check = '/check';
@@ -86,6 +88,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case home:
         return MaterialPageRoute(builder: (_) => HomeScreen());
+      case homeVendor:
+        return MaterialPageRoute(builder: (_) => HomeVScreen());
       case history:
         return transitionFade(HistoriesScreen());
       case check:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/screens/history/add_history_v_dialog.dart';
 
 import '../api/json_models/response/history_list_resp.dart';
 import '../globals.dart';
@@ -32,6 +33,19 @@ class HistoryHelper {
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
       builder: (context) => AddHistoryDialog(),
+    );
+  }
+
+  // Khusus vendor hanya menampilkan cctv saja
+  void showAddIncidentV(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      builder: (context) => AddHistoryVDialog(),
     );
   }
 

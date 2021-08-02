@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/globals.dart';
 
 import '../../config/histo_category.dart';
 import '../../config/pallatte.dart';
@@ -104,7 +105,9 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
 
   @override
   void dispose() {
-    historyProvider.resetFilter();
+    if (!App.getRoles().contains("VENDOR")) {
+      historyProvider.resetFilter();
+    }
     super.dispose();
   }
 
@@ -130,15 +133,16 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
           ),
           title: const Text('History'),
           actions: [
-            IconButton(
-              onPressed: () async {
-                await _dialogChangeFilter(context);
-              },
-              icon: Icon(
-                CupertinoIcons.decrease_indent,
-                size: 28,
+            if (!App.getRoles().contains("VENDOR"))
+              IconButton(
+                onPressed: () async {
+                  await _dialogChangeFilter(context);
+                },
+                icon: Icon(
+                  CupertinoIcons.decrease_indent,
+                  size: 28,
+                ),
               ),
-            ),
             horizontalSpaceSmall
           ],
         ),
