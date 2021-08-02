@@ -4,13 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/func_flushbar.dart';
 
 import '../../api/json_models/request/check_update_req.dart';
 import '../../api/json_models/response/check_resp.dart';
 import '../../config/pallatte.dart';
 import '../../providers/checks.dart';
 import '../../shared/button.dart';
+import '../../shared/func_flushbar.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 
@@ -30,6 +30,13 @@ class _ExpansionChildState extends State<ExpansionChild> {
   String? _selectedTag;
 
   void _updateChild() {
+    // validasi
+    if (widget.checkItem.imagePath.isEmpty) {
+      showToastWarning(
+          context: context, message: "Silakan upload foto terebih dahulu!");
+      return;
+    }
+
     var payload = CheckUpdateRequest(
         parentID: widget.parentID,
         childID: widget.checkItem.id,

@@ -5,7 +5,7 @@ import '../api/json_models/response/history_list_resp.dart';
 import '../config/constant.dart';
 import '../config/histo_icon.dart';
 import '../utils/utils.dart';
-import 'cached_image_circle.dart';
+import 'cached_image_square.dart';
 import 'ui_helpers.dart';
 
 class HistoryListTile extends StatelessWidget {
@@ -24,8 +24,11 @@ class HistoryListTile extends StatelessWidget {
       elevation: 0,
       child: ListTile(
         leading: (history.image.isNotEmpty)
-            ? CachedImageCircle(
-                urlPath: "${Constant.baseUrl}${history.image.thumbnailMod()}")
+            ? CachedImageSquare(
+                urlPath: "${Constant.baseUrl}${history.image.thumbnailMod()}",
+                width: 50,
+                height: 50,
+              )
             : CircleAvatar(
                 backgroundColor: Colors.blueGrey.shade300,
                 foregroundColor: Colors.white,

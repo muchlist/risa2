@@ -163,8 +163,7 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                         width: 60,
                         decoration: BoxDecoration(
                             color: Pallete.green.withOpacity(0.8),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(30))),
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
                         child: Center(
                             child: Text(
                           "${(dataPass.goalsAchieved / dataPass.goal * 100).toInt().toString()} %",
@@ -182,8 +181,7 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                             color: (_numberChange >= 0)
                                 ? Pallete.green
                                 : Colors.red[400],
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(30))),
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
                         child: Center(
                             child: Text(
                           "${(_selectedSlider / dataPass.goal * 100).toInt().toString()} %",

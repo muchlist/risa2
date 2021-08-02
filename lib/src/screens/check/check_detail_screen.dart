@@ -1,19 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/func_confirm.dart';
-import 'package:risa2/src/utils/string_modifier.dart';
 
 import '../../api/json_models/response/check_resp.dart';
 import '../../config/constant.dart';
 import '../../config/pallatte.dart';
 import '../../providers/checks.dart';
-import '../../shared/cached_image_circle.dart';
+import '../../shared/cached_image_square.dart';
+import '../../shared/func_confirm.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/date_unix.dart';
 import '../../utils/enums.dart';
+import '../../utils/string_modifier.dart';
 import 'check_detail_expanse.dart';
 
 class CheckDetailScreen extends StatelessWidget {
@@ -224,9 +224,12 @@ class ListTileCheck extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.all(8),
       leading: checkItem.imagePath != ""
-          ? CachedImageCircle(
+          ? CachedImageSquare(
               urlPath:
-                  "${Constant.baseUrl}${checkItem.imagePath.thumbnailMod()}")
+                  "${Constant.baseUrl}${checkItem.imagePath.thumbnailMod()}",
+              height: 50,
+              width: 50,
+            )
           : null,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -303,8 +306,11 @@ class ExpansionTileCheck extends StatelessWidget {
     return ExpansionTile(
       tilePadding: EdgeInsets.all(8),
       leading: checkItem.imagePath != ""
-          ? CachedImageCircle(
-              urlPath: "${Constant.baseUrl}${checkItem.imagePath}")
+          ? CachedImageSquare(
+              urlPath: "${Constant.baseUrl}${checkItem.imagePath}",
+              height: 50,
+              width: 50,
+            )
           : null,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
