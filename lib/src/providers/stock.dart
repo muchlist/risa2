@@ -2,18 +2,18 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:risa2/src/api/json_models/request/stock_change_req.dart';
-import 'package:risa2/src/api/json_models/request/stock_edit_req.dart';
-import 'package:risa2/src/utils/image_compress.dart';
 
 import '../api/filter_models/stock_filter.dart';
 import '../api/json_models/option/stock_category.dart';
+import '../api/json_models/request/stock_change_req.dart';
+import '../api/json_models/request/stock_edit_req.dart';
 import '../api/json_models/request/stock_req.dart';
 import '../api/json_models/response/stock_list_resp.dart';
 import '../api/json_models/response/stock_resp.dart';
 import '../api/services/stock_service.dart';
 import '../globals.dart';
 import '../utils/enums.dart';
+import '../utils/image_compress.dart';
 
 class StockProvider extends ChangeNotifier {
   final StockService _stockService;

@@ -41,9 +41,9 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
 
   String _statusIncrement() {
     if (_numberChange >= 0) {
-      return "( perubahan +${_numberChange.toInt()} )";
+      return "Perubahan +${_numberChange.toInt()}";
     } else {
-      return "( perubahan ${_numberChange.toInt()} )";
+      return "Perubahan ${_numberChange.toInt()}";
     }
   }
 
@@ -121,6 +121,7 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                   "Judul",
                   style: TextStyle(fontSize: 16),
                 ),
+                verticalSpaceTiny,
 
                 Container(
                   width: double.infinity,
@@ -138,6 +139,7 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                   "Deskripsi",
                   style: TextStyle(fontSize: 16),
                 ),
+                verticalSpaceTiny,
 
                 Container(
                   width: double.infinity,
@@ -151,89 +153,129 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                   ),
                 ),
 
-                verticalSpaceSmall,
-
-                // * Status pekerjaan text ------------------------
-                Text(
-                  "Progress ${(dataPass.goalsAchieved / dataPass.goal * 100).toInt().toString()}%  menjadi  ${(_selectedSlider / dataPass.goal * 100).toInt().toString()}%",
-                  style: TextStyle(fontSize: 16),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
-                  child: Text(
-                    _statusIncrement(),
-                    style: TextStyle(
-                        fontSize: 16,
-                        color:
-                            (_numberChange >= 0) ? Pallete.green : Colors.red,
-                        fontWeight: FontWeight.bold),
+                verticalSpaceMedium,
+                if (dataPass.goal != 0)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                            color: Pallete.green.withOpacity(0.8),
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        child: Center(
+                            child: Text(
+                          "${(dataPass.goalsAchieved / dataPass.goal * 100).toInt().toString()} %",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        )),
+                      ),
+                      horizontalSpaceMedium,
+                      Icon(Icons.arrow_forward),
+                      horizontalSpaceMedium,
+                      Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                            color: (_numberChange >= 0)
+                                ? Pallete.green
+                                : Colors.red[400],
+                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        child: Center(
+                            child: Text(
+                          "${(_selectedSlider / dataPass.goal * 100).toInt().toString()} %",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        )),
+                      )
+                    ],
                   ),
-                ),
-                Slider(
-                  min: 0,
-                  max: dataPass.goal.toDouble(),
-                  value: _selectedSlider,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedSlider = value;
-                      _numberChange =
-                          _selectedSlider - dataPass.goalsAchieved.toDouble();
-                    });
-                  },
-                ),
+                verticalSpaceMedium,
+                // * Status pekerjaan text ------------------------
+                if (dataPass.goal != 0)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      _statusIncrement(),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: (_numberChange >= 0)
+                            ? Colors.blueGrey
+                            : Colors.red[400],
+                      ),
+                    ),
+                  ),
+                if (dataPass.goal != 0)
+                  Slider(
+                    min: 0,
+                    max: dataPass.goal.toDouble(),
+                    value: _selectedSlider,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedSlider = value;
+                        _numberChange =
+                            _selectedSlider - dataPass.goalsAchieved.toDouble();
+                      });
+                    },
+                  ),
 
                 // * Note text ------------------------
-                const Text(
-                  "Catatan",
-                  style: TextStyle(fontSize: 16),
-                ),
-
-                TextFormField(
-                  textInputAction: TextInputAction.newline,
-                  minLines: 2,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                      filled: true,
-                      fillColor: Colors.white,
-                      enabledBorder: InputBorder.none,
-                      border: InputBorder.none),
-                  controller: noteController,
-                ),
+                if (dataPass.goal != 0)
+                  const Text(
+                    "Catatan",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                verticalSpaceTiny,
+                if (dataPass.goal != 0)
+                  TextFormField(
+                    textInputAction: TextInputAction.newline,
+                    minLines: 2,
+                    maxLines: 3,
+                    decoration: const InputDecoration(
+                        filled: true,
+                        fillColor: Colors.white,
+                        enabledBorder: InputBorder.none,
+                        border: InputBorder.none),
+                    controller: noteController,
+                  ),
 
                 verticalSpaceMedium,
-
-                (dataPass.isActive)
-                    ? Consumer<ImproveProvider>(builder: (_, data, __) {
-                        return (data.detailState == ViewState.busy)
-                            ? Center(child: const CircularProgressIndicator())
-                            : Center(
-                                child: HomeLikeButton(
-                                    iconData: CupertinoIcons.check_mark_circled,
-                                    text: "Update",
-                                    tapTap: _incrementImprove),
-                              );
-                      })
-                    : Center(
-                        child: (_approver)
-                            ? OutlinedButton.icon(
-                                style: OutlinedButton.styleFrom(
-                                  primary: Pallete.green,
-                                  shape: const StadiumBorder(),
-                                  side: const BorderSide(color: Pallete.green),
-                                ),
-                                onPressed: _enablingImprove,
-                                icon: const Icon(CupertinoIcons.rocket),
-                                label: const Text("Aktifkan"))
-                            : OutlinedButton.icon(
-                                style: OutlinedButton.styleFrom(
-                                  primary: Colors.grey,
-                                  shape: const StadiumBorder(),
-                                  side: const BorderSide(color: Colors.grey),
-                                ),
-                                onPressed: () {},
-                                icon: const Icon(CupertinoIcons.xmark_circle),
-                                label: const Text("Item belum diaktifkan")),
-                      ),
+                if (dataPass.goal != 0)
+                  (dataPass.isActive)
+                      ? Consumer<ImproveProvider>(builder: (_, data, __) {
+                          return (data.detailState == ViewState.busy)
+                              ? Center(child: const CircularProgressIndicator())
+                              : Center(
+                                  child: HomeLikeButton(
+                                      iconData:
+                                          CupertinoIcons.check_mark_circled,
+                                      text: "Update",
+                                      tapTap: _incrementImprove),
+                                );
+                        })
+                      : Center(
+                          child: (_approver)
+                              ? OutlinedButton.icon(
+                                  style: OutlinedButton.styleFrom(
+                                    primary: Pallete.green,
+                                    shape: const StadiumBorder(),
+                                    side:
+                                        const BorderSide(color: Pallete.green),
+                                  ),
+                                  onPressed: _enablingImprove,
+                                  icon: const Icon(CupertinoIcons.rocket),
+                                  label: const Text("Aktifkan"))
+                              : OutlinedButton.icon(
+                                  style: OutlinedButton.styleFrom(
+                                    primary: Colors.grey,
+                                    shape: const StadiumBorder(),
+                                    side: const BorderSide(color: Colors.grey),
+                                  ),
+                                  onPressed: () {},
+                                  icon: const Icon(CupertinoIcons.xmark_circle),
+                                  label: const Text("Item belum diaktifkan")),
+                        ),
 
                 verticalSpaceMedium,
               ],

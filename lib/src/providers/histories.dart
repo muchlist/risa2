@@ -8,6 +8,8 @@ import '../api/json_models/request/history_edit_req.dart';
 import '../api/json_models/request/history_req.dart';
 import '../api/json_models/response/history_list_resp.dart';
 import '../api/services/history_service.dart';
+import '../config/histo_category.dart';
+import '../globals.dart';
 import '../utils/enums.dart';
 import '../utils/image_compress.dart';
 
@@ -47,22 +49,46 @@ class HistoryProvider extends ChangeNotifier {
         .toList();
   }
 
+  // history complete
+  List<HistoryMinResponse> get historyCompletedList {
+    return _historyList.where((hist) {
+      return hist.completeStatus == enumStatus.completed.index;
+    }).toList();
+  }
+
   // history all
   List<HistoryMinResponse> get historyList {
     return UnmodifiableListView(_historyList);
   }
 
-  Future<void> findHistory({bool loading = true}) async {
-    // create filter
-    final filter = FilterHistory(branch: "BANJARMASIN", limit: 200);
+  // FILTER HISTORY
+  FilterHistory _filter = FilterHistory(branch: App.getBranch(), limit: 200);
+  FilterHistory get filter {
+    return _filter;
+  }
 
+  void setFilter(FilterHistory value) {
+    if (value.category == HistCategory.all) {
+      value.category = "";
+    }
+    _filter = value;
+  }
+
+  void resetFilter() {
+    if (_filter.category?.isNotEmpty ?? false) {
+      _filter = FilterHistory(branch: App.getBranch(), limit: 200);
+      findHistory(loading: false);
+    }
+  }
+
+  Future<void> findHistory({bool loading = true}) async {
     if (loading) {
       setState(ViewState.busy);
     }
 
     var error = "";
     try {
-      final response = await _historyService.findHistory(filter);
+      final response = await _historyService.findHistory(_filter);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -189,6 +215,32 @@ class HistoryProvider extends ChangeNotifier {
         error = response.error!.message;
       } else {
         await findParentHistory(parentID: parentID, loading: false);
+        return true;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setState(ViewState.idle);
+
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+    return false;
+  }
+
+  // return future true jika delete history berhasil
+  // memanggil findHistory sehigga tidak perlu notifyListener
+  Future<bool> deleteHistory(String historyID) async {
+    setState(ViewState.busy);
+
+    var error = "";
+    try {
+      final response = await _historyService.deleteHistory(historyID);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        await findHistory(loading: false);
         return true;
       }
     } catch (e) {

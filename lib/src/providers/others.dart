@@ -2,9 +2,9 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:risa2/src/api/json_models/option/location_division.dart';
 
 import '../api/filter_models/other_filter.dart';
+import '../api/json_models/option/location_division.dart';
 import '../api/json_models/request/other_edit_req.dart';
 import '../api/json_models/request/other_req.dart';
 import '../api/json_models/response/general_list_resp.dart';

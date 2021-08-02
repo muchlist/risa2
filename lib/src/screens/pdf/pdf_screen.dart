@@ -23,12 +23,12 @@ class _PdfScreenState extends State<PdfScreen> {
         elevation: 0,
         title: const Text("Report Generated"),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          icon: Icon(Icons.add),
-          onPressed: () {
-            // add pdf , munculkan bottom sheet saja
-          },
-          label: Text("Buat Manual")),
+      // floatingActionButton: FloatingActionButton.extended(
+      //     icon: Icon(Icons.add),
+      //     onPressed: () {
+      //       // add pdf , munculkan bottom sheet saja
+      //     },
+      //     label: Text("Buat Manual")),
       body: PdfRecyclerView(),
     );
   }

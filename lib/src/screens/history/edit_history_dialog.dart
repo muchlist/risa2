@@ -146,6 +146,28 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
     }
   }
 
+  Future<bool?> _getConfirm(BuildContext context) {
+    return showDialog<bool?>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Konfirmasi hapus"),
+            content: const Text("Apakah yakin ingin menghapus history ini!"),
+            actions: <Widget>[
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      primary: Theme.of(context).accentColor),
+                  child: const Text("Tidak"),
+                  onPressed: () => Navigator.of(context).pop(false)),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text("Ya"))
+            ],
+          );
+        });
+  }
+
   @override
   void dispose() {
     problemController.dispose();
@@ -324,7 +346,33 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
                             ),
                           ),
                           Expanded(
-                            child: SizedBox(),
+                            child: IconButton(
+                                icon: Icon(
+                                  CupertinoIcons.trash,
+                                  color: Colors.red[200],
+                                ),
+                                onPressed: () async {
+                                  var confirmDelete =
+                                      await _getConfirm(context);
+                                  if (confirmDelete != null && confirmDelete) {
+                                    await context
+                                        .read<HistoryProvider>()
+                                        .deleteHistory(widget.history.id)
+                                        .then((value) {
+                                      if (value) {
+                                        Navigator.pop(context);
+                                        showToastSuccess(
+                                            context: context,
+                                            message:
+                                                "Berhasil menghapus check");
+                                      }
+                                    }).onError((error, _) {
+                                      showToastError(
+                                          context: context,
+                                          message: error.toString());
+                                    });
+                                  }
+                                }),
                           )
                         ],
                       ),

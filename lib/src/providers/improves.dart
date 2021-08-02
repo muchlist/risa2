@@ -1,14 +1,15 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:risa2/src/api/json_models/request/improve_change_req.dart';
-import 'package:risa2/src/api/json_models/request/improve_edit_req.dart';
-import 'package:risa2/src/api/json_models/request/improve_req.dart';
-import 'package:risa2/src/api/json_models/response/improve_resp.dart';
 
 import '../api/filter_models/improve_filter.dart';
+import '../api/json_models/request/improve_change_req.dart';
+import '../api/json_models/request/improve_edit_req.dart';
+import '../api/json_models/request/improve_req.dart';
 import '../api/json_models/response/improve_list_resp.dart';
+import '../api/json_models/response/improve_resp.dart';
 import '../api/services/improve_service.dart';
+import '../globals.dart';
 import '../utils/enums.dart';
 
 class ImproveProvider extends ChangeNotifier {
@@ -32,12 +33,17 @@ class ImproveProvider extends ChangeNotifier {
     return UnmodifiableListView(_improveList);
   }
 
+  List<ImproveMinResponse> get improveListFront {
+    return UnmodifiableListView(
+        _improveList.where((el) => el.isActive && el.completeStatus != 2));
+  }
+
   Future<void> findImprove({bool loading = true}) async {
     if (loading) {
       setState(ViewState.busy);
     }
 
-    final filter = FilterImporve(branch: "BANJARMASIN", limit: 10);
+    final filter = FilterImporve(branch: App.getBranch(), limit: 10);
     var error = "";
 
     try {

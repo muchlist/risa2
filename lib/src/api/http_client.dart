@@ -33,7 +33,7 @@ class RequestREST {
         endpoint,
         options: Options(
           headers: {
-            "Authorization": "Bearer ${App.getToken() ?? ""}",
+            "Authorization": "Bearer ${App.getToken()}",
           },
         ),
       );
@@ -54,7 +54,7 @@ class RequestREST {
         data: data,
         options: Options(
           headers: {
-            "Authorization": "Bearer ${App.getToken() ?? ""}",
+            "Authorization": "Bearer ${App.getToken()}",
           },
         ),
       );
@@ -75,7 +75,7 @@ class RequestREST {
         data: data,
         options: Options(
           headers: {
-            "Authorization": "Bearer ${App.getToken() ?? ""}",
+            "Authorization": "Bearer ${App.getToken()}",
           },
         ),
       );
@@ -93,7 +93,7 @@ class RequestREST {
       endpoint,
       options: Options(
         headers: {
-          "Authorization": "Bearer ${App.getToken() ?? ""}",
+          "Authorization": "Bearer ${App.getToken()}",
         },
       ),
     );
@@ -110,7 +110,7 @@ class RequestREST {
         data: formData,
         options: Options(
           headers: {
-            "Authorization": "Bearer ${App.getToken() ?? ""}",
+            "Authorization": "Bearer ${App.getToken()}",
           },
         ),
       );

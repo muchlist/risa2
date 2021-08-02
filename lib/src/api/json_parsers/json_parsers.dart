@@ -15,6 +15,7 @@ export "other_parser.dart";
 export "pdf_parser.dart";
 export "speed_parser.dart";
 export "stock_parser.dart";
+export "vendor_check_parser.dart";
 
 abstract class JsonParser<T> {
   const JsonParser();
