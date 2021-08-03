@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../api/json_models/response/stock_list_resp.dart';
 import '../config/constant.dart';
 import '../utils/string_modifier.dart';
-import 'cached_image_circle.dart';
+import 'cached_image_square.dart';
 
 class StockListTile extends StatelessWidget {
   final StockMinResponse data;
@@ -17,8 +17,11 @@ class StockListTile extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: ListTile(
             leading: (data.image.isNotEmpty)
-                ? CachedImageCircle(
-                    urlPath: "${Constant.baseUrl}${data.image.thumbnailMod()}")
+                ? CachedImageSquare(
+                    urlPath: "${Constant.baseUrl}${data.image.thumbnailMod()}",
+                    width: 50,
+                    height: 50,
+                  )
                 : null,
             title: Text(data.name),
             subtitle: Row(

@@ -65,7 +65,7 @@ class CorouselItem extends StatelessWidget {
         elevation: 5,
         shape: RoundedRectangleBorder(
             side: BorderSide(color: Pallete.secondaryBackground, width: 0.2),
-            borderRadius: BorderRadius.circular(10)),
+            borderRadius: BorderRadius.circular(5)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(

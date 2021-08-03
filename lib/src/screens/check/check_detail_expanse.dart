@@ -29,11 +29,11 @@ class _ExpansionChildState extends State<ExpansionChild> {
   final checkNoteController = TextEditingController();
   String? _selectedTag;
 
-  void _updateChild() {
+  void _updateChild({bool bypass = false}) {
     // validasi
-    if (widget.checkItem.imagePath.isEmpty) {
+    if (widget.checkItem.imagePath.isEmpty && !bypass) {
       showToastWarning(
-          context: context, message: "Silakan upload foto terebih dahulu!");
+          context: context, message: "Silakan upload foto terlebih dahulu!");
       return;
     }
 
@@ -81,10 +81,9 @@ class _ExpansionChildState extends State<ExpansionChild> {
         .uploadChildCheck(id, childID, _image!)
         .then((value) {
       if (value) {
-        showToastSuccess(
-            context: context,
-            message: "Berhasil mengupload gambar",
-            onTop: true);
+        if (widget.checkItem.checkedAt == 0) {
+          _updateChild(bypass: true);
+        }
       }
     }).onError((error, _) {
       showToastError(context: context, message: error.toString());

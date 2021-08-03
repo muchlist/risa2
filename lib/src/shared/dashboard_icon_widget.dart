@@ -17,7 +17,7 @@ class DashboardIcon extends StatelessWidget {
           InkWell(
             splashColor: Pallete.secondaryBackground,
             customBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(5), // 25
             ),
             child: Padding(
               padding: EdgeInsets.all(4),
@@ -30,7 +30,7 @@ class DashboardIcon extends StatelessWidget {
                 height: 60,
                 decoration: BoxDecoration(
                   color: dashboardItem.color,
-                  borderRadius: BorderRadius.circular(25),
+                  borderRadius: BorderRadius.circular(5),
                   boxShadow: [
                     BoxShadow(
                         color: Pallete.secondaryBackground,

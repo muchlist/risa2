@@ -17,7 +17,7 @@ class DashboardVIcon extends StatelessWidget {
           InkWell(
             splashColor: Pallete.secondaryBackground,
             customBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(5),
             ),
             child: Padding(
               padding: EdgeInsets.all(4),
