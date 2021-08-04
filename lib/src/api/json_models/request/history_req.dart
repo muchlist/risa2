@@ -15,6 +15,7 @@ class HistoryRequest {
   final List<String> tag;
   @JsonKey(name: "complete_status")
   final int completeStatus;
+  final String image;
 
   HistoryRequest(
       {required this.id,
@@ -23,7 +24,8 @@ class HistoryRequest {
       required this.problemResolve,
       required this.status,
       required this.tag,
-      required this.completeStatus});
+      required this.completeStatus,
+      required this.image});
 
   factory HistoryRequest.fromJson(Map<String, dynamic> json) =>
       _$HistoryRequestFromJson(json);

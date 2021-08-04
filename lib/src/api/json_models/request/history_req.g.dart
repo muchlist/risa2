@@ -16,6 +16,7 @@ HistoryRequest _$HistoryRequestFromJson(Map<String, dynamic> json) {
     tag:
         (json['tag'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
     completeStatus: json['complete_status'] as int,
+    image: json['image'] as String,
   );
 }
 
@@ -28,4 +29,5 @@ Map<String, dynamic> _$HistoryRequestToJson(HistoryRequest instance) =>
       'status': instance.status,
       'tag': instance.tag,
       'complete_status': instance.completeStatus,
+      'image': instance.image,
     };

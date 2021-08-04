@@ -1,6 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/config/constant.dart';
+import 'package:risa2/src/shared/cached_image_square.dart';
+import 'package:risa2/src/shared/home_like_button.dart';
 
 import '../../api/filter_models/general_filter.dart';
 import '../../api/json_models/request/history_req.dart';
@@ -51,6 +57,11 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
   var _selectedSlider = 1.0;
   var _selectedLabel = "Progress";
 
+  // image
+  String _imagePath = "";
+  File? _image;
+  final picker = ImagePicker();
+
   // Text controller
   final problemController = TextEditingController();
   final resolveNoteController = TextEditingController();
@@ -77,7 +88,8 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
           problemResolve: resolveText,
           status: "None",
           tag: [],
-          completeStatus: _selectedSlider.toInt());
+          completeStatus: _selectedSlider.toInt(),
+          image: _imagePath);
 
       Future.delayed(Duration.zero, () {
         // * CALL Provider -----------------------------------------------------
@@ -96,6 +108,31 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
     } else {
       debugPrint("Error :(");
     }
+  }
+
+  Future _getImageAndUpload(
+      {required BuildContext context, required ImageSource source}) async {
+    final pickedFile = await picker.getImage(source: source);
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+    } else {
+      return;
+    }
+
+    // compress and upload
+    await context
+        .read<HistoryProvider>()
+        .uploadImageForpath(_image!)
+        .then((value) {
+      if (value.isNotEmpty) {
+        setState(() {
+          _imagePath = value;
+        });
+      }
+    }).onError((error, _) {
+      showToastError(context: context, message: error.toString());
+      return Future.error(error.toString());
+    });
   }
 
   @override
@@ -313,39 +350,53 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                             )
                           : const SizedBox.shrink(),
                       verticalSpaceRegular,
-                      Consumer<HistoryProvider>(
-                        builder: (_, data, __) {
-                          return (data.state == ViewState.busy)
-                              // * Button ---------------------------
-                              ? Center(child: const CircularProgressIndicator())
-                              : GestureDetector(
-                                  onTap: _addHistory,
-                                  child: Center(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(12),
-                                      decoration: BoxDecoration(
-                                          color: Theme.of(context).accentColor,
-                                          borderRadius:
-                                              BorderRadius.circular(24)),
-                                      child:
-                                          const Text.rich(TextSpan(children: [
-                                        WidgetSpan(
-                                            child: Icon(
-                                          CupertinoIcons.add,
-                                          size: 15,
-                                          color: Colors.white,
-                                        )),
-                                        TextSpan(
-                                            text: "Tambah Log",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500))
-                                      ])),
-                                    ),
-                                  ),
-                                );
-                        },
+                      if (_imagePath.isNotEmpty)
+                        Center(
+                          child: CachedImageSquare(
+                            urlPath: "${Constant.baseUrl}${_imagePath}",
+                            width: 200,
+                            height: 200,
+                          ),
+                        ),
+                      verticalSpaceRegular,
+
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: GestureDetector(
+                                onTap: () => _getImageAndUpload(
+                                    context: context,
+                                    source: ImageSource.camera),
+                                onLongPress: () => _getImageAndUpload(
+                                    context: context,
+                                    source: ImageSource.gallery),
+                                child: Icon(CupertinoIcons.camera)),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Consumer<HistoryProvider>(
+                              builder: (_, data, __) {
+                                return (data.state == ViewState.busy)
+                                    // * Button ---------------------------
+                                    ? Center(
+                                        child:
+                                            const CircularProgressIndicator())
+                                    : Center(
+                                        child: HomeLikeButton(
+                                          iconData: CupertinoIcons.add,
+                                          text: "Tambah",
+                                          tapTap: _addHistory,
+                                        ),
+                                      );
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: const SizedBox.shrink(),
+                          )
+                        ],
                       ),
 
                       SizedBox(

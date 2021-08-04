@@ -284,6 +284,29 @@ class HistoryProvider extends ChangeNotifier {
     return imageUrl;
   }
 
+  // return image url tanpa base jika update image berhasil
+  Future<String> uploadImageForpath(File file) async {
+    var imageUrl = "";
+    var error = "";
+
+    final fileCompressed = await compressFile(file);
+
+    try {
+      final response = await _historyService.uploadImageForPath(fileCompressed);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        imageUrl = response.data!;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+    if (error.isNotEmpty) {
+      return Future.error(error);
+    }
+    return imageUrl;
+  }
+
   void _updateImageinHistoryList(String id, String imageUrl) {
     for (var i = 0; i < _historyList.length; i++) {
       if (_historyList[i].id == id) {

@@ -40,13 +40,15 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
       final resolveText = resolveNoteController.text;
 
       final payload = HistoryRequest(
-          id: "",
-          parentID: widget.parentID,
-          problem: problemText,
-          problemResolve: resolveText,
-          status: "None",
-          tag: [],
-          completeStatus: _selectedSlider.toInt());
+        id: "",
+        parentID: widget.parentID,
+        problem: problemText,
+        problemResolve: resolveText,
+        status: "None",
+        tag: [],
+        completeStatus: _selectedSlider.toInt(),
+        image: "", // todo
+      );
 
       Future.delayed(Duration.zero, () {
         // * CALL Provider -----------------------------------------------------
