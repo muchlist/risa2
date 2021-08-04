@@ -77,7 +77,7 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
           if (value) {
             Navigator.of(context).pop();
             showToastSuccess(
-                context: context, message: "Berhasil menambahkan history");
+                context: context, message: "Berhasil menambahkan log");
           }
         }).onError((error, _) {
           if (error != null) {

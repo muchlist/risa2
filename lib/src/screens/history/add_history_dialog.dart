@@ -85,7 +85,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
           if (value) {
             Navigator.of(context).pop();
             showToastSuccess(
-                context: context, message: "Berhasil menambahkan history");
+                context: context, message: "Berhasil menambahkan log");
           }
         }).onError((error, _) {
           if (error != null) {
@@ -135,7 +135,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "Menambahkan Incident",
+                        "Menambahkan Log",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),

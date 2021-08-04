@@ -87,4 +87,10 @@ class HistoryService {
       "image": await MultipartFile.fromFile(file.path)
     }).executeUpload(HistoryParser());
   }
+
+  Future<MessageResponse> uploadImageForPath(File file) async {
+    return RequestREST(endpoint: "/upload-image", data: <String, dynamic>{
+      "image": await MultipartFile.fromFile(file.path)
+    }).executeUpload<MessageResponse>(MessageParser());
+  }
 }
