@@ -28,46 +28,44 @@ class VendorGridItemTile extends StatelessWidget {
 
     return Card(
         color: cardColor,
-        child: AspectRatio(
-          aspectRatio: 3 / 4,
-          child: Container(
-            padding: EdgeInsets.all(4.0),
-            width: 120,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  data.name.toLowerCase().capitalizeFirstofEach,
-                  style: TextStyle(fontSize: 14, color: textIconColor),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (data.isOffline)
-                      Icon(
-                        CupertinoIcons.power,
-                        size: 18,
-                        color: textIconColor,
-                      ),
-                    if (data.isBlur)
-                      Icon(
-                        CupertinoIcons.snow,
-                        size: 18,
-                        color: textIconColor,
-                      ),
-                    if (data.isChecked)
-                      Icon(
-                        CupertinoIcons.check_mark,
-                        size: 18,
-                        color: textIconColor,
-                      )
-                  ],
-                )
-              ],
-            ),
+        child: Container(
+          padding: EdgeInsets.all(4.0),
+          width: 120,
+          height: 120,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                data.name.toLowerCase().capitalizeFirstofEach,
+                style: TextStyle(fontSize: 14, color: textIconColor),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 3,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  if (data.isOffline)
+                    Icon(
+                      CupertinoIcons.multiply_circle,
+                      size: 18,
+                      color: textIconColor,
+                    ),
+                  if (data.isBlur)
+                    Icon(
+                      CupertinoIcons.circle_lefthalf_fill,
+                      size: 18,
+                      color: textIconColor,
+                    ),
+                  if (data.isChecked)
+                    Icon(
+                      CupertinoIcons.check_mark_circled,
+                      size: 18,
+                      color: textIconColor,
+                    )
+                ],
+              )
+            ],
           ),
         ));
   }

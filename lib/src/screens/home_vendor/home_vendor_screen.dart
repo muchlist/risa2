@@ -97,7 +97,7 @@ class _HomeVScreenState extends State<HomeVScreen> {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      // notifikasi di klik
+      _loadHistory();
     });
 
     _loadHistory();

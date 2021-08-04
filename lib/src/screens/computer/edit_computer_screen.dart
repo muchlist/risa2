@@ -112,7 +112,7 @@ class _EditComputerBodyState extends State<EditComputerBody> {
                   Navigator.of(context).pop();
                   showToastSuccess(
                       context: context,
-                      message: "Berhasil membuat computer ${payload.name}");
+                      message: "Berhasil mengubah computer ${payload.name}");
                 }
               }).onError((error, _) {
                 if (error != null) {

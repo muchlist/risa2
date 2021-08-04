@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      // notifikasi di klik
+      _loadHistory();
     });
 
     super.initState();

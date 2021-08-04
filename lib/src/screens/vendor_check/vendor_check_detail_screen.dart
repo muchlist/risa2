@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/providers/histories.dart';
+import 'package:risa2/src/shared/text_with_icon.dart';
 
 import '../../api/json_models/request/vendor_req.dart';
 import '../../api/json_models/response/vendor_check_resp.dart';
@@ -93,9 +95,9 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       CheckboxListTile(
-                          title: const Text(
-                            "Sudah dicek",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          title: TextIcon(
+                            icon: CupertinoIcons.check_mark_circled,
+                            text: "Sudah dicek",
                           ),
                           subtitle: const Text("tandai jika cctv sudah dicek"),
                           value: itemState.isChecked,
@@ -108,9 +110,9 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                         thickness: 1,
                       ),
                       CheckboxListTile(
-                          title: const Text(
-                            "Cctv offline",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          title: TextIcon(
+                            icon: CupertinoIcons.multiply_circle,
+                            text: "Cctv offline",
                           ),
                           subtitle: const Text(
                               "perangkat mati atau tidak dapat di ping"),
@@ -124,9 +126,9 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                         thickness: 1,
                       ),
                       CheckboxListTile(
-                          title: const Text(
-                            "Cctv blur",
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                          title: TextIcon(
+                            icon: CupertinoIcons.circle_lefthalf_fill,
+                            text: "Cctv blur",
                           ),
                           subtitle: const Text(
                               "kamera mengalami gangguan dari segi tangkapan gambar"),
@@ -188,6 +190,10 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                               if (value) {
                                 showToastSuccess(
                                     context: context, message: "Cek selesai");
+                                // reload history
+                                context
+                                    .read<HistoryProvider>()
+                                    .findHistory(loading: false);
                               }
                             });
                           }
@@ -395,10 +401,10 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
   Widget buildGridViewReady(List<VendorCheckItem> checkItems, String parentID) {
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 120.0,
+        maxCrossAxisExtent: 130.0,
         mainAxisSpacing: 5.0,
         crossAxisSpacing: 5.0,
-        childAspectRatio: 4 / 3,
+        childAspectRatio: 1 / 1,
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {

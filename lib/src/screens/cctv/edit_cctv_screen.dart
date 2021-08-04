@@ -85,7 +85,7 @@ class _EditCctvBodyState extends State<EditCctvBody> {
                   Navigator.of(context).pop();
                   showToastSuccess(
                       context: context,
-                      message: "Berhasil membuat cctv ${payload.name}");
+                      message: "Berhasil mengubah cctv ${payload.name}");
                 }
               }).onError((error, _) {
                 if (error != null) {
