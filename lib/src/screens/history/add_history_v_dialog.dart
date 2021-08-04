@@ -1,14 +1,20 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/filter_models/general_filter.dart';
 import '../../api/json_models/request/history_req.dart';
 import '../../api/json_models/response/general_list_resp.dart';
+import '../../config/constant.dart';
 import '../../config/pallatte.dart';
 import '../../providers/generals.dart';
 import '../../providers/histories.dart';
+import '../../shared/cached_image_square.dart';
 import '../../shared/func_flushbar.dart';
+import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 import '../search/general_search_delegate.dart';
@@ -43,6 +49,11 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
   var _selectedSlider = 1.0;
   var _selectedLabel = "Progress";
 
+  // image
+  String _imagePath = "";
+  File? _image;
+  final picker = ImagePicker();
+
   // Text controller
   final problemController = TextEditingController();
   final resolveNoteController = TextEditingController();
@@ -70,7 +81,7 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
         status: "None",
         tag: [],
         completeStatus: _selectedSlider.toInt(),
-        image: "", // todo
+        image: _imagePath,
       );
 
       Future.delayed(Duration.zero, () {
@@ -90,6 +101,31 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
     } else {
       debugPrint("Error :(");
     }
+  }
+
+  Future _getImageAndUpload(
+      {required BuildContext context, required ImageSource source}) async {
+    final pickedFile = await picker.getImage(source: source);
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+    } else {
+      return;
+    }
+
+    // compress and upload
+    await context
+        .read<HistoryProvider>()
+        .uploadImageForpath(_image!)
+        .then((value) {
+      if (value.isNotEmpty) {
+        setState(() {
+          _imagePath = value;
+        });
+      }
+    }).onError((error, _) {
+      showToastError(context: context, message: error.toString());
+      return Future.error(error.toString());
+    });
   }
 
   @override
@@ -307,39 +343,53 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
                             )
                           : const SizedBox.shrink(),
                       verticalSpaceRegular,
-                      Consumer<HistoryProvider>(
-                        builder: (_, data, __) {
-                          return (data.state == ViewState.busy)
-                              // * Button ---------------------------
-                              ? Center(child: const CircularProgressIndicator())
-                              : GestureDetector(
-                                  onTap: _addHistory,
-                                  child: Center(
-                                    child: Container(
-                                      padding: const EdgeInsets.all(12),
-                                      decoration: BoxDecoration(
-                                          color: Theme.of(context).accentColor,
-                                          borderRadius:
-                                              BorderRadius.circular(24)),
-                                      child:
-                                          const Text.rich(TextSpan(children: [
-                                        WidgetSpan(
-                                            child: Icon(
-                                          CupertinoIcons.add,
-                                          size: 15,
-                                          color: Colors.white,
-                                        )),
-                                        TextSpan(
-                                            text: "Tambah Log",
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w500))
-                                      ])),
-                                    ),
-                                  ),
-                                );
-                        },
+                      if (_imagePath.isNotEmpty)
+                        Center(
+                          child: CachedImageSquare(
+                            urlPath: "${Constant.baseUrl}${_imagePath}",
+                            width: 200,
+                            height: 200,
+                          ),
+                        ),
+                      verticalSpaceRegular,
+
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: GestureDetector(
+                                onTap: () => _getImageAndUpload(
+                                    context: context,
+                                    source: ImageSource.camera),
+                                onLongPress: () => _getImageAndUpload(
+                                    context: context,
+                                    source: ImageSource.gallery),
+                                child: Icon(CupertinoIcons.camera)),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Consumer<HistoryProvider>(
+                              builder: (_, data, __) {
+                                return (data.state == ViewState.busy)
+                                    // * Button ---------------------------
+                                    ? Center(
+                                        child:
+                                            const CircularProgressIndicator())
+                                    : Center(
+                                        child: HomeLikeButton(
+                                          iconData: CupertinoIcons.add,
+                                          text: "Tambah",
+                                          tapTap: _addHistory,
+                                        ),
+                                      );
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: const SizedBox.shrink(),
+                          )
+                        ],
                       ),
 
                       SizedBox(
