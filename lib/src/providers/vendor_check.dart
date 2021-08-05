@@ -31,6 +31,18 @@ class VendorCheckProvider extends ChangeNotifier {
     return UnmodifiableListView(_vendorCheckList);
   }
 
+  // vendorCheck list virtual cache
+  List<VendorCheckMinResponse> get vendorCheckListVirtual {
+    return UnmodifiableListView(
+        _vendorCheckList.where((element) => element.isVirtualCheck));
+  }
+
+  // vendorCheck list virtual cache
+  List<VendorCheckMinResponse> get vendorCheckListPhyshic {
+    return UnmodifiableListView(
+        _vendorCheckList.where((element) => !element.isVirtualCheck));
+  }
+
   // *memasang filter pada pencarian vendorCheck
   FilterCheck _filterVendorCheck = FilterCheck(branch: App.getBranch());
   void setFilter(FilterCheck filter) {

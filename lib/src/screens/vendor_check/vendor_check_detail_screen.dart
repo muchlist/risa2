@@ -1,18 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/providers/histories.dart';
-import 'package:risa2/src/shared/text_with_icon.dart';
 
 import '../../api/json_models/request/vendor_req.dart';
 import '../../api/json_models/response/vendor_check_resp.dart';
 import '../../config/pallatte.dart';
 import '../../globals.dart';
+import '../../providers/histories.dart';
 import '../../providers/vendor_check.dart';
 import '../../shared/disable_glow.dart';
 import '../../shared/func_confirm.dart';
 import '../../shared/func_flushbar.dart';
+import '../../shared/func_history_dialog.dart';
 import '../../shared/home_like_button.dart';
+import '../../shared/text_with_icon.dart';
 import '../../shared/vendor_check_grid.dart';
 import '../../utils/date_unix.dart';
 import '../../utils/enums.dart';
@@ -38,16 +39,19 @@ class VendorCheckDetailBody extends StatefulWidget {
 }
 
 class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
+  late VendorCheckProvider _vendorCheckProviderR;
+
   @override
   void initState() {
-    context.read<VendorCheckProvider>().removeDetail();
+    _vendorCheckProviderR = context.read<VendorCheckProvider>();
+    _vendorCheckProviderR.removeDetail();
     _loadDetail();
     super.initState();
   }
 
   Future<void> _loadDetail() {
     return Future.delayed(Duration.zero, () {
-      context.read<VendorCheckProvider>().getDetail().onError((error, _) {
+      _vendorCheckProviderR.getDetail().onError((error, _) {
         Navigator.pop(context);
         showToastError(context: context, message: error.toString());
       });
@@ -78,14 +82,14 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
         });
   }
 
-  // Memunculkan dialog
+  // Memunculkan return
   Future<void> _dialogUpdateItem(BuildContext context, String cctvname,
       VendorUpdateRequest itemStateValue) async {
-    return await showDialog<void>(
+    final _isCheckedBefore = itemStateValue.isChecked;
+    final _itemStateUpdated = await showDialog<VendorUpdateRequest?>(
         context: context,
         builder: (BuildContext context) {
           var itemState = itemStateValue;
-
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
               title: Text(cctvname),
@@ -148,11 +152,14 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                         primary: Theme.of(context).accentColor),
                     child: const Text("Update"),
                     onPressed: () {
-                      context
-                          .read<VendorCheckProvider>()
+                      _vendorCheckProviderR
                           .updateChildVendorCheck(itemState)
                           .then((value) {
-                        Navigator.of(context).pop();
+                        if (value && itemState.isChecked) {
+                          Navigator.of(context).pop(itemState);
+                        } else {
+                          Navigator.of(context).pop(itemState);
+                        }
                       }).onError((error, stackTrace) {
                         showToastError(
                             context: context, message: error.toString());
@@ -163,6 +170,20 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
             );
           });
         });
+
+    // Menambahkan incident
+    final _isPhysicalCheck =
+        !_vendorCheckProviderR.vendorCheckDetail.isVirtualCheck;
+
+    if (_itemStateUpdated != null &&
+        _itemStateUpdated.isChecked &&
+        _isPhysicalCheck) {
+      final _isCreateNewCheck = _itemStateUpdated.isChecked != _isCheckedBefore;
+      if (_isCreateNewCheck) {
+        HistoryHelper()
+            .showAddMaintenanceIncident(context, cctvname, _itemStateUpdated);
+      }
+    }
   }
 
   @override

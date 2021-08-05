@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/api/json_models/request/vendor_req.dart';
 import 'package:risa2/src/screens/history/add_history_v_dialog.dart';
+import 'package:risa2/src/screens/history/add_maintenance_history.dart';
 
 import '../api/json_models/response/history_list_resp.dart';
 import '../globals.dart';
@@ -61,6 +63,22 @@ class HistoryHelper {
       builder: (context) => AddParentHistoryDialog(
         parentID: parentID,
         parentName: parentName,
+      ),
+    );
+  }
+
+  void showAddMaintenanceIncident(
+      BuildContext context, String parentName, VendorUpdateRequest mtState) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      builder: (context) => AddMaintenanceHistoryDialog(
+        parentName: parentName,
+        mtState: mtState,
       ),
     );
   }
