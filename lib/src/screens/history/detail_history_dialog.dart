@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:risa2/src/screens/image_viewer/image_viewer.dart';
 import 'package:risa2/src/shared/home_like_button.dart';
 
 import '../../api/json_models/response/history_list_resp.dart';
@@ -156,11 +157,24 @@ class _DetailHistoryDialogState extends State<DetailHistoryDialog> {
                         : const SizedBox.shrink(),
                     verticalSpaceRegular,
                     if (widget.history.image.isNotEmpty)
-                      Center(
-                        child: CachedImageSquare(
-                          urlPath: "${Constant.baseUrl}${widget.history.image}",
-                          width: 200,
-                          height: 200,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ImageViewer(
+                                  imgUrl:
+                                      "${Constant.baseUrl}${widget.history.image}"),
+                            ),
+                          );
+                        },
+                        child: Center(
+                          child: CachedImageSquare(
+                            urlPath:
+                                "${Constant.baseUrl}${widget.history.image}",
+                            width: 200,
+                            height: 200,
+                          ),
                         ),
                       ),
 

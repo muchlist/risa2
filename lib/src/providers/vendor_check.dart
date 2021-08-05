@@ -33,14 +33,14 @@ class VendorCheckProvider extends ChangeNotifier {
 
   // vendorCheck list virtual cache
   List<VendorCheckMinResponse> get vendorCheckListVirtual {
-    return UnmodifiableListView(
-        _vendorCheckList.where((element) => element.isVirtualCheck));
+    return _vendorCheckList.where((element) => element.isVirtualCheck).toList();
   }
 
   // vendorCheck list virtual cache
   List<VendorCheckMinResponse> get vendorCheckListPhyshic {
-    return UnmodifiableListView(
-        _vendorCheckList.where((element) => !element.isVirtualCheck));
+    return _vendorCheckList
+        .where((element) => !element.isVirtualCheck)
+        .toList();
   }
 
   // *memasang filter pada pencarian vendorCheck
