@@ -12,12 +12,18 @@ class ImageViewer extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       // APPBAR -----------------------------------------------------------
       appBar: AppBar(
+          leading: GestureDetector(
+              onTap: () => Navigator.pop(context),
+              child: const Icon(Icons.arrow_back)),
           automaticallyImplyLeading: false,
           elevation: 0,
           title: const Text("Image View")),
       body: PhotoView(
         imageProvider: NetworkImage(imgUrl),
         backgroundDecoration: const BoxDecoration(color: Pallete.background),
+        initialScale: PhotoViewComputedScale.contained * 0.8,
+        minScale: PhotoViewComputedScale.contained * 0.5,
+        maxScale: PhotoViewComputedScale.contained * 1.5,
       ),
     );
   }
