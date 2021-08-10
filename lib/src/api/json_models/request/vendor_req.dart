@@ -12,6 +12,9 @@ class VendorUpdateRequest {
     required this.isOffline,
   });
 
+  factory VendorUpdateRequest.fromJson(Map<String, dynamic> json) =>
+      _$VendorUpdateRequestFromJson(json);
+
   @JsonKey(name: "parent_id")
   final String parentID;
   @JsonKey(name: "child_id")
@@ -23,9 +26,6 @@ class VendorUpdateRequest {
   @JsonKey(name: "is_offline")
   bool isOffline;
 
-  factory VendorUpdateRequest.fromJson(Map<String, dynamic> json) =>
-      _$VendorUpdateRequestFromJson(json);
-
   Map<String, dynamic> toJson() => _$VendorUpdateRequestToJson(this);
 }
 
@@ -33,10 +33,10 @@ class VendorUpdateRequest {
 @JsonSerializable()
 class BulkVendorUpdateRequest {
   BulkVendorUpdateRequest(this.items);
-  final List<VendorUpdateRequest> items;
 
   factory BulkVendorUpdateRequest.fromJson(Map<String, dynamic> json) =>
       _$BulkVendorUpdateRequestFromJson(json);
+  final List<VendorUpdateRequest> items;
 
   Map<String, dynamic> toJson() => _$BulkVendorUpdateRequestToJson(this);
 }

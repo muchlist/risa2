@@ -8,9 +8,8 @@ import '../../providers/improves.dart';
 import '../../router/routes.dart';
 
 class Corousel extends StatelessWidget {
-  final List<ImproveMinResponse> improves;
-
   const Corousel(this.improves);
+  final List<ImproveMinResponse> improves;
 
   @override
   Widget build(BuildContext context) {
@@ -20,18 +19,11 @@ class Corousel extends StatelessWidget {
         options: CarouselOptions(
           height: 90,
           viewportFraction: 0.70,
-          initialPage: 0,
-          enableInfiniteScroll: true,
-          reverse: false,
           autoPlay: true,
-          autoPlayInterval: Duration(seconds: 5),
-          autoPlayAnimationDuration: Duration(milliseconds: 800),
-          autoPlayCurve: Curves.fastOutSlowIn,
+          autoPlayInterval: const Duration(seconds: 5),
           enlargeCenterPage: true,
-          // pageSnapping: false,
-          scrollDirection: Axis.horizontal,
         ),
-        items: improves.map((i) {
+        items: improves.map((ImproveMinResponse i) {
           return Builder(
             builder: (BuildContext ctx) {
               return GestureDetector(
@@ -52,9 +44,8 @@ class Corousel extends StatelessWidget {
 }
 
 class CorouselItem extends StatelessWidget {
-  final ImproveMinResponse improvePreview;
-
   const CorouselItem({required this.improvePreview});
+  final ImproveMinResponse improvePreview;
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +55,14 @@ class CorouselItem extends StatelessWidget {
         shadowColor: Colors.black54,
         elevation: 5,
         shape: RoundedRectangleBorder(
-            side: BorderSide(color: Pallete.secondaryBackground, width: 0.2),
+            side: const BorderSide(
+                color: Pallete.secondaryBackground, width: 0.2),
             borderRadius: BorderRadius.circular(5)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
               title: Row(
-                children: [
+                children: <Widget>[
                   Expanded(
                     child: Text(improvePreview.title,
                         maxLines: 1,
@@ -81,27 +73,25 @@ class CorouselItem extends StatelessWidget {
                 ],
               ),
               subtitle: Row(
-                children: [
+                children: <Widget>[
                   Expanded(
                       child: Text(
                     improvePreview.description,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   )),
                 ],
               ),
               trailing: (improvePreview.goal != 0)
                   ? Container(
-                      padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          // border: Border.all(
-                          //     color: Colors.white), //  Colors.blueGrey),
-                          shape: BoxShape.circle,
-                          color: Pallete.green),
+                      padding: const EdgeInsets.all(10),
+                      decoration: const BoxDecoration(
+                          shape: BoxShape.circle, color: Pallete.green),
                       child: Text(
                         "${(improvePreview.goalsAchieved / improvePreview.goal * 100).toInt()}%",
-                        style: TextStyle(fontSize: 10, color: Colors.white),
+                        style:
+                            const TextStyle(fontSize: 10, color: Colors.white),
                       ))
                   : const SizedBox()),
         ),

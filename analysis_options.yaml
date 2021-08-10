@@ -33,7 +33,10 @@ linter:
     # Blindly follow the Flutter code style, which prefers types everywhere
     always_specify_types: true
   
+    # my setting
     use_setters_to_change_properties: false
+    avoid_positional_boolean_parameters: false
+
     # Back to the 80s
     lines_longer_than_80_chars: false
     prefer_interpolation_to_compose_strings: false

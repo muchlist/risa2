@@ -13,8 +13,8 @@ class HistoryVListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _currentUser = App.getName();
-    final _createdByCurrentAccount =
+    final String? _currentUser = App.getName();
+    final bool _createdByCurrentAccount =
         history.createdBy == _currentUser || history.updatedBy == _currentUser;
 
     return Padding(

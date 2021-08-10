@@ -4,16 +4,6 @@ part 'stock_edit_req.g.dart';
 
 @JsonSerializable()
 class StockEditRequest {
-  @JsonKey(name: "filter_timestamp")
-  final int filterTimestamp;
-  final String name;
-  @JsonKey(name: "stock_category")
-  final String stockCategory;
-  final String location;
-  final String unit;
-  final int threshold;
-  final String note;
-
   StockEditRequest(
       {required this.filterTimestamp,
       required this.name,
@@ -25,6 +15,16 @@ class StockEditRequest {
 
   factory StockEditRequest.fromJson(Map<String, dynamic> json) =>
       _$StockEditRequestFromJson(json);
+
+  @JsonKey(name: "filter_timestamp")
+  final int filterTimestamp;
+  final String name;
+  @JsonKey(name: "stock_category")
+  final String stockCategory;
+  final String location;
+  final String unit;
+  final int threshold;
+  final String note;
 
   Map<String, dynamic> toJson() => _$StockEditRequestToJson(this);
 }

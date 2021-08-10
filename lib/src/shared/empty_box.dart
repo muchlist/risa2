@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class EmptyBox extends StatelessWidget {
-  final GestureTapCallback loadTap;
-
   const EmptyBox({required this.loadTap});
+  final GestureTapCallback loadTap;
 
   @override
   Widget build(BuildContext context) {

@@ -13,8 +13,8 @@ class VendorGridItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var cardColor = Colors.teal[100];
-    var textIconColor = Colors.black87;
+    Color? cardColor = Colors.teal[100];
+    Color textIconColor = Colors.black87;
     if (data.isOffline) {
       cardColor = Colors.red[300];
       textIconColor = Colors.white;
@@ -29,13 +29,13 @@ class VendorGridItemTile extends StatelessWidget {
     return Card(
         color: cardColor,
         child: Container(
-          padding: EdgeInsets.all(4.0),
+          padding: const EdgeInsets.all(4.0),
           width: 120,
           height: 120,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: <Widget>[
               Text(
                 data.name.toLowerCase().capitalizeFirstofEach,
                 style: TextStyle(fontSize: 14, color: textIconColor),
@@ -44,7 +44,7 @@ class VendorGridItemTile extends StatelessWidget {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [
+                children: <Widget>[
                   if (data.isOffline)
                     Icon(
                       CupertinoIcons.multiply_circle,

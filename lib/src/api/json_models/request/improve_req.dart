@@ -4,12 +4,6 @@ part 'improve_req.g.dart';
 
 @JsonSerializable()
 class ImproveRequest {
-  final String title;
-  final String description;
-  final int goal;
-  @JsonKey(name: "complete_status")
-  final int completeStatus;
-
   ImproveRequest(
       {required this.title,
       required this.description,
@@ -18,6 +12,12 @@ class ImproveRequest {
 
   factory ImproveRequest.fromJson(Map<String, dynamic> json) =>
       _$ImproveRequestFromJson(json);
+
+  final String title;
+  final String description;
+  final int goal;
+  @JsonKey(name: "complete_status")
+  final int completeStatus;
 
   Map<String, dynamic> toJson() => _$ImproveRequestToJson(this);
 }

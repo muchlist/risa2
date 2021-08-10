@@ -17,33 +17,33 @@ class ComputerService {
 
   Future<MessageResponse> createComputer(ComputerRequest payload) {
     return RequestREST(endpoint: "/computer", data: payload.toJson())
-        .executePost<MessageResponse>(MessageParser());
+        .executePost<MessageResponse>(const MessageParser());
   }
 
   Future<ComputerDetailResponse> editComputer(
       String id, ComputerEditRequest payload) {
     return RequestREST(endpoint: "/computer/$id", data: payload.toJson())
-        .executePut<ComputerDetailResponse>(ComputerParser());
+        .executePut<ComputerDetailResponse>(const ComputerParser());
   }
 
   Future<ComputerDetailResponse> getComputer(String id) {
     return RequestREST(endpoint: "/computer/$id")
-        .executeGet<ComputerDetailResponse>(ComputerParser());
+        .executeGet<ComputerDetailResponse>(const ComputerParser());
   }
 
   Future<ComputerDetailResponse> enableComputer(String id) {
     return RequestREST(endpoint: "/computer-avail/$id/enable")
-        .executeGet<ComputerDetailResponse>(ComputerParser());
+        .executeGet<ComputerDetailResponse>(const ComputerParser());
   }
 
   Future<ComputerDetailResponse> disableComputer(String id) {
     return RequestREST(endpoint: "/computer-avail/$id/disable")
-        .executeGet<ComputerDetailResponse>(ComputerParser());
+        .executeGet<ComputerDetailResponse>(const ComputerParser());
   }
 
   Future<MessageResponse> deleteComputer(String id) {
     return RequestREST(endpoint: "/computer/$id")
-        .executeDelete<MessageResponse>(MessageParser());
+        .executeDelete<MessageResponse>(const MessageParser());
   }
 
   Future<ComputerListResponse> findComputer(FilterComputer f) {
@@ -71,13 +71,13 @@ class ComputerService {
     }
 
     return RequestREST(endpoint: "/computer?$query")
-        .executeGet<ComputerListResponse>(ComputerListParser());
+        .executeGet<ComputerListResponse>(const ComputerListParser());
   }
 
   Future<ComputerDetailResponse> uploadImage(String id, File file) async {
     return RequestREST(endpoint: "/computer-image/$id", data: <String, dynamic>{
       "image": await MultipartFile.fromFile(file.path)
-    }).executeUpload(ComputerParser());
+    }).executeUpload(const ComputerParser());
   }
 
   Future<OptComputerType> getOptCreateComputer(String branch) {

@@ -11,7 +11,7 @@ class TextIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-        children: [
+        children: <InlineSpan>[
           WidgetSpan(
             child: Icon(
               icon,

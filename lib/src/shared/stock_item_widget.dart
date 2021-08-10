@@ -7,9 +7,8 @@ import '../utils/string_modifier.dart';
 import 'cached_image_square.dart';
 
 class StockListTile extends StatelessWidget {
-  final StockMinResponse data;
-
   const StockListTile({Key? key, required this.data}) : super(key: key);
+  final StockMinResponse data;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +24,7 @@ class StockListTile extends StatelessWidget {
                 : null,
             title: Text(data.name),
             subtitle: Row(
-              children: [
+              children: <Widget>[
                 Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
@@ -37,14 +36,15 @@ class StockListTile extends StatelessWidget {
             trailing: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
+              children: <Widget>[
                 Text("${data.qty} ${data.unit}"),
-                (data.qty <= data.threshold)
-                    ? Icon(
-                        CupertinoIcons.exclamationmark_circle,
-                        color: Colors.red,
-                      )
-                    : SizedBox.shrink(),
+                if (data.qty <= data.threshold)
+                  const Icon(
+                    CupertinoIcons.exclamationmark_circle,
+                    color: Colors.red,
+                  )
+                else
+                  const SizedBox.shrink(),
               ],
             )));
   }

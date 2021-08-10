@@ -4,16 +4,6 @@ part 'stock_req.g.dart';
 
 @JsonSerializable()
 class StockRequest {
-  final String name;
-  @JsonKey(name: "stock_category")
-  final String stockCategory;
-  final String location;
-  final String unit;
-  final int qty;
-  final int threshold;
-  final String note;
-  final bool deactive;
-
   StockRequest(
       {required this.name,
       required this.stockCategory,
@@ -26,6 +16,15 @@ class StockRequest {
 
   factory StockRequest.fromJson(Map<String, dynamic> json) =>
       _$StockRequestFromJson(json);
+  final String name;
+  @JsonKey(name: "stock_category")
+  final String stockCategory;
+  final String location;
+  final String unit;
+  final int qty;
+  final int threshold;
+  final String note;
+  final bool deactive;
 
   Map<String, dynamic> toJson() => _$StockRequestToJson(this);
 }

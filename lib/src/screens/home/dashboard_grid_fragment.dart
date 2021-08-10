@@ -28,9 +28,9 @@ class _DashboardGridState extends State<DashboardGrid> {
           scrollDirection: Axis.horizontal,
           itemCount: dashboardItems.length,
           shrinkWrap: true,
-          itemBuilder: (ctx, i) => GestureDetector(
+          itemBuilder: (BuildContext ctx, int i) => GestureDetector(
               onTap: () {
-                final route = dashboardItems[i].route;
+                final String route = dashboardItems[i].route;
                 if (route.isNotEmpty) {
                   // jika route other harus mengisi sub kategori
                   if (route == RouteGenerator.other) {
@@ -44,9 +44,8 @@ class _DashboardGridState extends State<DashboardGrid> {
                 }
               },
               child: DashboardIcon(dashboardItems[i])),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 1 / 1,
             crossAxisSpacing: 15,
             mainAxisSpacing: 5,
           ),

@@ -15,7 +15,7 @@ class CorouselContainer extends StatefulWidget {
 class _CorouselContainerState extends State<CorouselContainer> {
   @override
   void initState() {
-    Future.delayed(Duration.zero, () {
+    Future<void>.delayed(Duration.zero, () {
       context.read<ImproveProvider>().findImprove();
     });
     super.initState();
@@ -23,11 +23,11 @@ class _CorouselContainerState extends State<CorouselContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final improveProvider = context.watch<ImproveProvider>();
+    final ImproveProvider improveProvider = context.watch<ImproveProvider>();
 
     return Center(
-        child: (improveProvider.improveListFront.length != 0)
-            ? Container(
+        child: (improveProvider.improveListFront.isNotEmpty)
+            ? SizedBox(
                 width: double.infinity,
                 child: Corousel(improveProvider.improveListFront),
               )

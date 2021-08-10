@@ -5,9 +5,8 @@ import '../api/json_models/response/computer_list_resp.dart';
 import 'ui_helpers.dart';
 
 class ComputerListTile extends StatelessWidget {
-  final ComputerMinResponse data;
-
   const ComputerListTile({Key? key, required this.data}) : super(key: key);
+  final ComputerMinResponse data;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +22,7 @@ class ComputerListTile extends StatelessWidget {
                       borderRadius: BorderRadius.circular(5),
                       color: Colors.green.shade100,
                     ),
-                    child: Text(" Seat "),
+                    child: const Text(" Seat "),
                   ),
                 if (data.seatManagement) horizontalSpaceTiny,
                 Container(
@@ -37,7 +36,7 @@ class ComputerListTile extends StatelessWidget {
             trailing: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: <Widget>[
                 Text(data.location.toLowerCase()),
                 Text(data.division.toLowerCase())
               ],

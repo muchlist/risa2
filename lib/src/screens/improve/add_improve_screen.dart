@@ -29,21 +29,21 @@ class AddImproveBody extends StatefulWidget {
 }
 
 class _AddImproveBodyState extends State<AddImproveBody> {
-  final _key = GlobalKey<FormState>();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
-  final titleController = TextEditingController();
-  final descController = TextEditingController();
-  final goalController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descController = TextEditingController();
+  final TextEditingController goalController = TextEditingController();
 
   void _addImprove() {
     if (_key.currentState?.validate() ?? false) {
-      var goal = 0;
+      int goal = 0;
       if (goalController.text.isNotEmpty) {
         goal = int.parse(goalController.text);
       }
 
       // Payload
-      final payload = ImproveRequest(
+      final ImproveRequest payload = ImproveRequest(
         title: titleController.text,
         description: descController.text,
         completeStatus: 0,
@@ -51,20 +51,21 @@ class _AddImproveBodyState extends State<AddImproveBody> {
       );
 
       // Call Provider
-      Future.delayed(
+      Future<void>.delayed(
           Duration.zero,
-          () =>
-              context.read<ImproveProvider>().addImprove(payload).then((value) {
+          () => context
+                  .read<ImproveProvider>()
+                  .addImprove(payload)
+                  .then((bool value) {
                 if (value) {
                   Navigator.of(context).pop();
                   showToastSuccess(
                       context: context,
                       message: "Berhasil membuat ${payload.title}");
                 }
-              }).onError((error, _) {
+              }).onError((Object? error, _) {
                 if (error != null) {
-                  showToastError(
-                      context: context, message: error.toString(), onTop: true);
+                  showToastError(context: context, message: error.toString());
                 }
               }));
     }
@@ -88,7 +89,7 @@ class _AddImproveBodyState extends State<AddImproveBody> {
             key: _key,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 // * Judul text ------------------------
                 const Text(
                   "Judul",
@@ -98,14 +99,13 @@ class _AddImproveBodyState extends State<AddImproveBody> {
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Pallete.secondaryBackground,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: titleController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return 'Judul tidak boleh kosong';
                     }
@@ -145,14 +145,13 @@ class _AddImproveBodyState extends State<AddImproveBody> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Pallete.secondaryBackground,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: goalController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return null;
                     } else if (int.tryParse(text) != null &&
@@ -165,9 +164,10 @@ class _AddImproveBodyState extends State<AddImproveBody> {
 
                 verticalSpaceSmall,
 
-                Consumer<ImproveProvider>(builder: (_, data, __) {
+                Consumer<ImproveProvider>(
+                    builder: (_, ImproveProvider data, __) {
                   return (data.state == ViewState.busy)
-                      ? Center(child: const CircularProgressIndicator())
+                      ? const Center(child: CircularProgressIndicator())
                       : Center(
                           child: HomeLikeButton(
                               iconData: CupertinoIcons.add,

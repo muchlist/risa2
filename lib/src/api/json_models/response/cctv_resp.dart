@@ -7,19 +7,46 @@ part 'cctv_resp.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class CctvDetailResponse {
-  final ErrorResp? error;
-  final CctvDetailResponseData? data;
-
   CctvDetailResponse(this.error, this.data);
 
   factory CctvDetailResponse.fromJson(Map<String, dynamic> json) =>
       _$CctvDetailResponseFromJson(json);
+
+  final ErrorResp? error;
+  final CctvDetailResponseData? data;
 
   Map<String, dynamic> toJson() => _$CctvDetailResponseToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
 class CctvDetailResponseData {
+  CctvDetailResponseData(
+      this.id,
+      this.createdAt,
+      this.updatedAt,
+      this.createdBy,
+      this.createdById,
+      this.updatedBy,
+      this.updatedById,
+      this.branch,
+      this.disable,
+      this.name,
+      this.ip,
+      this.inventoryNumber,
+      this.location,
+      this.locationLat,
+      this.locationLon,
+      this.date,
+      this.tag,
+      this.image,
+      this.brand,
+      this.type,
+      this.note,
+      this.extra);
+
+  factory CctvDetailResponseData.fromJson(Map<String, dynamic> json) =>
+      _$CctvDetailResponseDataFromJson(json);
+
   final String id;
   @JsonKey(name: "created_at")
   final int createdAt;
@@ -52,33 +79,6 @@ class CctvDetailResponseData {
   final String type;
   final String note;
   final CctvExtra extra;
-
-  CctvDetailResponseData(
-      this.id,
-      this.createdAt,
-      this.updatedAt,
-      this.createdBy,
-      this.createdById,
-      this.updatedBy,
-      this.updatedById,
-      this.branch,
-      this.disable,
-      this.name,
-      this.ip,
-      this.inventoryNumber,
-      this.location,
-      this.locationLat,
-      this.locationLon,
-      this.date,
-      this.tag,
-      this.image,
-      this.brand,
-      this.type,
-      this.note,
-      this.extra);
-
-  factory CctvDetailResponseData.fromJson(Map<String, dynamic> json) =>
-      _$CctvDetailResponseDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$CctvDetailResponseDataToJson(this);
 }

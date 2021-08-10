@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import '../api/json_models/response/cctv_list_resp.dart';
 
 class CctvListTile extends StatelessWidget {
-  final CctvMinResponse data;
-
   const CctvListTile({Key? key, required this.data}) : super(key: key);
+  final CctvMinResponse data;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +13,7 @@ class CctvListTile extends StatelessWidget {
         child: ListTile(
             title: Text(data.name),
             subtitle: Row(
-              children: [
+              children: <Widget>[
                 Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
@@ -23,6 +22,6 @@ class CctvListTile extends StatelessWidget {
                     child: Text(" ${data.ip.toLowerCase()} ")),
               ],
             ),
-            trailing: Text("${data.location}")));
+            trailing: Text(data.location)));
   }
 }

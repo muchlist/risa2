@@ -5,32 +5,30 @@ import '../api/json_models/response/general_list_resp.dart';
 import '../config/pallatte.dart';
 
 class OtherActionTile extends StatelessWidget {
+  const OtherActionTile({Key? key, required this.data}) : super(key: key);
   final GeneralMinResponse data;
 
-  const OtherActionTile({Key? key, required this.data}) : super(key: key);
-
   double _calculatePercentPing() {
-    var pingSum = 0;
-    for (final ping in data.pingsState) {
+    int pingSum = 0;
+    for (final PingState ping in data.pingsState) {
       pingSum += ping.code;
     }
     if (pingSum == 0) {
       return 0.0;
     }
-    return (pingSum / 2 / data.pingsState.length * 100);
+    return pingSum / 2 / data.pingsState.length * 100;
   }
 
   String _generateCase() {
-    var caseString = "";
-    for (final caseItem in data.cases) {
-      caseString += caseItem.caseNote + "\n";
+    final StringBuffer caseString = StringBuffer();
+    for (final Case caseItem in data.cases) {
+      caseString.writeln(caseItem.caseNote);
     }
 
-    caseString = caseString.replaceAll("#Pending#", "⏱");
-    caseString = caseString.replaceAll("#Progress#", "🔧");
-    caseString = caseString.replaceAll(" None", "");
-
-    return caseString;
+    return caseString.toString()
+      ..replaceAll("#Pending#", "⏱")
+      ..replaceAll("#Progress#", "🔧")
+      ..replaceAll(" None", "");
   }
 
   @override
@@ -44,7 +42,7 @@ class OtherActionTile extends StatelessWidget {
           child: ListTile(
               title: Text(
                 data.name,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,16 +56,16 @@ class OtherActionTile extends StatelessWidget {
                         padding: const EdgeInsets.all(4.0),
                         child: Text(
                           data.ip.toLowerCase(),
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                         ),
                       ),
                     ),
                   Text(_generateCase())
                 ],
               ),
-              trailing: (data.pingsState.length != 0)
+              trailing: (data.pingsState.isNotEmpty)
                   ? Text("${_calculatePercentPing().toStringAsFixed(0)}%")
-                  : SizedBox.shrink()),
+                  : const SizedBox.shrink()),
         ));
   }
 }

@@ -1,15 +1,15 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class App {
-  static final _tokenSaved = "token";
-  static final _branchSaved = "branch";
-  static final _rolesSaved = "roles";
-  static final _nameSaved = "name";
-  static final _expiredSaved = "expired";
-  static final _fireTokenSaved = "firebaseToken";
+  static const String _tokenSaved = "token";
+  static const String _branchSaved = "branch";
+  static const String _rolesSaved = "roles";
+  static const String _nameSaved = "name";
+  static const String _expiredSaved = "expired";
+  static const String _fireTokenSaved = "firebaseToken";
 
   static late SharedPreferences localStorage;
-  static Future init() async {
+  static Future<void> init() async {
     localStorage = await SharedPreferences.getInstance();
   }
 
@@ -54,16 +54,16 @@ class App {
   }
 
   static List<String> getRoles() {
-    final rolesString = localStorage.getString(_rolesSaved);
+    final String? rolesString = localStorage.getString(_rolesSaved);
     if (rolesString != null && rolesString.isNotEmpty) {
       return rolesString.split(",");
     }
-    return [];
+    return <String>[];
   }
 
   static Future<bool> setRoles(List<String> value) {
-    var rolesString = "";
-    if (value.length != 0) {
+    String rolesString = "";
+    if (value.isNotEmpty) {
       rolesString = value.join(",");
     }
     return localStorage.setString(_rolesSaved, rolesString);

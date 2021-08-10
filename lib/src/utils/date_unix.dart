@@ -6,22 +6,22 @@ extension UnixTimeStamp on int {
   }
 
   String getDateString() {
-    var date = DateTime.fromMillisecondsSinceEpoch(this * 1000);
+    final DateTime date = DateTime.fromMillisecondsSinceEpoch(this * 1000);
     return DateFormat("d MMM HH:mm").format(date.toLocal());
   }
 
   String getHourString() {
-    var date = DateTime.fromMillisecondsSinceEpoch(this * 1000);
+    final DateTime date = DateTime.fromMillisecondsSinceEpoch(this * 1000);
     return DateFormat("HH:mm").format(date.toLocal());
   }
 
   String getMonthYear() {
-    var date = DateTime.fromMillisecondsSinceEpoch(this * 1000);
+    final DateTime date = DateTime.fromMillisecondsSinceEpoch(this * 1000);
     return DateFormat("MMM y").format(date.toLocal());
   }
 
   String getCompleteDateString() {
-    var date = DateTime.fromMillisecondsSinceEpoch(this * 1000);
+    final DateTime date = DateTime.fromMillisecondsSinceEpoch(this * 1000);
     return DateFormat("d MMM y HH:mm").format(date.toLocal());
   }
 }
@@ -32,6 +32,6 @@ extension DateMYString on DateTime {
   }
 
   int toInt() {
-    return (millisecondsSinceEpoch ~/ 1000);
+    return millisecondsSinceEpoch ~/ 1000;
   }
 }

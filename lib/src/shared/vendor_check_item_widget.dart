@@ -4,13 +4,12 @@ import '../api/json_models/response/vendor_check_list_resp.dart';
 import '../utils/date_unix.dart';
 
 class VendorCheckListTile extends StatelessWidget {
-  final VendorCheckMinResponse data;
-
   const VendorCheckListTile({Key? key, required this.data}) : super(key: key);
+  final VendorCheckMinResponse data;
 
   @override
   Widget build(BuildContext context) {
-    var dateDescription = data.timeStarted.getDateString();
+    String dateDescription = data.timeStarted.getDateString();
     if (data.timeEnded != 0) {
       dateDescription += "   ~   ${data.timeEnded.getDateString()}";
     }

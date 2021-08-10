@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/api/json_models/response/improve_list_resp.dart';
 
 import '../../api/json_models/request/improve_change_req.dart';
 import '../../config/pallatte.dart';
@@ -33,8 +34,8 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
   late final ImproveProvider _improveProvider;
   late bool _approver;
 
-  final _key = GlobalKey<FormState>();
-  final noteController = TextEditingController();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
+  final TextEditingController noteController = TextEditingController();
 
   late double _selectedSlider;
   double _numberChange = 0.0;
@@ -48,8 +49,8 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
   }
 
   Future<void> _enablingImprove() {
-    return Future.delayed(Duration.zero, () {
-      _improveProvider.enabling().onError((error, _) {
+    return Future<void>.delayed(Duration.zero, () {
+      _improveProvider.enabling().onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -57,30 +58,29 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
 
   void _incrementImprove() {
     if (_key.currentState?.validate() ?? false) {
-      final timeNow = DateTime.now().toInt();
+      final int timeNow = DateTime.now().toInt();
       // Payload
-      final payload = ImproveChangeRequest(
+      final ImproveChangeRequest payload = ImproveChangeRequest(
           increment: _numberChange.toInt(),
           note: noteController.text,
           time: timeNow);
 
       // Call Provider
-      Future.delayed(
+      Future<void>.delayed(
           Duration.zero,
           () => _improveProvider
                   .incrementImprovement(
                       _improveProvider.improveDataPass?.id ?? "", payload)
-                  .then((value) {
+                  .then((bool value) {
                 if (value) {
                   Navigator.of(context).pop();
                   showToastSuccess(
                       context: context,
                       message: "Berhasil mengupdate improvement");
                 }
-              }).onError((error, _) {
+              }).onError((Object? error, _) {
                 if (error != null) {
-                  showToastError(
-                      context: context, message: error.toString(), onTop: true);
+                  showToastError(context: context, message: error.toString());
                 }
               }));
     }
@@ -91,7 +91,7 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
     _improveProvider = context.read<ImproveProvider>();
     _selectedSlider =
         _improveProvider.improveDataPass?.goalsAchieved.toDouble() ?? 0.0;
-    _approver = App.getRoles().any((element) {
+    _approver = App.getRoles().any((String element) {
       return element == "APPROVE";
     });
     super.initState();
@@ -105,7 +105,7 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
 
   @override
   Widget build(BuildContext context) {
-    final dataPass = _improveProvider.improveDataPass!;
+    final ImproveMinResponse dataPass = _improveProvider.improveDataPass!;
 
     return SingleChildScrollView(
       child: Padding(
@@ -115,7 +115,7 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
             key: _key,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 // * Judul text ------------------------
                 const Text(
                   "Judul",
@@ -125,7 +125,7 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
 
                 Container(
                   width: double.infinity,
-                  decoration: BoxDecoration(color: Colors.white),
+                  decoration: const BoxDecoration(color: Colors.white),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(dataPass.title),
@@ -143,12 +143,12 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
 
                 Container(
                   width: double.infinity,
-                  decoration: BoxDecoration(color: Colors.white),
+                  decoration: const BoxDecoration(color: Colors.white),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       dataPass.description,
-                      style: TextStyle(color: Colors.grey),
+                      style: const TextStyle(color: Colors.grey),
                     ),
                   ),
                 ),
@@ -157,22 +157,23 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                 if (dataPass.goal != 0)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
+                    children: <Widget>[
                       Container(
                         height: 60,
                         width: 60,
                         decoration: BoxDecoration(
                             color: Pallete.green.withOpacity(0.8),
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(5))),
                         child: Center(
                             child: Text(
                           "${(dataPass.goalsAchieved / dataPass.goal * 100).toInt().toString()} %",
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         )),
                       ),
                       horizontalSpaceMedium,
-                      Icon(Icons.arrow_forward),
+                      const Icon(Icons.arrow_forward),
                       horizontalSpaceMedium,
                       Container(
                         height: 60,
@@ -181,11 +182,12 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                             color: (_numberChange >= 0)
                                 ? Pallete.green
                                 : Colors.red[400],
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(5))),
                         child: Center(
                             child: Text(
                           "${(_selectedSlider / dataPass.goal * 100).toInt().toString()} %",
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         )),
                       )
@@ -208,10 +210,9 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                   ),
                 if (dataPass.goal != 0)
                   Slider(
-                    min: 0,
                     max: dataPass.goal.toDouble(),
                     value: _selectedSlider,
-                    onChanged: (value) {
+                    onChanged: (double value) {
                       setState(() {
                         _selectedSlider = value;
                         _numberChange =
@@ -243,9 +244,10 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                 verticalSpaceMedium,
                 if (dataPass.goal != 0)
                   (dataPass.isActive)
-                      ? Consumer<ImproveProvider>(builder: (_, data, __) {
+                      ? Consumer<ImproveProvider>(
+                          builder: (_, ImproveProvider data, __) {
                           return (data.detailState == ViewState.busy)
-                              ? Center(child: const CircularProgressIndicator())
+                              ? const Center(child: CircularProgressIndicator())
                               : Center(
                                   child: HomeLikeButton(
                                       iconData:
@@ -255,7 +257,7 @@ class _IncrementImproveBodyState extends State<IncrementImproveBody> {
                                 );
                         })
                       : Center(
-                          child: (_approver)
+                          child: _approver
                               ? OutlinedButton.icon(
                                   style: OutlinedButton.styleFrom(
                                     primary: Pallete.green,

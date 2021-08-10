@@ -4,22 +4,6 @@ part 'other_req.g.dart';
 
 @JsonSerializable()
 class OtherRequest {
-  @JsonKey(name: "sub_category")
-  final String subCategory;
-  final String name;
-  final String detail;
-  @JsonKey(name: "inventory_number")
-  final String inventoryNumber;
-  final String ip;
-  final String location;
-  final String division;
-  final String brand;
-  final int date;
-  @JsonKey(defaultValue: [])
-  final List<String> tag;
-  final String note;
-  final String type;
-
   OtherRequest(
       {required this.subCategory,
       required this.name,
@@ -36,6 +20,22 @@ class OtherRequest {
 
   factory OtherRequest.fromJson(Map<String, dynamic> json) =>
       _$OtherRequestFromJson(json);
+
+  @JsonKey(name: "sub_category")
+  final String subCategory;
+  final String name;
+  final String detail;
+  @JsonKey(name: "inventory_number")
+  final String inventoryNumber;
+  final String ip;
+  final String location;
+  final String division;
+  final String brand;
+  final int date;
+  @JsonKey(defaultValue: <String>[])
+  final List<String> tag;
+  final String note;
+  final String type;
 
   Map<String, dynamic> toJson() => _$OtherRequestToJson(this);
 }

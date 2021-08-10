@@ -13,7 +13,8 @@ import '../../shared/func_flushbar.dart';
 import '../../shared/increment_decrement_icon.dart';
 import '../../utils/utils.dart';
 
-var refreshKeyImproveScreen = GlobalKey<RefreshIndicatorState>();
+GlobalKey<RefreshIndicatorState> refreshKeyImproveScreen =
+    GlobalKey<RefreshIndicatorState>();
 
 class ImproveDetailScreen extends StatefulWidget {
   @override
@@ -32,7 +33,7 @@ class _ImproveDetailScreenState extends State<ImproveDetailScreen> {
             onPressed: () {
               Navigator.pushNamed(context, RouteGenerator.improveEdit);
             },
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.pencil_circle,
               size: 28,
             ),

@@ -9,9 +9,8 @@ import 'cached_image_square.dart';
 import 'ui_helpers.dart';
 
 class HistoryListTile extends StatelessWidget {
-  final HistoryMinResponse history;
-
   const HistoryListTile({Key? key, required this.history}) : super(key: key);
+  final HistoryMinResponse history;
 
   @override
   Widget build(BuildContext context) {
@@ -32,31 +31,32 @@ class HistoryListTile extends StatelessWidget {
             : CircleAvatar(
                 backgroundColor: Colors.blueGrey.shade300,
                 foregroundColor: Colors.white,
-                child: Icon(getIcon(history.category)),
                 radius: 25,
+                child: Icon(getIcon(history.category)),
               ),
         title: Padding(
           padding: const EdgeInsets.only(top: 8, bottom: 8),
           child: Text(
             history.parentName,
-            style: Theme.of(context).textTheme.bodyText1!,
+            style: Theme.of(context).textTheme.bodyText1,
           ),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            (history.problemResolve.isEmpty)
-                ? Text("📝 ${history.problem}")
-                : Text("📝 ${history.problem} \n💡 ${history.problemResolve}"),
+          children: <Widget>[
+            if (history.problemResolve.isEmpty)
+              Text("📝 ${history.problem}")
+            else
+              Text("📝 ${history.problem} \n💡 ${history.problemResolve}"),
             verticalSpaceSmall,
             Row(
-              children: [
+              children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
                       color: (history.completeStatus == 4 ||
                               history.completeStatus == 0)
                           ? Colors.green.withOpacity(0.5)
-                          : Color.fromRGBO(255, 186, 130, 0.15),
+                          : const Color.fromRGBO(255, 186, 130, 0.15),
                       borderRadius: BorderRadius.circular(5)),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -65,7 +65,7 @@ class HistoryListTile extends StatelessWidget {
                       maxLines: 1,
                       style: (history.completeStatus == 4 ||
                               history.completeStatus == 0)
-                          ? TextStyle(color: Colors.white)
+                          ? const TextStyle(color: Colors.white)
                           : TextStyle(color: Colors.deepOrange[300]),
                     ),
                   ),
@@ -75,7 +75,7 @@ class HistoryListTile extends StatelessWidget {
                   history.updatedAt.getDateString(),
                   maxLines: 1,
                 ),
-                Spacer(),
+                const Spacer(),
                 Text(
                   history.updatedBy.toLowerCase().split(" ")[0],
                   maxLines: 1,

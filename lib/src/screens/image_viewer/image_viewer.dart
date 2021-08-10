@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:risa2/src/config/pallatte.dart';
+import '../../config/pallatte.dart';
 
 class ImageViewer extends StatelessWidget {
-  final String imgUrl;
   const ImageViewer({Key? key, required this.imgUrl}) : super(key: key);
+  final String imgUrl;
 
   @override
   Widget build(BuildContext context) {

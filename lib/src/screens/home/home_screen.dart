@@ -27,16 +27,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  var refreshKeyHome = GlobalKey<RefreshIndicatorState>();
+  GlobalKey<RefreshIndicatorState> refreshKeyHome =
+      GlobalKey<RefreshIndicatorState>();
   late FirebaseMessaging messaging;
 
   Future<dynamic> _loadHistory() {
-    return Future.delayed(Duration.zero, () {
+    return Future<void>.delayed(Duration.zero, () {
       context
           .read<HistoryProvider>()
           .findHistory()
           .then((_) {})
-          .onError((error, _) {
+          .onError((Object? error, _) {
         if (error != null) {
           showToastError(context: context, message: error.toString());
         }
@@ -45,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<dynamic> _loadImprove() {
-    return Future.delayed(Duration.zero, () {
+    return Future<void>.delayed(Duration.zero, () {
       context.read<ImproveProvider>().findImprove();
     });
   }
@@ -63,8 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).accentColor),
-                  child: const Text("Jangan Logout"),
-                  onPressed: () => Navigator.of(context).pop(false)),
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text("Jangan Logout")),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   child: const Text("Logout"))
@@ -77,11 +78,11 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     messaging = FirebaseMessaging.instance;
 
-    messaging.getToken().then((value) async {
-      final firebaseTokenSaved = App.getFireToken();
+    messaging.getToken().then((String? value) async {
+      final String? firebaseTokenSaved = App.getFireToken();
       if (value != firebaseTokenSaved) {
         if (value != null) {
-          final success =
+          final bool success =
               await context.read<AuthProvider>().sendFCMToken(value);
           if (success) {
             await App.setFireToken(value);
@@ -93,13 +94,11 @@ class _HomeScreenState extends State<HomeScreen> {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.notification != null) {
         showToastWarning(
-            context: context,
-            message: message.notification?.body ?? "",
-            onTop: true);
+            context: context, message: message.notification?.body ?? "");
       }
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       _loadHistory();
     });
 
@@ -112,9 +111,9 @@ class _HomeScreenState extends State<HomeScreen> {
       resizeToAvoidBottomInset: true,
       // APPBAR -----------------------------------------------------------
       appBar: AppBar(
-        actions: [
+        actions: <Widget>[
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.search,
               size: 28,
             ),
@@ -128,16 +127,16 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
           IconButton(
-              icon: Icon(
+              icon: const Icon(
                 CupertinoIcons.square_arrow_right,
                 size: 28,
               ),
               onPressed: () async {
-                final logout = await _logoutConfirm(context);
+                final bool? logout = await _logoutConfirm(context);
                 if (logout != null && logout) {
                   await App.setToken("");
-                  await Navigator.pushNamedAndRemoveUntil(
-                      context, RouteGenerator.login, (route) => false);
+                  await Navigator.pushNamedAndRemoveUntil(context,
+                      RouteGenerator.login, (Route<dynamic> route) => false);
                 }
               }),
           horizontalSpaceSmall,
@@ -151,8 +150,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontSize: 20,
                   color: Colors.black,
                   fontWeight: FontWeight.bold),
-              children: <TextSpan>[
-                const TextSpan(
+              children: const <TextSpan>[
+                TextSpan(
                     text: "Welcome to RISA",
                     style: TextStyle(fontSize: 12, color: Colors.black))
               ]),
@@ -176,7 +175,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    CorouselContainer(),
+                    const CorouselContainer(),
                     DashboardGrid(),
                     verticalSpaceMedium,
                     Padding(
@@ -242,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   decoration: BoxDecoration(
                       color: Theme.of(context).accentColor,
                       borderRadius: BorderRadius.circular(24)),
-                  child: const Text.rich(TextSpan(children: [
+                  child: const Text.rich(TextSpan(children: <InlineSpan>[
                     WidgetSpan(
                         child: Icon(
                       CupertinoIcons.add,

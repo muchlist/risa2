@@ -3,16 +3,15 @@ import 'package:flutter/material.dart';
 import '../config/pallatte.dart';
 
 class HomeLikeButton extends StatelessWidget {
-  final IconData iconData;
-  final String text;
-  final GestureTapCallback tapTap;
-  final Color color;
-
   const HomeLikeButton(
       {required this.iconData,
       required this.text,
       required this.tapTap,
       this.color = Pallete.green});
+  final IconData iconData;
+  final String text;
+  final GestureTapCallback tapTap;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +21,7 @@ class HomeLikeButton extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
             color: color, borderRadius: BorderRadius.circular(24)),
-        child: Text.rich(TextSpan(children: [
+        child: Text.rich(TextSpan(children: <InlineSpan>[
           WidgetSpan(
               child: Icon(
             iconData,

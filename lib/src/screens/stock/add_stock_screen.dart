@@ -29,16 +29,16 @@ class AddStockBody extends StatefulWidget {
 }
 
 class _AddStockBodyState extends State<AddStockBody> {
-  final _key = GlobalKey<FormState>();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   String? _selectedCategory;
 
-  final titleController = TextEditingController();
-  final locationController = TextEditingController();
-  final unitController = TextEditingController();
-  final qtyController = TextEditingController();
-  final thresholdController = TextEditingController();
-  final noteController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
+  final TextEditingController unitController = TextEditingController();
+  final TextEditingController qtyController = TextEditingController();
+  final TextEditingController thresholdController = TextEditingController();
+  final TextEditingController noteController = TextEditingController();
 
   void _addStock() {
     if (_key.currentState?.validate() ?? false) {

@@ -5,11 +5,11 @@ import 'package:path_provider/path_provider.dart';
 
 Future<File> compressFile(File file) async {
   try {
-    final tempDir = await getTemporaryDirectory();
-    final tempPath = tempDir.path;
+    final Directory tempDir = await getTemporaryDirectory();
+    final String tempPath = tempDir.path;
 
-    final tempTargetPath = tempPath + file.path.split('/').last;
-    var result = await FlutterImageCompress.compressAndGetFile(
+    final String tempTargetPath = tempPath + file.path.split('/').last;
+    final File? result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
       tempTargetPath,
       quality: 70,

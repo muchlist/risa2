@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import '../api/json_models/response/other_list_resp.dart';
 
 class OtherListTile extends StatelessWidget {
-  final OtherMinResponse data;
-
   const OtherListTile({Key? key, required this.data}) : super(key: key);
+  final OtherMinResponse data;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +15,7 @@ class OtherListTile extends StatelessWidget {
             title: Text(data.name),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 if (data.ip.isNotEmpty && data.ip != "0.0.0.0")
                   Text(data.ip.toLowerCase()),
                 if (data.detail.isNotEmpty) Text(data.detail),
@@ -25,7 +24,7 @@ class OtherListTile extends StatelessWidget {
             trailing: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: <Widget>[
                 if (data.location.isNotEmpty) Text(data.location.toLowerCase()),
                 if (data.division.isNotEmpty) Text(data.division.toLowerCase())
               ],

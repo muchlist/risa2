@@ -5,54 +5,51 @@ import '../models/dashboard.dart';
 import 'ui_helpers.dart';
 
 class DashboardIcon extends StatelessWidget {
-  final Dashboard dashboardItem;
-
   const DashboardIcon(this.dashboardItem);
+  final Dashboard dashboardItem;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          InkWell(
-            splashColor: Pallete.secondaryBackground,
-            customBorder: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(5), // 25
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(4),
-              child: Container(
-                child: Icon(
-                  dashboardItem.icon,
-                  color: Colors.white,
-                ),
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: dashboardItem.color,
-                  borderRadius: BorderRadius.circular(5),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Pallete.secondaryBackground,
-                        blurRadius: 5,
-                        offset: Offset(0, 3),
-                        spreadRadius: 2)
-                  ],
-                ),
+    return Column(
+      children: <Widget>[
+        InkWell(
+          splashColor: Pallete.secondaryBackground,
+          customBorder: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5), // 25
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(4),
+            child: Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                color: dashboardItem.color,
+                borderRadius: BorderRadius.circular(5),
+                boxShadow: const <BoxShadow>[
+                  BoxShadow(
+                      color: Pallete.secondaryBackground,
+                      blurRadius: 5,
+                      offset: Offset(0, 3),
+                      spreadRadius: 2)
+                ],
+              ),
+              child: Icon(
+                dashboardItem.icon,
+                color: Colors.white,
               ),
             ),
           ),
-          verticalSpaceTiny,
-          Flexible(
-            child: Text(
-              dashboardItem.title,
-              style: TextStyle(fontSize: 12),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
-          )
-        ],
-      ),
+        ),
+        verticalSpaceTiny,
+        Flexible(
+          child: Text(
+            dashboardItem.title,
+            style: const TextStyle(fontSize: 12),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+          ),
+        )
+      ],
     );
   }
 }

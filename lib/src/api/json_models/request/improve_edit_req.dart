@@ -4,14 +4,6 @@ part 'improve_edit_req.g.dart';
 
 @JsonSerializable()
 class ImproveEditRequest {
-  @JsonKey(name: "filter_timestamp")
-  final int filterTimestamp;
-  final String title;
-  final String description;
-  final int goal;
-  @JsonKey(name: "complete_status")
-  final int completeStatus;
-
   ImproveEditRequest(
       {required this.filterTimestamp,
       required this.title,
@@ -21,6 +13,14 @@ class ImproveEditRequest {
 
   factory ImproveEditRequest.fromJson(Map<String, dynamic> json) =>
       _$ImproveEditRequestFromJson(json);
+
+  @JsonKey(name: "filter_timestamp")
+  final int filterTimestamp;
+  final String title;
+  final String description;
+  final int goal;
+  @JsonKey(name: "complete_status")
+  final int completeStatus;
 
   Map<String, dynamic> toJson() => _$ImproveEditRequestToJson(this);
 }

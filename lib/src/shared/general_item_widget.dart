@@ -4,16 +4,15 @@ import '../api/json_models/response/general_list_resp.dart';
 import '../config/pallatte.dart';
 
 class GeneralListTile extends StatelessWidget {
-  final GeneralMinResponse data;
-
   const GeneralListTile({Key? key, required this.data}) : super(key: key);
+  final GeneralMinResponse data;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
       child: Column(
-        children: [
+        children: <Widget>[
           ListTile(
               title: Text(
                 data.name,
@@ -24,22 +23,22 @@ class GeneralListTile extends StatelessWidget {
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  (data.ip == "0.0.0.0")
-                      ? Text.rich(TextSpan(children: [
-                          TextSpan(
-                              text: " ${data.category.toLowerCase()} ",
-                              style: TextStyle(
-                                  backgroundColor: Pallete.secondaryBackground))
-                        ]))
-                      : Text.rich(TextSpan(children: [
-                          TextSpan(
-                              text: " ${data.category.toLowerCase()} ",
-                              style: TextStyle(
-                                  backgroundColor:
-                                      Pallete.secondaryBackground)),
-                          TextSpan(text: "  ${data.ip}")
-                        ])),
+                children: <Widget>[
+                  if (data.ip == "0.0.0.0")
+                    Text.rich(TextSpan(children: <InlineSpan>[
+                      TextSpan(
+                          text: " ${data.category.toLowerCase()} ",
+                          style: const TextStyle(
+                              backgroundColor: Pallete.secondaryBackground))
+                    ]))
+                  else
+                    Text.rich(TextSpan(children: <TextSpan>[
+                      TextSpan(
+                          text: " ${data.category.toLowerCase()} ",
+                          style: const TextStyle(
+                              backgroundColor: Pallete.secondaryBackground)),
+                      TextSpan(text: "  ${data.ip}")
+                    ])),
                 ],
               ),
               trailing: (data.casesSize != 0)
@@ -47,14 +46,15 @@ class GeneralListTile extends StatelessWidget {
                       alignment: Alignment.center,
                       width: 20,
                       height: 20,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           shape: BoxShape.circle, color: Colors.pink),
                       child: Text(
                         data.casesSize.toString(),
-                        style: TextStyle(color: Colors.white, fontSize: 12),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 12),
                       ),
                     )
-                  : SizedBox.shrink()),
+                  : const SizedBox.shrink()),
         ],
       ),
     );

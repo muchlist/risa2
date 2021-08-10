@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/api/json_models/response/other_resp.dart';
 import '../../api/json_models/request/other_edit_req.dart';
 
 import '../../providers/others.dart';
@@ -28,7 +29,7 @@ class EditOtherBody extends StatefulWidget {
 }
 
 class _EditOtherBodyState extends State<EditOtherBody> {
-  final _key = GlobalKey<FormState>();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
   late OtherProvider otherProvider;
 
   String? _selectedLocation;
@@ -42,29 +43,29 @@ class _EditOtherBodyState extends State<EditOtherBody> {
     return _dateSelected!.getMonthYearDisplay();
   }
 
-  final nameController = TextEditingController();
-  final detailController = TextEditingController();
-  final inventoryNumController = TextEditingController();
-  final ipController = TextEditingController();
-  final brandController = TextEditingController();
-  final noteController = TextEditingController();
-  final tipeController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController detailController = TextEditingController();
+  final TextEditingController inventoryNumController = TextEditingController();
+  final TextEditingController ipController = TextEditingController();
+  final TextEditingController brandController = TextEditingController();
+  final TextEditingController noteController = TextEditingController();
+  final TextEditingController tipeController = TextEditingController();
 
   void _editOther(int timestamp) {
     if (_key.currentState?.validate() ?? false) {
       // validasi tambahan
-      var errorMessage = "";
+      String errorMessage = "";
       if (_selectedLocation == null) {
         errorMessage = errorMessage + "Lokasi tidak boleh kosong. ";
       }
 
       if (errorMessage.isNotEmpty) {
-        showToastWarning(context: context, message: errorMessage, onTop: true);
+        showToastWarning(context: context, message: errorMessage);
         return;
       }
 
       // Payload
-      final payload = OtherEditRequest(
+      final OtherEditRequest payload = OtherEditRequest(
         filterTimestamp: timestamp,
         filterSubCategory: context.read<OtherProvider>().subCategory,
         name: nameController.text,
@@ -74,35 +75,37 @@ class _EditOtherBodyState extends State<EditOtherBody> {
         location: _selectedLocation ?? "",
         brand: brandController.text,
         date: (_dateSelected != null) ? _dateSelected!.toInt() : 0,
-        tag: [],
+        tag: <String>[],
         note: noteController.text,
         type: tipeController.text,
         division: _selectedDivision ?? "",
       );
 
       // Call Provider
-      Future.delayed(
+      Future<void>.delayed(
           Duration.zero,
-          () => context.read<OtherProvider>().editOther(payload).then((value) {
+          () => context
+                  .read<OtherProvider>()
+                  .editOther(payload)
+                  .then((bool value) {
                 if (value) {
                   Navigator.of(context).pop();
                   showToastSuccess(
                       context: context,
                       message: "Berhasil mengubah ${payload.name}");
                 }
-              }).onError((error, _) {
+              }).onError((Object? error, _) {
                 if (error != null) {
-                  showToastError(
-                      context: context, message: error.toString(), onTop: true);
+                  showToastError(context: context, message: error.toString());
                 }
               }));
     }
   }
 
-  Future _pickDate(BuildContext context) async {
-    final initialDate =
+  Future<void> _pickDate(BuildContext context) async {
+    final DateTime initialDate =
         (_dateSelected == null) ? DateTime.now() : _dateSelected!;
-    final newDate = await showDatePicker(
+    final DateTime? newDate = await showDatePicker(
         context: context,
         initialDate: initialDate,
         firstDate: DateTime(DateTime.now().year - 10),
@@ -119,7 +122,8 @@ class _EditOtherBodyState extends State<EditOtherBody> {
   @override
   void initState() {
     otherProvider = context.read<OtherProvider>();
-    final existData = context.read<OtherProvider>().otherDetail;
+    final OtherDetailResponseData existData =
+        context.read<OtherProvider>().otherDetail;
 
     nameController.text = existData.name;
     detailController.text = existData.detail;
@@ -134,12 +138,12 @@ class _EditOtherBodyState extends State<EditOtherBody> {
 
     // default length == 1 , if option got update length more than 1
     if (context.read<OtherProvider>().otherOption.location.length == 1) {
-      Future.delayed(
+      Future<void>.delayed(
           Duration.zero,
           () => context
                   .read<OtherProvider>()
                   .findOptionOther()
-                  .onError((error, _) {
+                  .onError((Object? error, _) {
                 showToastError(context: context, message: error.toString());
               })).whenComplete(() {
         _selectedLocation = null;
@@ -186,7 +190,7 @@ class _EditOtherBodyState extends State<EditOtherBody> {
             key: _key,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 // * Judul text ------------------------
                 const Text(
                   "Nama item",
@@ -196,14 +200,13 @@ class _EditOtherBodyState extends State<EditOtherBody> {
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: nameController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return 'Nama item tidak boleh kosong';
                     }
@@ -221,7 +224,6 @@ class _EditOtherBodyState extends State<EditOtherBody> {
 
                 TextFormField(
                   textInputAction: TextInputAction.next,
-                  minLines: null,
                   maxLines: null,
                   decoration: const InputDecoration(
                       filled: true,
@@ -242,7 +244,6 @@ class _EditOtherBodyState extends State<EditOtherBody> {
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -262,14 +263,13 @@ class _EditOtherBodyState extends State<EditOtherBody> {
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: ipController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return null;
                     } else {
@@ -288,27 +288,27 @@ class _EditOtherBodyState extends State<EditOtherBody> {
                   "Lokasi",
                   style: TextStyle(fontSize: 16),
                 ),
-                Consumer<OtherProvider>(builder: (_, data, __) {
+                Consumer<OtherProvider>(builder: (_, OtherProvider data, __) {
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     height: 50,
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isExpanded: true,
-                        hint: Text("Lokasi"),
+                        hint: const Text("Lokasi"),
                         value: (_selectedLocation != null)
                             ? _selectedLocation
                             : null,
-                        items: data.otherOption.location.map((loc) {
+                        items: data.otherOption.location.map((String loc) {
                           return DropdownMenuItem<String>(
                             value: loc,
                             child: Text(loc),
                           );
                         }).toList(),
-                        onChanged: (value) {
+                        onChanged: (String? value) {
                           setState(() {
                             _selectedLocation = value;
                             FocusScope.of(context).requestFocus(FocusNode());
@@ -326,27 +326,27 @@ class _EditOtherBodyState extends State<EditOtherBody> {
                   "Divisi",
                   style: TextStyle(fontSize: 16),
                 ),
-                Consumer<OtherProvider>(builder: (_, data, __) {
+                Consumer<OtherProvider>(builder: (_, OtherProvider data, __) {
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     height: 50,
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isExpanded: true,
-                        hint: Text("Divisi"),
+                        hint: const Text("Divisi"),
                         value: (_selectedDivision != null)
                             ? _selectedDivision
                             : null,
-                        items: data.otherOption.division.map((loc) {
+                        items: data.otherOption.division.map((String loc) {
                           return DropdownMenuItem<String>(
                             value: loc,
                             child: Text(loc),
                           );
                         }).toList(),
-                        onChanged: (value) {
+                        onChanged: (String? value) {
                           setState(() {
                             _selectedDivision = value;
                             FocusScope.of(context).requestFocus(FocusNode());
@@ -369,7 +369,6 @@ class _EditOtherBodyState extends State<EditOtherBody> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -390,17 +389,17 @@ class _EditOtherBodyState extends State<EditOtherBody> {
                   onTap: () => _pickDate(context),
                   child: Container(
                     height: 50,
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                        children: <Widget>[
                           Text(
                             getDateString(),
                           ),
-                          Icon(CupertinoIcons.calendar),
+                          const Icon(CupertinoIcons.calendar),
                         ]),
                   ),
                 ),
@@ -417,7 +416,6 @@ class _EditOtherBodyState extends State<EditOtherBody> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -448,9 +446,9 @@ class _EditOtherBodyState extends State<EditOtherBody> {
 
                 verticalSpaceMedium,
 
-                Consumer<OtherProvider>(builder: (_, data, __) {
+                Consumer<OtherProvider>(builder: (_, OtherProvider data, __) {
                   return (data.state == ViewState.busy)
-                      ? Center(child: const CircularProgressIndicator())
+                      ? const Center(child: CircularProgressIndicator())
                       : Center(
                           child: HomeLikeButton(
                               iconData: CupertinoIcons.pencil_circle,

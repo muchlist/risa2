@@ -6,9 +6,8 @@ import '../utils/utils.dart';
 import 'ui_helpers.dart';
 
 class LineChartSpeedTest extends StatefulWidget {
-  final List<SpeedData> data;
-
   const LineChartSpeedTest({Key? key, required this.data}) : super(key: key);
+  final List<SpeedData> data;
 
   @override
   State<StatefulWidget> createState() => LineChartSpeedTestState();
@@ -22,15 +21,15 @@ class LineChartSpeedTestState extends State<LineChartSpeedTest> {
 
   @override
   Widget build(BuildContext context) {
-    final isPortrait = screenIsPortrait(context);
+    final bool isPortrait = screenIsPortrait(context);
 
     return AspectRatio(
-      aspectRatio: (isPortrait) ? 16 / 15 : 16 / 9,
+      aspectRatio: isPortrait ? 16 / 15 : 16 / 9,
       child: Container(
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5)),
           gradient: LinearGradient(
-            colors: [
+            colors: <Color>[
               Color(0xff2c274c),
               Color(0xff46426c),
             ],
@@ -44,9 +43,9 @@ class LineChartSpeedTestState extends State<LineChartSpeedTest> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
                 verticalSpaceSmall,
-                Padding(
-                  padding: const EdgeInsets.only(left: 16),
-                  child: const Text(
+                const Padding(
+                  padding: EdgeInsets.only(left: 16),
+                  child: Text(
                     'Speed Test Banjarmasin',
                     style: TextStyle(
                         color: Colors.white,
@@ -66,17 +65,17 @@ class LineChartSpeedTestState extends State<LineChartSpeedTest> {
                   ),
                 ),
                 verticalSpaceSmall,
-                if (widget.data.length != 0)
+                if (widget.data.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(left: 16),
                     child: Table(
-                      columnWidths: {
+                      columnWidths: const <int, TableColumnWidth>{
                         0: FlexColumnWidth(0.8),
                         1: FlexColumnWidth(0.2),
-                        2: FlexColumnWidth(1.0)
+                        2: FlexColumnWidth()
                       },
-                      children: [
-                        TableRow(children: [
+                      children: <TableRow>[
+                        TableRow(children: <Widget>[
                           const Text(
                             "Download Speed",
                             style: TextStyle(fontSize: 12, color: Colors.white),
@@ -89,10 +88,10 @@ class LineChartSpeedTestState extends State<LineChartSpeedTest> {
                             softWrap: true,
                             maxLines: 1,
                             overflow: TextOverflow.clip,
-                            style: TextStyle(color: Color(0xff4af699)),
+                            style: const TextStyle(color: Color(0xff4af699)),
                           ),
                         ]),
-                        TableRow(children: [
+                        TableRow(children: <Widget>[
                           const Text("Upload Speed",
                               style:
                                   TextStyle(fontSize: 12, color: Colors.white)),
@@ -104,10 +103,10 @@ class LineChartSpeedTestState extends State<LineChartSpeedTest> {
                             softWrap: true,
                             maxLines: 1,
                             overflow: TextOverflow.clip,
-                            style: TextStyle(color: Colors.blueAccent),
+                            style: const TextStyle(color: Colors.blueAccent),
                           ),
                         ]),
-                        TableRow(children: [
+                        TableRow(children: <Widget>[
                           const Text("Latency",
                               style:
                                   TextStyle(fontSize: 12, color: Colors.white)),
@@ -118,10 +117,10 @@ class LineChartSpeedTestState extends State<LineChartSpeedTest> {
                               softWrap: true,
                               maxLines: 1,
                               overflow: TextOverflow.clip,
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.white)),
+                              style: const TextStyle(
+                                  fontSize: 12, color: Colors.white)),
                         ]),
-                        TableRow(children: [
+                        TableRow(children: <Widget>[
                           const Text("Recent Test",
                               style:
                                   TextStyle(fontSize: 12, color: Colors.white)),
@@ -132,8 +131,8 @@ class LineChartSpeedTestState extends State<LineChartSpeedTest> {
                               softWrap: true,
                               maxLines: 1,
                               overflow: TextOverflow.clip,
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.white)),
+                              style: const TextStyle(
+                                  fontSize: 12, color: Colors.white)),
                         ]),
                       ],
                     ),
@@ -163,14 +162,14 @@ class LineChartSpeedTestState extends State<LineChartSpeedTest> {
         bottomTitles: SideTitles(
           showTitles: true,
           reservedSize: 22,
-          getTextStyles: (value) => const TextStyle(
+          getTextStyles: (double value) => const TextStyle(
             color: Color(0xff72719b),
             fontWeight: FontWeight.bold,
             fontSize: 16,
           ),
           margin: 10,
-          getTitles: (value) {
-            final intValue = value.toInt();
+          getTitles: (double value) {
+            final int intValue = value.toInt();
             if (intValue == widget.data.length - 1) {
               return widget.data[intValue].time.getHourString();
             }
@@ -182,13 +181,13 @@ class LineChartSpeedTestState extends State<LineChartSpeedTest> {
         ),
         leftTitles: SideTitles(
           showTitles: true,
-          getTextStyles: (value) => const TextStyle(
+          getTextStyles: (double value) => const TextStyle(
             color: Color(0xff75729e),
             fontWeight: FontWeight.bold,
             fontSize: 14,
           ),
-          getTitles: (value) {
-            final intValue = value.toInt();
+          getTitles: (double value) {
+            final int intValue = value.toInt();
             if (intValue % 10 == 0) {
               return '$intValue';
             }
@@ -227,19 +226,19 @@ class LineChartSpeedTestState extends State<LineChartSpeedTest> {
   List<LineChartBarData> linesBarData() {
     // menambahkan data upload dan download,
     // konversi ke FlSpot
-    var chartDataUpload = <FlSpot>[];
-    var chartDataDownload = <FlSpot>[];
-    for (var i = 0; i < widget.data.length; i++) {
+    final List<FlSpot> chartDataUpload = <FlSpot>[];
+    final List<FlSpot> chartDataDownload = <FlSpot>[];
+    for (int i = 0; i < widget.data.length; i++) {
       chartDataUpload.add(FlSpot(i.toDouble(),
           double.parse(widget.data[i].upload.toStringAsFixed(2))));
       chartDataDownload.add(FlSpot(i.toDouble(),
           double.parse(widget.data[i].download.toStringAsFixed(2))));
     }
 
-    final lineChartBarDownload = LineChartBarData(
+    final LineChartBarData lineChartBarDownload = LineChartBarData(
       spots: chartDataDownload,
       isCurved: true,
-      colors: [
+      colors: <Color>[
         const Color(0xff4af699),
       ],
       barWidth: 8,
@@ -251,10 +250,10 @@ class LineChartSpeedTestState extends State<LineChartSpeedTest> {
         show: false,
       ),
     );
-    final lineChartBarUpload = LineChartBarData(
+    final LineChartBarData lineChartBarUpload = LineChartBarData(
       spots: chartDataUpload,
       isCurved: true,
-      colors: [
+      colors: <Color>[
         Colors.blueAccent,
       ],
       barWidth: 8,
@@ -262,12 +261,12 @@ class LineChartSpeedTestState extends State<LineChartSpeedTest> {
       dotData: FlDotData(
         show: false,
       ),
-      belowBarData: BarAreaData(show: false, colors: [
+      belowBarData: BarAreaData(show: false, colors: <Color>[
         const Color(0x00aa4cfc),
       ]),
     );
 
-    return [
+    return <LineChartBarData>[
       lineChartBarDownload,
       lineChartBarUpload,
     ];

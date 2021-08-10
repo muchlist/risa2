@@ -1,12 +1,12 @@
 String thumbnailModifier(String path) {
-  var splitted = path.split("/");
+  final List<String> splitted = path.split("/");
   splitted.last = "thumb_" + splitted.last;
   return splitted.join("/");
 }
 
 extension PathUrl on String {
   String thumbnailMod() {
-    var splitted = split("/");
+    final List<String> splitted = split("/");
     splitted.last = "thumb_" + splitted.last;
     return splitted.join("/");
   }
@@ -19,6 +19,6 @@ extension CapExtension on String {
   // Hello World
   String get capitalizeFirstofEach => replaceAll(RegExp(' +'), ' ')
       .split(" ")
-      .map((str) => str.inCaps)
+      .map((String str) => str.inCaps)
       .join(" ");
 }

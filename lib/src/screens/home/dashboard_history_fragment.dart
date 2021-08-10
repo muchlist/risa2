@@ -22,12 +22,12 @@ class _DashboardListViewState extends State<DashboardListView> {
   }
 
   Future<dynamic> _loadHistory() {
-    return Future.delayed(Duration.zero, () {
+    return Future<void>.delayed(Duration.zero, () {
       context
           .read<HistoryProvider>()
           .findHistory()
           .then((_) {})
-          .onError((error, _) {
+          .onError((Object? error, _) {
         if (error != null) {
           showToastError(context: context, message: error.toString());
         }
@@ -38,11 +38,11 @@ class _DashboardListViewState extends State<DashboardListView> {
   @override
   Widget build(BuildContext context) {
     // Provider
-    final historyProvider = context.watch<HistoryProvider>();
+    final HistoryProvider historyProvider = context.watch<HistoryProvider>();
 
     if (historyProvider.state == ViewState.busy) {
       return const CircularProgressIndicator();
-    } else if (historyProvider.historyListDashboard.length == 0) {
+    } else if (historyProvider.historyListDashboard.isEmpty) {
       return SizedBox(
           height: 200,
           width: 200,

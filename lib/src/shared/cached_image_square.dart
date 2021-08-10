@@ -3,20 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:risa2/src/config/pallatte.dart';
 
 class CachedImageSquare extends StatelessWidget {
+  const CachedImageSquare(
+      {required this.urlPath, this.width = 125.0, this.height = 125.0});
   final String urlPath;
   final double width;
   final double height;
-
-  const CachedImageSquare(
-      {required this.urlPath, this.width = 125.0, this.height = 125.0});
 
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: urlPath,
-      imageBuilder: (context, imageProvider) => ClipRRect(
+      imageBuilder:
+          (BuildContext context, ImageProvider<Object> imageProvider) =>
+              ClipRRect(
         borderRadius: BorderRadius.circular(5.0),
-        child: Container(
+        child: SizedBox(
           width: width,
           height: height,
           child: Image(
