@@ -39,8 +39,8 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
   @override
   void initState() {
     context.read<CheckProvider>().removeDetail();
-    Future.delayed(Duration.zero, () {
-      context.read<CheckProvider>().getDetail().onError((error, _) {
+    Future<void>.delayed(Duration.zero, () {
+      context.read<CheckProvider>().getDetail().onError((Object? error, _) {
         Navigator.pop(context);
         showToastError(context: context, message: error.toString());
       });
@@ -52,32 +52,31 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
   @override
   Widget build(BuildContext context) {
     // Watch data ====================================================
-    final data = context.watch<CheckProvider>();
-    var detail = data.checkDetail ??
-        CheckDetailResponseData(
-            "", 0, 0, "Loading", "", "Loading", "", "", 0, false, "", []);
+    final CheckProvider data = context.watch<CheckProvider>();
+    final CheckDetailResponseData detail = data.checkDetail ??
+        CheckDetailResponseData("", 0, 0, "Loading", "", "Loading", "", "", 0,
+            false, "", <CheckItem>[]);
 
     return (data.detailState == ViewState.busy)
-        ? Center(child: CircularProgressIndicator())
+        ? const Center(child: CircularProgressIndicator())
         : Stack(
-            children: [
+            children: <Widget>[
               Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Column(
-                    children: [
+                    children: <Widget>[
                       // header
                       Container(
-                        padding: EdgeInsets.all(8),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
                             color: Pallete.secondaryBackground,
                             borderRadius: BorderRadius.circular(3)),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
+                          children: <Widget>[
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: const <Widget>[
                                 Text("Nama"),
                                 Text("Shift"),
                                 Text("Dibuat"),
@@ -85,8 +84,8 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text("   :   "),
+                              children: const <Widget>[
+                                Text("   :   "),
                                 Text("   :   "),
                                 Text("   :   "),
                               ],
@@ -94,15 +93,14 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
+                                children: <Widget>[
                                   Text(
                                     detail.createdBy,
                                     softWrap: true,
                                     maxLines: 2,
                                     overflow: TextOverflow.clip,
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     "Shift ${detail.shift}",
@@ -111,7 +109,7 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
                                     overflow: TextOverflow.clip,
                                   ),
                                   Text(
-                                    "${detail.createdAt.getDateString()}",
+                                    detail.createdAt.getDateString(),
                                     softWrap: true,
                                     maxLines: 2,
                                     overflow: TextOverflow.clip,
@@ -123,12 +121,12 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
                                 detail.updatedBy == App.getName())
                               IconButton(
                                 onPressed: () async {
-                                  var isDeleted = await getConfirm(
+                                  final bool? isDeleted = await getConfirm(
                                       context,
                                       "Konfirmasi",
                                       "Yakin ingin menghapus daftar cek ini?");
                                   if (isDeleted != null && isDeleted) {
-                                    await data.deleteCheck().then((value) {
+                                    await data.deleteCheck().then((bool value) {
                                       if (value) {
                                         Navigator.pop(context);
                                         showToastSuccess(
@@ -136,7 +134,8 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
                                             message:
                                                 "Berhasil menghapus ceklist");
                                       }
-                                    }).onError((error, stackTrace) {
+                                    }).onError(
+                                        (Object? error, StackTrace stackTrace) {
                                       showToastError(
                                           context: context,
                                           message: error.toString());
@@ -156,38 +155,41 @@ class _CheckDetailBodyState extends State<CheckDetailBody> {
                       Expanded(child: buildListView(detail))
                     ],
                   )),
-              (detail.isFinish)
-                  ? SizedBox.shrink()
-                  : Positioned(
-                      bottom: 15,
-                      right: 20,
-                      child: HomeLikeButton(
-                        iconData: CupertinoIcons.check_mark_circled_solid,
-                        text: "Selesai Shift",
-                        tapTap: () async {
-                          var isFinish = await getConfirm(context, "Konfirmasi",
-                              "Apakah kamu ingin mengakhiri pengecekan pada shift ini?\nDokumen tidak bisa dirubah lagi!");
-                          if (isFinish != null && isFinish) {
-                            await data.completeCheck().then((value) {
-                              if (value) {
-                                showToastSuccess(
-                                    context: context, message: "Cek selesai");
-                              }
-                            });
-                          }
-                        },
-                        color: Colors.deepOrange.shade300,
-                      ))
+              if (detail.isFinish)
+                const SizedBox.shrink()
+              else
+                Positioned(
+                    bottom: 15,
+                    right: 20,
+                    child: HomeLikeButton(
+                      iconData: CupertinoIcons.check_mark_circled_solid,
+                      text: "Selesai Shift",
+                      tapTap: () async {
+                        final bool? isFinish = await getConfirm(
+                            context,
+                            "Konfirmasi",
+                            "Apakah kamu ingin mengakhiri pengecekan pada shift ini?\nDokumen tidak bisa dirubah lagi!");
+                        if (isFinish != null && isFinish) {
+                          await data.completeCheck().then((bool value) {
+                            if (value) {
+                              showToastSuccess(
+                                  context: context, message: "Cek selesai");
+                            }
+                          });
+                        }
+                      },
+                      color: Colors.deepOrange.shade300,
+                    ))
             ],
           );
   }
 }
 
 Widget buildListView(CheckDetailResponseData data) {
-  var checkItemsGenerate = data.checkItems;
+  final List<CheckItem> checkItemsGenerate = data.checkItems;
   // checkItems sort if data isFinish
   if (data.isFinish) {
-    checkItemsGenerate.sort((a, b) {
+    checkItemsGenerate.sort((CheckItem a, CheckItem b) {
       if (b.checkedAt == 0) {
         return -1;
       }
@@ -197,10 +199,10 @@ Widget buildListView(CheckDetailResponseData data) {
   }
 
   return ListView.builder(
-      padding: EdgeInsets.only(bottom: 250),
+      padding: const EdgeInsets.only(bottom: 250),
       itemCount: checkItemsGenerate.length,
-      itemBuilder: (context, index) {
-        var checkItem = checkItemsGenerate[index];
+      itemBuilder: (BuildContext context, int index) {
+        final CheckItem checkItem = checkItemsGenerate[index];
 
         return Card(
             child: !data.isFinish
@@ -224,7 +226,7 @@ class ListTileCheck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.all(8),
+      contentPadding: const EdgeInsets.all(8),
       leading: checkItem.imagePath != ""
           ? CachedImageSquare(
               urlPath:
@@ -235,7 +237,7 @@ class ListTileCheck extends StatelessWidget {
           : null,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           Text(checkItem.name),
           Text(
             "${checkItem.type} ${checkItem.location}",
@@ -246,7 +248,7 @@ class ListTileCheck extends StatelessWidget {
       ),
       subtitle: (checkItem.checkedAt != 0)
           ? Text.rich(
-              TextSpan(children: [
+              TextSpan(children: <InlineSpan>[
                 WidgetSpan(
                     child: Container(
                   decoration: BoxDecoration(
@@ -255,39 +257,43 @@ class ListTileCheck extends StatelessWidget {
                   ),
                   child: Text(" ${checkItem.checkedAt.getDateString()} "),
                 )),
-                (checkItem.tagSelected.isNotEmpty)
-                    ? WidgetSpan(
-                        child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.yellow.shade100,
-                        ),
-                        child: Text(" ${checkItem.tagSelected} "),
-                      ))
-                    : TextSpan(),
+                if (checkItem.tagSelected.isNotEmpty)
+                  WidgetSpan(
+                      child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.yellow.shade100,
+                    ),
+                    child: Text(" ${checkItem.tagSelected} "),
+                  ))
+                else
+                  const TextSpan(),
                 TextSpan(text: " ${checkItem.checkedNote}")
               ]),
             )
           : null,
       trailing: (checkItem.checkedAt != 0)
-          ? Wrap(children: [
-              Icon(CupertinoIcons.check_mark_circled, color: Colors.green),
-              (checkItem.haveProblem)
-                  ? Icon(
-                      CupertinoIcons.exclamationmark_square,
-                      color: Colors.red.shade300,
-                    )
-                  : SizedBox.shrink(),
+          ? Wrap(children: <Widget>[
+              const Icon(CupertinoIcons.check_mark_circled,
+                  color: Colors.green),
+              if (checkItem.haveProblem)
+                Icon(
+                  CupertinoIcons.exclamationmark_square,
+                  color: Colors.red.shade300,
+                )
+              else
+                const SizedBox.shrink(),
             ])
-          : Wrap(children: [
-              (checkItem.haveProblem)
-                  ? Icon(
-                      CupertinoIcons.exclamationmark_square,
-                      color: Colors.red.shade300,
-                    )
-                  : SizedBox.shrink(),
+          : Wrap(children: <Widget>[
+              if (checkItem.haveProblem)
+                Icon(
+                  CupertinoIcons.exclamationmark_square,
+                  color: Colors.red.shade300,
+                )
+              else
+                const SizedBox.shrink(),
             ]),
-      key: ValueKey(checkItem.id),
+      key: ValueKey<String>(checkItem.id),
     );
   }
 }
@@ -306,7 +312,7 @@ class ExpansionTileCheck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ExpansionTile(
-      tilePadding: EdgeInsets.all(8),
+      tilePadding: const EdgeInsets.all(8),
       leading: checkItem.imagePath != ""
           ? CachedImageSquare(
               urlPath: "${Constant.baseUrl}${checkItem.imagePath}",
@@ -316,7 +322,7 @@ class ExpansionTileCheck extends StatelessWidget {
           : null,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           Text(
             checkItem.name,
           ),
@@ -329,7 +335,7 @@ class ExpansionTileCheck extends StatelessWidget {
       ),
       subtitle: (checkItem.checkedAt != 0)
           ? Text.rich(
-              TextSpan(children: [
+              TextSpan(children: <InlineSpan>[
                 WidgetSpan(
                     child: Container(
                   decoration: BoxDecoration(
@@ -338,44 +344,47 @@ class ExpansionTileCheck extends StatelessWidget {
                   ),
                   child: Text(" ${checkItem.checkedAt.getDateString()} "),
                 )),
-                (checkItem.tagSelected.isNotEmpty)
-                    ? WidgetSpan(
-                        child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          color: Colors.yellow.shade100,
-                        ),
-                        child: Text(" ${checkItem.tagSelected} "),
-                      ))
-                    : TextSpan(),
+                if (checkItem.tagSelected.isNotEmpty)
+                  WidgetSpan(
+                      child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.yellow.shade100,
+                    ),
+                    child: Text(" ${checkItem.tagSelected} "),
+                  ))
+                else
+                  const TextSpan(),
                 TextSpan(text: " ${checkItem.checkedNote}")
               ]),
             )
           : null,
       trailing: (checkItem.checkedAt != 0)
-          ? Wrap(children: [
-              Icon(
+          ? Wrap(children: <Widget>[
+              const Icon(
                 CupertinoIcons.check_mark_circled,
                 color: Colors.green,
               ),
-              (checkItem.haveProblem)
-                  ? Icon(
-                      CupertinoIcons.exclamationmark_square,
-                      color: Colors.red.shade300,
-                    )
-                  : SizedBox.shrink(),
+              if (checkItem.haveProblem)
+                Icon(
+                  CupertinoIcons.exclamationmark_square,
+                  color: Colors.red.shade300,
+                )
+              else
+                const SizedBox.shrink(),
             ])
-          : Wrap(children: [
-              (checkItem.haveProblem)
-                  ? Icon(
-                      CupertinoIcons.exclamationmark_square,
-                      color: Colors.red.shade300,
-                    )
-                  : SizedBox.shrink(),
+          : Wrap(children: <Widget>[
+              if (checkItem.haveProblem)
+                Icon(
+                  CupertinoIcons.exclamationmark_square,
+                  color: Colors.red.shade300,
+                )
+              else
+                const SizedBox.shrink(),
             ]),
       expandedAlignment: Alignment.topLeft,
-      key: ValueKey(checkItem.id),
-      children: [
+      key: ValueKey<String>(checkItem.id),
+      children: <Widget>[
         verticalSpaceSmall,
         ExpansionChild(
           parentID: parentID,

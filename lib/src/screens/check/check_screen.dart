@@ -12,7 +12,8 @@ import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 import 'add_check_dialog.dart';
 
-var refreshKeyCheckScreen = GlobalKey<RefreshIndicatorState>();
+GlobalKey<RefreshIndicatorState> refreshKeyCheckScreen =
+    GlobalKey<RefreshIndicatorState>();
 
 class CheckScreen extends StatefulWidget {
   @override
@@ -40,12 +41,12 @@ class _CheckScreenState extends State<CheckScreen> {
       appBar: AppBar(
         elevation: 0,
         title: const Text("Pengecekan shift"),
-        actions: [
+        actions: <Widget>[
           IconButton(
             onPressed: () {
               Navigator.of(context).pushNamed(RouteGenerator.checkMaster);
             },
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.square_list,
               size: 28,
             ),
@@ -69,17 +70,17 @@ class _CheckRecyclerViewState extends State<CheckRecyclerView> {
     showModalBottomSheet(
       // isScrollControlled: true,
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      builder: (context) => AddCheckDialog(),
+      builder: (BuildContext context) => const AddCheckDialog(),
     );
   }
 
-  Future<dynamic> _loadCheck() {
-    return Future.delayed(Duration.zero, () {
-      context.read<CheckProvider>().findCheck().onError((error, _) {
+  Future<void> _loadCheck() {
+    return Future<void>.delayed(Duration.zero, () {
+      context.read<CheckProvider>().findCheck().onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -95,23 +96,24 @@ class _CheckRecyclerViewState extends State<CheckRecyclerView> {
   @override
   Widget build(BuildContext context) {
     return Consumer<CheckProvider>(
-      builder: (_, data, __) {
+      builder: (_, CheckProvider data, __) {
         return Stack(
           alignment: Alignment.center,
-          children: [
+          children: <Widget>[
             Positioned(
                 top: 0,
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: (data.checkList.length != 0)
+                child: (data.checkList.isNotEmpty)
                     ? buildListView(data)
                     : (data.state == ViewState.idle)
                         ? EmptyBox(loadTap: _loadCheck)
-                        : Center()),
-            (data.state == ViewState.busy)
-                ? Center(child: CircularProgressIndicator())
-                : Center(),
+                        : const Center()),
+            if (data.state == ViewState.busy)
+              const Center(child: CircularProgressIndicator())
+            else
+              const Center(),
             Positioned(
                 bottom: 50,
                 child: HomeLikeButton(
@@ -140,9 +142,9 @@ class _CheckRecyclerViewState extends State<CheckRecyclerView> {
       key: refreshKeyCheckScreen,
       onRefresh: _loadCheck,
       child: ListView.builder(
-        padding: EdgeInsets.only(bottom: 60),
+        padding: const EdgeInsets.only(bottom: 60),
         itemCount: data.checkList.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
               onTap: () {
                 data.setCheckID(data.checkList[index].id);
