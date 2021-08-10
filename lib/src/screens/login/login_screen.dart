@@ -15,14 +15,16 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: true,
-        body: LayoutBuilder(builder: (context, constraint) {
+        body: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraint) {
           return SingleChildScrollView(
-            physics: ClampingScrollPhysics(),
+            physics: const ClampingScrollPhysics(),
             child: Column(
               children: <Widget>[
                 Upper(constraint.maxHeight * 0.5, constraint.maxWidth),
                 Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                     child: LoginForm())
               ],
             ),
@@ -32,9 +34,9 @@ class LoginScreen extends StatelessWidget {
 }
 
 class Upper extends StatelessWidget {
+  const Upper(this.height, this.width);
   final double height;
   final double width;
-  const Upper(this.height, this.width);
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,7 @@ class Upper extends StatelessWidget {
       child: Center(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: [
+        children: <Widget>[
           if (screenIsPortrait(context))
             SizedBox(
               height: 100,
@@ -74,10 +76,10 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
-  final usernameController = TextEditingController();
-  final passwordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
-  final _key = GlobalKey<FormState>();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -87,16 +89,16 @@ class _LoginFormState extends State<LoginForm> {
   }
 
   void _login() {
-    final authViewModel = context.read<AuthProvider>();
+    final AuthProvider authViewModel = context.read<AuthProvider>();
 
     if (_key.currentState?.validate() ?? false) {
-      final username = usernameController.text;
-      final password = passwordController.text;
+      final String username = usernameController.text;
+      final String password = passwordController.text;
 
-      Future.delayed(Duration.zero, () {
-        authViewModel.login(username, password).then((value) {
+      Future<void>.delayed(Duration.zero, () {
+        authViewModel.login(username, password).then((bool value) {
           if (value) {
-            Future.delayed(Duration(milliseconds: 500), () {
+            Future<void>.delayed(const Duration(milliseconds: 500), () {
               if (App.getRoles().contains("VENDOR")) {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                     RouteGenerator.homeVendor,
@@ -108,10 +110,9 @@ class _LoginFormState extends State<LoginForm> {
               }
             });
           }
-        }).onError((error, _) {
+        }).onError((Object? error, _) {
           if (error != null) {
-            showToastError(
-                context: context, message: error.toString(), onTop: true);
+            showToastError(context: context, message: error.toString());
           }
         });
       });
@@ -122,17 +123,23 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    const enabledOutlineInputBorder = OutlineInputBorder(
+    const OutlineInputBorder enabledOutlineInputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        borderSide: BorderSide(color: Pallete.secondaryBackground, width: 1));
+        borderSide: BorderSide(
+          color: Pallete.secondaryBackground,
+        ));
 
-    const focusedOutlineInputBorder = OutlineInputBorder(
+    const OutlineInputBorder focusedOutlineInputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        borderSide: BorderSide(color: Colors.grey, width: 1));
+        borderSide: BorderSide(
+          color: Colors.grey,
+        ));
 
-    const errorOutlineInputBorder = OutlineInputBorder(
+    const OutlineInputBorder errorOutlineInputBorder = OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        borderSide: BorderSide(color: Colors.red, width: 1));
+        borderSide: BorderSide(
+          color: Colors.red,
+        ));
 
     return Form(
         key: _key,
@@ -151,7 +158,7 @@ class _LoginFormState extends State<LoginForm> {
                     border: OutlineInputBorder(),
                     prefixIcon: Icon(Icons.person),
                     labelText: "Username"),
-                validator: (text) {
+                validator: (String? text) {
                   if (text == null || text.isEmpty) {
                     return 'username tidak boleh kosong';
                   }
@@ -173,7 +180,7 @@ class _LoginFormState extends State<LoginForm> {
                     prefixIcon: Icon(Icons.lock),
                     labelText: "Password"),
                 obscureText: true,
-                validator: (text) {
+                validator: (String? text) {
                   if (text == null || text.length < 7) {
                     return 'Password setidaknya 7 karakter';
                   }
@@ -184,7 +191,7 @@ class _LoginFormState extends State<LoginForm> {
             ),
             verticalSpaceSmall,
             Consumer<AuthProvider>(
-              builder: (_, data, __) {
+              builder: (_, AuthProvider data, __) {
                 return (data.state == ViewState.busy)
                     ? const CircularProgressIndicator()
                     : RisaButton(title: "login", onPress: _login);
