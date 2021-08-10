@@ -22,10 +22,10 @@ class _ImproveScreenState extends State<ImproveScreen> {
       appBar: AppBar(
         elevation: 0,
         title: const Text("Daftar Improve"),
-        actions: [
+        actions: <Widget>[
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.decrease_indent,
               size: 28,
             ),
@@ -34,11 +34,11 @@ class _ImproveScreenState extends State<ImproveScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
           onPressed: () {
             Navigator.pushNamed(context, RouteGenerator.improveAdd);
           },
-          label: Text("Tambah data")),
+          label: const Text("Tambah data")),
       body: ImproveRecyclerView(),
     );
   }
@@ -50,11 +50,12 @@ class ImproveRecyclerView extends StatefulWidget {
 }
 
 class _ImproveRecyclerViewState extends State<ImproveRecyclerView> {
-  final refreshKeyImproveScreen = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> refreshKeyImproveScreen =
+      GlobalKey<RefreshIndicatorState>();
 
   Future<void> _loadImprove() {
-    return Future.delayed(Duration.zero, () {
-      context.read<ImproveProvider>().findImprove().onError((error, _) {
+    return Future<void>.delayed(Duration.zero, () {
+      context.read<ImproveProvider>().findImprove().onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -68,23 +69,24 @@ class _ImproveRecyclerViewState extends State<ImproveRecyclerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ImproveProvider>(builder: (_, data, __) {
+    return Consumer<ImproveProvider>(builder: (_, ImproveProvider data, __) {
       return Stack(
         alignment: Alignment.center,
-        children: [
+        children: <Widget>[
           Positioned(
               top: 0,
               bottom: 0,
               left: 0,
               right: 0,
-              child: (data.improveList.length != 0)
+              child: (data.improveList.isNotEmpty)
                   ? buildListView(data)
                   : (data.state == ViewState.idle)
                       ? EmptyBox(loadTap: _loadImprove)
-                      : Center()),
-          (data.state == ViewState.busy)
-              ? Center(child: CircularProgressIndicator())
-              : Center(),
+                      : const Center()),
+          if (data.state == ViewState.busy)
+            const Center(child: CircularProgressIndicator())
+          else
+            const Center(),
         ],
       );
     });
@@ -95,9 +97,9 @@ class _ImproveRecyclerViewState extends State<ImproveRecyclerView> {
       key: refreshKeyImproveScreen,
       onRefresh: _loadImprove,
       child: ListView.builder(
-        padding: EdgeInsets.only(bottom: 60),
+        padding: const EdgeInsets.only(bottom: 60),
         itemCount: data.improveList.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
               onTap: () {
                 context.read<ImproveProvider>().removeDetail();

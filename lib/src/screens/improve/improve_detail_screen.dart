@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/home_like_button.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
 
 import '../../api/json_models/response/improve_list_resp.dart';
 import '../../api/json_models/response/improve_resp.dart';
@@ -10,7 +8,9 @@ import '../../config/pallatte.dart';
 import '../../providers/improves.dart';
 import '../../router/routes.dart';
 import '../../shared/func_flushbar.dart';
+import '../../shared/home_like_button.dart';
 import '../../shared/increment_decrement_icon.dart';
+import '../../shared/ui_helpers.dart';
 import '../../utils/utils.dart';
 
 GlobalKey<RefreshIndicatorState> refreshKeyImproveScreen =
@@ -28,7 +28,7 @@ class _ImproveDetailScreenState extends State<ImproveDetailScreen> {
       appBar: AppBar(
         elevation: 0,
         title: const Text("Improve Detail"),
-        actions: [
+        actions: <Widget>[
           IconButton(
             onPressed: () {
               Navigator.pushNamed(context, RouteGenerator.improveEdit);
@@ -53,16 +53,16 @@ class ImproveRecyclerView extends StatefulWidget {
 
 class _ImproveRecyclerViewState extends State<ImproveRecyclerView> {
   Future<void> _loadDetailImprove() {
-    return Future.delayed(Duration.zero, () {
-      context.read<ImproveProvider>().getDetail().onError((error, _) {
+    return Future<void>.delayed(Duration.zero, () {
+      context.read<ImproveProvider>().getDetail().onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
   }
 
   Future<void> _enablingImprove() {
-    return Future.delayed(Duration.zero, () {
-      context.read<ImproveProvider>().enabling().onError((error, _) {
+    return Future<void>.delayed(Duration.zero, () {
+      context.read<ImproveProvider>().enabling().onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -76,22 +76,22 @@ class _ImproveRecyclerViewState extends State<ImproveRecyclerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ImproveProvider>(builder: (_, data, __) {
+    return Consumer<ImproveProvider>(builder: (_, ImproveProvider data, __) {
       return Stack(
         alignment: Alignment.center,
-        children: [
+        children: <Widget>[
           Positioned(
               top: 0, bottom: 0, left: 0, right: 0, child: buildListView(data)),
           if (data.detailState == ViewState.busy)
-            Center(child: CircularProgressIndicator())
+            const Center(child: CircularProgressIndicator())
         ],
       );
     });
   }
 
   Widget buildListView(ImproveProvider data) {
-    final detail = data.improveDetail;
-    final improveMinRess = ImproveMinResponse(
+    final ImproveDetailResponseData detail = data.improveDetail;
+    final ImproveMinResponse improveMinRess = ImproveMinResponse(
         detail.id,
         detail.createdAt,
         detail.updatedAt,
@@ -119,30 +119,31 @@ class _ImproveRecyclerViewState extends State<ImproveRecyclerView> {
           )),
           SliverToBoxAdapter(
               child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Divider(
+            children: <Widget>[
+              const Divider(
                 color: Pallete.secondaryBackground,
                 thickness: 5.0,
               ),
-              (detail.isActive)
-                  ? HomeLikeButton(
-                      iconData: Icons.add,
-                      text: "Tambah Progress",
-                      tapTap: () {
-                        data.setImproveDataPass(improveMinRess);
-                        Navigator.pushNamed(
-                            context, RouteGenerator.improveChange);
-                      })
-                  : HomeLikeButton(
-                      iconData: CupertinoIcons.rocket,
-                      text: "Aktifkan",
-                      tapTap: _enablingImprove),
+              if (detail.isActive)
+                HomeLikeButton(
+                    iconData: Icons.add,
+                    text: "Tambah Progress",
+                    tapTap: () {
+                      data.setImproveDataPass(improveMinRess);
+                      Navigator.pushNamed(
+                          context, RouteGenerator.improveChange);
+                    })
+              else
+                HomeLikeButton(
+                    iconData: CupertinoIcons.rocket,
+                    text: "Aktifkan",
+                    tapTap: _enablingImprove),
               verticalSpaceSmall
             ],
           )),
           SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
+            delegate:
+                SliverChildBuilderDelegate((BuildContext context, int index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: ChangeImproveTile(
@@ -150,7 +151,7 @@ class _ImproveRecyclerViewState extends State<ImproveRecyclerView> {
               );
             }, childCount: detail.improveChanges.length),
           ),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
               child: SizedBox(
             height: 100,
           )),
@@ -161,9 +162,8 @@ class _ImproveRecyclerViewState extends State<ImproveRecyclerView> {
 }
 
 class ImproveHeaderTile extends StatelessWidget {
-  final ImproveDetailResponseData data;
-
   const ImproveHeaderTile({required this.data});
+  final ImproveDetailResponseData data;
 
   @override
   Widget build(BuildContext context) {
@@ -173,16 +173,17 @@ class ImproveHeaderTile extends StatelessWidget {
         shadowColor: Colors.white,
         elevation: 5,
         shape: RoundedRectangleBorder(
-            side: BorderSide(color: Pallete.secondaryBackground, width: 0.2),
+            side: const BorderSide(
+                color: Pallete.secondaryBackground, width: 0.2),
             borderRadius: BorderRadius.circular(10)),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListTile(
               title: Text(data.title,
-                  style: Theme.of(context).textTheme.bodyText1!),
+                  style: Theme.of(context).textTheme.bodyText1),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     data.description,
                   ),
@@ -191,18 +192,18 @@ class ImproveHeaderTile extends StatelessWidget {
                 ],
               ),
               leading: (!data.isActive)
-                  ? Icon(Icons.disabled_by_default_rounded)
+                  ? const Icon(Icons.disabled_by_default_rounded)
                   : null,
               trailing: (data.goal != 0)
                   ? Container(
-                      padding: EdgeInsets.all(8),
+                      padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.blueGrey),
                         shape: BoxShape.circle,
                       ),
                       child: Text(
                         "${(data.goalsAchieved / data.goal * 100).toInt()}%",
-                        style: TextStyle(fontSize: 10),
+                        style: const TextStyle(fontSize: 10),
                       ))
                   : const SizedBox()),
         ),
@@ -212,9 +213,8 @@ class ImproveHeaderTile extends StatelessWidget {
 }
 
 class ChangeImproveTile extends StatelessWidget {
-  final ImproveChange dataTile;
-
   const ChangeImproveTile({Key? key, required this.dataTile}) : super(key: key);
+  final ImproveChange dataTile;
 
   @override
   Widget build(BuildContext context) {
@@ -226,10 +226,10 @@ class ChangeImproveTile extends StatelessWidget {
           title: Text(dataTile.author.toLowerCase()),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text(
                 dataTile.time.getDateString(),
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               ),
               Text(dataTile.note),
             ],

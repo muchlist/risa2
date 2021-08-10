@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/api/json_models/response/improve_list_resp.dart';
 
 import '../../api/json_models/request/improve_change_req.dart';
+import '../../api/json_models/response/improve_list_resp.dart';
 import '../../config/pallatte.dart';
 import '../../globals.dart';
 import '../../providers/improves.dart';
