@@ -43,7 +43,7 @@ class _AddStockBodyState extends State<AddStockBody> {
   void _addStock() {
     if (_key.currentState?.validate() ?? false) {
       // validasi tambahan
-      var errorMessage = "";
+      String errorMessage = "";
       if (_selectedCategory == null) {
         errorMessage = errorMessage + "kategori tidak boleh kosong. ";
       }
@@ -52,8 +52,8 @@ class _AddStockBodyState extends State<AddStockBody> {
         return;
       }
 
-      var qty = 0;
-      var threshold = 0;
+      int qty = 0;
+      int threshold = 0;
       if (qtyController.text.isNotEmpty) {
         qty = int.parse(qtyController.text);
       }
@@ -62,7 +62,7 @@ class _AddStockBodyState extends State<AddStockBody> {
       }
 
       // Payload
-      final payload = StockRequest(
+      final StockRequest payload = StockRequest(
           name: titleController.text,
           stockCategory: _selectedCategory ?? "",
           location: locationController.text.toUpperCase(),
@@ -73,19 +73,21 @@ class _AddStockBodyState extends State<AddStockBody> {
           deactive: false);
 
       // Call Provider
-      Future.delayed(
+      Future<void>.delayed(
           Duration.zero,
-          () => context.read<StockProvider>().addStock(payload).then((value) {
+          () => context
+                  .read<StockProvider>()
+                  .addStock(payload)
+                  .then((bool value) {
                 if (value) {
                   Navigator.of(context).pop();
                   showToastSuccess(
                       context: context,
                       message: "Berhasil membuat stok ${payload.name}");
                 }
-              }).onError((error, _) {
+              }).onError((Object? error, _) {
                 if (error != null) {
-                  showToastError(
-                      context: context, message: error.toString(), onTop: true);
+                  showToastError(context: context, message: error.toString());
                 }
               }));
     }
@@ -107,12 +109,12 @@ class _AddStockBodyState extends State<AddStockBody> {
   void initState() {
     // default length == 1 , if option got update length more than 1
     if (context.read<StockProvider>().stockOption.category.length == 1) {
-      Future.delayed(
+      Future<void>.delayed(
           Duration.zero,
           () => context
                   .read<StockProvider>()
                   .findOptionStock()
-                  .onError((error, _) {
+                  .onError((Object? error, _) {
                 showToastError(context: context, message: error.toString());
               }));
     }
@@ -129,7 +131,7 @@ class _AddStockBodyState extends State<AddStockBody> {
             key: _key,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 // * Judul text ------------------------
                 const Text(
                   "Nama Stok",
@@ -139,14 +141,13 @@ class _AddStockBodyState extends State<AddStockBody> {
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Pallete.secondaryBackground,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: titleController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return 'Nama stok tidak boleh kosong';
                     }
@@ -161,28 +162,28 @@ class _AddStockBodyState extends State<AddStockBody> {
                   "Kategori",
                   style: TextStyle(fontSize: 16),
                 ),
-                Consumer<StockProvider>(builder: (_, data, __) {
+                Consumer<StockProvider>(builder: (_, StockProvider data, __) {
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     height: 50,
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
                     decoration:
-                        BoxDecoration(color: Pallete.secondaryBackground),
+                        const BoxDecoration(color: Pallete.secondaryBackground),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isExpanded: true,
-                        hint: Text("Kategori"),
+                        hint: const Text("Kategori"),
                         value: (_selectedCategory != null)
                             ? _selectedCategory
                             : null,
-                        items: data.stockOption.category.map((cat) {
+                        items: data.stockOption.category.map((String cat) {
                           return DropdownMenuItem<String>(
                             value: cat,
                             child: Text(cat),
                           );
                         }).toList(),
-                        onChanged: (value) {
+                        onChanged: (String? value) {
                           setState(() {
                             _selectedCategory = value;
                             FocusScope.of(context).requestFocus(FocusNode());
@@ -205,14 +206,13 @@ class _AddStockBodyState extends State<AddStockBody> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Pallete.secondaryBackground,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: qtyController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return null;
                     } else if (int.tryParse(text) != null &&
@@ -234,14 +234,13 @@ class _AddStockBodyState extends State<AddStockBody> {
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Pallete.secondaryBackground,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: unitController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return "Satuan tidak boleh kosong";
                     } else if (text.length > 5) {
@@ -263,14 +262,13 @@ class _AddStockBodyState extends State<AddStockBody> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.number,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Pallete.secondaryBackground,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: thresholdController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return null;
                     } else if (int.tryParse(text) != null &&
@@ -299,7 +297,7 @@ class _AddStockBodyState extends State<AddStockBody> {
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: locationController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return "Lokasi tidak boleh kosong";
                     }
@@ -329,9 +327,9 @@ class _AddStockBodyState extends State<AddStockBody> {
 
                 verticalSpaceMedium,
 
-                Consumer<StockProvider>(builder: (_, data, __) {
+                Consumer<StockProvider>(builder: (_, StockProvider data, __) {
                   return (data.state == ViewState.busy)
-                      ? Center(child: const CircularProgressIndicator())
+                      ? const Center(child: CircularProgressIndicator())
                       : Center(
                           child: HomeLikeButton(
                               iconData: CupertinoIcons.add,

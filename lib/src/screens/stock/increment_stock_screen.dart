@@ -28,35 +28,36 @@ class IncrementStockBody extends StatefulWidget {
 }
 
 class _IncrementStockBodyState extends State<IncrementStockBody> {
-  final _key = GlobalKey<FormState>();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
-  final qtyController = TextEditingController();
-  final noteController = TextEditingController();
+  final TextEditingController qtyController = TextEditingController();
+  final TextEditingController noteController = TextEditingController();
 
   void _incrementStock() {
     if (_key.currentState?.validate() ?? false) {
-      final timeNow = DateTime.now().toInt();
+      final int timeNow = DateTime.now().toInt();
       // Payload
-      final payload = StockChangeRequest(
+      final StockChangeRequest payload = StockChangeRequest(
           baNumber: timeNow.toString(),
           note: noteController.text,
           qty: int.parse(qtyController.text),
           time: 0);
 
       // Call Provider
-      Future.delayed(
+      Future<void>.delayed(
           Duration.zero,
-          () =>
-              context.read<StockProvider>().changeStock(payload).then((value) {
+          () => context
+                  .read<StockProvider>()
+                  .changeStock(payload)
+                  .then((bool value) {
                 if (value) {
                   Navigator.of(context).pop();
                   showToastSuccess(
                       context: context, message: "Berhasil menambahkan stok");
                 }
-              }).onError((error, _) {
+              }).onError((Object? error, _) {
                 if (error != null) {
-                  showToastError(
-                      context: context, message: error.toString(), onTop: true);
+                  showToastError(context: context, message: error.toString());
                 }
               }));
     }
@@ -80,7 +81,7 @@ class _IncrementStockBodyState extends State<IncrementStockBody> {
             key: _key,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 // * Judul text ------------------------
                 const Text(
                   "Nama Stok",
@@ -90,7 +91,6 @@ class _IncrementStockBodyState extends State<IncrementStockBody> {
                 TextFormField(
                   enabled: false,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Pallete.secondaryBackground,
@@ -109,17 +109,15 @@ class _IncrementStockBodyState extends State<IncrementStockBody> {
 
                 TextFormField(
                   textInputAction: TextInputAction.next,
-                  keyboardType: TextInputType.numberWithOptions(
-                      decimal: false, signed: false),
+                  keyboardType: const TextInputType.numberWithOptions(),
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Pallete.secondaryBackground,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: qtyController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return "Qty tidak boleh kosong";
                     } else if (int.tryParse(text) != null &&
@@ -148,7 +146,7 @@ class _IncrementStockBodyState extends State<IncrementStockBody> {
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: noteController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return "Catatan tidak boleh kosong";
                     }
@@ -158,9 +156,9 @@ class _IncrementStockBodyState extends State<IncrementStockBody> {
 
                 verticalSpaceMedium,
 
-                Consumer<StockProvider>(builder: (_, data, __) {
+                Consumer<StockProvider>(builder: (_, StockProvider data, __) {
                   return (data.stockChangeState == ViewState.busy)
-                      ? Center(child: const CircularProgressIndicator())
+                      ? const Center(child: CircularProgressIndicator())
                       : Center(
                           child: HomeLikeButton(
                               iconData: CupertinoIcons.add,

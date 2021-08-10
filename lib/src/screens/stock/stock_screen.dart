@@ -11,7 +11,8 @@ import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 import '../search/stock_search_delegate.dart';
 
-var refreshKeyStockScreen = GlobalKey<RefreshIndicatorState>();
+GlobalKey<RefreshIndicatorState> refreshKeyStockScreen =
+    GlobalKey<RefreshIndicatorState>();
 
 class StockScreen extends StatefulWidget {
   @override
@@ -25,13 +26,14 @@ class _StockScreenState extends State<StockScreen> {
       appBar: AppBar(
         elevation: 0,
         title: const Text("Daftar Stock"),
-        actions: [
+        actions: <Widget>[
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.search,
               size: 28,
             ),
             onPressed: () async {
+              // ignore: always_specify_types
               final searchResult = await showSearch(
                 context: context,
                 delegate: StockSearchDelegate(),
@@ -45,7 +47,7 @@ class _StockScreenState extends State<StockScreen> {
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.decrease_indent,
               size: 28,
             ),
@@ -54,11 +56,11 @@ class _StockScreenState extends State<StockScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
           onPressed: () {
             Navigator.pushNamed(context, RouteGenerator.stockAdd);
           },
-          label: Text("Tambah data")),
+          label: const Text("Tambah data")),
       body: StockRecyclerView(),
     );
   }
@@ -71,8 +73,8 @@ class StockRecyclerView extends StatefulWidget {
 
 class _StockRecyclerViewState extends State<StockRecyclerView> {
   Future<void> _loadStock() {
-    return Future.delayed(Duration.zero, () {
-      context.read<StockProvider>().findStock().onError((error, _) {
+    return Future<void>.delayed(Duration.zero, () {
+      context.read<StockProvider>().findStock().onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -86,23 +88,24 @@ class _StockRecyclerViewState extends State<StockRecyclerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<StockProvider>(builder: (_, data, __) {
+    return Consumer<StockProvider>(builder: (_, StockProvider data, __) {
       return Stack(
         alignment: Alignment.center,
-        children: [
+        children: <Widget>[
           Positioned(
               top: 0,
               bottom: 0,
               left: 0,
               right: 0,
-              child: (data.stockList.length != 0)
+              child: (data.stockList.isNotEmpty)
                   ? buildListView(data)
                   : (data.state == ViewState.idle)
                       ? EmptyBox(loadTap: _loadStock)
-                      : Center()),
-          (data.state == ViewState.busy)
-              ? Center(child: CircularProgressIndicator())
-              : Center(),
+                      : const Center()),
+          if (data.state == ViewState.busy)
+            const Center(child: CircularProgressIndicator())
+          else
+            const Center(),
         ],
       );
     });
@@ -113,9 +116,9 @@ class _StockRecyclerViewState extends State<StockRecyclerView> {
       key: refreshKeyStockScreen,
       onRefresh: _loadStock,
       child: ListView.builder(
-        padding: EdgeInsets.only(bottom: 60),
+        padding: const EdgeInsets.only(bottom: 60),
         itemCount: data.stockList.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
               onTap: () {
                 context.read<StockProvider>().removeDetail();

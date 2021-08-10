@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/router/routes.dart';
 
 import '../../providers/stock.dart';
+import '../../router/routes.dart';
 import '../../shared/func_flushbar.dart';
 import 'stock_detail_fragment.dart';
 import 'stock_use_fragment.dart';
@@ -28,8 +28,8 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).accentColor),
-                  child: const Text("Tidak"),
-                  onPressed: () => Navigator.of(context).pop(false)),
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text("Tidak")),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   child: const Text("Ya"))
@@ -40,8 +40,8 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
 
   @override
   void initState() {
-    Future.delayed(Duration.zero, () {
-      context.read<StockProvider>().getDetail().onError((error, _) =>
+    Future<void>.delayed(Duration.zero, () {
+      context.read<StockProvider>().getDetail().onError((Object? error, _) =>
           showToastError(context: context, message: error.toString()));
     });
     super.initState();
@@ -54,12 +54,12 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          bottom: TabBar(
-            tabs: [
-              const Tab(
+          bottom: const TabBar(
+            tabs: <Widget>[
+              Tab(
                 text: "Detail",
               ),
-              const Tab(
+              Tab(
                 text: "Pemakaian",
               ),
             ],
@@ -67,7 +67,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
           title: const Text('Stock Detail'),
         ),
         body: TabBarView(
-          children: [
+          children: <Widget>[
             StockDetailFragment(),
             StockUseRecyclerView(),
           ],
@@ -75,19 +75,16 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
         floatingActionButton: SpeedDial(
           icon: Icons.add,
           activeIcon: Icons.close,
-          closeManually: false,
-          renderOverlay: false,
           curve: Curves.bounceIn,
           overlayColor: Colors.black,
           overlayOpacity: 0.2,
-          shape: CircleBorder(),
-          children: [
+          children: <SpeedDialChild>[
             SpeedDialChild(
-              child: Icon(CupertinoIcons.plus),
+              child: const Icon(CupertinoIcons.plus),
               backgroundColor: Colors.green.shade100,
               label: 'tambahkan stok',
               onTap: () async {
-                final incremented = await _incrementConfirm(context);
+                final bool? incremented = await _incrementConfirm(context);
                 if (incremented != null && incremented) {
                   await Navigator.pushNamed(
                       context, RouteGenerator.stockIncrement);
@@ -95,7 +92,7 @@ class _StockDetailScreenState extends State<StockDetailScreen> {
               },
             ),
             SpeedDialChild(
-              child: Icon(CupertinoIcons.minus),
+              child: const Icon(CupertinoIcons.minus),
               backgroundColor: Colors.red.shade100,
               label: 'kurangi stok',
               onTap: () {

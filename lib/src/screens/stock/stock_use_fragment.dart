@@ -9,14 +9,14 @@ import '../../utils/date_unix.dart';
 class StockUseRecyclerView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Consumer<StockProvider>(builder: (_, data, __) {
-      final stockUse = data.sortedStockUse;
+    return Consumer<StockProvider>(builder: (_, StockProvider data, __) {
+      final List<StockChange> stockUse = data.sortedStockUse;
 
       return ListView.builder(
-        padding: EdgeInsets.only(bottom: 60),
+        padding: const EdgeInsets.only(bottom: 60),
         itemCount: stockUse.length,
-        itemBuilder: (context, index) {
-          final stockUseData = stockUse[index];
+        itemBuilder: (BuildContext context, int index) {
+          final StockChange stockUseData = stockUse[index];
 
           return ChangeStockTile(
             dataTile: stockUseData,
@@ -28,15 +28,14 @@ class StockUseRecyclerView extends StatelessWidget {
 }
 
 class TxtBox extends StatelessWidget {
+  const TxtBox({required this.text, required this.color});
   final String text;
   final Color color;
-
-  const TxtBox({required this.text, required this.color});
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: [
+      children: <Widget>[
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(2),
@@ -44,16 +43,15 @@ class TxtBox extends StatelessWidget {
           ),
           child: Text(text),
         ),
-        Spacer(),
+        const Spacer(),
       ],
     );
   }
 }
 
 class ChangeStockTile extends StatelessWidget {
-  final StockChange dataTile;
-
   const ChangeStockTile({Key? key, required this.dataTile}) : super(key: key);
+  final StockChange dataTile;
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +64,7 @@ class ChangeStockTile extends StatelessWidget {
           subtitle: Text(dataTile.note),
           trailing: Text(
             dataTile.time.getDateString(),
-            style: TextStyle(fontSize: 12),
+            style: const TextStyle(fontSize: 12),
           ),
         ),
       ),
