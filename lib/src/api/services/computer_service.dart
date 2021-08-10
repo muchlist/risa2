@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:risa2/src/api/json_models/option/computer_option.dart';
 
 import '../filter_models/computer_filter.dart';
 import '../http_client.dart';
+import '../json_models/option/computer_option.dart';
 import '../json_models/request/computer_edit_req.dart';
 import '../json_models/request/computer_req.dart';
 import '../json_models/response/computer_list_resp.dart';
@@ -47,7 +47,7 @@ class ComputerService {
   }
 
   Future<ComputerListResponse> findComputer(FilterComputer f) {
-    var query = "";
+    String query = "";
     if (f.branch != null) {
       query = query + "branch=${f.branch}&";
     }

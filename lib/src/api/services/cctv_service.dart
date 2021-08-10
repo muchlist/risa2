@@ -17,36 +17,36 @@ class CctvService {
 
   Future<MessageResponse> createCctv(CctvRequest payload) {
     return RequestREST(endpoint: "/cctv", data: payload.toJson())
-        .executePost<MessageResponse>(MessageParser());
+        .executePost<MessageResponse>(const MessageParser());
   }
 
   Future<CctvDetailResponse> editCctv(String id, CctvEditRequest payload) {
     return RequestREST(endpoint: "/cctv/$id", data: payload.toJson())
-        .executePut<CctvDetailResponse>(CctvParser());
+        .executePut<CctvDetailResponse>(const CctvParser());
   }
 
   Future<CctvDetailResponse> getCctv(String id) {
     return RequestREST(endpoint: "/cctv/$id")
-        .executeGet<CctvDetailResponse>(CctvParser());
+        .executeGet<CctvDetailResponse>(const CctvParser());
   }
 
   Future<CctvDetailResponse> enableCctv(String id) {
     return RequestREST(endpoint: "/cctv-avail/$id/enable")
-        .executeGet<CctvDetailResponse>(CctvParser());
+        .executeGet<CctvDetailResponse>(const CctvParser());
   }
 
   Future<CctvDetailResponse> disableCctv(String id) {
     return RequestREST(endpoint: "/cctv-avail/$id/disable")
-        .executeGet<CctvDetailResponse>(CctvParser());
+        .executeGet<CctvDetailResponse>(const CctvParser());
   }
 
   Future<MessageResponse> deleteCctv(String id) {
     return RequestREST(endpoint: "/cctv/$id")
-        .executeDelete<MessageResponse>(MessageParser());
+        .executeDelete<MessageResponse>(const MessageParser());
   }
 
   Future<CctvListResponse> findCctv(FilterCctv f) {
-    var query = "";
+    String query = "";
     if (f.branch != null) {
       query = query + "branch=${f.branch}&";
     }
@@ -64,13 +64,13 @@ class CctvService {
     }
 
     return RequestREST(endpoint: "/cctv?$query")
-        .executeGet<CctvListResponse>(CctvListParser());
+        .executeGet<CctvListResponse>(const CctvListParser());
   }
 
   Future<CctvDetailResponse> uploadImage(String id, File file) async {
     return RequestREST(endpoint: "/cctv-image/$id", data: <String, dynamic>{
       "image": await MultipartFile.fromFile(file.path)
-    }).executeUpload(CctvParser());
+    }).executeUpload(const CctvParser());
   }
 
   Future<OptLocationType> getOptCreateCctv(String branch) {

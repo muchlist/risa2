@@ -8,14 +8,14 @@ class PdfService {
   const PdfService();
   Future<PdfListResponse> findPDF({String type = ""}) {
     return RequestREST(endpoint: "/list-pdf?type=$type")
-        .executeGet<PdfListResponse>(PdfListParser());
+        .executeGet<PdfListResponse>(const PdfListParser());
   }
 
   Future<MessageResponse> generatePDF(String branch, int start, int end) {
     //generate-pdf?branch=BANJARMASIN&start=1625721500&end=1625745096
     return RequestREST(
             endpoint: "/generate-pdf?branch=$branch&start=$start&end=$end")
-        .executeGet<MessageResponse>(MessageParser());
+        .executeGet<MessageResponse>(const MessageParser());
   }
 
   Future<MessageResponse> generatePDFforVendor(
@@ -24,6 +24,6 @@ class PdfService {
     return RequestREST(
             endpoint:
                 "/generate-pdf-vendor?branch=$branch&start=$start&end=$end")
-        .executeGet<MessageResponse>(MessageParser());
+        .executeGet<MessageResponse>(const MessageParser());
   }
 }

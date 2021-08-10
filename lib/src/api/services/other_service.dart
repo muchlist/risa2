@@ -17,36 +17,36 @@ class OtherService {
 
   Future<MessageResponse> createOther(OtherRequest payload) {
     return RequestREST(endpoint: "/other", data: payload.toJson())
-        .executePost<MessageResponse>(MessageParser());
+        .executePost<MessageResponse>(const MessageParser());
   }
 
   Future<OtherDetailResponse> editOther(String id, OtherEditRequest payload) {
     return RequestREST(endpoint: "/other/$id", data: payload.toJson())
-        .executePut<OtherDetailResponse>(OtherParser());
+        .executePut<OtherDetailResponse>(const OtherParser());
   }
 
   Future<OtherDetailResponse> getOther(String id) {
     return RequestREST(endpoint: "/other/$id")
-        .executeGet<OtherDetailResponse>(OtherParser());
+        .executeGet<OtherDetailResponse>(const OtherParser());
   }
 
   Future<OtherDetailResponse> enableOther(String id, String subCategory) {
     return RequestREST(endpoint: "/other-avail/$subCategory/$id/enable")
-        .executeGet<OtherDetailResponse>(OtherParser());
+        .executeGet<OtherDetailResponse>(const OtherParser());
   }
 
   Future<OtherDetailResponse> disableOther(String id, String subCategory) {
     return RequestREST(endpoint: "/other-avail/$subCategory/$id/disable")
-        .executeGet<OtherDetailResponse>(OtherParser());
+        .executeGet<OtherDetailResponse>(const OtherParser());
   }
 
   Future<MessageResponse> deleteOther(String id, String subCategory) {
     return RequestREST(endpoint: "/other/$subCategory/$id")
-        .executeDelete<MessageResponse>(MessageParser());
+        .executeDelete<MessageResponse>(const MessageParser());
   }
 
   Future<OtherListResponse> findOther(FilterOther f, String subCategory) {
-    var query = "";
+    String query = "";
     if (f.branch != null) {
       query = query + "branch=${f.branch}&";
     }
@@ -67,13 +67,13 @@ class OtherService {
     }
 
     return RequestREST(endpoint: "/others/$subCategory?$query")
-        .executeGet<OtherListResponse>(OtherListParser());
+        .executeGet<OtherListResponse>(const OtherListParser());
   }
 
   Future<OtherDetailResponse> uploadImage(String id, File file) async {
     return RequestREST(endpoint: "/other-image/$id", data: <String, dynamic>{
       "image": await MultipartFile.fromFile(file.path)
-    }).executeUpload(OtherParser());
+    }).executeUpload(const OtherParser());
   }
 
   Future<OptLocationDivison> getOptCreateOther(String branch) {

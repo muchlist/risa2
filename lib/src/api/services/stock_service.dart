@@ -18,36 +18,36 @@ class StockService {
 
   Future<MessageResponse> createStock(StockRequest payload) {
     return RequestREST(endpoint: "/stock", data: payload.toJson())
-        .executePost<MessageResponse>(MessageParser());
+        .executePost<MessageResponse>(const MessageParser());
   }
 
   Future<StockDetailResponse> editStock(String id, StockEditRequest payload) {
     return RequestREST(endpoint: "/stock/$id", data: payload.toJson())
-        .executePut<StockDetailResponse>(StockParser());
+        .executePut<StockDetailResponse>(const StockParser());
   }
 
   Future<StockDetailResponse> getStock(String id) {
     return RequestREST(endpoint: "/stock/$id")
-        .executeGet<StockDetailResponse>(StockParser());
+        .executeGet<StockDetailResponse>(const StockParser());
   }
 
   Future<StockDetailResponse> enableStock(String id) {
     return RequestREST(endpoint: "/stock-avail/$id/enable")
-        .executeGet<StockDetailResponse>(StockParser());
+        .executeGet<StockDetailResponse>(const StockParser());
   }
 
   Future<StockDetailResponse> disableStock(String id) {
     return RequestREST(endpoint: "/stock-avail/$id/disable")
-        .executeGet<StockDetailResponse>(StockParser());
+        .executeGet<StockDetailResponse>(const StockParser());
   }
 
   Future<MessageResponse> deleteStock(String id) {
     return RequestREST(endpoint: "/stock/$id")
-        .executeDelete<MessageResponse>(MessageParser());
+        .executeDelete<MessageResponse>(const MessageParser());
   }
 
   Future<StockListResponse> findStock(FilterStock f) {
-    var query = "";
+    String query = "";
     if (f.name != null) {
       query = query + "name=${f.name}&";
     }
@@ -62,7 +62,7 @@ class StockService {
     }
 
     return RequestREST(endpoint: "/stock?$query")
-        .executeGet<StockListResponse>(StockListParser());
+        .executeGet<StockListResponse>(const StockListParser());
   }
 
   Future<StockDetailResponse> changeStock(

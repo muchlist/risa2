@@ -1,8 +1,7 @@
 class ItemShiftChoice {
+  ItemShiftChoice(this.id, this.label);
   final int id;
   final String label;
-
-  ItemShiftChoice(this.id, this.label);
 }
 
 List<ItemShiftChoice> getItemShiftChoice() {

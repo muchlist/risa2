@@ -16,11 +16,11 @@ class HistoryService {
 
   Future<MessageResponse> createHistory(HistoryRequest payload) {
     return RequestREST(endpoint: "/histories", data: payload.toJson())
-        .executePost<MessageResponse>(MessageParser());
+        .executePost<MessageResponse>(const MessageParser());
   }
 
   Future<HistoryListResponse> findHistory(FilterHistory f) {
-    var query = "";
+    String query = "";
     if (f.branch != null) {
       query = query + "branch=${f.branch}&";
     }
@@ -41,56 +41,56 @@ class HistoryService {
     }
 
     return RequestREST(endpoint: "/histories?$query")
-        .executeGet<HistoryListResponse>(HistoryListParser());
+        .executeGet<HistoryListResponse>(const HistoryListParser());
   }
 
   Future<HistoryListResponse> findHistoryFromParent(String id) {
     return RequestREST(endpoint: "/histories-parent/$id")
-        .executeGet<HistoryListResponse>(HistoryListParser());
+        .executeGet<HistoryListResponse>(const HistoryListParser());
   }
 
   Future<HistoryListResponse> findHistoryFromUser(String id,
       {int? start, int? end, int? limit}) {
-    var query = "";
+    String query = "";
     if (start != null) {
-      query = query + "start=${start}&";
+      query = query + "start=$start&";
     }
     if (end != null) {
-      query = query + "end=${end}&";
+      query = query + "end=$end&";
     }
     if (limit != null) {
-      query = query + "limit=${limit}&";
+      query = query + "limit=$limit&";
     }
 
     return RequestREST(endpoint: "/histories-parent/$id?$query")
-        .executeGet<HistoryListResponse>(HistoryListParser());
+        .executeGet<HistoryListResponse>(const HistoryListParser());
   }
 
   Future<HistoryDetailResponse> getHistory(String id) {
     return RequestREST(endpoint: "/histories/$id")
-        .executeGet<HistoryDetailResponse>(HistoryParser());
+        .executeGet<HistoryDetailResponse>(const HistoryParser());
   }
 
   Future<HistoryDetailResponse> editHistory(
       String id, HistoryEditRequest payload) {
     return RequestREST(endpoint: "/histories/$id", data: payload.toJson())
-        .executePut<HistoryDetailResponse>(HistoryParser());
+        .executePut<HistoryDetailResponse>(const HistoryParser());
   }
 
   Future<MessageResponse> deleteHistory(String id) {
     return RequestREST(endpoint: "/histories/$id")
-        .executeDelete<MessageResponse>(MessageParser());
+        .executeDelete<MessageResponse>(const MessageParser());
   }
 
   Future<HistoryDetailResponse> uploadImage(String id, File file) async {
     return RequestREST(endpoint: "/history-image/$id", data: <String, dynamic>{
       "image": await MultipartFile.fromFile(file.path)
-    }).executeUpload(HistoryParser());
+    }).executeUpload(const HistoryParser());
   }
 
   Future<MessageResponse> uploadImageForPath(File file) async {
     return RequestREST(endpoint: "/upload-image", data: <String, dynamic>{
       "image": await MultipartFile.fromFile(file.path)
-    }).executeUpload<MessageResponse>(MessageParser());
+    }).executeUpload<MessageResponse>(const MessageParser());
   }
 }

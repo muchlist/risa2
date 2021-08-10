@@ -11,33 +11,34 @@ class VendorCheckService {
   const VendorCheckService();
 
   Future<MessageResponse> createVendorCheck(bool isVirtual) {
-    var isVirtualString = "";
+    String isVirtualString = "";
     if (isVirtual) {
       isVirtualString = "yes";
     }
     return RequestREST(
-        endpoint: "/vendor-check?virtual=$isVirtualString",
-        data: {}).executePost<MessageResponse>(MessageParser());
+            endpoint: "/vendor-check?virtual=$isVirtualString",
+            data: <String, dynamic>{})
+        .executePost<MessageResponse>(const MessageParser());
   }
 
   Future<VendorCheckDetailResponse> getVendorCheck(String id) {
     return RequestREST(endpoint: "/vendor-check/$id")
-        .executeGet<VendorCheckDetailResponse>(VendorCheckParser());
+        .executeGet<VendorCheckDetailResponse>(const VendorCheckParser());
   }
 
   // {{url}}/api/v1/vendor-check-finish/60f7bd8d52ffaa4bbb3c3997
   Future<VendorCheckDetailResponse> finishVendorCheck(String id) {
     return RequestREST(endpoint: "/vendor-check-finish/$id")
-        .executeGet<VendorCheckDetailResponse>(VendorCheckParser());
+        .executeGet<VendorCheckDetailResponse>(const VendorCheckParser());
   }
 
   Future<MessageResponse> deleteVendorCheck(String id) {
     return RequestREST(endpoint: "/vendor-check/$id")
-        .executeDelete<MessageResponse>(MessageParser());
+        .executeDelete<MessageResponse>(const MessageParser());
   }
 
   Future<VendorCheckListResponse> findVendorCheck(FilterCheck f) {
-    var query = "";
+    String query = "";
     if (f.branch != null) {
       query = query + "branch=${f.branch}&";
     }
@@ -51,18 +52,18 @@ class VendorCheckService {
       query = query + "limit=${f.limit}&";
     }
     return RequestREST(endpoint: "/vendor-check?$query")
-        .executeGet<VendorCheckListResponse>(VendorCheckListParser());
+        .executeGet<VendorCheckListResponse>(const VendorCheckListParser());
   }
 
   Future<VendorCheckDetailResponse> updateVendorCheck(
       VendorUpdateRequest payload) {
     return RequestREST(endpoint: "/vendor-check-update", data: payload.toJson())
-        .executePost<VendorCheckDetailResponse>(VendorCheckParser());
+        .executePost<VendorCheckDetailResponse>(const VendorCheckParser());
   }
 
   Future<MessageResponse> bulkUpdateVendorCheck(
       BulkVendorUpdateRequest payload) {
     return RequestREST(endpoint: "/bulk-vendor-update", data: payload.toJson())
-        .executePost<MessageResponse>(MessageParser());
+        .executePost<MessageResponse>(const MessageParser());
   }
 }

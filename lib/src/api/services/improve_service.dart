@@ -13,43 +13,43 @@ class ImproveService {
 
   Future<MessageResponse> createImprove(ImproveRequest payload) {
     return RequestREST(endpoint: "/improve", data: payload.toJson())
-        .executePost<MessageResponse>(MessageParser());
+        .executePost<MessageResponse>(const MessageParser());
   }
 
   Future<ImproveDetailResponse> changeImprove(
       String id, ImproveChangeRequest payload) {
     return RequestREST(endpoint: "/improve-change/$id", data: payload.toJson())
-        .executePost<ImproveDetailResponse>(ImproveParser());
+        .executePost<ImproveDetailResponse>(const ImproveParser());
   }
 
   Future<ImproveDetailResponse> editImprove(
       String id, ImproveEditRequest payload) {
     return RequestREST(endpoint: "/improve/$id", data: payload.toJson())
-        .executePut<ImproveDetailResponse>(ImproveParser());
+        .executePut<ImproveDetailResponse>(const ImproveParser());
   }
 
   Future<ImproveDetailResponse> getImprove(String id) {
     return RequestREST(endpoint: "/improve/$id")
-        .executeGet<ImproveDetailResponse>(ImproveParser());
+        .executeGet<ImproveDetailResponse>(const ImproveParser());
   }
 
   Future<ImproveDetailResponse> enableImprove(String id) {
     return RequestREST(endpoint: "/improve-status/$id/enable")
-        .executeGet<ImproveDetailResponse>(ImproveParser());
+        .executeGet<ImproveDetailResponse>(const ImproveParser());
   }
 
   Future<ImproveDetailResponse> disableImprove(String id) {
     return RequestREST(endpoint: "/improve-status/$id/disable")
-        .executeGet<ImproveDetailResponse>(ImproveParser());
+        .executeGet<ImproveDetailResponse>(const ImproveParser());
   }
 
   Future<MessageResponse> deleteImprove(String id) {
     return RequestREST(endpoint: "/improve/$id")
-        .executeDelete<MessageResponse>(MessageParser());
+        .executeDelete<MessageResponse>(const MessageParser());
   }
 
   Future<ImproveListResponse> findImprove(FilterImporve f) {
-    var query = "";
+    String query = "";
     if (f.branch != null) {
       query = query + "branch=${f.branch}&";
     }
@@ -67,6 +67,6 @@ class ImproveService {
     }
 
     return RequestREST(endpoint: "/improve?$query")
-        .executeGet<ImproveListResponse>(ImproveListParser());
+        .executeGet<ImproveListResponse>(const ImproveListParser());
   }
 }

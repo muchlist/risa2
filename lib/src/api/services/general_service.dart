@@ -7,7 +7,7 @@ class GeneralService {
   const GeneralService();
 
   Future<GeneralListResponse> findGeneral(FilterGeneral f) {
-    var query = "";
+    String query = "";
     if (f.ip != null) {
       query = query + "ip=${f.ip}&";
     }
@@ -22,6 +22,6 @@ class GeneralService {
     }
 
     return RequestREST(endpoint: "/general?$query")
-        .executeGet<GeneralListResponse>(GeneralListParser());
+        .executeGet<GeneralListResponse>(const GeneralListParser());
   }
 }

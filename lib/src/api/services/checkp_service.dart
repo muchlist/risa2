@@ -15,27 +15,27 @@ class CheckpService {
 
   Future<MessageResponse> createCheckp(CheckpRequest payload) {
     return RequestREST(endpoint: "/check-item", data: payload.toJson())
-        .executePost<MessageResponse>(MessageParser());
+        .executePost<MessageResponse>(const MessageParser());
   }
 
   Future<CheckpDetailResponse> editCheckp(
       String id, CheckpEditRequest payload) {
     return RequestREST(endpoint: "/check-item/$id", data: payload.toJson())
-        .executePut<CheckpDetailResponse>(CheckpParser());
+        .executePut<CheckpDetailResponse>(const CheckpParser());
   }
 
   Future<CheckpDetailResponse> getCheckp(String id) {
     return RequestREST(endpoint: "/check-item/$id")
-        .executeGet<CheckpDetailResponse>(CheckpParser());
+        .executeGet<CheckpDetailResponse>(const CheckpParser());
   }
 
   Future<MessageResponse> deleteCheckp(String id) {
     return RequestREST(endpoint: "/check-item/$id")
-        .executeDelete<MessageResponse>(MessageParser());
+        .executeDelete<MessageResponse>(const MessageParser());
   }
 
   Future<CheckpListResponse> findCheckp(FilterCheckp f) {
-    var query = "";
+    String query = "";
     if (f.branch != null) {
       query = query + "branch=${f.branch}&";
     }
@@ -49,17 +49,17 @@ class CheckpService {
       query = query + "disable=${f.disable}&";
     }
     return RequestREST(endpoint: "/check-item?$query")
-        .executeGet<CheckpListResponse>(CheckpListParser());
+        .executeGet<CheckpListResponse>(const CheckpListParser());
   }
 
   Future<CheckpDetailResponse> enableCheckp(String id) {
     return RequestREST(endpoint: "/check-item-avail/$id/enable")
-        .executeGet<CheckpDetailResponse>(CheckpParser());
+        .executeGet<CheckpDetailResponse>(const CheckpParser());
   }
 
   Future<CheckpDetailResponse> disableCheckp(String id) {
     return RequestREST(endpoint: "/check-item-avail/$id/disable")
-        .executeGet<CheckpDetailResponse>(CheckpParser());
+        .executeGet<CheckpDetailResponse>(const CheckpParser());
   }
 
   Future<OptLocationType> getOptCreateCheckp(String branch) {

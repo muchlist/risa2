@@ -17,7 +17,7 @@ class CheckService {
 
   Future<MessageResponse> createCheck(CheckRequest payload) {
     return RequestREST(endpoint: "/check", data: payload.toJson())
-        .executePost<MessageResponse>(MessageParser());
+        .executePost<MessageResponse>(const MessageParser());
   }
 
   Future<CheckDetailResponse> uploadImage(
@@ -27,26 +27,26 @@ class CheckService {
         endpoint: "/check-image/$id/$childID",
         data: <String, dynamic>{
           "image": await MultipartFile.fromFile(file.path)
-        }).executeUpload(CheckParser());
+        }).executeUpload(const CheckParser());
   }
 
   Future<CheckDetailResponse> editCheck(String id, CheckEditRequest payload) {
     return RequestREST(endpoint: "/check/$id", data: payload.toJson())
-        .executePut<CheckDetailResponse>(CheckParser());
+        .executePut<CheckDetailResponse>(const CheckParser());
   }
 
   Future<CheckDetailResponse> getCheck(String id) {
     return RequestREST(endpoint: "/check/$id")
-        .executeGet<CheckDetailResponse>(CheckParser());
+        .executeGet<CheckDetailResponse>(const CheckParser());
   }
 
   Future<MessageResponse> deleteCheck(String id) {
     return RequestREST(endpoint: "/check/$id")
-        .executeDelete<MessageResponse>(MessageParser());
+        .executeDelete<MessageResponse>(const MessageParser());
   }
 
   Future<CheckListResponse> findCheck(FilterCheck f) {
-    var query = "";
+    String query = "";
     if (f.branch != null) {
       query = query + "branch=${f.branch}&";
     }
@@ -60,11 +60,11 @@ class CheckService {
       query = query + "limit=${f.limit}&";
     }
     return RequestREST(endpoint: "/check?$query")
-        .executeGet<CheckListResponse>(CheckListParser());
+        .executeGet<CheckListResponse>(const CheckListParser());
   }
 
   Future<CheckDetailResponse> updateCheck(CheckUpdateRequest payload) {
     return RequestREST(endpoint: "/check-update", data: payload.toJson())
-        .executePost<CheckDetailResponse>(CheckParser());
+        .executePost<CheckDetailResponse>(const CheckParser());
   }
 }

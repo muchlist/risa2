@@ -6,6 +6,6 @@ class SpeedService {
   const SpeedService();
   Future<SpeedListResponse> retrieveSpeed() {
     return RequestREST(endpoint: "/speed-test")
-        .executeGet<SpeedListResponse>(SpeedListParser());
+        .executeGet<SpeedListResponse>(const SpeedListParser());
   }
 }

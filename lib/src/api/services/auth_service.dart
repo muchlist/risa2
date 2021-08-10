@@ -7,12 +7,15 @@ class AuthService {
 
   Future<LoginResponse> login(String id, String password) {
     return RequestREST(
-            endpoint: "/login", data: {"id": id, "password": password})
-        .executePost<LoginResponse>(LoginParser());
+            endpoint: "/login",
+            data: <String, dynamic>{"id": id, "password": password})
+        .executePost<LoginResponse>(const LoginParser());
   }
 
   Future<LoginResponse> sendFCMToken(String token) {
-    return RequestREST(endpoint: "/update-fcm", data: {"fcm_token": token})
-        .executePost<LoginResponse>(LoginParser());
+    return RequestREST(
+            endpoint: "/update-fcm",
+            data: <String, dynamic>{"fcm_token": token})
+        .executePost<LoginResponse>(const LoginParser());
   }
 }
