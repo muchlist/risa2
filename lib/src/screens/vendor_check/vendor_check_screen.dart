@@ -21,8 +21,8 @@ class _VendorCheckScreenState extends State<VendorCheckScreen> {
   late VendorCheckProvider _vendorCheckProvider;
 
   Future<dynamic> _loadVendorCheck() {
-    return Future.delayed(Duration.zero, () {
-      _vendorCheckProvider.findVendorCheck().onError((error, _) {
+    return Future<void>.delayed(Duration.zero, () {
+      _vendorCheckProvider.findVendorCheck().onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -32,11 +32,11 @@ class _VendorCheckScreenState extends State<VendorCheckScreen> {
     showModalBottomSheet(
       // isScrollControlled: true,
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      builder: (context) => AddVendorCheckDialog(),
+      builder: (BuildContext context) => const AddVendorCheckDialog(),
     );
   }
 
@@ -57,17 +57,16 @@ class _VendorCheckScreenState extends State<VendorCheckScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
-      initialIndex: 0,
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
           title: const Text("Checklist CCTV"),
-          bottom: TabBar(
-            tabs: [
-              const Tab(
+          bottom: const TabBar(
+            tabs: <Tab>[
+              Tab(
                 text: "Virtual",
               ),
-              const Tab(
+              Tab(
                 text: "Fisik",
               ),
             ],
@@ -81,7 +80,7 @@ class _VendorCheckScreenState extends State<VendorCheckScreen> {
               left: 0,
               right: 0,
               child: TabBarView(
-                children: [
+                children: <Widget>[
                   VendorCheckRecyclerView(
                     virtualCheckScreen: true,
                     vendorProviderR: _vendorCheckProvider,
@@ -114,14 +113,13 @@ class _VendorCheckScreenState extends State<VendorCheckScreen> {
 
 // VendorCheckReceiclerView ------------------------------------
 class VendorCheckRecyclerView extends StatefulWidget {
-  final bool virtualCheckScreen;
-  final VendorCheckProvider vendorProviderR;
-
   const VendorCheckRecyclerView(
       {Key? key,
       required this.virtualCheckScreen,
       required this.vendorProviderR})
       : super(key: key);
+  final bool virtualCheckScreen;
+  final VendorCheckProvider vendorProviderR;
 
   @override
   _VendorCheckRecyclerViewState createState() =>
@@ -129,11 +127,12 @@ class VendorCheckRecyclerView extends StatefulWidget {
 }
 
 class _VendorCheckRecyclerViewState extends State<VendorCheckRecyclerView> {
-  var refreshKeyVendorCheckScreen = GlobalKey<RefreshIndicatorState>();
+  GlobalKey<RefreshIndicatorState> refreshKeyVendorCheckScreen =
+      GlobalKey<RefreshIndicatorState>();
 
   Future<dynamic> _loadVendorCheck() {
-    return Future.delayed(Duration.zero, () {
-      widget.vendorProviderR.findVendorCheck().onError((error, _) {
+    return Future<void>.delayed(Duration.zero, () {
+      widget.vendorProviderR.findVendorCheck().onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -142,8 +141,8 @@ class _VendorCheckRecyclerViewState extends State<VendorCheckRecyclerView> {
   @override
   Widget build(BuildContext context) {
     return Consumer<VendorCheckProvider>(
-      builder: (_, data, __) {
-        var checkList = <VendorCheckMinResponse>[];
+      builder: (_, VendorCheckProvider data, __) {
+        List<VendorCheckMinResponse> checkList = <VendorCheckMinResponse>[];
         if (widget.virtualCheckScreen) {
           checkList = data.vendorCheckListVirtual;
         } else {
@@ -152,20 +151,21 @@ class _VendorCheckRecyclerViewState extends State<VendorCheckRecyclerView> {
 
         return Stack(
           alignment: Alignment.center,
-          children: [
+          children: <Widget>[
             Positioned(
                 top: 0,
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: (checkList.length != 0)
+                child: (checkList.isNotEmpty)
                     ? buildListView(checkList)
                     : (data.state == ViewState.idle)
                         ? EmptyBox(loadTap: _loadVendorCheck)
-                        : Center()),
-            (data.state == ViewState.busy)
-                ? Center(child: CircularProgressIndicator())
-                : Center(),
+                        : const Center()),
+            if (data.state == ViewState.busy)
+              const Center(child: CircularProgressIndicator())
+            else
+              const Center(),
           ],
         );
       },
@@ -177,9 +177,9 @@ class _VendorCheckRecyclerViewState extends State<VendorCheckRecyclerView> {
       key: refreshKeyVendorCheckScreen,
       onRefresh: _loadVendorCheck,
       child: ListView.builder(
-        padding: EdgeInsets.only(bottom: 120),
+        padding: const EdgeInsets.only(bottom: 120),
         itemCount: checkList.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
               widget.vendorProviderR.setVendorCheckID(checkList[index].id);

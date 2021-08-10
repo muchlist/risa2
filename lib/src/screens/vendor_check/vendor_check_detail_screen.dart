@@ -18,7 +18,8 @@ import '../../shared/vendor_check_grid.dart';
 import '../../utils/date_unix.dart';
 import '../../utils/enums.dart';
 
-var refreshKeyVendorCheckDetailScreen = GlobalKey<RefreshIndicatorState>();
+GlobalKey<RefreshIndicatorState> refreshKeyVendorCheckDetailScreen =
+    GlobalKey<RefreshIndicatorState>();
 
 class VendorCheckDetailScreen extends StatelessWidget {
   @override
@@ -50,8 +51,8 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
   }
 
   Future<void> _loadDetail() {
-    return Future.delayed(Duration.zero, () {
-      _vendorCheckProviderR.getDetail().onError((error, _) {
+    return Future<void>.delayed(Duration.zero, () {
+      _vendorCheckProviderR.getDetail().onError((Object? error, _) {
         Navigator.pop(context);
         showToastError(context: context, message: error.toString());
       });
@@ -72,8 +73,8 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).accentColor),
-                  child: const Text("Tidak"),
-                  onPressed: () => Navigator.of(context).pop(false)),
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text("Tidak")),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   child: const Text("Ya"))
@@ -85,100 +86,104 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
   // Memunculkan return
   Future<void> _dialogUpdateItem(BuildContext context, String cctvname,
       VendorUpdateRequest itemStateValue) async {
-    final _isCheckedBefore = itemStateValue.isChecked;
-    final _itemStateUpdated = await showDialog<VendorUpdateRequest?>(
-        context: context,
-        builder: (BuildContext context) {
-          var itemState = itemStateValue;
-          return StatefulBuilder(builder: (context, setState) {
-            return AlertDialog(
-              title: Text(cctvname),
-              content: DisableOverScrollGlow(
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      CheckboxListTile(
-                          title: TextIcon(
-                            icon: CupertinoIcons.check_mark_circled,
-                            text: "Sudah dicek",
+    final bool _isCheckedBefore = itemStateValue.isChecked;
+    final VendorUpdateRequest? _itemStateUpdated =
+        await showDialog<VendorUpdateRequest?>(
+            context: context,
+            builder: (BuildContext context) {
+              final VendorUpdateRequest itemState = itemStateValue;
+              return StatefulBuilder(
+                  builder: (BuildContext context, Function setState) {
+                return AlertDialog(
+                  title: Text(cctvname),
+                  content: DisableOverScrollGlow(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          CheckboxListTile(
+                              title: const TextIcon(
+                                icon: CupertinoIcons.check_mark_circled,
+                                text: "Sudah dicek",
+                              ),
+                              subtitle:
+                                  const Text("tandai jika cctv sudah dicek"),
+                              value: itemState.isChecked,
+                              onChanged: (bool? checked) {
+                                setState(() {
+                                  itemState.isChecked = checked ?? false;
+                                });
+                              }),
+                          const Divider(
+                            thickness: 1,
                           ),
-                          subtitle: const Text("tandai jika cctv sudah dicek"),
-                          value: itemState.isChecked,
-                          onChanged: (checked) {
-                            setState(() {
-                              itemState.isChecked = checked ?? false;
-                            });
-                          }),
-                      const Divider(
-                        thickness: 1,
+                          CheckboxListTile(
+                              title: const TextIcon(
+                                icon: CupertinoIcons.multiply_circle,
+                                text: "Cctv offline",
+                              ),
+                              subtitle: const Text(
+                                  "perangkat mati atau tidak dapat di ping"),
+                              value: itemState.isOffline,
+                              onChanged: (bool? checked) {
+                                setState(() {
+                                  itemState.isOffline = checked ?? false;
+                                });
+                              }),
+                          const Divider(
+                            thickness: 1,
+                          ),
+                          CheckboxListTile(
+                              title: const TextIcon(
+                                icon: CupertinoIcons.circle_lefthalf_fill,
+                                text: "Cctv blur",
+                              ),
+                              subtitle: const Text(
+                                  "kamera mengalami gangguan dari segi tangkapan gambar"),
+                              value: itemState.isBlur,
+                              onChanged: (bool? checked) {
+                                setState(() {
+                                  itemState.isBlur = checked ?? false;
+                                });
+                              })
+                        ],
                       ),
-                      CheckboxListTile(
-                          title: TextIcon(
-                            icon: CupertinoIcons.multiply_circle,
-                            text: "Cctv offline",
-                          ),
-                          subtitle: const Text(
-                              "perangkat mati atau tidak dapat di ping"),
-                          value: itemState.isOffline,
-                          onChanged: (checked) {
-                            setState(() {
-                              itemState.isOffline = checked ?? false;
-                            });
-                          }),
-                      const Divider(
-                        thickness: 1,
-                      ),
-                      CheckboxListTile(
-                          title: TextIcon(
-                            icon: CupertinoIcons.circle_lefthalf_fill,
-                            text: "Cctv blur",
-                          ),
-                          subtitle: const Text(
-                              "kamera mengalami gangguan dari segi tangkapan gambar"),
-                          value: itemState.isBlur,
-                          onChanged: (checked) {
-                            setState(() {
-                              itemState.isBlur = checked ?? false;
-                            });
-                          })
-                    ],
+                    ),
                   ),
-                ),
-              ),
-              actions: <Widget>[
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).accentColor),
-                    child: const Text("Update"),
-                    onPressed: () {
-                      _vendorCheckProviderR
-                          .updateChildVendorCheck(itemState)
-                          .then((value) {
-                        if (value && itemState.isChecked) {
-                          Navigator.of(context).pop(itemState);
-                        } else {
-                          Navigator.of(context).pop(itemState);
-                        }
-                      }).onError((error, stackTrace) {
-                        showToastError(
-                            context: context, message: error.toString());
-                      });
-                      // if success pop true
-                    }),
-              ],
-            );
-          });
-        });
+                  actions: <Widget>[
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).accentColor),
+                        onPressed: () {
+                          _vendorCheckProviderR
+                              .updateChildVendorCheck(itemState)
+                              .then((bool value) {
+                            if (value && itemState.isChecked) {
+                              Navigator.of(context).pop(itemState);
+                            } else {
+                              Navigator.of(context).pop(itemState);
+                            }
+                          }).onError((Object? error, StackTrace stackTrace) {
+                            showToastError(
+                                context: context, message: error.toString());
+                          });
+                          // if success pop true
+                        },
+                        child: const Text("Update")),
+                  ],
+                );
+              });
+            });
 
     // Menambahkan incident
-    final _isPhysicalCheck =
+    final bool _isPhysicalCheck =
         !_vendorCheckProviderR.vendorCheckDetail.isVirtualCheck;
 
     if (_itemStateUpdated != null &&
         _itemStateUpdated.isChecked &&
         _isPhysicalCheck) {
-      final _isCreateNewCheck = _itemStateUpdated.isChecked != _isCheckedBefore;
+      final bool _isCreateNewCheck =
+          _itemStateUpdated.isChecked != _isCheckedBefore;
       if (_isCreateNewCheck) {
         HistoryHelper()
             .showAddMaintenanceIncident(context, cctvname, _itemStateUpdated);
@@ -189,52 +194,53 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
   @override
   Widget build(BuildContext context) {
     // Watch data ====================================================
-    final data = context.watch<VendorCheckProvider>();
+    final VendorCheckProvider data = context.watch<VendorCheckProvider>();
 
     return (data.detailState == ViewState.busy)
         ? const Center(child: CircularProgressIndicator())
         : Stack(
             children: [
               buildBody(data),
-              (data.vendorCheckDetail.isFinish)
-                  ? SizedBox.shrink()
-                  : Positioned(
-                      bottom: 15,
-                      right: 20,
-                      child: HomeLikeButton(
-                        iconData: CupertinoIcons.check_mark_circled_solid,
-                        text: "Tutup pengecekan",
-                        tapTap: () async {
-                          var isFinish = await _getConfirm(context);
-                          if (isFinish != null && isFinish) {
-                            await data.completeVendorCheck().then((value) {
-                              if (value) {
-                                showToastSuccess(
-                                    context: context, message: "Cek selesai");
-                                // reload history
-                                context
-                                    .read<HistoryProvider>()
-                                    .findHistory(loading: false);
-                              }
-                            });
-                          }
-                        },
-                        color: Pallete.green,
-                      ))
+              if (data.vendorCheckDetail.isFinish)
+                const SizedBox.shrink()
+              else
+                Positioned(
+                    bottom: 15,
+                    right: 20,
+                    child: HomeLikeButton(
+                      iconData: CupertinoIcons.check_mark_circled_solid,
+                      text: "Tutup pengecekan",
+                      tapTap: () async {
+                        final bool? isFinish = await _getConfirm(context);
+                        if (isFinish != null && isFinish) {
+                          await data.completeVendorCheck().then((bool value) {
+                            if (value) {
+                              showToastSuccess(
+                                  context: context, message: "Cek selesai");
+                              // reload history
+                              context
+                                  .read<HistoryProvider>()
+                                  .findHistory(loading: false);
+                            }
+                          });
+                        }
+                      },
+                    ))
             ],
           );
   }
 
   Widget buildBody(VendorCheckProvider data) {
-    var detail = data.vendorCheckDetail;
-    var locations = data.getLocationList();
-    var cctvs = data.getCheckItemPerLocation(locations);
+    final VendorCheckDetailResponseData detail = data.vendorCheckDetail;
+    final List<String> locations = data.getLocationList();
+    final Map<String, List<VendorCheckItem>> cctvs =
+        data.getCheckItemPerLocation(locations);
 
-    var slivers = <Widget>[
+    final List<Widget> slivers = <Widget>[
       buildHeaderSliver(data),
     ];
 
-    for (final loc in locations) {
+    for (final String loc in locations) {
       slivers
         ..add(SliverToBoxAdapter(
           child: Padding(
@@ -246,12 +252,12 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
             ),
           ),
         ))
-        ..add(buildGridViewReady(cctvs[loc] ?? [], detail.id));
+        ..add(buildGridViewReady(cctvs[loc] ?? <VendorCheckItem>[], detail.id));
     }
 
     // end sliver
-    slivers.add(SliverToBoxAdapter(
-      child: const SizedBox(
+    slivers.add(const SliverToBoxAdapter(
+      child: SizedBox(
         height: 100,
       ),
     ));
@@ -269,14 +275,14 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
   }
 
   SliverToBoxAdapter buildHeaderSliver(VendorCheckProvider data) {
-    var detail = data.vendorCheckDetail;
+    final VendorCheckDetailResponseData detail = data.vendorCheckDetail;
 
-    var cctvChecked = 0;
-    var cctvOffline = 0;
-    var cctvBlur = 0;
-    var cctvTotal = 0;
+    int cctvChecked = 0;
+    int cctvOffline = 0;
+    int cctvBlur = 0;
+    int cctvTotal = 0;
 
-    for (final cctv in detail.vendorCheckItems) {
+    for (final VendorCheckItem cctv in detail.vendorCheckItems) {
       if (cctv.isChecked) {
         cctvChecked++;
       }
@@ -291,46 +297,44 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
 
     return SliverToBoxAdapter(
       child: Container(
-        padding: EdgeInsets.all(8),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
             color: Pallete.secondaryBackground,
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(3)),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text("Dibuat / update"),
-                const Text("Tipe cek"),
-                const Text("Cabang"),
-                const Text("Mulai cek"),
-                const Text("Selesai cek"),
-                const Text("Sudah dicek"),
-                const Text("Cctv offline"),
-                const Text("Cctv buram"),
+              children: const <Widget>[
+                Text("Dibuat / update"),
+                Text("Tipe cek"),
+                Text("Cabang"),
+                Text("Mulai cek"),
+                Text("Selesai cek"),
+                Text("Sudah dicek"),
+                Text("Cctv offline"),
+                Text("Cctv buram"),
               ],
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text("   :   "),
-                const Text("   :   "),
-                const Text("   :   "),
-                const Text("   :   "),
-                const Text("   :   "),
-                const Text("   :   "),
-                const Text("   :   "),
-                const Text("   :   "),
+              children: const <Widget>[
+                Text("   :   "),
+                Text("   :   "),
+                Text("   :   "),
+                Text("   :   "),
+                Text("   :   "),
+                Text("   :   "),
+                Text("   :   "),
+                Text("   :   "),
               ],
             ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     (detail.updatedBy == detail.createdBy)
                         ? detail.createdBy
@@ -338,7 +342,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                     softWrap: true,
                     maxLines: 2,
                     overflow: TextOverflow.clip,
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
                     (detail.isVirtualCheck) ? "Virtual" : "Fisik",
@@ -392,17 +396,17 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
             if (!detail.isFinish && detail.createdBy == App.getName())
               IconButton(
                 onPressed: () async {
-                  var isDeleted = await getConfirm(context, "Konfirmasi",
-                      "Yakin ingin menghapus daftar cek ini?");
+                  final bool? isDeleted = await getConfirm(context,
+                      "Konfirmasi", "Yakin ingin menghapus daftar cek ini?");
                   if (isDeleted != null && isDeleted) {
-                    await data.deleteVendorCheck().then((value) {
+                    await data.deleteVendorCheck().then((bool value) {
                       if (value) {
                         Navigator.pop(context);
                         showToastSuccess(
                             context: context,
                             message: "Berhasil menghapus ceklist");
                       }
-                    }).onError((error, stackTrace) {
+                    }).onError((Object? error, StackTrace stackTrace) {
                       showToastError(
                           context: context, message: error.toString());
                     });
@@ -425,7 +429,6 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
         maxCrossAxisExtent: 130.0,
         mainAxisSpacing: 5.0,
         crossAxisSpacing: 5.0,
-        childAspectRatio: 1 / 1,
       ),
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
