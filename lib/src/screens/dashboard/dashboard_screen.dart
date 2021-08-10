@@ -22,9 +22,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       appBar: AppBar(
         elevation: 0,
         title: const Text("Dashboard"),
-        actions: [
+        actions: <Widget>[
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.restart,
               size: 28,
             ),
@@ -33,7 +33,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           horizontalSpaceSmall
         ],
       ),
-      body: DashboardBody(),
+      body: const DashboardBody(),
     );
   }
 }
@@ -46,13 +46,13 @@ class DashboardBody extends StatefulWidget {
 }
 
 class _DashboardBodyState extends State<DashboardBody> {
-  Future<dynamic> _loadSpeedTestData() {
-    return Future.delayed(Duration.zero, () {
+  Future<void> _loadSpeedTestData() {
+    return Future<void>.delayed(Duration.zero, () {
       context
           .read<DashboardProvider>()
           .retrieveSpeed()
           .then((_) {})
-          .onError((error, _) {
+          .onError((Object? error, _) {
         if (error != null) {
           showToastError(context: context, message: error.toString());
         }
@@ -70,10 +70,11 @@ class _DashboardBodyState extends State<DashboardBody> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        children: [
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Consumer<DashboardProvider>(builder: (_, data, __) {
+            child: Consumer<DashboardProvider>(
+                builder: (_, DashboardProvider data, __) {
               if (data.state == ViewState.busy) {
                 return const Center(child: CircularProgressIndicator());
               }
