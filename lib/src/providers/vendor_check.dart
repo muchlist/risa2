@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:risa2/src/api/json_models/response/message_resp.dart';
 import '../api/filter_models/check_filter.dart';
 import '../api/json_models/request/vendor_req.dart';
 import '../api/json_models/response/vendor_check_list_resp.dart';
@@ -11,8 +12,8 @@ import '../globals.dart';
 import '../utils/enums.dart';
 
 class VendorCheckProvider extends ChangeNotifier {
-  final VendorCheckService _vendorCheckService;
   VendorCheckProvider(this._vendorCheckService);
+  final VendorCheckService _vendorCheckService;
 
   // =======================================================
   // List VendorCheck
@@ -26,20 +27,22 @@ class VendorCheckProvider extends ChangeNotifier {
   }
 
   // vendorCheck list cache
-  List<VendorCheckMinResponse> _vendorCheckList = [];
+  List<VendorCheckMinResponse> _vendorCheckList = <VendorCheckMinResponse>[];
   List<VendorCheckMinResponse> get vendorCheckList {
-    return UnmodifiableListView(_vendorCheckList);
+    return UnmodifiableListView<VendorCheckMinResponse>(_vendorCheckList);
   }
 
   // vendorCheck list virtual cache
   List<VendorCheckMinResponse> get vendorCheckListVirtual {
-    return _vendorCheckList.where((element) => element.isVirtualCheck).toList();
+    return _vendorCheckList
+        .where((VendorCheckMinResponse element) => element.isVirtualCheck)
+        .toList();
   }
 
   // vendorCheck list virtual cache
   List<VendorCheckMinResponse> get vendorCheckListPhyshic {
     return _vendorCheckList
-        .where((element) => !element.isVirtualCheck)
+        .where((VendorCheckMinResponse element) => !element.isVirtualCheck)
         .toList();
   }
 
@@ -53,9 +56,9 @@ class VendorCheckProvider extends ChangeNotifier {
   Future<void> findVendorCheck() async {
     setState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response =
+      final VendorCheckListResponse response =
           await _vendorCheckService.findVendorCheck(_filterVendorCheck);
       if (response.error != null) {
         error = response.error!.message;
@@ -68,7 +71,7 @@ class VendorCheckProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
@@ -76,10 +79,11 @@ class VendorCheckProvider extends ChangeNotifier {
   // memanggil findVendorCheck sehigga tidak perlu notifyListener
   Future<bool> addVendorCheck(bool isVirtual) async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _vendorCheckService.createVendorCheck(isVirtual);
+      final MessageResponse response =
+          await _vendorCheckService.createVendorCheck(isVirtual);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -89,7 +93,7 @@ class VendorCheckProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findVendorCheck();
     return true;
@@ -115,8 +119,8 @@ class VendorCheckProvider extends ChangeNotifier {
   VendorCheckDetailResponseData? _vendorCheckDetail;
   VendorCheckDetailResponseData get vendorCheckDetail {
     if (_vendorCheckDetail == null) {
-      return VendorCheckDetailResponseData(
-          "", 0, "", "", 0, "", "", "", 0, 0, false, false, "", []);
+      return VendorCheckDetailResponseData("", 0, "", "", 0, "", "", "", 0, 0,
+          false, false, "", <VendorCheckItem>[]);
     }
     return _vendorCheckDetail!;
   }
@@ -130,9 +134,9 @@ class VendorCheckProvider extends ChangeNotifier {
   Future<void> getDetail() async {
     setDetailState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response =
+      final VendorCheckDetailResponse response =
           await _vendorCheckService.getVendorCheck(_vendorCheckIDSaved);
       if (response.error != null) {
         error = response.error!.message;
@@ -145,20 +149,20 @@ class VendorCheckProvider extends ChangeNotifier {
 
     setDetailState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
   // =============================
   // get distinct location
   List<String> getLocationList() {
-    var checkItems =
+    final List<VendorCheckItem> checkItems =
         _vendorCheckDetail?.vendorCheckItems ?? <VendorCheckItem>[];
-    var allLocation = <String>[];
+    final List<String> allLocation = <String>[];
     if (checkItems.isEmpty) {
       return <String>[];
     }
-    for (final check in checkItems) {
+    for (final VendorCheckItem check in checkItems) {
       allLocation.add(check.location);
     }
     return allLocation.toSet().toList();
@@ -166,13 +170,14 @@ class VendorCheckProvider extends ChangeNotifier {
 
   Map<String, List<VendorCheckItem>> getCheckItemPerLocation(
       List<String> locations) {
-    var checkMap = Map<String, List<VendorCheckItem>>();
+    final Map<String, List<VendorCheckItem>> checkMap =
+        <String, List<VendorCheckItem>>{};
     if (_vendorCheckDetail == null) {
       return checkMap;
     }
-    for (final loc in locations) {
+    for (final String loc in locations) {
       checkMap[loc] = _vendorCheckDetail!.vendorCheckItems
-          .where((cctv) => cctv.location == loc)
+          .where((VendorCheckItem cctv) => cctv.location == loc)
           .toList();
     }
     return checkMap;
@@ -192,10 +197,11 @@ class VendorCheckProvider extends ChangeNotifier {
 // return future true jika update vendorVendorCheck berhasil
   Future<bool> updateChildVendorCheck(VendorUpdateRequest payload) async {
     setChildState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _vendorCheckService.updateVendorCheck(payload);
+      final VendorCheckDetailResponse response =
+          await _vendorCheckService.updateVendorCheck(payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -208,7 +214,7 @@ class VendorCheckProvider extends ChangeNotifier {
     setChildState(ViewState.idle);
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     return true;
   }
@@ -218,10 +224,10 @@ class VendorCheckProvider extends ChangeNotifier {
   // memanggil findVendorCheck sehigga tidak perlu notifyListener
   Future<bool> completeVendorCheck() async {
     setDetailState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response =
+      final VendorCheckDetailResponse response =
           await _vendorCheckService.finishVendorCheck(_vendorCheckIDSaved);
       if (response.error != null) {
         error = response.error!.message;
@@ -234,7 +240,7 @@ class VendorCheckProvider extends ChangeNotifier {
 
     setDetailState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findVendorCheck();
     return true;
@@ -244,10 +250,10 @@ class VendorCheckProvider extends ChangeNotifier {
   // memanggil findVendorCheck sehigga tidak perlu notifyListener
   Future<bool> deleteVendorCheck() async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response =
+      final MessageResponse response =
           await _vendorCheckService.deleteVendorCheck(_vendorCheckIDSaved);
       if (response.error != null) {
         error = response.error!.message;
@@ -258,7 +264,7 @@ class VendorCheckProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findVendorCheck();
     return true;
@@ -268,6 +274,6 @@ class VendorCheckProvider extends ChangeNotifier {
   // di on dispose
   void onClose() {
     removeDetail();
-    _vendorCheckList = [];
+    _vendorCheckList = <VendorCheckMinResponse>[];
   }
 }

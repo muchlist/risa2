@@ -2,6 +2,8 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:risa2/src/api/json_models/response/history_resp.dart';
+import 'package:risa2/src/api/json_models/response/message_resp.dart';
 
 import '../api/filter_models/history_filter.dart';
 import '../api/json_models/request/history_edit_req.dart';
@@ -14,8 +16,8 @@ import '../utils/enums.dart';
 import '../utils/image_compress.dart';
 
 class HistoryProvider extends ChangeNotifier {
-  final HistoryService _historyService;
   HistoryProvider(this._historyService);
+  final HistoryService _historyService;
 
   ViewState _state = ViewState.idle;
   ViewState get state => _state;
@@ -24,19 +26,19 @@ class HistoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<HistoryMinResponse> _historyList = [];
+  List<HistoryMinResponse> _historyList = <HistoryMinResponse>[];
 
   // 3 history terbaru
   List<HistoryMinResponse> get historyListDashboard {
     if (_historyList.length > 4) {
-      return [..._historyList.sublist(0, 5)];
+      return <HistoryMinResponse>[..._historyList.sublist(0, 5)];
     }
-    return UnmodifiableListView(_historyList);
+    return UnmodifiableListView<HistoryMinResponse>(_historyList);
   }
 
   // history progress
   List<HistoryMinResponse> get historyProgressList {
-    return _historyList.where((hist) {
+    return _historyList.where((HistoryMinResponse hist) {
       return hist.completeStatus == enumStatus.progress.index ||
           hist.completeStatus == enumStatus.rpending.index;
     }).toList();
@@ -45,20 +47,21 @@ class HistoryProvider extends ChangeNotifier {
   // history pending
   List<HistoryMinResponse> get historyPendingList {
     return _historyList
-        .where((hist) => hist.completeStatus == enumStatus.pending.index)
+        .where((HistoryMinResponse hist) =>
+            hist.completeStatus == enumStatus.pending.index)
         .toList();
   }
 
   // history complete
   List<HistoryMinResponse> get historyCompletedList {
-    return _historyList.where((hist) {
+    return _historyList.where((HistoryMinResponse hist) {
       return hist.completeStatus == enumStatus.completed.index;
     }).toList();
   }
 
   // history all
   List<HistoryMinResponse> get historyList {
-    return UnmodifiableListView(_historyList);
+    return UnmodifiableListView<HistoryMinResponse>(_historyList);
   }
 
   // FILTER HISTORY
@@ -86,9 +89,10 @@ class HistoryProvider extends ChangeNotifier {
       setState(ViewState.busy);
     }
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _historyService.findHistory(_filter);
+      final HistoryListResponse response =
+          await _historyService.findHistory(_filter);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -100,7 +104,7 @@ class HistoryProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
@@ -111,9 +115,10 @@ class HistoryProvider extends ChangeNotifier {
       {String parentID = ""}) async {
     setState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _historyService.createHistory(payload);
+      final MessageResponse response =
+          await _historyService.createHistory(payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -132,20 +137,20 @@ class HistoryProvider extends ChangeNotifier {
     setState(ViewState.idle);
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     return false;
   }
 
   // ** PARENT HISTORY -----------------------------------------------------
-  List<HistoryMinResponse> _parentHistory = [];
+  List<HistoryMinResponse> _parentHistory = <HistoryMinResponse>[];
 
   List<HistoryMinResponse> get parentHistory {
-    return UnmodifiableListView(_parentHistory);
+    return UnmodifiableListView<HistoryMinResponse>(_parentHistory);
   }
 
   void clearParentHistory() {
-    _parentHistory = [];
+    _parentHistory = <HistoryMinResponse>[];
   }
 
   Future<void> findParentHistory(
@@ -153,9 +158,10 @@ class HistoryProvider extends ChangeNotifier {
     if (loading) {
       setState(ViewState.busy);
     }
-    var error = "";
+    String error = "";
     try {
-      final response = await _historyService.findHistoryFromParent(parentID);
+      final HistoryListResponse response =
+          await _historyService.findHistoryFromParent(parentID);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -167,7 +173,7 @@ class HistoryProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
@@ -178,9 +184,10 @@ class HistoryProvider extends ChangeNotifier {
       {required HistoryEditRequest payload, required String id}) async {
     setState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _historyService.editHistory(id, payload);
+      final HistoryDetailResponse response =
+          await _historyService.editHistory(id, payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -194,7 +201,7 @@ class HistoryProvider extends ChangeNotifier {
     setState(ViewState.idle);
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     return false;
   }
@@ -208,9 +215,10 @@ class HistoryProvider extends ChangeNotifier {
       required String parentID}) async {
     setState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _historyService.editHistory(id, payload);
+      final HistoryDetailResponse response =
+          await _historyService.editHistory(id, payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -224,7 +232,7 @@ class HistoryProvider extends ChangeNotifier {
     setState(ViewState.idle);
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     return false;
   }
@@ -234,9 +242,10 @@ class HistoryProvider extends ChangeNotifier {
   Future<bool> deleteHistory(String historyID) async {
     setState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _historyService.deleteHistory(historyID);
+      final MessageResponse response =
+          await _historyService.deleteHistory(historyID);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -250,7 +259,7 @@ class HistoryProvider extends ChangeNotifier {
     setState(ViewState.idle);
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     return false;
   }
@@ -258,13 +267,14 @@ class HistoryProvider extends ChangeNotifier {
   // * update image
   // return image url tanpa base jika update image berhasil
   Future<String> uploadImage(String id, File file) async {
-    var imageUrl = "";
-    var error = "";
+    String imageUrl = "";
+    String error = "";
 
-    final fileCompressed = await compressFile(file);
+    final File fileCompressed = await compressFile(file);
 
     try {
-      final response = await _historyService.uploadImage(id, fileCompressed);
+      final HistoryDetailResponse response =
+          await _historyService.uploadImage(id, fileCompressed);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -279,20 +289,21 @@ class HistoryProvider extends ChangeNotifier {
     notifyListeners();
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<String>.error(error);
     }
     return imageUrl;
   }
 
   // return image url tanpa base jika update image berhasil
   Future<String> uploadImageForpath(File file) async {
-    var imageUrl = "";
-    var error = "";
+    String imageUrl = "";
+    String error = "";
 
-    final fileCompressed = await compressFile(file);
+    final File fileCompressed = await compressFile(file);
 
     try {
-      final response = await _historyService.uploadImageForPath(fileCompressed);
+      final MessageResponse response =
+          await _historyService.uploadImageForPath(fileCompressed);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -302,13 +313,13 @@ class HistoryProvider extends ChangeNotifier {
       error = e.toString();
     }
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<String>.error(error);
     }
     return imageUrl;
   }
 
   void _updateImageinHistoryList(String id, String imageUrl) {
-    for (var i = 0; i < _historyList.length; i++) {
+    for (int i = 0; i < _historyList.length; i++) {
       if (_historyList[i].id == id) {
         _historyList[i].image = imageUrl;
       }
@@ -316,7 +327,7 @@ class HistoryProvider extends ChangeNotifier {
   }
 
   void _updateImageinParentHistoryList(String id, String imageUrl) {
-    for (var i = 0; i < _parentHistory.length; i++) {
+    for (int i = 0; i < _parentHistory.length; i++) {
       if (_parentHistory[i].id == id) {
         _parentHistory[i].image = imageUrl;
       }

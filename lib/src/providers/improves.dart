@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:risa2/src/api/json_models/response/message_resp.dart';
 
 import '../api/filter_models/improve_filter.dart';
 import '../api/json_models/request/improve_change_req.dart';
@@ -13,8 +14,8 @@ import '../globals.dart';
 import '../utils/enums.dart';
 
 class ImproveProvider extends ChangeNotifier {
-  final ImproveService _improveService;
   ImproveProvider(this._improveService);
+  final ImproveService _improveService;
 
   ViewState _state = ViewState.idle;
 
@@ -24,18 +25,18 @@ class ImproveProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<ImproveMinResponse> _improveList = [
+  List<ImproveMinResponse> _improveList = <ImproveMinResponse>[
     ImproveMinResponse(
         "", 0, 0, "", "Loading ...", "Loading, please standby!", 0, 0, true, 1)
   ];
 
   List<ImproveMinResponse> get improveList {
-    return UnmodifiableListView(_improveList);
+    return UnmodifiableListView<ImproveMinResponse>(_improveList);
   }
 
   List<ImproveMinResponse> get improveListFront {
-    return UnmodifiableListView(
-        _improveList.where((el) => el.isActive && el.completeStatus != 2));
+    return UnmodifiableListView<ImproveMinResponse>(_improveList.where(
+        (ImproveMinResponse el) => el.isActive && el.completeStatus != 2));
   }
 
   Future<void> findImprove({bool loading = true}) async {
@@ -43,13 +44,15 @@ class ImproveProvider extends ChangeNotifier {
       setState(ViewState.busy);
     }
 
-    final filter = FilterImporve(branch: App.getBranch(), limit: 10);
-    var error = "";
+    final FilterImporve filter =
+        FilterImporve(branch: App.getBranch(), limit: 10);
+    String error = "";
 
     try {
-      final response = await _improveService.findImprove(filter);
+      final ImproveListResponse response =
+          await _improveService.findImprove(filter);
       if (response.error != null) {
-        _improveList = [
+        _improveList = <ImproveMinResponse>[
           ImproveMinResponse(
               "", 0, 0, "", "Error ...", response.error!.message, 0, 0, true, 1)
         ];
@@ -58,7 +61,7 @@ class ImproveProvider extends ChangeNotifier {
         _improveList = response.data;
       }
     } catch (e) {
-      _improveList = [
+      _improveList = <ImproveMinResponse>[
         ImproveMinResponse(
             "", 0, 0, "", "Error ...", error.toString(), 0, 0, true, 1)
       ];
@@ -67,7 +70,7 @@ class ImproveProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
@@ -87,7 +90,7 @@ class ImproveProvider extends ChangeNotifier {
 
   // improve detail cache
   ImproveDetailResponseData _improveDetail = ImproveDetailResponseData(
-      "", 0, 0, "", "", "", "", "", "", "", 0, 0, false, 0, []);
+      "", 0, 0, "", "", "", "", "", "", "", 0, 0, false, 0, <ImproveChange>[]);
   ImproveDetailResponseData get improveDetail {
     return _improveDetail;
   }
@@ -97,9 +100,10 @@ class ImproveProvider extends ChangeNotifier {
   Future<void> getDetail() async {
     setDetailState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _improveService.getImprove(_detailIDSaved);
+      final ImproveDetailResponse response =
+          await _improveService.getImprove(_detailIDSaved);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -111,13 +115,13 @@ class ImproveProvider extends ChangeNotifier {
 
     setDetailState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
   void removeDetail() {
-    _improveDetail = ImproveDetailResponseData(
-        "", 0, 0, "", "", "", "", "", "", "", 0, 0, false, 0, []);
+    _improveDetail = ImproveDetailResponseData("", 0, 0, "", "", "", "", "", "",
+        "", 0, 0, false, 0, <ImproveChange>[]);
   }
 
   // Passing data dari corousel ke change Improve
@@ -131,10 +135,11 @@ class ImproveProvider extends ChangeNotifier {
   Future<bool> incrementImprovement(
       String id, ImproveChangeRequest payload) async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _improveService.changeImprove(id, payload);
+      final ImproveDetailResponse response =
+          await _improveService.changeImprove(id, payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -145,7 +150,7 @@ class ImproveProvider extends ChangeNotifier {
     }
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
 
     await findImprove(loading: false);
@@ -156,10 +161,11 @@ class ImproveProvider extends ChangeNotifier {
   // memanggil findimprove sehingga tidak perlu notifyListener
   Future<bool> addImprove(ImproveRequest payload) async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _improveService.createImprove(payload);
+      final MessageResponse response =
+          await _improveService.createImprove(payload);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -169,7 +175,7 @@ class ImproveProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findImprove(loading: false);
     return true;
@@ -178,10 +184,10 @@ class ImproveProvider extends ChangeNotifier {
   // return future ImproveDetail jika edit improve berhasil
   Future<bool> editImprove(ImproveEditRequest payload) async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response =
+      final ImproveDetailResponse response =
           await _improveService.editImprove(_detailIDSaved, payload);
       if (response.error != null) {
         error = response.error!.message;
@@ -194,7 +200,7 @@ class ImproveProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
 
     await findImprove(loading: false);
@@ -206,9 +212,10 @@ class ImproveProvider extends ChangeNotifier {
   Future<void> enabling() async {
     setDetailState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _improveService.enableImprove(_detailIDSaved);
+      final ImproveDetailResponse response =
+          await _improveService.enableImprove(_detailIDSaved);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -220,7 +227,7 @@ class ImproveProvider extends ChangeNotifier {
 
     setDetailState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 

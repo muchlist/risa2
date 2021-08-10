@@ -9,9 +9,8 @@ import '../utils/enums.dart';
 import '../utils/utils.dart';
 
 class GeneralProvider extends ChangeNotifier {
-  final GeneralService _generalService;
-
   GeneralProvider(this._generalService);
+  final GeneralService _generalService;
 
   ViewState _state = ViewState.idle;
   ViewState get state => _state;
@@ -21,28 +20,29 @@ class GeneralProvider extends ChangeNotifier {
   }
 
   // general list cache
-  List<GeneralMinResponse> _generalList = [];
+  List<GeneralMinResponse> _generalList = <GeneralMinResponse>[];
 
   List<GeneralMinResponse> get generalList {
-    return UnmodifiableListView(_generalList);
+    return UnmodifiableListView<GeneralMinResponse>(_generalList);
   }
 
   void removeGenerals() {
-    _generalList = [];
+    _generalList = <GeneralMinResponse>[];
   }
 
   List<GeneralMinResponse> generalListFiltered(String search) {
-    final generalCopy = UnmodifiableListView(_generalList);
+    final UnmodifiableListView<GeneralMinResponse> generalCopy =
+        UnmodifiableListView<GeneralMinResponse>(_generalList);
     return generalCopy
-        .where((general) => general.name.contains(search))
+        .where((GeneralMinResponse general) => general.name.contains(search))
         .toList();
   }
 
-  // is search loading
-  bool _isLoading = false;
-  bool get isLoading {
-    return _isLoading;
-  }
+  // // is search loading
+  // final bool _isLoading = false;
+  // bool get isLoading {
+  //   return _isLoading;
+  // }
 
   // *memasang filter pada pencarian general item
   FilterGeneral _filterGeneral = FilterGeneral();
@@ -54,7 +54,8 @@ class GeneralProvider extends ChangeNotifier {
     setState(ViewState.busy);
 
     // *copy value dari cache filter general dan ganti namanya dengan input
-    var filter = FilterGeneral(name: search, category: _filterGeneral.category);
+    FilterGeneral filter =
+        FilterGeneral(name: search, category: _filterGeneral.category);
 
     if (ValueValidator().ip(search) && search != "0.0.0.0") {
       filter = FilterGeneral(
@@ -63,9 +64,10 @@ class GeneralProvider extends ChangeNotifier {
 
     setState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _generalService.findGeneral(filter);
+      final GeneralListResponse response =
+          await _generalService.findGeneral(filter);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -77,7 +79,7 @@ class GeneralProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 }

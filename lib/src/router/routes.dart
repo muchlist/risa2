@@ -40,6 +40,8 @@ import '../screens/vendor_check/vendor_check_detail_screen.dart';
 import '../screens/vendor_check/vendor_check_screen.dart';
 
 class RouteGenerator {
+  RouteGenerator._();
+
   static const String landing = '/';
   static const String home = '/home';
   static const String homeVendor = '/home-vendor';
@@ -78,18 +80,16 @@ class RouteGenerator {
   static const String dashboard = '/dashboard';
   static const String pdf = '/pdf';
 
-  RouteGenerator._();
-
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case landing:
-        return MaterialPageRoute(builder: (_) => LandingPage());
+        return MaterialPageRoute<LandingPage>(builder: (_) => LandingPage());
       case login:
-        return MaterialPageRoute(builder: (_) => LoginScreen());
+        return MaterialPageRoute<LoginScreen>(builder: (_) => LoginScreen());
       case home:
-        return MaterialPageRoute(builder: (_) => HomeScreen());
+        return MaterialPageRoute<HomeScreen>(builder: (_) => HomeScreen());
       case homeVendor:
-        return MaterialPageRoute(builder: (_) => HomeVScreen());
+        return MaterialPageRoute<HomeVScreen>(builder: (_) => HomeVScreen());
       case history:
         return transitionFade(HistoriesScreen());
       case check:
@@ -153,20 +153,20 @@ class RouteGenerator {
       case vendorCheckDetail:
         return transitionFade(VendorCheckDetailScreen());
       case dashboard:
-        return transitionFade(DashboardScreen());
+        return transitionFade(const DashboardScreen());
       case pdf:
         return transitionFade(PdfScreen());
       default:
-        return MaterialPageRoute(builder: (_) => LoginScreen());
+        return MaterialPageRoute<LoginScreen>(builder: (_) => LoginScreen());
     }
   }
 }
 
 PageTransition<dynamic> transitionFade(Widget screen) {
-  return PageTransition(child: screen, type: PageTransitionType.fade);
+  return PageTransition<dynamic>(child: screen, type: PageTransitionType.fade);
 }
 
 class RouteException implements Exception {
-  final String message;
   const RouteException(this.message);
+  final String message;
 }

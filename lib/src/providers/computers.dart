@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:risa2/src/api/json_models/response/message_resp.dart';
 
 import '../api/filter_models/computer_filter.dart';
 import '../api/json_models/option/computer_option.dart';
@@ -16,8 +17,8 @@ import '../utils/enums.dart';
 import '../utils/image_compress.dart';
 
 class ComputerProvider extends ChangeNotifier {
-  final ComputerService _computerService;
   ComputerProvider(this._computerService);
+  final ComputerService _computerService;
 
   // =======================================================
   // List Computer
@@ -31,15 +32,15 @@ class ComputerProvider extends ChangeNotifier {
   }
 
   // computer list cache
-  List<ComputerMinResponse> _computerList = [];
+  List<ComputerMinResponse> _computerList = <ComputerMinResponse>[];
   List<ComputerMinResponse> get computerList {
-    return UnmodifiableListView(_computerList);
+    return UnmodifiableListView<ComputerMinResponse>(_computerList);
   }
 
   // computer extra list cache
-  List<GeneralMinResponse> _computerExtraList = [];
+  List<GeneralMinResponse> _computerExtraList = <GeneralMinResponse>[];
   List<GeneralMinResponse> get computerExtraList {
-    return UnmodifiableListView(_computerExtraList);
+    return UnmodifiableListView<GeneralMinResponse>(_computerExtraList);
   }
 
   // *memasang filter pada pencarian computer
@@ -56,9 +57,10 @@ class ComputerProvider extends ChangeNotifier {
       setState(ViewState.busy);
     }
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _computerService.findComputer(_filterComputer);
+      final ComputerListResponse response =
+          await _computerService.findComputer(_filterComputer);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -72,7 +74,7 @@ class ComputerProvider extends ChangeNotifier {
     setState(ViewState.idle);
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
@@ -119,12 +121,12 @@ class ComputerProvider extends ChangeNotifier {
       0,
       0,
       0,
-      [],
+      <String>[],
       "",
       "",
       "",
       "",
-      ComputerExtra([], 0, [], ""));
+      ComputerExtra(<Case>[], 0, <PingState>[], ""));
   ComputerDetailResponseData get computerDetail {
     return _computerDetail;
   }
@@ -154,12 +156,12 @@ class ComputerProvider extends ChangeNotifier {
         0,
         0,
         0,
-        [],
+        <String>[],
         "",
         "",
         "",
         "",
-        ComputerExtra([], 0, [], ""));
+        ComputerExtra(<Case>[], 0, <PingState>[], ""));
   }
 
   // get detail computer
@@ -167,13 +169,14 @@ class ComputerProvider extends ChangeNotifier {
   Future<void> getDetail() async {
     setDetailState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _computerService.getComputer(_computerIDSaved);
+      final ComputerDetailResponse response =
+          await _computerService.getComputer(_computerIDSaved);
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        final computerData = response.data!;
+        final ComputerDetailResponseData computerData = response.data!;
         _computerDetail = computerData;
       }
     } catch (e) {
@@ -182,7 +185,7 @@ class ComputerProvider extends ChangeNotifier {
 
     setDetailState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
@@ -190,10 +193,11 @@ class ComputerProvider extends ChangeNotifier {
   // memanggil findComputer sehingga tidak perlu notifyListener
   Future<bool> addComputer(ComputerRequest payload) async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _computerService.createComputer(payload);
+      final MessageResponse response =
+          await _computerService.createComputer(payload);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -203,7 +207,7 @@ class ComputerProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findComputer(loading: false);
     return true;
@@ -211,7 +215,14 @@ class ComputerProvider extends ChangeNotifier {
 
   // computer option cache
   OptComputerType _computerOption = OptComputerType(
-      ["None"], ["None"], ["None"], ["None"], [0], [0], ["None"]);
+    <String>["None"],
+    <String>["None"],
+    <String>["None"],
+    <String>["None"],
+    <int>[0],
+    <int>[0],
+    <String>["None"],
+  );
   OptComputerType get computerOption {
     return _computerOption;
   }
@@ -219,11 +230,11 @@ class ComputerProvider extends ChangeNotifier {
   // * Mendapatkan check option
   Future<void> findOptionComputer() async {
     try {
-      final response =
+      final OptComputerType response =
           await _computerService.getOptCreateComputer(App.getBranch() ?? "");
       _computerOption = response;
     } catch (e) {
-      return Future.error(e.toString());
+      return Future<void>.error(e.toString());
     }
     notifyListeners();
   }
@@ -231,10 +242,10 @@ class ComputerProvider extends ChangeNotifier {
   // return future ComputerDetail jika edit computer berhasil
   Future<bool> editComputer(ComputerEditRequest payload) async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response =
+      final ComputerDetailResponse response =
           await _computerService.editComputer(_computerIDSaved, payload);
       if (response.error != null) {
         error = response.error!.message;
@@ -247,7 +258,7 @@ class ComputerProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
 
     await findComputer(loading: false);
@@ -257,12 +268,13 @@ class ComputerProvider extends ChangeNotifier {
   // * update image
   // return future true jika update image berhasil
   Future<bool> uploadImage(String id, File file) async {
-    var error = "";
+    String error = "";
 
     final fileCompressed = await compressFile(file);
 
     try {
-      final response = await _computerService.uploadImage(id, fileCompressed);
+      final ComputerDetailResponse response =
+          await _computerService.uploadImage(id, fileCompressed);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -275,17 +287,18 @@ class ComputerProvider extends ChangeNotifier {
     notifyListeners();
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     return true;
   }
 
   // remove computer
   Future<bool> removeComputer() async {
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _computerService.deleteComputer(_computerIDSaved);
+      final MessageResponse response =
+          await _computerService.deleteComputer(_computerIDSaved);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -295,7 +308,7 @@ class ComputerProvider extends ChangeNotifier {
 
     notifyListeners();
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findComputer(loading: false);
     return true;
@@ -313,7 +326,7 @@ class ComputerProvider extends ChangeNotifier {
   // di on dispose
   void onClose() {
     removeDetail();
-    _computerExtraList = [];
-    _computerList = [];
+    _computerExtraList = <GeneralMinResponse>[];
+    _computerList = <ComputerMinResponse>[];
   }
 }

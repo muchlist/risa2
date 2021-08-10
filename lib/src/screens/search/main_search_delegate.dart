@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/shared/func_history_dialog.dart';
+import 'package:risa2/src/utils/enums.dart';
 
 import '../../providers/generals.dart';
 import '../../shared/general_item_widget.dart';
@@ -85,7 +86,7 @@ class MainSearchDelegate extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     return Consumer<GeneralProvider>(
       builder: (_, data, __) {
-        return (data.isLoading)
+        return (data.state == ViewState.busy)
             ? Center(child: CircularProgressIndicator())
             : ListView.builder(
                 itemCount: data.generalList.length,

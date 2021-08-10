@@ -46,7 +46,7 @@ class OtherProvider extends ChangeNotifier {
   }
 
   // other extra list cache
-  List<GeneralMinResponse> _otherExtraList = [];
+  List<GeneralMinResponse> _otherExtraList = <GeneralMinResponse>[];
   List<GeneralMinResponse> get otherExtraList {
     return UnmodifiableListView<GeneralMinResponse>(_otherExtraList);
   }

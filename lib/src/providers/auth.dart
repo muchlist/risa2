@@ -6,8 +6,8 @@ import '../globals.dart';
 import '../utils/enums.dart';
 
 class AuthProvider extends ChangeNotifier {
-  final AuthService _authservice;
   AuthProvider(this._authservice);
+  final AuthService _authservice;
 
   ViewState _state = ViewState.idle;
   ViewState get state => _state;
@@ -22,9 +22,9 @@ class AuthProvider extends ChangeNotifier {
   Future<bool> login(String id, String password) async {
     setState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _authservice.login(id, password);
+      final LoginResponse response = await _authservice.login(id, password);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -46,7 +46,7 @@ class AuthProvider extends ChangeNotifier {
     setState(ViewState.idle);
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     return false;
   }
@@ -54,24 +54,23 @@ class AuthProvider extends ChangeNotifier {
   // sendFCMToken mengirimkan token firebase ke server, return true if success
   Future<bool> sendFCMToken(String token) async {
     try {
-      final response = await _authservice.sendFCMToken(token);
+      final LoginResponse response = await _authservice.sendFCMToken(token);
       if (response.error != null) {
         return false;
       }
       return true;
     } catch (e) {
-      print(e.toString());
       return false;
     }
   }
 
   void logout() {
     _saveDataToPersistent(
-        token: "", branch: "", name: "", role: [], expired: 0);
+        token: "", branch: "", name: "", role: <String>[], expired: 0);
     notifyListeners();
   }
 
-  _saveDataToPersistent(
+  Future<void> _saveDataToPersistent(
       {required String token,
       required String name,
       required String branch,

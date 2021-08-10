@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/foundation.dart';
+import 'package:risa2/src/api/json_models/response/message_resp.dart';
 
 import '../api/filter_models/checkp_filter.dart';
 import '../api/json_models/option/location_type.dart';
@@ -13,9 +14,8 @@ import '../globals.dart';
 import '../utils/enums.dart';
 
 class CheckMasterProvider extends ChangeNotifier {
-  final CheckpService _checkMasterService;
-
   CheckMasterProvider(this._checkMasterService);
+  final CheckpService _checkMasterService;
 
   // =======================================================
   // List MasterCheck
@@ -28,9 +28,9 @@ class CheckMasterProvider extends ChangeNotifier {
   }
 
   // check master list cache
-  List<CheckpMinResponse> _checkpList = [];
+  List<CheckpMinResponse> _checkpList = <CheckpMinResponse>[];
   List<CheckpMinResponse> get checkpList {
-    return UnmodifiableListView(_checkpList);
+    return UnmodifiableListView<CheckpMinResponse>(_checkpList);
   }
 
   // *memasang filter pada pencarian check master
@@ -43,9 +43,10 @@ class CheckMasterProvider extends ChangeNotifier {
   Future<void> findCheckMaster() async {
     setState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _checkMasterService.findCheckp(_filterCheck);
+      final CheckpListResponse response =
+          await _checkMasterService.findCheckp(_filterCheck);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -57,7 +58,7 @@ class CheckMasterProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
@@ -65,10 +66,11 @@ class CheckMasterProvider extends ChangeNotifier {
   // memanggil findCheck sehingga tidak perlu notifyListener
   Future<bool> addCheckMaster(CheckpRequest payload) async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _checkMasterService.createCheckp(payload);
+      final MessageResponse response =
+          await _checkMasterService.createCheckp(payload);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -78,7 +80,7 @@ class CheckMasterProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findCheckMaster();
     return true;
@@ -116,9 +118,10 @@ class CheckMasterProvider extends ChangeNotifier {
     setDetailState(ViewState.busy);
 
     late CheckpDetailResponseData responseData;
-    var error = "";
+    String error = "";
     try {
-      final response = await _checkMasterService.getCheckp(_checkIDSaved);
+      final CheckpDetailResponse response =
+          await _checkMasterService.getCheckp(_checkIDSaved);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -131,7 +134,7 @@ class CheckMasterProvider extends ChangeNotifier {
 
     setDetailState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<CheckpDetailResponseData>.error(error);
     }
 
     return responseData;
@@ -140,15 +143,15 @@ class CheckMasterProvider extends ChangeNotifier {
   // edit master check
   Future<bool> editCheckMaster(CheckpEditRequest payload) async {
     setDetailState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response =
+      final CheckpDetailResponse response =
           await _checkMasterService.editCheckp(_checkIDSaved, payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        _checkDetail = response.data!;
+        _checkDetail = response.data;
       }
     } catch (e) {
       error = e.toString();
@@ -156,7 +159,7 @@ class CheckMasterProvider extends ChangeNotifier {
 
     setDetailState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findCheckMaster();
     return true;
@@ -165,10 +168,11 @@ class CheckMasterProvider extends ChangeNotifier {
   // remove master check
   Future<bool> removeCheckMaster() async {
     setDetailState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _checkMasterService.deleteCheckp(_checkIDSaved);
+      final MessageResponse response =
+          await _checkMasterService.deleteCheckp(_checkIDSaved);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -178,14 +182,15 @@ class CheckMasterProvider extends ChangeNotifier {
 
     setDetailState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findCheckMaster();
     return true;
   }
 
   // check option cache
-  OptLocationType _checkOption = OptLocationType(["None"], ["None"]);
+  OptLocationType _checkOption =
+      OptLocationType(<String>["None"], <String>["None"]);
   OptLocationType get checkOption {
     return _checkOption;
   }
@@ -193,17 +198,17 @@ class CheckMasterProvider extends ChangeNotifier {
   // * Mendapatkan check option
   Future<void> findOptionCheckMaster() async {
     try {
-      final response =
+      final OptLocationType response =
           await _checkMasterService.getOptCreateCheckp(App.getBranch() ?? "");
       _checkOption = response;
     } catch (e) {
-      return Future.error(e.toString());
+      return Future<void>.error(e.toString());
     }
     notifyListeners();
   }
 
   void onClose() {
     removeDetail();
-    _checkpList = [];
+    _checkpList = <CheckpMinResponse>[];
   }
 }

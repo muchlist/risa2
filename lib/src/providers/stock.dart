@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:risa2/src/api/json_models/response/message_resp.dart';
 
 import '../api/filter_models/stock_filter.dart';
 import '../api/json_models/option/stock_category.dart';
@@ -16,8 +17,8 @@ import '../utils/enums.dart';
 import '../utils/image_compress.dart';
 
 class StockProvider extends ChangeNotifier {
-  final StockService _stockService;
   StockProvider(this._stockService);
+  final StockService _stockService;
 
   // =======================================================
   // List Stock
@@ -31,9 +32,9 @@ class StockProvider extends ChangeNotifier {
   }
 
   // stock list cache
-  List<StockMinResponse> _stockList = [];
+  List<StockMinResponse> _stockList = <StockMinResponse>[];
   List<StockMinResponse> get stockList {
-    return UnmodifiableListView(_stockList);
+    return UnmodifiableListView<StockMinResponse>(_stockList);
   }
 
   // *memasang filter pada pencarian stock
@@ -50,9 +51,10 @@ class StockProvider extends ChangeNotifier {
       setState(ViewState.busy);
     }
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _stockService.findStock(_filterStock);
+      final StockListResponse response =
+          await _stockService.findStock(_filterStock);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -65,7 +67,7 @@ class StockProvider extends ChangeNotifier {
     setState(ViewState.idle);
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
@@ -86,21 +88,59 @@ class StockProvider extends ChangeNotifier {
   }
 
   // stock detail cache
-  StockDetailResponseData _stockDetail = StockDetailResponseData("", 0, 0, "",
-      "", "", "", "", false, "", "", "", 0, 0, "", [], "", "", [], []);
+  StockDetailResponseData _stockDetail = StockDetailResponseData(
+      "",
+      0,
+      0,
+      "",
+      "",
+      "",
+      "",
+      "",
+      false,
+      "",
+      "",
+      "",
+      0,
+      0,
+      "",
+      <String>[],
+      "",
+      "",
+      <StockChange>[],
+      <StockChange>[]);
   StockDetailResponseData get stockDetail {
     return _stockDetail;
   }
 
   // list Stock use cache
-  List<StockChange> _sortedStockUse = [];
+  List<StockChange> _sortedStockUse = <StockChange>[];
   List<StockChange> get sortedStockUse {
     return _sortedStockUse;
   }
 
   void removeDetail() {
-    _stockDetail = StockDetailResponseData("", 0, 0, "", "", "", "", "", false,
-        "", "", "", 0, 0, "", [], "", "", [], []);
+    _stockDetail = StockDetailResponseData(
+        "",
+        0,
+        0,
+        "",
+        "",
+        "",
+        "",
+        "",
+        false,
+        "",
+        "",
+        "",
+        0,
+        0,
+        "",
+        <String>[],
+        "",
+        "",
+        <StockChange>[],
+        <StockChange>[]);
   }
 
   // get detail stock
@@ -108,13 +148,14 @@ class StockProvider extends ChangeNotifier {
   Future<void> getDetail() async {
     setDetailState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _stockService.getStock(_stockIDSaved);
+      final StockDetailResponse response =
+          await _stockService.getStock(_stockIDSaved);
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        final stockData = response.data!;
+        final StockDetailResponseData stockData = response.data!;
         _sortedStockUse =
             _sortStockUse(stockData.increment, stockData.decrement);
         _stockDetail = stockData;
@@ -125,23 +166,23 @@ class StockProvider extends ChangeNotifier {
 
     setDetailState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
   int getStockIncrementCount() {
-    final increment = _stockDetail.increment;
-    var total = 0;
-    for (var inc in increment) {
+    final List<StockChange> increment = _stockDetail.increment;
+    int total = 0;
+    for (final StockChange inc in increment) {
       total = total + inc.qty;
     }
     return total;
   }
 
   int getStockDecrementCount() {
-    final decrement = _stockDetail.decrement;
-    var total = 0;
-    for (var dec in decrement) {
+    final List<StockChange> decrement = _stockDetail.decrement;
+    int total = 0;
+    for (final StockChange dec in decrement) {
       total = total + dec.qty;
     }
     return -total;
@@ -151,12 +192,14 @@ class StockProvider extends ChangeNotifier {
   // berdasarkan valu time unix
   List<StockChange> _sortStockUse(List<StockChange> stockUseIncrement,
       List<StockChange> stockUseDecrement) {
-    if (stockUseIncrement.length == 0 && stockUseDecrement.length == 0) {
-      return [];
+    if (stockUseIncrement.isEmpty && stockUseDecrement.isEmpty) {
+      return <StockChange>[];
     }
 
-    var stockUseCombination = [...stockUseIncrement, ...stockUseDecrement]
-      ..sort((a, b) => b.time.compareTo(a.time));
+    final List<StockChange> stockUseCombination = <StockChange>[
+      ...stockUseIncrement,
+      ...stockUseDecrement
+    ]..sort((StockChange a, StockChange b) => b.time.compareTo(a.time));
 
     return stockUseCombination;
   }
@@ -165,10 +208,10 @@ class StockProvider extends ChangeNotifier {
   // memanggil findStock sehingga tidak perlu notifyListener
   Future<bool> addStock(StockRequest payload) async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _stockService.createStock(payload);
+      final MessageResponse response = await _stockService.createStock(payload);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -178,14 +221,14 @@ class StockProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findStock(loading: false);
     return true;
   }
 
   // stock option cache
-  OptStockCategory _stockOption = OptStockCategory(["None"]);
+  OptStockCategory _stockOption = OptStockCategory(<String>["None"]);
   OptStockCategory get stockOption {
     return _stockOption;
   }
@@ -193,10 +236,10 @@ class StockProvider extends ChangeNotifier {
   // * Mendapatkan check option
   Future<void> findOptionStock() async {
     try {
-      final response = await _stockService.getOptStock();
+      final OptStockCategory response = await _stockService.getOptStock();
       _stockOption = response;
     } catch (e) {
-      return Future.error(e.toString());
+      return Future<void>.error(e.toString());
     }
     notifyListeners();
   }
@@ -204,10 +247,11 @@ class StockProvider extends ChangeNotifier {
   // return future StockDetail jika edit stock berhasil
   Future<bool> editStock(StockEditRequest payload) async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _stockService.editStock(_stockIDSaved, payload);
+      final StockDetailResponse response =
+          await _stockService.editStock(_stockIDSaved, payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -219,7 +263,7 @@ class StockProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
 
     await findStock(loading: false);
@@ -229,12 +273,13 @@ class StockProvider extends ChangeNotifier {
   // * update image
   // return future true jika update image berhasil
   Future<bool> uploadImage(String id, File file) async {
-    var error = "";
+    String error = "";
 
-    final fileCompressed = await compressFile(file);
+    final File fileCompressed = await compressFile(file);
 
     try {
-      final response = await _stockService.uploadImage(id, fileCompressed);
+      final StockDetailResponse response =
+          await _stockService.uploadImage(id, fileCompressed);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -247,17 +292,18 @@ class StockProvider extends ChangeNotifier {
     notifyListeners();
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     return true;
   }
 
   // remove stock
   Future<bool> removeStock() async {
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _stockService.deleteStock(_stockIDSaved);
+      final MessageResponse response =
+          await _stockService.deleteStock(_stockIDSaved);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -267,7 +313,7 @@ class StockProvider extends ChangeNotifier {
 
     notifyListeners();
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findStock(loading: false);
     return true;
@@ -285,14 +331,15 @@ class StockProvider extends ChangeNotifier {
   // perbedaan increment dan decrement adalah pada payload qty plus atau minus
   Future<bool> changeStock(StockChangeRequest payload) async {
     setStockChangeState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _stockService.changeStock(_stockIDSaved, payload);
+      final StockDetailResponse response =
+          await _stockService.changeStock(_stockIDSaved, payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        final stockData = response.data!;
+        final StockDetailResponseData stockData = response.data!;
         _sortedStockUse =
             _sortStockUse(stockData.increment, stockData.decrement);
         _stockDetail = stockData;
@@ -303,7 +350,7 @@ class StockProvider extends ChangeNotifier {
 
     setStockChangeState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
 
     await findStock(loading: false);

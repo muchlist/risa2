@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:risa2/src/api/json_models/response/message_resp.dart';
 
 import '../api/filter_models/cctv_filter.dart';
 import '../api/json_models/option/location_type.dart';
@@ -17,8 +18,8 @@ import '../utils/enums.dart';
 import '../utils/image_compress.dart';
 
 class CctvProvider extends ChangeNotifier {
-  final CctvService _cctvService;
   CctvProvider(this._cctvService);
+  final CctvService _cctvService;
 
   // =======================================================
   // List Cctv
@@ -32,15 +33,15 @@ class CctvProvider extends ChangeNotifier {
   }
 
   // cctv list cache
-  List<CctvMinResponse> _cctvList = [];
+  List<CctvMinResponse> _cctvList = <CctvMinResponse>[];
   List<CctvMinResponse> get cctvList {
-    return UnmodifiableListView(_cctvList);
+    return UnmodifiableListView<CctvMinResponse>(_cctvList);
   }
 
   // cctv extra list cache
-  List<GeneralMinResponse> _cctvExtraList = [];
+  List<GeneralMinResponse> _cctvExtraList = <GeneralMinResponse>[];
   List<GeneralMinResponse> get cctvExtraList {
-    return UnmodifiableListView(_cctvExtraList);
+    return UnmodifiableListView<GeneralMinResponse>(_cctvExtraList);
   }
 
   // perhitungan dari data cctv extra list
@@ -48,9 +49,9 @@ class CctvProvider extends ChangeNotifier {
   CctvExtraSum get cctvExtraSum => _cctvExtraSum;
 
   CctvExtraSum _calculateInfoExtra(List<GeneralMinResponse> ctvs) {
-    var cctvNeedCheck = 0;
-    var cctvInProgress = 0;
-    for (final cctv in ctvs) {
+    int cctvNeedCheck = 0;
+    int cctvInProgress = 0;
+    for (final GeneralMinResponse cctv in ctvs) {
       if (cctv.casesSize == 0 && cctv.lastPing == "DOWN") {
         cctvNeedCheck++;
       }
@@ -75,9 +76,10 @@ class CctvProvider extends ChangeNotifier {
       setState(ViewState.busy);
     }
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _cctvService.findCctv(_filterCctv);
+      final CctvListResponse response =
+          await _cctvService.findCctv(_filterCctv);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -92,7 +94,7 @@ class CctvProvider extends ChangeNotifier {
     setState(ViewState.idle);
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
@@ -132,12 +134,12 @@ class CctvProvider extends ChangeNotifier {
       "",
       "",
       0,
-      [],
+      <String>[],
       "",
       "",
       "",
       "",
-      CctvExtra([], 0, [], ""));
+      CctvExtra(<Case>[], 0, <PingState>[], ""));
   CctvDetailResponseData get cctvDetail {
     return _cctvDetail;
   }
@@ -160,12 +162,12 @@ class CctvProvider extends ChangeNotifier {
         "",
         "",
         0,
-        [],
+        <String>[],
         "",
         "",
         "",
         "",
-        CctvExtra([], 0, [], ""));
+        CctvExtra(<Case>[], 0, <PingState>[], ""));
   }
 
   // get detail cctv
@@ -175,13 +177,14 @@ class CctvProvider extends ChangeNotifier {
       setDetailState(ViewState.busy);
     }
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _cctvService.getCctv(_cctvIDSaved);
+      final CctvDetailResponse response =
+          await _cctvService.getCctv(_cctvIDSaved);
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        final cctvData = response.data!;
+        final CctvDetailResponseData cctvData = response.data!;
         _cctvDetail = cctvData;
       }
     } catch (e) {
@@ -190,7 +193,7 @@ class CctvProvider extends ChangeNotifier {
 
     setDetailState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
@@ -198,10 +201,10 @@ class CctvProvider extends ChangeNotifier {
   // memanggil findCctv sehingga tidak perlu notifyListener
   Future<bool> addCctv(CctvRequest payload) async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _cctvService.createCctv(payload);
+      final MessageResponse response = await _cctvService.createCctv(payload);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -211,14 +214,15 @@ class CctvProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findCctv(loading: false);
     return true;
   }
 
   // cctv option cache
-  OptLocationType _cctvOption = OptLocationType(["None"], ["None"]);
+  OptLocationType _cctvOption =
+      OptLocationType(<String>["None"], <String>["None"]);
   OptLocationType get cctvOption {
     return _cctvOption;
   }
@@ -226,11 +230,11 @@ class CctvProvider extends ChangeNotifier {
   // * Mendapatkan check option
   Future<void> findOptionCctv() async {
     try {
-      final response =
+      final OptLocationType response =
           await _cctvService.getOptCreateCctv(App.getBranch() ?? "");
       _cctvOption = response;
     } catch (e) {
-      return Future.error(e.toString());
+      return Future<void>.error(e.toString());
     }
     notifyListeners();
   }
@@ -238,10 +242,11 @@ class CctvProvider extends ChangeNotifier {
   // return future CctvDetail jika edit cctv berhasil
   Future<bool> editCctv(CctvEditRequest payload) async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _cctvService.editCctv(_cctvIDSaved, payload);
+      final CctvDetailResponse response =
+          await _cctvService.editCctv(_cctvIDSaved, payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -253,7 +258,7 @@ class CctvProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
 
     await findCctv(loading: false);
@@ -263,12 +268,13 @@ class CctvProvider extends ChangeNotifier {
   // * update image
   // return future true jika update image berhasil
   Future<bool> uploadImage(String id, File file) async {
-    var error = "";
+    String error = "";
 
-    final fileCompressed = await compressFile(file);
+    final File fileCompressed = await compressFile(file);
 
     try {
-      final response = await _cctvService.uploadImage(id, fileCompressed);
+      final CctvDetailResponse response =
+          await _cctvService.uploadImage(id, fileCompressed);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -281,17 +287,18 @@ class CctvProvider extends ChangeNotifier {
     notifyListeners();
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     return true;
   }
 
   // remove cctv
   Future<bool> removeCctv() async {
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _cctvService.deleteCctv(_cctvIDSaved);
+      final MessageResponse response =
+          await _cctvService.deleteCctv(_cctvIDSaved);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -301,7 +308,7 @@ class CctvProvider extends ChangeNotifier {
 
     notifyListeners();
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findCctv(loading: false);
     return true;
@@ -319,7 +326,7 @@ class CctvProvider extends ChangeNotifier {
   // di on dispose
   void onClose() {
     removeDetail();
-    _cctvExtraList = [];
-    _cctvList = [];
+    _cctvExtraList = <GeneralMinResponse>[];
+    _cctvList = <CctvMinResponse>[];
   }
 }

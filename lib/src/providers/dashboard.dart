@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:flutter/cupertino.dart';
+import 'package:risa2/src/api/json_models/response/message_resp.dart';
 
 import '../api/json_models/response/pdf_list_resp.dart';
 import '../api/json_models/response/speed_list_resp.dart';
@@ -10,9 +11,9 @@ import '../globals.dart';
 import '../utils/utils.dart';
 
 class DashboardProvider extends ChangeNotifier {
+  DashboardProvider(this._speedService, this._pdfService);
   final SpeedService _speedService;
   final PdfService _pdfService;
-  DashboardProvider(this._speedService, this._pdfService);
 
   // =======================================================
   // List Dashboard
@@ -26,16 +27,16 @@ class DashboardProvider extends ChangeNotifier {
   }
 
   // speed list cache
-  List<SpeedData> _speedList = [];
+  List<SpeedData> _speedList = <SpeedData>[];
   List<SpeedData> get speedList {
-    return UnmodifiableListView(_speedList);
+    return UnmodifiableListView<SpeedData>(_speedList);
   }
 
   List<SpeedData> get lastTeenSpeedList {
     if (_speedList.length <= 10) {
-      return UnmodifiableListView(_speedList);
+      return UnmodifiableListView<SpeedData>(_speedList);
     }
-    return UnmodifiableListView(
+    return UnmodifiableListView<SpeedData>(
         speedList.sublist(speedList.length - 1 - 10).toList());
   }
 
@@ -45,9 +46,9 @@ class DashboardProvider extends ChangeNotifier {
       setState(ViewState.busy);
     }
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _speedService.retrieveSpeed();
+      final SpeedListResponse response = await _speedService.retrieveSpeed();
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -60,16 +61,16 @@ class DashboardProvider extends ChangeNotifier {
     setState(ViewState.idle);
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
   // PDF
 
   // speed list cache
-  List<PdfData> _pdfList = [];
+  List<PdfData> _pdfList = <PdfData>[];
   List<PdfData> get pdfList {
-    return UnmodifiableListView(_pdfList);
+    return UnmodifiableListView<PdfData>(_pdfList);
   }
 
   // * Mendapatkan pdf
@@ -78,9 +79,9 @@ class DashboardProvider extends ChangeNotifier {
       setState(ViewState.busy);
     }
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _pdfService.findPDF(type: pdfType);
+      final PdfListResponse response = await _pdfService.findPDF(type: pdfType);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -93,17 +94,17 @@ class DashboardProvider extends ChangeNotifier {
     setState(ViewState.idle);
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
   // generate PDF
   Future<bool> generatePDF(int start, int end, bool forVendor) async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = (forVendor)
+      final MessageResponse response = forVendor
           ? await _pdfService.generatePDFforVendor(
               App.getBranch() ?? "", start, end)
           : await _pdfService.generatePDF(App.getBranch() ?? "", start, end);
@@ -116,17 +117,17 @@ class DashboardProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
 
-    await findPdf(loading: false, pdfType: (forVendor) ? "VENDOR" : "LAPORAN");
+    await findPdf(loading: false, pdfType: forVendor ? "VENDOR" : "LAPORAN");
     return true;
   }
 
   // dipanggil ketika data sudah tidak dibutuhkan lagi,
   // di on dispose
   void onClose() {
-    _speedList = [];
-    _pdfList = [];
+    _speedList = <SpeedData>[];
+    _pdfList = <PdfData>[];
   }
 }

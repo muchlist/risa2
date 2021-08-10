@@ -1,16 +1,16 @@
 class HistCategory {
-  static const all = "SEMUA";
-  static const cctv = "CCTV";
-  static const pc = "PC";
-  static const stock = "STOCK";
-  static const application = "APPLICATION";
-  static const printer = "PRINTER";
-  static const altai = "ALTAI";
-  static const handheld = "HANDHELD";
-  static const server = "SERVER";
-  static const gate = "GATE";
-  static const ups = "UPS";
-  static const other = "OTHER";
+  static const String all = "SEMUA";
+  static const String cctv = "CCTV";
+  static const String pc = "PC";
+  static const String stock = "STOCK";
+  static const String application = "APPLICATION";
+  static const String printer = "PRINTER";
+  static const String altai = "ALTAI";
+  static const String handheld = "HANDHELD";
+  static const String server = "SERVER";
+  static const String gate = "GATE";
+  static const String ups = "UPS";
+  static const String other = "OTHER";
 
   final List<String> categoryList = <String>[
     all,
