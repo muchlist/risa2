@@ -10,33 +10,33 @@ import '../../shared/history_item_widget.dart';
 import '../../utils/enums.dart';
 
 class HistoryRecyclerView extends StatefulWidget {
-  final enumStatus status;
-  final HistoryProvider provider;
-
   const HistoryRecyclerView({
     Key? key,
     required this.provider,
     this.status = enumStatus.info,
   }) : super(key: key);
+  final enumStatus status;
+  final HistoryProvider provider;
 
   @override
   _HistoryRecyclerViewState createState() => _HistoryRecyclerViewState();
 }
 
 class _HistoryRecyclerViewState extends State<HistoryRecyclerView> {
-  var refreshKeyProgressHistory = GlobalKey<RefreshIndicatorState>();
+  GlobalKey<RefreshIndicatorState> refreshKeyProgressHistory =
+      GlobalKey<RefreshIndicatorState>();
 
   Future<void> _loadHistories() {
-    return Future.delayed(Duration.zero, () {
-      widget.provider.findHistory().onError((error, _) =>
+    return Future<void>.delayed(Duration.zero, () {
+      widget.provider.findHistory().onError((Object? error, _) =>
           showToastError(context: context, message: error.toString()));
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HistoryProvider>(builder: (_, data, __) {
-      var histories = <HistoryMinResponse>[];
+    return Consumer<HistoryProvider>(builder: (_, HistoryProvider data, __) {
+      List<HistoryMinResponse> histories = <HistoryMinResponse>[];
 
       switch (widget.status) {
         case enumStatus.progress:
@@ -51,20 +51,21 @@ class _HistoryRecyclerViewState extends State<HistoryRecyclerView> {
 
       return Stack(
         alignment: Alignment.center,
-        children: [
+        children: <Widget>[
           Positioned(
               top: 0,
               bottom: 0,
               left: 0,
               right: 0,
-              child: (histories.length != 0)
+              child: (histories.isNotEmpty)
                   ? buildListView(histories)
                   : (data.state == ViewState.idle)
                       ? EmptyBox(loadTap: _loadHistories)
-                      : Center()),
-          (data.state == ViewState.busy)
-              ? Center(child: CircularProgressIndicator())
-              : Center(),
+                      : const Center()),
+          if (data.state == ViewState.busy)
+            const Center(child: CircularProgressIndicator())
+          else
+            const Center(),
         ],
       );
     });
@@ -75,9 +76,9 @@ class _HistoryRecyclerViewState extends State<HistoryRecyclerView> {
       key: refreshKeyProgressHistory,
       onRefresh: _loadHistories,
       child: ListView.builder(
-        padding: EdgeInsets.only(bottom: 60),
+        padding: const EdgeInsets.only(bottom: 60),
         itemCount: listData.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
               onTap: () =>
                   HistoryHelper().showDetailIncident(context, listData[index]),
