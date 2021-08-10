@@ -8,7 +8,7 @@ import '../../shared/other_item_widget.dart';
 
 class OtherSearchDelegate extends SearchDelegate<String?> {
   Widget generateListView(List<OtherMinResponse> otherList) {
-    if (otherList.length == 0) {
+    if (otherList.isEmpty) {
       return Center(
           child: SizedBox(
               height: 200,
@@ -19,7 +19,7 @@ class OtherSearchDelegate extends SearchDelegate<String?> {
 
     return ListView.builder(
       itemCount: otherList.length,
-      itemBuilder: (context, index) {
+      itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: () => close(context, otherList[index].id),
           child: OtherListTile(
@@ -32,9 +32,9 @@ class OtherSearchDelegate extends SearchDelegate<String?> {
 
   @override
   List<Widget> buildActions(Object context) {
-    return [
+    return <Widget>[
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -45,7 +45,7 @@ class OtherSearchDelegate extends SearchDelegate<String?> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -54,12 +54,13 @@ class OtherSearchDelegate extends SearchDelegate<String?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final otherList = context.read<OtherProvider>().otherList;
+    final List<OtherMinResponse> otherList =
+        context.read<OtherProvider>().otherList;
     if (query == "") {
       return generateListView(otherList);
     } else {
-      final otherListFiltered = otherList
-          .where((x) =>
+      final List<OtherMinResponse> otherListFiltered = otherList
+          .where((OtherMinResponse x) =>
               x.name.contains(query.toUpperCase()) || x.ip.contains(query))
           .toList();
 
@@ -69,12 +70,13 @@ class OtherSearchDelegate extends SearchDelegate<String?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final otherList = context.read<OtherProvider>().otherList;
+    final List<OtherMinResponse> otherList =
+        context.read<OtherProvider>().otherList;
     if (query == "") {
       return generateListView(otherList);
     } else {
-      final otherListFiltered = otherList
-          .where((x) =>
+      final List<OtherMinResponse> otherListFiltered = otherList
+          .where((OtherMinResponse x) =>
               x.name.contains(query.toUpperCase()) || x.ip.contains(query))
           .toList();
 

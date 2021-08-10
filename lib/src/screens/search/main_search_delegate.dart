@@ -1,18 +1,20 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/func_history_dialog.dart';
-import 'package:risa2/src/utils/enums.dart';
 
 import '../../providers/generals.dart';
+import '../../shared/func_history_dialog.dart';
 import '../../shared/general_item_widget.dart';
+import '../../utils/enums.dart';
 
 /// digunakan di home search
-class MainSearchDelegate extends SearchDelegate {
+class MainSearchDelegate extends SearchDelegate<void> {
   @override
   List<Widget> buildActions(Object context) {
-    return [
+    return <Widget>[
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -23,7 +25,7 @@ class MainSearchDelegate extends SearchDelegate {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -35,9 +37,9 @@ class MainSearchDelegate extends SearchDelegate {
     if (query.length < 3) {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
+        children: const <Widget>[
           Center(
-            child: const Text(
+            child: Text(
               "Pencarian harus lebih dari 3 karakter.",
             ),
           )
@@ -45,12 +47,15 @@ class MainSearchDelegate extends SearchDelegate {
       );
     }
 
-    Future.delayed(Duration.zero, () {
-      context.read<GeneralProvider>().findGeneral(query).onError((error, _) {
+    Future<void>.delayed(Duration.zero, () {
+      context
+          .read<GeneralProvider>()
+          .findGeneral(query)
+          .onError((Object? error, _) {
         if (error != null) {
-          final snackBar = SnackBar(
+          final SnackBar snackBar = SnackBar(
             content: Text(error.toString()),
-            duration: Duration(seconds: 3),
+            duration: const Duration(seconds: 3),
           );
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
@@ -58,8 +63,8 @@ class MainSearchDelegate extends SearchDelegate {
     });
 
     return Consumer<GeneralProvider>(
-      builder: (_, data, __) {
-        return (data.generalList.length == 0)
+      builder: (_, GeneralProvider data, __) {
+        return (data.generalList.isEmpty)
             ? Center(
                 child: Text(
                   "$query tidak ditemukan...",
@@ -67,7 +72,7 @@ class MainSearchDelegate extends SearchDelegate {
               )
             : ListView.builder(
                 itemCount: data.generalList.length,
-                itemBuilder: (context, index) {
+                itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
                       onTap: () {
                         HistoryHelper().showParent(
@@ -85,12 +90,12 @@ class MainSearchDelegate extends SearchDelegate {
   @override
   Widget buildSuggestions(BuildContext context) {
     return Consumer<GeneralProvider>(
-      builder: (_, data, __) {
+      builder: (_, GeneralProvider data, __) {
         return (data.state == ViewState.busy)
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : ListView.builder(
                 itemCount: data.generalList.length,
-                itemBuilder: (context, index) {
+                itemBuilder: (BuildContext context, int index) {
                   return GestureDetector(
                     onTap: () {
                       HistoryHelper().showParent(

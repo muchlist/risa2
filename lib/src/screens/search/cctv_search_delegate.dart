@@ -8,7 +8,7 @@ import '../../shared/cctv_item_widget.dart';
 
 class CctvSearchDelegate extends SearchDelegate<String?> {
   Widget generateListView(List<CctvMinResponse> cctvList) {
-    if (cctvList.length == 0) {
+    if (cctvList.isEmpty) {
       return Center(
           child: SizedBox(
               height: 200,
@@ -19,7 +19,7 @@ class CctvSearchDelegate extends SearchDelegate<String?> {
 
     return ListView.builder(
       itemCount: cctvList.length,
-      itemBuilder: (context, index) {
+      itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: () => close(context, cctvList[index].id),
           child: CctvListTile(
@@ -32,9 +32,9 @@ class CctvSearchDelegate extends SearchDelegate<String?> {
 
   @override
   List<Widget> buildActions(Object context) {
-    return [
+    return <Widget>[
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -45,7 +45,7 @@ class CctvSearchDelegate extends SearchDelegate<String?> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -54,12 +54,13 @@ class CctvSearchDelegate extends SearchDelegate<String?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final cctvList = context.read<CctvProvider>().cctvList;
+    final List<CctvMinResponse> cctvList =
+        context.read<CctvProvider>().cctvList;
     if (query == "") {
       return generateListView(cctvList);
     } else {
-      final cctvListFiltered = cctvList
-          .where((x) =>
+      final List<CctvMinResponse> cctvListFiltered = cctvList
+          .where((CctvMinResponse x) =>
               x.name.contains(query.toUpperCase()) || x.ip.contains(query))
           .toList();
 
@@ -69,12 +70,13 @@ class CctvSearchDelegate extends SearchDelegate<String?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final cctvList = context.read<CctvProvider>().cctvList;
+    final List<CctvMinResponse> cctvList =
+        context.read<CctvProvider>().cctvList;
     if (query == "") {
       return generateListView(cctvList);
     } else {
-      final cctvListFiltered = cctvList
-          .where((x) =>
+      final List<CctvMinResponse> cctvListFiltered = cctvList
+          .where((CctvMinResponse x) =>
               x.name.contains(query.toUpperCase()) || x.ip.contains(query))
           .toList();
 

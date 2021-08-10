@@ -8,7 +8,7 @@ import '../../shared/computer_item_widget.dart';
 
 class ComputerSearchDelegate extends SearchDelegate<String?> {
   Widget generateListView(List<ComputerMinResponse> computerList) {
-    if (computerList.length == 0) {
+    if (computerList.isEmpty) {
       return Center(
           child: SizedBox(
               height: 200,
@@ -19,7 +19,7 @@ class ComputerSearchDelegate extends SearchDelegate<String?> {
 
     return ListView.builder(
       itemCount: computerList.length,
-      itemBuilder: (context, index) {
+      itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: () => close(context, computerList[index].id),
           child: ComputerListTile(
@@ -32,9 +32,9 @@ class ComputerSearchDelegate extends SearchDelegate<String?> {
 
   @override
   List<Widget> buildActions(Object context) {
-    return [
+    return <Widget>[
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -45,7 +45,7 @@ class ComputerSearchDelegate extends SearchDelegate<String?> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -54,12 +54,13 @@ class ComputerSearchDelegate extends SearchDelegate<String?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final computerList = context.read<ComputerProvider>().computerList;
+    final List<ComputerMinResponse> computerList =
+        context.read<ComputerProvider>().computerList;
     if (query == "") {
       return generateListView(computerList);
     } else {
-      final computerListFiltered = computerList
-          .where((x) =>
+      final List<ComputerMinResponse> computerListFiltered = computerList
+          .where((ComputerMinResponse x) =>
               x.name.contains(query.toUpperCase()) || x.ip.contains(query))
           .toList();
 
@@ -69,12 +70,13 @@ class ComputerSearchDelegate extends SearchDelegate<String?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final computerList = context.read<ComputerProvider>().computerList;
+    final List<ComputerMinResponse> computerList =
+        context.read<ComputerProvider>().computerList;
     if (query == "") {
       return generateListView(computerList);
     } else {
-      final computerListFiltered = computerList
-          .where((x) =>
+      final List<ComputerMinResponse> computerListFiltered = computerList
+          .where((ComputerMinResponse x) =>
               x.name.contains(query.toUpperCase()) || x.ip.contains(query))
           .toList();
 

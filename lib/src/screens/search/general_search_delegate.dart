@@ -9,7 +9,7 @@ import '../../shared/general_item_widget.dart';
 /// digunakan saat penambahan history halaman depan
 class GeneralSearchDelegate extends SearchDelegate<GeneralMinResponse?> {
   Widget generateListView(List<GeneralMinResponse> generalList) {
-    if (generalList.length == 0) {
+    if (generalList.isEmpty) {
       return Center(
           child: SizedBox(
               height: 200,
@@ -20,7 +20,7 @@ class GeneralSearchDelegate extends SearchDelegate<GeneralMinResponse?> {
 
     return ListView.builder(
       itemCount: generalList.length,
-      itemBuilder: (context, index) {
+      itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: () => close(context, generalList[index]),
           child: GeneralListTile(
@@ -33,9 +33,9 @@ class GeneralSearchDelegate extends SearchDelegate<GeneralMinResponse?> {
 
   @override
   List<Widget> buildActions(Object context) {
-    return [
+    return <Widget>[
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -46,7 +46,7 @@ class GeneralSearchDelegate extends SearchDelegate<GeneralMinResponse?> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -55,12 +55,13 @@ class GeneralSearchDelegate extends SearchDelegate<GeneralMinResponse?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final generalList = context.read<GeneralProvider>().generalList;
+    final List<GeneralMinResponse> generalList =
+        context.read<GeneralProvider>().generalList;
     if (query == "") {
       return generateListView(generalList);
     } else {
-      final generalListFiltered = generalList
-          .where((x) =>
+      final List<GeneralMinResponse> generalListFiltered = generalList
+          .where((GeneralMinResponse x) =>
               x.name.contains(query.toUpperCase()) || x.ip.contains(query))
           .toList();
 
@@ -70,12 +71,13 @@ class GeneralSearchDelegate extends SearchDelegate<GeneralMinResponse?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final generalList = context.read<GeneralProvider>().generalList;
+    final List<GeneralMinResponse> generalList =
+        context.read<GeneralProvider>().generalList;
     if (query == "") {
       return generateListView(generalList);
     } else {
-      final generalListFiltered = generalList
-          .where((x) =>
+      final List<GeneralMinResponse> generalListFiltered = generalList
+          .where((GeneralMinResponse x) =>
               x.name.contains(query.toUpperCase()) || x.ip.contains(query))
           .toList();
 

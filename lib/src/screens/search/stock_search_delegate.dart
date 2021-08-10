@@ -8,7 +8,7 @@ import '../../shared/stock_item_widget.dart';
 
 class StockSearchDelegate extends SearchDelegate<String?> {
   Widget generateListView(List<StockMinResponse> stockList) {
-    if (stockList.length == 0) {
+    if (stockList.isEmpty) {
       return Center(
           child: SizedBox(
               height: 200,
@@ -19,7 +19,7 @@ class StockSearchDelegate extends SearchDelegate<String?> {
 
     return ListView.builder(
       itemCount: stockList.length,
-      itemBuilder: (context, index) {
+      itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
           onTap: () => close(context, stockList[index].id),
           child: StockListTile(
@@ -32,9 +32,9 @@ class StockSearchDelegate extends SearchDelegate<String?> {
 
   @override
   List<Widget> buildActions(Object context) {
-    return [
+    return <Widget>[
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -45,7 +45,7 @@ class StockSearchDelegate extends SearchDelegate<String?> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -54,12 +54,14 @@ class StockSearchDelegate extends SearchDelegate<String?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final stockList = context.read<StockProvider>().stockList;
+    final List<StockMinResponse> stockList =
+        context.read<StockProvider>().stockList;
     if (query == "") {
       return generateListView(stockList);
     } else {
-      final stockListFiltered =
-          stockList.where((x) => x.name.contains(query.toUpperCase())).toList();
+      final List<StockMinResponse> stockListFiltered = stockList
+          .where((StockMinResponse x) => x.name.contains(query.toUpperCase()))
+          .toList();
 
       return generateListView(stockListFiltered);
     }
@@ -67,12 +69,14 @@ class StockSearchDelegate extends SearchDelegate<String?> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final stockList = context.read<StockProvider>().stockList;
+    final List<StockMinResponse> stockList =
+        context.read<StockProvider>().stockList;
     if (query == "") {
       return generateListView(stockList);
     } else {
-      final stockListFiltered =
-          stockList.where((x) => x.name.contains(query.toUpperCase())).toList();
+      final List<StockMinResponse> stockListFiltered = stockList
+          .where((StockMinResponse x) => x.name.contains(query.toUpperCase()))
+          .toList();
 
       return generateListView(stockListFiltered);
     }
