@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/utils/enums.dart';
 
 import '../../api/filter_models/history_filter.dart';
 import '../../config/histo_category.dart';
@@ -176,15 +177,16 @@ class _HomeVScreenState extends State<HomeVScreen> {
                             ),
                           )),
                           buildSliverHistoryCompleted(data),
-                          SliverToBoxAdapter(
-                              child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "CCTV BERMASALAH",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                          )),
+                          if (data.historyProgressList.length != 0)
+                            SliverToBoxAdapter(
+                                child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "CCTV BERMASALAH",
+                                style: TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                            )),
                           buildStaggeredHistory(data),
                           SliverPadding(padding: EdgeInsets.only(bottom: 100))
                         ],
@@ -262,7 +264,14 @@ class _HomeVScreenState extends State<HomeVScreen> {
                     onPressed: () {
                       Navigator.pushNamed(context, RouteGenerator.pdf);
                     }),
-              )
+              ),
+              if (data.state == ViewState.busy)
+                Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Center(child: CircularProgressIndicator()))
             ],
           );
         },

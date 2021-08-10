@@ -73,14 +73,14 @@ class DashboardProvider extends ChangeNotifier {
   }
 
   // * Mendapatkan pdf
-  Future<void> findPdf({bool loading = true}) async {
+  Future<void> findPdf({bool loading = true, String pdfType = ""}) async {
     if (loading) {
       setState(ViewState.busy);
     }
 
     var error = "";
     try {
-      final response = await _pdfService.findPDF();
+      final response = await _pdfService.findPDF(type: pdfType);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -98,13 +98,15 @@ class DashboardProvider extends ChangeNotifier {
   }
 
   // generate PDF
-  Future<bool> generatePDF(int start, int end) async {
+  Future<bool> generatePDF(int start, int end, bool forVendor) async {
     setState(ViewState.busy);
     var error = "";
 
     try {
-      final response =
-          await _pdfService.generatePDF(App.getBranch() ?? "", start, end);
+      final response = (forVendor)
+          ? await _pdfService.generatePDFforVendor(
+              App.getBranch() ?? "", start, end)
+          : await _pdfService.generatePDF(App.getBranch() ?? "", start, end);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -116,7 +118,8 @@ class DashboardProvider extends ChangeNotifier {
     if (error.isNotEmpty) {
       return Future.error(error);
     }
-    await findPdf(loading: false);
+
+    await findPdf(loading: false, pdfType: (forVendor) ? "VENDOR" : "LAPORAN");
     return true;
   }
 

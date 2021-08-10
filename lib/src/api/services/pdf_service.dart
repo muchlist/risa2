@@ -6,8 +6,8 @@ import '../json_parsers/json_parsers.dart';
 
 class PdfService {
   const PdfService();
-  Future<PdfListResponse> findPDF() {
-    return RequestREST(endpoint: "/list-pdf")
+  Future<PdfListResponse> findPDF({String type = ""}) {
+    return RequestREST(endpoint: "/list-pdf?type=$type")
         .executeGet<PdfListResponse>(PdfListParser());
   }
 
@@ -15,6 +15,15 @@ class PdfService {
     //generate-pdf?branch=BANJARMASIN&start=1625721500&end=1625745096
     return RequestREST(
             endpoint: "/generate-pdf?branch=$branch&start=$start&end=$end")
+        .executeGet<MessageResponse>(MessageParser());
+  }
+
+  Future<MessageResponse> generatePDFforVendor(
+      String branch, int start, int end) {
+    //generate-pdf?branch=BANJARMASIN&start=1625721500&end=1625745096
+    return RequestREST(
+            endpoint:
+                "/generate-pdf-vendor?branch=$branch&start=$start&end=$end")
         .executeGet<MessageResponse>(MessageParser());
   }
 }
