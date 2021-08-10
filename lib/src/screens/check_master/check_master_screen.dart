@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/api/json_models/response/checkp_list_resp.dart';
 
 import '../../providers/checks_master.dart';
 import '../../router/routes.dart';
@@ -8,7 +9,8 @@ import '../../shared/empty_box.dart';
 import '../../shared/func_flushbar.dart';
 import '../../utils/enums.dart';
 
-var refreshKeyCheckMasterSreen = GlobalKey<RefreshIndicatorState>();
+GlobalKey<RefreshIndicatorState> refreshKeyCheckMasterSreen =
+    GlobalKey<RefreshIndicatorState>();
 
 class CheckMasterScreen extends StatefulWidget {
   @override
@@ -39,8 +41,8 @@ class _CheckMasterScreenState extends State<CheckMasterScreen> {
       ),
       body: CheckMasterRecyclerView(),
       floatingActionButton: FloatingActionButton.extended(
-        label: Text("Tambah"),
-        icon: Icon(CupertinoIcons.add),
+        label: const Text("Tambah"),
+        icon: const Icon(CupertinoIcons.add),
         onPressed: () {
           Navigator.of(context).pushNamed(RouteGenerator.checkMasterAdd);
         },
@@ -57,9 +59,12 @@ class CheckMasterRecyclerView extends StatefulWidget {
 }
 
 class _CheckMasterRecyclerViewState extends State<CheckMasterRecyclerView> {
-  Future<dynamic> _loadCheck() {
-    return Future.delayed(Duration.zero, () {
-      context.read<CheckMasterProvider>().findCheckMaster().onError((error, _) {
+  Future<void> _loadCheck() {
+    return Future<void>.delayed(Duration.zero, () {
+      context
+          .read<CheckMasterProvider>()
+          .findCheckMaster()
+          .onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -75,23 +80,24 @@ class _CheckMasterRecyclerViewState extends State<CheckMasterRecyclerView> {
   @override
   Widget build(BuildContext context) {
     return Consumer<CheckMasterProvider>(
-      builder: (_, data, __) {
+      builder: (_, CheckMasterProvider data, __) {
         return Stack(
           alignment: Alignment.center,
-          children: [
+          children: <Widget>[
             Positioned(
                 top: 0,
                 bottom: 0,
                 left: 0,
                 right: 0,
-                child: (data.checkpList.length != 0)
+                child: (data.checkpList.isNotEmpty)
                     ? buildListView(data)
                     : (data.state == ViewState.idle)
                         ? EmptyBox(loadTap: _loadCheck)
-                        : Center()),
-            (data.state == ViewState.busy)
-                ? Center(child: CircularProgressIndicator())
-                : Center(),
+                        : const Center()),
+            if (data.state == ViewState.busy)
+              const Center(child: CircularProgressIndicator())
+            else
+              const Center(),
           ],
         );
       },
@@ -103,10 +109,10 @@ class _CheckMasterRecyclerViewState extends State<CheckMasterRecyclerView> {
       key: refreshKeyCheckMasterSreen,
       onRefresh: _loadCheck,
       child: ListView.builder(
-        padding: EdgeInsets.only(bottom: 60),
+        padding: const EdgeInsets.only(bottom: 60),
         itemCount: data.checkpList.length,
-        itemBuilder: (context, index) {
-          final checkp = data.checkpList[index];
+        itemBuilder: (BuildContext context, int index) {
+          final CheckpMinResponse checkp = data.checkpList[index];
 
           return GestureDetector(
               onTap: () {
@@ -119,29 +125,31 @@ class _CheckMasterRecyclerViewState extends State<CheckMasterRecyclerView> {
                 child: ListTile(
                   title: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Text(checkp.name),
                       Text(
                         "${checkp.type} - ${checkp.location}",
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
+                        style:
+                            const TextStyle(fontSize: 12, color: Colors.grey),
                       )
                     ],
                   ),
-                  trailing: checkp.shifts.length > 0
+                  trailing: checkp.shifts.isNotEmpty
                       ? Wrap(
                           alignment: WrapAlignment.center,
                           spacing: 2,
                           children: checkp.shifts
-                              .map((e) => Container(
-                                  padding: EdgeInsets.all(2),
-                                  decoration: BoxDecoration(
+                              .map((int e) => Container(
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: const BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.grey),
                                   child: Padding(
                                     padding: const EdgeInsets.all(3.0),
                                     child: Text(
                                       e.toString(),
-                                      style: TextStyle(color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
                                   )))
                               .toList(),
