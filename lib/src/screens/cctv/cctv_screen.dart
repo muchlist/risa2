@@ -14,7 +14,8 @@ import '../../utils/enums.dart';
 import '../search/cctv_search_delegate.dart';
 import 'cctv_with_incident_dialog.dart';
 
-var refreshKeyCctvScreen = GlobalKey<RefreshIndicatorState>();
+GlobalKey<RefreshIndicatorState> refreshKeyCctvScreen =
+    GlobalKey<RefreshIndicatorState>();
 
 class CctvScreen extends StatefulWidget {
   @override
@@ -42,22 +43,23 @@ class _CctvScreenState extends State<CctvScreen> {
       appBar: AppBar(
         elevation: 0,
         title: const Text("Daftar Cctv"),
-        actions: [
+        actions: <Widget>[
           IconButton(
             onPressed: () {
               Navigator.pushNamed(context, RouteGenerator.vendorCheck);
             },
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.checkmark_alt_circle,
               size: 28,
             ),
           ),
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.search,
               size: 28,
             ),
             onPressed: () async {
+              // ignore: always_specify_types
               final searchResult = await showSearch(
                 context: context,
                 delegate: CctvSearchDelegate(),
@@ -74,11 +76,11 @@ class _CctvScreenState extends State<CctvScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
           onPressed: () {
             Navigator.pushNamed(context, RouteGenerator.cctvAdd);
           },
-          label: Text("Tambah data")),
+          label: const Text("Tambah data")),
       body: CctvRecyclerView(),
     );
   }
@@ -94,17 +96,17 @@ class _CctvRecyclerViewState extends State<CctvRecyclerView> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      builder: (context) => CctvWithIncidentDialog(),
+      builder: (BuildContext context) => CctvWithIncidentDialog(),
     );
   }
 
   Future<void> _loadCctv() {
-    return Future.delayed(Duration.zero, () {
-      context.read<CctvProvider>().findCctv().onError((error, _) {
+    return Future<void>.delayed(Duration.zero, () {
+      context.read<CctvProvider>().findCctv().onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -118,23 +120,24 @@ class _CctvRecyclerViewState extends State<CctvRecyclerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CctvProvider>(builder: (_, data, __) {
+    return Consumer<CctvProvider>(builder: (_, CctvProvider data, __) {
       return Stack(
         alignment: Alignment.center,
-        children: [
+        children: <Widget>[
           Positioned(
               top: 0,
               bottom: 0,
               left: 0,
               right: 0,
-              child: (data.cctvList.length != 0)
+              child: (data.cctvList.isNotEmpty)
                   ? buildListView(data)
                   : (data.state == ViewState.idle)
                       ? EmptyBox(loadTap: _loadCctv)
-                      : Center()),
-          (data.state == ViewState.busy)
-              ? Center(child: CircularProgressIndicator())
-              : Center(),
+                      : const Center()),
+          if (data.state == ViewState.busy)
+            const Center(child: CircularProgressIndicator())
+          else
+            const Center(),
         ],
       );
     });
@@ -155,7 +158,8 @@ class _CctvRecyclerViewState extends State<CctvRecyclerView> {
             )),
           // LIST CCTV INVENTORY
           SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
+            delegate:
+                SliverChildBuilderDelegate((BuildContext context, int index) {
               return GestureDetector(
                   onTap: () {
                     context.read<CctvProvider>().removeDetail();
@@ -167,7 +171,7 @@ class _CctvRecyclerViewState extends State<CctvRecyclerView> {
                   child: CctvListTile(data: data.cctvList[index]));
             }, childCount: data.cctvList.length),
           ),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
               child: SizedBox(
             height: 100,
           )),
@@ -178,9 +182,9 @@ class _CctvRecyclerViewState extends State<CctvRecyclerView> {
 }
 
 class CctvSliverHeading extends StatelessWidget {
+  const CctvSliverHeading({required this.data, required this.onTap});
   final CctvExtraSum data;
   final GestureTapCallback onTap;
-  const CctvSliverHeading({required this.data, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -189,26 +193,26 @@ class CctvSliverHeading extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: Pallete.secondaryBackground,
           ),
           child: Row(
-            children: [
+            children: <Widget>[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text("Perlu pengecekan : ${data.needCheck} unit"),
                   Text("Bermasalah: ${data.needToBeDone} unit"),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               CircleAvatar(
                 maxRadius: 16,
                 backgroundColor:
                     (data.needCheck != 0) ? Colors.red.shade300 : Colors.grey,
-                child: Icon(
+                child: const Icon(
                   CupertinoIcons.eyeglasses,
                   color: Colors.white,
                 ),

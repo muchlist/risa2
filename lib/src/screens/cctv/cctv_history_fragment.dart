@@ -11,7 +11,8 @@ import '../../shared/history_item_widget.dart';
 import '../../shared/home_like_button.dart';
 import '../../utils/utils.dart';
 
-var refreshKeyCctvHistory = GlobalKey<RefreshIndicatorState>();
+GlobalKey<RefreshIndicatorState> refreshKeyCctvHistory =
+    GlobalKey<RefreshIndicatorState>();
 
 class CctvHistoryRecyclerView extends StatefulWidget {
   @override
@@ -24,10 +25,10 @@ class _CctvHistoryRecyclerViewState extends State<CctvHistoryRecyclerView> {
   late final CctvProvider cctvProvider;
 
   Future<void> _loadHistory() {
-    final parentID = cctvProvider.getCctvId();
-    return Future.delayed(Duration.zero, () {
+    final String parentID = cctvProvider.getCctvId();
+    return Future<void>.delayed(Duration.zero, () {
       historyProvider.findParentHistory(parentID: parentID).onError(
-          (error, _) =>
+          (Object? error, _) =>
               showToastError(context: context, message: error.toString()));
     });
   }
@@ -41,25 +42,26 @@ class _CctvHistoryRecyclerViewState extends State<CctvHistoryRecyclerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HistoryProvider>(builder: (_, data, __) {
-      final histories = data.parentHistory;
+    return Consumer<HistoryProvider>(builder: (_, HistoryProvider data, __) {
+      final List<HistoryMinResponse> histories = data.parentHistory;
 
       return Stack(
         alignment: Alignment.center,
-        children: [
+        children: <Widget>[
           Positioned(
               top: 0,
               bottom: 0,
               left: 0,
               right: 0,
-              child: (histories.length != 0)
+              child: (histories.isNotEmpty)
                   ? buildListView(histories)
                   : (data.state == ViewState.idle)
                       ? EmptyBox(loadTap: _loadHistory)
-                      : Center()),
-          (data.state == ViewState.busy)
-              ? Center(child: CircularProgressIndicator())
-              : Center(),
+                      : const Center()),
+          if (data.state == ViewState.busy)
+            const Center(child: CircularProgressIndicator())
+          else
+            const Center(),
           Positioned(
             bottom: 30,
             child: HomeLikeButton(
@@ -78,9 +80,9 @@ class _CctvHistoryRecyclerViewState extends State<CctvHistoryRecyclerView> {
       key: refreshKeyCctvHistory,
       onRefresh: _loadHistory,
       child: ListView.builder(
-        padding: EdgeInsets.only(bottom: 60),
+        padding: const EdgeInsets.only(bottom: 60),
         itemCount: listData.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
               onTap: () =>
                   HistoryHelper().showDetailIncident(context, listData[index]),

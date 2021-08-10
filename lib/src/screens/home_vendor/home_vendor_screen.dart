@@ -29,17 +29,18 @@ class HomeVScreen extends StatefulWidget {
 }
 
 class _HomeVScreenState extends State<HomeVScreen> {
-  var refreshKeyHome = GlobalKey<RefreshIndicatorState>();
+  GlobalKey<RefreshIndicatorState> refreshKeyHome =
+      GlobalKey<RefreshIndicatorState>();
   late HistoryProvider historyProvider;
   late FirebaseMessaging messaging;
 
-  Future<dynamic> _loadHistory() {
-    return Future.delayed(Duration.zero, () {
+  Future<void> _loadHistory() {
+    return Future<void>.delayed(Duration.zero, () {
       historyProvider.setFilter(FilterHistory(
           branch: App.getBranch(),
           category: "${HistCategory.cctv},${HistCategory.altai}"));
 
-      historyProvider.findHistory().then((_) {}).onError((error, _) {
+      historyProvider.findHistory().then((_) {}).onError((Object? error, _) {
         if (error != null) {
           showToastError(context: context, message: error.toString());
         }
@@ -60,8 +61,8 @@ class _HomeVScreenState extends State<HomeVScreen> {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).accentColor),
-                  child: const Text("Jangan Logout"),
-                  onPressed: () => Navigator.of(context).pop(false)),
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text("Jangan Logout")),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   child: const Text("Logout"))
@@ -75,11 +76,11 @@ class _HomeVScreenState extends State<HomeVScreen> {
     historyProvider = context.read<HistoryProvider>();
     messaging = FirebaseMessaging.instance;
 
-    messaging.getToken().then((value) async {
-      final firebaseTokenSaved = App.getFireToken();
+    messaging.getToken().then((String? value) async {
+      final String? firebaseTokenSaved = App.getFireToken();
       if (value != firebaseTokenSaved) {
         if (value != null) {
-          final success =
+          final bool success =
               await context.read<AuthProvider>().sendFCMToken(value);
           if (success) {
             await App.setFireToken(value);
@@ -91,13 +92,11 @@ class _HomeVScreenState extends State<HomeVScreen> {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.notification != null) {
         showToastWarning(
-            context: context,
-            message: message.notification?.body ?? "",
-            onTop: true);
+            context: context, message: message.notification?.body ?? "");
       }
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       _loadHistory();
     });
 
@@ -111,18 +110,18 @@ class _HomeVScreenState extends State<HomeVScreen> {
       resizeToAvoidBottomInset: true,
       // APPBAR -----------------------------------------------------------
       appBar: AppBar(
-        actions: [
+        actions: <Widget>[
           IconButton(
-              icon: Icon(
+              icon: const Icon(
                 CupertinoIcons.square_arrow_right,
                 size: 28,
               ),
               onPressed: () async {
-                final logout = await _logoutConfirm(context);
+                final bool? logout = await _logoutConfirm(context);
                 if (logout != null && logout) {
                   await App.setToken("");
-                  await Navigator.pushNamedAndRemoveUntil(
-                      context, RouteGenerator.login, (route) => false);
+                  await Navigator.pushNamedAndRemoveUntil(context,
+                      RouteGenerator.login, (Route<dynamic> route) => false);
                 }
               }),
           horizontalSpaceSmall,
@@ -136,8 +135,8 @@ class _HomeVScreenState extends State<HomeVScreen> {
                   fontSize: 20,
                   color: Colors.black,
                   fontWeight: FontWeight.bold),
-              children: <TextSpan>[
-                const TextSpan(
+              children: const <TextSpan>[
+                TextSpan(
                     text: "Welcome to RISA",
                     style: TextStyle(fontSize: 12, color: Colors.black))
               ]),
@@ -146,7 +145,7 @@ class _HomeVScreenState extends State<HomeVScreen> {
 
       // BODY ------------------------------------------------------------
       body: Consumer<HistoryProvider>(
-        builder: (_, data, __) {
+        builder: (_, HistoryProvider data, __) {
           return Stack(
             alignment: Alignment.center,
             children: <Widget>[
@@ -167,9 +166,9 @@ class _HomeVScreenState extends State<HomeVScreen> {
                       child: CustomScrollView(
                         slivers: <Widget>[
                           buildSliverAppBar(),
-                          SliverToBoxAdapter(
+                          const SliverToBoxAdapter(
                               child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: Text(
                               "SELESAI DIPERBAIKI",
                               style: TextStyle(
@@ -177,10 +176,10 @@ class _HomeVScreenState extends State<HomeVScreen> {
                             ),
                           )),
                           buildSliverHistoryCompleted(data),
-                          if (data.historyProgressList.length != 0)
-                            SliverToBoxAdapter(
+                          if (data.historyProgressList.isNotEmpty)
+                            const SliverToBoxAdapter(
                                 child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(8.0),
                               child: Text(
                                 "CCTV BERMASALAH",
                                 style: TextStyle(
@@ -188,7 +187,8 @@ class _HomeVScreenState extends State<HomeVScreen> {
                               ),
                             )),
                           buildStaggeredHistory(data),
-                          SliverPadding(padding: EdgeInsets.only(bottom: 100))
+                          const SliverPadding(
+                              padding: EdgeInsets.only(bottom: 100))
                         ],
                       ),
                     ),
@@ -229,7 +229,7 @@ class _HomeVScreenState extends State<HomeVScreen> {
                       decoration: BoxDecoration(
                           color: Theme.of(context).accentColor,
                           borderRadius: BorderRadius.circular(24)),
-                      child: const Text.rich(TextSpan(children: [
+                      child: const Text.rich(TextSpan(children: <InlineSpan>[
                         WidgetSpan(
                             child: Icon(
                           CupertinoIcons.add,
@@ -266,7 +266,7 @@ class _HomeVScreenState extends State<HomeVScreen> {
                     }),
               ),
               if (data.state == ViewState.busy)
-                Positioned(
+                const Positioned(
                     top: 0,
                     left: 0,
                     right: 0,
@@ -282,7 +282,7 @@ class _HomeVScreenState extends State<HomeVScreen> {
   SliverList buildSliverHistoryCompleted(HistoryProvider data) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (context, index) {
+        (BuildContext context, int index) {
           {
             return GestureDetector(
               onDoubleTap: () => HistoryHelper().showEditIncident(
@@ -316,9 +316,8 @@ class _HomeVScreenState extends State<HomeVScreen> {
         children: [
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, RouteGenerator.history),
-            child: DashboardVIcon(
-              Dashboard("History", CupertinoIcons.circle_grid_3x3_fill,
-                  color: Pallete.green),
+            child: const DashboardVIcon(
+              Dashboard("History", CupertinoIcons.circle_grid_3x3_fill),
             ),
           ),
           horizontalSpaceTiny,
