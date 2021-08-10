@@ -46,7 +46,7 @@ class OtherActionTile extends StatelessWidget {
               ),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   if (data.ip.isNotEmpty && data.ip != "0.0.0.0")
                     Container(
                       decoration: BoxDecoration(

@@ -313,7 +313,7 @@ class _HomeVScreenState extends State<HomeVScreen> {
       // floating: true,
       flexibleSpace: ListView(
         scrollDirection: Axis.horizontal,
-        children: [
+        children: <Widget>[
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, RouteGenerator.history),
             child: const DashboardVIcon(

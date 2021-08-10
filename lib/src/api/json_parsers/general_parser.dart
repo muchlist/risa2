@@ -9,10 +9,11 @@ class GeneralListParser extends JsonParser<GeneralListResponse>
   @override
   Future<GeneralListResponse> parseFromJson(String json) async {
     try {
-      final decoded = decodeJsonObject(json);
+      final Map<String, dynamic> decoded = decodeJsonObject(json);
       return GeneralListResponse.fromJson(decoded);
     } catch (e) {
-      return GeneralListResponse(ErrorResp(0, e.toString(), "", []), []);
+      return GeneralListResponse(
+          ErrorResp(0, e.toString(), "", <String>[]), <GeneralMinResponse>[]);
     }
   }
 }

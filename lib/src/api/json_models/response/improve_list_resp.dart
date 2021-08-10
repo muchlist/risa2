@@ -6,20 +6,34 @@ part 'improve_list_resp.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ImproveListResponse {
-  final ErrorResp? error;
-  @JsonKey(defaultValue: [])
-  final List<ImproveMinResponse> data;
-
   ImproveListResponse(this.error, this.data);
 
   factory ImproveListResponse.fromJson(Map<String, dynamic> json) =>
       _$ImproveListResponseFromJson(json);
+  final ErrorResp? error;
+  @JsonKey(defaultValue: <ImproveMinResponse>[])
+  final List<ImproveMinResponse> data;
 
   Map<String, dynamic> toJson() => _$ImproveListResponseToJson(this);
 }
 
 @JsonSerializable()
 class ImproveMinResponse {
+  ImproveMinResponse(
+      this.id,
+      this.createdAt,
+      this.updatedAt,
+      this.branch,
+      this.title,
+      this.description,
+      this.goal,
+      this.goalsAchieved,
+      this.isActive,
+      this.completeStatus);
+
+  factory ImproveMinResponse.fromJson(Map<String, dynamic> json) =>
+      _$ImproveMinResponseFromJson(json);
+
   final String id;
   @JsonKey(name: "created_at")
   final int createdAt;
@@ -35,21 +49,6 @@ class ImproveMinResponse {
   final bool isActive;
   @JsonKey(name: "complete_status")
   final int completeStatus;
-
-  ImproveMinResponse(
-      this.id,
-      this.createdAt,
-      this.updatedAt,
-      this.branch,
-      this.title,
-      this.description,
-      this.goal,
-      this.goalsAchieved,
-      this.isActive,
-      this.completeStatus);
-
-  factory ImproveMinResponse.fromJson(Map<String, dynamic> json) =>
-      _$ImproveMinResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ImproveMinResponseToJson(this);
 }

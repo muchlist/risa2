@@ -270,7 +270,7 @@ class ComputerProvider extends ChangeNotifier {
   Future<bool> uploadImage(String id, File file) async {
     String error = "";
 
-    final fileCompressed = await compressFile(file);
+    final File fileCompressed = await compressFile(file);
 
     try {
       final ComputerDetailResponse response =

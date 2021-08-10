@@ -10,10 +10,11 @@ class StockParser extends JsonParser<StockDetailResponse>
   @override
   Future<StockDetailResponse> parseFromJson(String json) async {
     try {
-      final decoded = decodeJsonObject(json);
+      final Map<String, dynamic> decoded = decodeJsonObject(json);
       return StockDetailResponse.fromJson(decoded);
     } catch (e) {
-      return StockDetailResponse(ErrorResp(0, e.toString(), "", []), null);
+      return StockDetailResponse(
+          ErrorResp(0, e.toString(), "", <String>[]), null);
     }
   }
 }
@@ -25,10 +26,11 @@ class StockListParser extends JsonParser<StockListResponse>
   @override
   Future<StockListResponse> parseFromJson(String json) async {
     try {
-      final decoded = decodeJsonObject(json);
+      final Map<String, dynamic> decoded = decodeJsonObject(json);
       return StockListResponse.fromJson(decoded);
     } catch (e) {
-      return StockListResponse(ErrorResp(0, e.toString(), "", []), []);
+      return StockListResponse(
+          ErrorResp(0, e.toString(), "", <String>[]), <StockMinResponse>[]);
     }
   }
 }

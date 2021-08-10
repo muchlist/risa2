@@ -6,20 +6,26 @@ part 'check_list_resp.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class CheckListResponse {
-  final ErrorResp? error;
-  @JsonKey(defaultValue: [])
-  final List<CheckMinResponse> data;
-
   CheckListResponse(this.error, this.data);
 
   factory CheckListResponse.fromJson(Map<String, dynamic> json) =>
       _$CheckListResponseFromJson(json);
+
+  final ErrorResp? error;
+  @JsonKey(defaultValue: <CheckMinResponse>[])
+  final List<CheckMinResponse> data;
 
   Map<String, dynamic> toJson() => _$CheckListResponseToJson(this);
 }
 
 @JsonSerializable()
 class CheckMinResponse {
+  CheckMinResponse(this.id, this.createdAt, this.createdBy, this.updatedAt,
+      this.branch, this.shift, this.isFinish, this.note);
+
+  factory CheckMinResponse.fromJson(Map<String, dynamic> json) =>
+      _$CheckMinResponseFromJson(json);
+
   final String id;
   @JsonKey(name: "created_at")
   final int createdAt;
@@ -32,12 +38,6 @@ class CheckMinResponse {
   @JsonKey(name: "is_finish")
   final bool isFinish;
   final String note;
-
-  CheckMinResponse(this.id, this.createdAt, this.createdBy, this.updatedAt,
-      this.branch, this.shift, this.isFinish, this.note);
-
-  factory CheckMinResponse.fromJson(Map<String, dynamic> json) =>
-      _$CheckMinResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$CheckMinResponseToJson(this);
 }

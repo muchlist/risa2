@@ -199,7 +199,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
     return (data.detailState == ViewState.busy)
         ? const Center(child: CircularProgressIndicator())
         : Stack(
-            children: [
+            children: <Widget>[
               buildBody(data),
               if (data.vendorCheckDetail.isFinish)
                 const SizedBox.shrink()

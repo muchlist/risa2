@@ -7,46 +7,33 @@ part 'computer_list_resp.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ComputerListResponse {
-  final ErrorResp? error;
-  final ComputerListData data;
-
   ComputerListResponse(this.error, this.data);
 
   factory ComputerListResponse.fromJson(Map<String, dynamic> json) =>
       _$ComputerListResponseFromJson(json);
+
+  final ErrorResp? error;
+  final ComputerListData data;
 
   Map<String, dynamic> toJson() => _$ComputerListResponseToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
 class ComputerListData {
-  @JsonKey(defaultValue: [], name: "computer_list")
-  final List<ComputerMinResponse> computerList;
-  @JsonKey(defaultValue: [], name: "extra_list")
-  final List<GeneralMinResponse> extraList;
-
   ComputerListData(this.computerList, this.extraList);
 
   factory ComputerListData.fromJson(Map<String, dynamic> json) =>
       _$ComputerListDataFromJson(json);
+  @JsonKey(defaultValue: <ComputerMinResponse>[], name: "computer_list")
+  final List<ComputerMinResponse> computerList;
+  @JsonKey(defaultValue: <GeneralMinResponse>[], name: "extra_list")
+  final List<GeneralMinResponse> extraList;
 
   Map<String, dynamic> toJson() => _$ComputerListDataToJson(this);
 }
 
 @JsonSerializable()
 class ComputerMinResponse {
-  final String id;
-  final String branch;
-  final bool disable;
-  final String name;
-  final String division;
-  @JsonKey(name: "seat_management")
-  final bool seatManagement;
-  final String ip;
-  final String location;
-  @JsonKey(defaultValue: [])
-  final List<String> tag;
-
   ComputerMinResponse(
     this.id,
     this.branch,
@@ -61,6 +48,18 @@ class ComputerMinResponse {
 
   factory ComputerMinResponse.fromJson(Map<String, dynamic> json) =>
       _$ComputerMinResponseFromJson(json);
+
+  final String id;
+  final String branch;
+  final bool disable;
+  final String name;
+  final String division;
+  @JsonKey(name: "seat_management")
+  final bool seatManagement;
+  final String ip;
+  final String location;
+  @JsonKey(defaultValue: <String>[])
+  final List<String> tag;
 
   Map<String, dynamic> toJson() => _$ComputerMinResponseToJson(this);
 }

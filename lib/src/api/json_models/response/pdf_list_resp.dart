@@ -6,20 +6,26 @@ part 'pdf_list_resp.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class PdfListResponse {
-  final ErrorResp? error;
-  @JsonKey(defaultValue: [])
-  final List<PdfData> data;
-
   PdfListResponse(this.error, this.data);
 
   factory PdfListResponse.fromJson(Map<String, dynamic> json) =>
       _$PdfListResponseFromJson(json);
+
+  final ErrorResp? error;
+  @JsonKey(defaultValue: <PdfData>[])
+  final List<PdfData> data;
 
   Map<String, dynamic> toJson() => _$PdfListResponseToJson(this);
 }
 
 @JsonSerializable()
 class PdfData {
+  PdfData(this.id, this.createdAt, this.createdBy, this.branch, this.name,
+      this.type, this.fileName);
+
+  factory PdfData.fromJson(Map<String, dynamic> json) =>
+      _$PdfDataFromJson(json);
+
   final String id;
   @JsonKey(name: "created_at")
   final int createdAt;
@@ -30,12 +36,6 @@ class PdfData {
   final String type;
   @JsonKey(name: "file_name")
   final String fileName;
-
-  PdfData(this.id, this.createdAt, this.createdBy, this.branch, this.name,
-      this.type, this.fileName);
-
-  factory PdfData.fromJson(Map<String, dynamic> json) =>
-      _$PdfDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$PdfDataToJson(this);
 }

@@ -6,19 +6,35 @@ part 'check_resp.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class CheckDetailResponse {
-  final ErrorResp? error;
-  final CheckDetailResponseData? data;
-
   CheckDetailResponse(this.error, this.data);
 
   factory CheckDetailResponse.fromJson(Map<String, dynamic> json) =>
       _$CheckDetailResponseFromJson(json);
+  final ErrorResp? error;
+  final CheckDetailResponseData? data;
 
   Map<String, dynamic> toJson() => _$CheckDetailResponseToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
 class CheckDetailResponseData {
+  CheckDetailResponseData(
+      this.id,
+      this.createdAt,
+      this.updatedAt,
+      this.createdBy,
+      this.createdById,
+      this.updatedBy,
+      this.updatedById,
+      this.branch,
+      this.shift,
+      this.isFinish,
+      this.note,
+      this.checkItems);
+
+  factory CheckDetailResponseData.fromJson(Map<String, dynamic> json) =>
+      _$CheckDetailResponseDataFromJson(json);
+
   final String id;
   @JsonKey(name: "created_at")
   final int createdAt;
@@ -37,54 +53,14 @@ class CheckDetailResponseData {
   @JsonKey(name: "is_finish")
   final bool isFinish;
   final String note;
-  @JsonKey(name: "check_items", defaultValue: [])
+  @JsonKey(name: "check_items", defaultValue: <CheckItem>[])
   final List<CheckItem> checkItems;
-
-  CheckDetailResponseData(
-      this.id,
-      this.createdAt,
-      this.updatedAt,
-      this.createdBy,
-      this.createdById,
-      this.updatedBy,
-      this.updatedById,
-      this.branch,
-      this.shift,
-      this.isFinish,
-      this.note,
-      this.checkItems);
-
-  factory CheckDetailResponseData.fromJson(Map<String, dynamic> json) =>
-      _$CheckDetailResponseDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$CheckDetailResponseDataToJson(this);
 }
 
 @JsonSerializable()
 class CheckItem {
-  final String id;
-  final String name;
-  final String location;
-  final String type;
-  @JsonKey(defaultValue: [])
-  final List<String> tag;
-  @JsonKey(name: "tag_extra", defaultValue: [])
-  final List<String> tagExtra;
-  @JsonKey(name: "checked_at")
-  final int checkedAt;
-  @JsonKey(name: "tag_selected")
-  final String tagSelected;
-  @JsonKey(name: "tag_extra_selected")
-  final String tagExtraSelected;
-  @JsonKey(name: "image_path")
-  final String imagePath;
-  @JsonKey(name: "checked_note")
-  final String checkedNote;
-  @JsonKey(name: "have_problem")
-  final bool haveProblem;
-  @JsonKey(name: "complete_status")
-  final int completeStatus;
-
   CheckItem(
       this.id,
       this.name,
@@ -102,6 +78,29 @@ class CheckItem {
 
   factory CheckItem.fromJson(Map<String, dynamic> json) =>
       _$CheckItemFromJson(json);
+
+  final String id;
+  final String name;
+  final String location;
+  final String type;
+  @JsonKey(defaultValue: <String>[])
+  final List<String> tag;
+  @JsonKey(name: "tag_extra", defaultValue: <String>[])
+  final List<String> tagExtra;
+  @JsonKey(name: "checked_at")
+  final int checkedAt;
+  @JsonKey(name: "tag_selected")
+  final String tagSelected;
+  @JsonKey(name: "tag_extra_selected")
+  final String tagExtraSelected;
+  @JsonKey(name: "image_path")
+  final String imagePath;
+  @JsonKey(name: "checked_note")
+  final String checkedNote;
+  @JsonKey(name: "have_problem")
+  final bool haveProblem;
+  @JsonKey(name: "complete_status")
+  final int completeStatus;
 
   Map<String, dynamic> toJson() => _$CheckItemToJson(this);
 }

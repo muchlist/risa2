@@ -11,10 +11,11 @@ class CheckpParser extends JsonParser<CheckpDetailResponse>
   @override
   Future<CheckpDetailResponse> parseFromJson(String json) async {
     try {
-      final decoded = decodeJsonObject(json);
+      final Map<String, dynamic> decoded = decodeJsonObject(json);
       return CheckpDetailResponse.fromJson(decoded);
     } catch (e) {
-      return CheckpDetailResponse(ErrorResp(0, e.toString(), "", []), null);
+      return CheckpDetailResponse(
+          ErrorResp(0, e.toString(), "", <String>[]), null);
     }
   }
 }
@@ -26,10 +27,11 @@ class CheckpListParser extends JsonParser<CheckpListResponse>
   @override
   Future<CheckpListResponse> parseFromJson(String json) async {
     try {
-      final decoded = decodeJsonObject(json);
+      final Map<String, dynamic> decoded = decodeJsonObject(json);
       return CheckpListResponse.fromJson(decoded);
     } catch (e) {
-      return CheckpListResponse(ErrorResp(0, e.toString(), "", []), []);
+      return CheckpListResponse(
+          ErrorResp(0, e.toString(), "", <String>[]), <CheckpMinResponse>[]);
     }
   }
 }

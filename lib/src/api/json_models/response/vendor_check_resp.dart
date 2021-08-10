@@ -7,11 +7,11 @@ part 'vendor_check_resp.g.dart';
 @JsonSerializable(explicitToJson: true)
 class VendorCheckDetailResponse {
   VendorCheckDetailResponse(this.error, this.data);
-  final ErrorResp? error;
-  final VendorCheckDetailResponseData? data;
 
   factory VendorCheckDetailResponse.fromJson(Map<String, dynamic> json) =>
       _$VendorCheckDetailResponseFromJson(json);
+  final ErrorResp? error;
+  final VendorCheckDetailResponseData? data;
 
   Map<String, dynamic> toJson() => _$VendorCheckDetailResponseToJson(this);
 }
@@ -33,6 +33,9 @@ class VendorCheckDetailResponseData {
       this.isFinish,
       this.note,
       this.vendorCheckItems);
+
+  factory VendorCheckDetailResponseData.fromJson(Map<String, dynamic> json) =>
+      _$VendorCheckDetailResponseDataFromJson(json);
 
   final String id;
   @JsonKey(name: "created_at")
@@ -57,11 +60,8 @@ class VendorCheckDetailResponseData {
   @JsonKey(name: "is_finish")
   final bool isFinish;
   final String note;
-  @JsonKey(name: "vendor_check_items", defaultValue: [])
+  @JsonKey(name: "vendor_check_items", defaultValue: <VendorCheckItem>[])
   final List<VendorCheckItem> vendorCheckItems;
-
-  factory VendorCheckDetailResponseData.fromJson(Map<String, dynamic> json) =>
-      _$VendorCheckDetailResponseDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$VendorCheckDetailResponseDataToJson(this);
 }
@@ -79,6 +79,9 @@ class VendorCheckItem {
       this.isOffline,
       this.imagePath);
 
+  factory VendorCheckItem.fromJson(Map<String, dynamic> json) =>
+      _$VendorCheckItemFromJson(json);
+
   final String id;
   final String name;
   final String location;
@@ -94,9 +97,6 @@ class VendorCheckItem {
   final bool isOffline;
   @JsonKey(name: "image_path")
   final String imagePath;
-
-  factory VendorCheckItem.fromJson(Map<String, dynamic> json) =>
-      _$VendorCheckItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$VendorCheckItemToJson(this);
 }

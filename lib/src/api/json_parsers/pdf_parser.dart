@@ -9,10 +9,11 @@ class PdfListParser extends JsonParser<PdfListResponse>
   @override
   Future<PdfListResponse> parseFromJson(String json) async {
     try {
-      final decoded = decodeJsonObject(json);
+      final Map<String, dynamic> decoded = decodeJsonObject(json);
       return PdfListResponse.fromJson(decoded);
     } catch (e) {
-      return PdfListResponse(ErrorResp(0, e.toString(), "", []), []);
+      return PdfListResponse(
+          ErrorResp(0, e.toString(), "", <String>[]), <PdfData>[]);
     }
   }
 }

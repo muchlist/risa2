@@ -10,10 +10,11 @@ class HistoryParser extends JsonParser<HistoryDetailResponse>
   @override
   Future<HistoryDetailResponse> parseFromJson(String json) async {
     try {
-      final decoded = decodeJsonObject(json);
+      final Map<String, dynamic> decoded = decodeJsonObject(json);
       return HistoryDetailResponse.fromJson(decoded);
     } catch (e) {
-      return HistoryDetailResponse(ErrorResp(0, e.toString(), "", []), null);
+      return HistoryDetailResponse(
+          ErrorResp(0, e.toString(), "", <String>[]), null);
     }
   }
 }
@@ -25,10 +26,11 @@ class HistoryListParser extends JsonParser<HistoryListResponse>
   @override
   Future<HistoryListResponse> parseFromJson(String json) async {
     try {
-      final decoded = decodeJsonObject(json);
+      final Map<String, dynamic> decoded = decodeJsonObject(json);
       return HistoryListResponse.fromJson(decoded);
     } catch (e) {
-      return HistoryListResponse(ErrorResp(0, e.toString(), "", []), []);
+      return HistoryListResponse(
+          ErrorResp(0, e.toString(), "", <String>[]), <HistoryMinResponse>[]);
     }
   }
 }

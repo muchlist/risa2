@@ -6,19 +6,40 @@ part 'history_resp.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class HistoryDetailResponse {
-  final ErrorResp? error;
-  final HistoryDetailResponseData? data;
-
   HistoryDetailResponse(this.error, this.data);
 
   factory HistoryDetailResponse.fromJson(Map<String, dynamic> json) =>
       _$HistoryDetailResponseFromJson(json);
+  final ErrorResp? error;
+  final HistoryDetailResponseData? data;
 
   Map<String, dynamic> toJson() => _$HistoryDetailResponseToJson(this);
 }
 
 @JsonSerializable()
 class HistoryDetailResponseData {
+  HistoryDetailResponseData(
+      this.id,
+      this.createdAt,
+      this.updatedAt,
+      this.createdBy,
+      this.updatedBy,
+      this.category,
+      this.branch,
+      this.parentID,
+      this.parentName,
+      this.status,
+      this.problem,
+      this.problemResolve,
+      this.completeStatus,
+      this.dateStart,
+      this.dateEnd,
+      this.tag,
+      this.image);
+
+  factory HistoryDetailResponseData.fromJson(Map<String, dynamic> json) =>
+      _$HistoryDetailResponseDataFromJson(json);
+
   final String id;
   @JsonKey(name: "created_at")
   final int createdAt;
@@ -44,31 +65,9 @@ class HistoryDetailResponseData {
   final int dateStart;
   @JsonKey(name: "date_end")
   final int dateEnd;
-  @JsonKey(defaultValue: [])
+  @JsonKey(defaultValue: <String>[])
   final List<String> tag;
   final String image;
-
-  HistoryDetailResponseData(
-      this.id,
-      this.createdAt,
-      this.updatedAt,
-      this.createdBy,
-      this.updatedBy,
-      this.category,
-      this.branch,
-      this.parentID,
-      this.parentName,
-      this.status,
-      this.problem,
-      this.problemResolve,
-      this.completeStatus,
-      this.dateStart,
-      this.dateEnd,
-      this.tag,
-      this.image);
-
-  factory HistoryDetailResponseData.fromJson(Map<String, dynamic> json) =>
-      _$HistoryDetailResponseDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$HistoryDetailResponseDataToJson(this);
 }

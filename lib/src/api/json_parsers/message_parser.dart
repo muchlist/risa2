@@ -9,10 +9,10 @@ class MessageParser extends JsonParser<MessageResponse>
   @override
   Future<MessageResponse> parseFromJson(String json) async {
     try {
-      final decoded = decodeJsonObject(json);
+      final Map<String, dynamic> decoded = decodeJsonObject(json);
       return MessageResponse.fromJson(decoded);
     } catch (e) {
-      return MessageResponse(ErrorResp(0, e.toString(), "", []), null);
+      return MessageResponse(ErrorResp(0, e.toString(), "", <String>[]), null);
     }
   }
 }

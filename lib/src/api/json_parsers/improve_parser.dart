@@ -10,10 +10,11 @@ class ImproveParser extends JsonParser<ImproveDetailResponse>
   @override
   Future<ImproveDetailResponse> parseFromJson(String json) async {
     try {
-      final decoded = decodeJsonObject(json);
+      final Map<String, dynamic> decoded = decodeJsonObject(json);
       return ImproveDetailResponse.fromJson(decoded);
     } catch (e) {
-      return ImproveDetailResponse(ErrorResp(0, e.toString(), "", []), null);
+      return ImproveDetailResponse(
+          ErrorResp(0, e.toString(), "", <String>[]), null);
     }
   }
 }
@@ -25,10 +26,11 @@ class ImproveListParser extends JsonParser<ImproveListResponse>
   @override
   Future<ImproveListResponse> parseFromJson(String json) async {
     try {
-      final decoded = decodeJsonObject(json);
+      final Map<String, dynamic> decoded = decodeJsonObject(json);
       return ImproveListResponse.fromJson(decoded);
     } catch (e) {
-      return ImproveListResponse(ErrorResp(0, json, "", []), []);
+      return ImproveListResponse(
+          ErrorResp(0, json, "", <String>[]), <ImproveMinResponse>[]);
     }
   }
 }

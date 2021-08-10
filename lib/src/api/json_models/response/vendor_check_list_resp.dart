@@ -6,14 +6,14 @@ part 'vendor_check_list_resp.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class VendorCheckListResponse {
-  final ErrorResp? error;
-  @JsonKey(defaultValue: [])
-  final List<VendorCheckMinResponse> data;
-
   VendorCheckListResponse(this.error, this.data);
 
   factory VendorCheckListResponse.fromJson(Map<String, dynamic> json) =>
       _$VendorCheckListResponseFromJson(json);
+
+  final ErrorResp? error;
+  @JsonKey(defaultValue: <VendorCheckMinResponse>[])
+  final List<VendorCheckMinResponse> data;
 
   Map<String, dynamic> toJson() => _$VendorCheckListResponseToJson(this);
 }
@@ -32,6 +32,9 @@ class VendorCheckMinResponse {
       this.isVirtualCheck,
       this.isFinish,
       this.note);
+
+  factory VendorCheckMinResponse.fromJson(Map<String, dynamic> json) =>
+      _$VendorCheckMinResponseFromJson(json);
 
   final String id;
   @JsonKey(name: "created_at")
@@ -52,9 +55,6 @@ class VendorCheckMinResponse {
   @JsonKey(name: "is_finish")
   final bool isFinish;
   final String note;
-
-  factory VendorCheckMinResponse.fromJson(Map<String, dynamic> json) =>
-      _$VendorCheckMinResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$VendorCheckMinResponseToJson(this);
 }

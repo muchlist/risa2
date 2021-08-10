@@ -38,7 +38,7 @@ class HistoryVCListTile extends StatelessWidget {
           padding: const EdgeInsets.only(top: 8, bottom: 8),
           child: Text(
             history.parentName,
-            style: Theme.of(context).textTheme.bodyText1!,
+            style: Theme.of(context).textTheme.bodyText1,
           ),
         ),
         subtitle: Column(

@@ -68,13 +68,13 @@ class StockService {
   Future<StockDetailResponse> changeStock(
       String id, StockChangeRequest payload) {
     return RequestREST(endpoint: "/stock-change/$id", data: payload.toJson())
-        .executePost<StockDetailResponse>(StockParser());
+        .executePost<StockDetailResponse>(const StockParser());
   }
 
   Future<StockDetailResponse> uploadImage(String id, File file) async {
     return RequestREST(endpoint: "/stock-image/$id", data: <String, dynamic>{
       "image": await MultipartFile.fromFile(file.path)
-    }).executeUpload(StockParser());
+    }).executeUpload(const StockParser());
   }
 
   Future<OptStockCategory> getOptStock() {

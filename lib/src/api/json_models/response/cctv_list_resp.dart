@@ -23,9 +23,9 @@ class CctvListData {
 
   factory CctvListData.fromJson(Map<String, dynamic> json) =>
       _$CctvListDataFromJson(json);
-  @JsonKey(defaultValue: [], name: "cctv_list")
+  @JsonKey(defaultValue: <CctvMinResponse>[], name: "cctv_list")
   final List<CctvMinResponse> cctvList;
-  @JsonKey(defaultValue: [], name: "extra_list")
+  @JsonKey(defaultValue: <GeneralMinResponse>[], name: "extra_list")
   final List<GeneralMinResponse> extraList;
 
   Map<String, dynamic> toJson() => _$CctvListDataToJson(this);
@@ -45,7 +45,7 @@ class CctvMinResponse {
   final String name;
   final String ip;
   final String location;
-  @JsonKey(defaultValue: [])
+  @JsonKey(defaultValue: <String>[])
   final List<String> tag;
 
   Map<String, dynamic> toJson() => _$CctvMinResponseToJson(this);

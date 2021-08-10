@@ -10,10 +10,10 @@ class LoginParser extends JsonParser<LoginResponse>
   @override
   Future<LoginResponse> parseFromJson(String json) async {
     try {
-      final decoded = decodeJsonObject(json);
+      final Map<String, dynamic> decoded = decodeJsonObject(json);
       return LoginResponse.fromJson(decoded);
     } catch (e) {
-      return LoginResponse(ErrorResp(0, e.toString(), "", []), null);
+      return LoginResponse(ErrorResp(0, e.toString(), "", <String>[]), null);
     }
   }
 }

@@ -72,7 +72,7 @@ class CctvDetailResponseData {
   @JsonKey(name: "location_lon")
   final String locationLon;
   final int date;
-  @JsonKey(defaultValue: [])
+  @JsonKey(defaultValue: <String>[])
   final List<String> tag;
   final String image;
   final String brand;
@@ -85,19 +85,19 @@ class CctvDetailResponseData {
 
 @JsonSerializable(explicitToJson: true)
 class CctvExtra {
-  @JsonKey(defaultValue: [])
-  final List<Case> cases;
-  @JsonKey(name: "cases_size")
-  final int casesSize;
-  @JsonKey(name: "pings_state", defaultValue: [])
-  final List<PingState> pingsState;
-  @JsonKey(name: "last_ping")
-  final String lastPing;
-
   CctvExtra(this.cases, this.casesSize, this.pingsState, this.lastPing);
 
   factory CctvExtra.fromJson(Map<String, dynamic> json) =>
       _$CctvExtraFromJson(json);
+
+  @JsonKey(defaultValue: <Case>[])
+  final List<Case> cases;
+  @JsonKey(name: "cases_size")
+  final int casesSize;
+  @JsonKey(name: "pings_state", defaultValue: <PingState>[])
+  final List<PingState> pingsState;
+  @JsonKey(name: "last_ping")
+  final String lastPing;
 
   Map<String, dynamic> toJson() => _$CctvExtraToJson(this);
 }

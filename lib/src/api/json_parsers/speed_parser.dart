@@ -9,10 +9,11 @@ class SpeedListParser extends JsonParser<SpeedListResponse>
   @override
   Future<SpeedListResponse> parseFromJson(String json) async {
     try {
-      final decoded = decodeJsonObject(json);
+      final Map<String, dynamic> decoded = decodeJsonObject(json);
       return SpeedListResponse.fromJson(decoded);
     } catch (e) {
-      return SpeedListResponse(ErrorResp(0, e.toString(), "", []), []);
+      return SpeedListResponse(
+          ErrorResp(0, e.toString(), "", <String>[]), <SpeedData>[]);
     }
   }
 }
