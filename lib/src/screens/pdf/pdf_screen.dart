@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/constant.dart';
@@ -10,6 +9,7 @@ import '../../globals.dart';
 import '../../providers/dashboard.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/func_flushbar.dart';
+import '../../shared/ui_helpers.dart';
 import '../../utils/utils.dart';
 import 'generate_pdf_dialog.dart';
 
@@ -23,20 +23,17 @@ class _PdfScreenState extends State<PdfScreen> {
     showModalBottomSheet(
       // isScrollControlled: true,
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      builder: (context) => GeneratePdfDialog(),
+      builder: (BuildContext context) => const GeneratePdfDialog(),
     );
   }
 
   Future<void> _loadAllPdf() {
-    return Future.delayed(Duration.zero, () {
-      context
-          .read<DashboardProvider>()
-          .findPdf(pdfType: "")
-          .onError((error, _) {
+    return Future<void>.delayed(Duration.zero, () {
+      context.read<DashboardProvider>().findPdf().onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -48,9 +45,9 @@ class _PdfScreenState extends State<PdfScreen> {
       appBar: AppBar(
         elevation: 0,
         title: const Text("Report Generated"),
-        actions: [
+        actions: <Widget>[
           IconButton(
-              icon: Icon(
+              icon: const Icon(
                 CupertinoIcons.text_append,
                 size: 26,
               ),
@@ -59,11 +56,11 @@ class _PdfScreenState extends State<PdfScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
           onPressed: () {
             _startGeneratePDF(context);
           },
-          label: Text("Buat Manual")),
+          label: const Text("Buat Manual")),
       body: PdfRecyclerView(),
     );
   }
@@ -75,16 +72,17 @@ class PdfRecyclerView extends StatefulWidget {
 }
 
 class _PdfRecyclerViewState extends State<PdfRecyclerView> {
-  final refreshKeyPdfScreen = GlobalKey<RefreshIndicatorState>();
-  late bool _isVendor = App.getRoles().contains("VENDOR");
+  final GlobalKey<RefreshIndicatorState> refreshKeyPdfScreen =
+      GlobalKey<RefreshIndicatorState>();
+  late final bool _isVendor = App.getRoles().contains("VENDOR");
 
   Future<void> _loadPdf() {
-    var typePDF = (_isVendor) ? "VENDOR" : "LAPORAN";
-    return Future.delayed(Duration.zero, () {
+    final String typePDF = _isVendor ? "VENDOR" : "LAPORAN";
+    return Future<void>.delayed(Duration.zero, () {
       context
           .read<DashboardProvider>()
           .findPdf(pdfType: typePDF)
-          .onError((error, _) {
+          .onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -109,23 +107,25 @@ class _PdfRecyclerViewState extends State<PdfRecyclerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<DashboardProvider>(builder: (_, data, __) {
+    return Consumer<DashboardProvider>(
+        builder: (_, DashboardProvider data, __) {
       return Stack(
         alignment: Alignment.center,
-        children: [
+        children: <Widget>[
           Positioned(
               top: 0,
               bottom: 0,
               left: 0,
               right: 0,
-              child: (data.pdfList.length != 0)
+              child: (data.pdfList.isNotEmpty)
                   ? buildListView(data)
                   : (data.state == ViewState.idle)
                       ? EmptyBox(loadTap: _loadPdf)
-                      : Center()),
-          (data.state == ViewState.busy)
-              ? Center(child: CircularProgressIndicator())
-              : Center(),
+                      : const Center()),
+          if (data.state == ViewState.busy)
+            const Center(child: CircularProgressIndicator())
+          else
+            const Center(),
         ],
       );
     });
@@ -136,12 +136,12 @@ class _PdfRecyclerViewState extends State<PdfRecyclerView> {
       key: refreshKeyPdfScreen,
       onRefresh: _loadPdf,
       child: ListView.builder(
-        padding: EdgeInsets.only(bottom: 60),
+        padding: const EdgeInsets.only(bottom: 60),
         itemCount: data.pdfList.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
               onTap: () {
-                final url =
+                final String url =
                     "${Constant.baseUrl}${data.pdfList[index].fileName}";
                 _launchInBrowser(url);
               },
