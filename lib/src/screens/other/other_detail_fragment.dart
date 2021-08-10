@@ -4,11 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/router/routes.dart';
+import 'package:risa2/src/api/json_models/response/other_resp.dart';
 
 import '../../config/constant.dart';
 import '../../config/pallatte.dart';
 import '../../providers/others.dart';
+import '../../router/routes.dart';
 import '../../shared/cached_image_square.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/ui_helpers.dart';
@@ -23,31 +24,32 @@ class OtherDetailFragment extends StatefulWidget {
 class _OtherDetailFragmentState extends State<OtherDetailFragment> {
   @override
   Widget build(BuildContext context) {
-    final otherProvider = context.watch<OtherProvider>();
-    final detail = otherProvider.otherDetail;
+    final OtherProvider otherProvider = context.watch<OtherProvider>();
+    final OtherDetailResponseData detail = otherProvider.otherDetail;
 
-    return Stack(children: [
+    return Stack(children: <Widget>[
       SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               // Upper table
               Text(
                 detail.name,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 16),
                 child: Table(
-                  columnWidths: {
+                  columnWidths: const <int, TableColumnWidth>{
                     0: FlexColumnWidth(2.0),
                     1: FlexColumnWidth(0.5),
                     2: FlexColumnWidth(3.0)
                   },
-                  children: [
-                    TableRow(children: [
+                  children: <TableRow>[
+                    TableRow(children: <Widget>[
                       const Text("Detail"),
                       const Text("   :   "),
                       Text(
@@ -58,7 +60,7 @@ class _OtherDetailFragmentState extends State<OtherDetailFragment> {
                       ),
                     ]),
                     if (detail.ip.isNotEmpty && detail.ip != "0.0.0.0")
-                      TableRow(children: [
+                      TableRow(children: <Widget>[
                         const Text("IP"),
                         const Text("   :   "),
                         Text(
@@ -69,7 +71,7 @@ class _OtherDetailFragmentState extends State<OtherDetailFragment> {
                         ),
                       ]),
                     if (detail.inventoryNumber.isNotEmpty)
-                      TableRow(children: [
+                      TableRow(children: <Widget>[
                         const Text("No Invent"),
                         const Text("   :   "),
                         Text(
@@ -79,7 +81,7 @@ class _OtherDetailFragmentState extends State<OtherDetailFragment> {
                           overflow: TextOverflow.clip,
                         ),
                       ]),
-                    TableRow(children: [
+                    TableRow(children: <Widget>[
                       const Text("Cabang"),
                       const Text("   :   "),
                       Text(
@@ -90,7 +92,7 @@ class _OtherDetailFragmentState extends State<OtherDetailFragment> {
                       ),
                     ]),
                     if (detail.location.isNotEmpty)
-                      TableRow(children: [
+                      TableRow(children: <Widget>[
                         const Text("Lokasi"),
                         const Text("   :   "),
                         Text(
@@ -101,7 +103,7 @@ class _OtherDetailFragmentState extends State<OtherDetailFragment> {
                         ),
                       ]),
                     if (detail.brand.isNotEmpty || detail.type.isNotEmpty)
-                      TableRow(children: [
+                      TableRow(children: <Widget>[
                         const Text("Merk Tipe"),
                         const Text("   :   "),
                         Text(
@@ -112,17 +114,17 @@ class _OtherDetailFragmentState extends State<OtherDetailFragment> {
                         ),
                       ]),
                     if (detail.date != 0)
-                      TableRow(children: [
+                      TableRow(children: <Widget>[
                         const Text("Tahun"),
                         const Text("   :   "),
                         Text(
-                          "${detail.date.getMonthYear()}",
+                          detail.date.getMonthYear(),
                           softWrap: true,
                           maxLines: 2,
                           overflow: TextOverflow.clip,
                         ),
                       ]),
-                    TableRow(children: [
+                    TableRow(children: <Widget>[
                       const Text("Update"),
                       const Text("   :   "),
                       Text(
@@ -132,7 +134,7 @@ class _OtherDetailFragmentState extends State<OtherDetailFragment> {
                         overflow: TextOverflow.clip,
                       ),
                     ]),
-                    TableRow(children: [
+                    TableRow(children: <Widget>[
                       const Text("Catatan"),
                       const Text("   :   "),
                       Text(
@@ -155,7 +157,7 @@ class _OtherDetailFragmentState extends State<OtherDetailFragment> {
       ),
       // Loading Screen
       if (otherProvider.detailState == ViewState.busy)
-        Scaffold(
+        const Scaffold(
           body: Center(
             child: CircularProgressIndicator(),
           ),
@@ -165,23 +167,22 @@ class _OtherDetailFragmentState extends State<OtherDetailFragment> {
 }
 
 class ButtonContainer extends StatefulWidget {
-  final OtherProvider provider;
-
   const ButtonContainer({required this.provider});
+  final OtherProvider provider;
 
   @override
   _ButtonContainerState createState() => _ButtonContainerState();
 }
 
 class _ButtonContainerState extends State<ButtonContainer> {
-  File? _image;
-  final picker = ImagePicker();
+  late File? _image;
+  final ImagePicker picker = ImagePicker();
 
-  Future _getImageAndUpload(
+  Future<void> _getImageAndUpload(
       {required BuildContext context,
       required ImageSource source,
       required String id}) async {
-    final pickedFile = await picker.getImage(source: source);
+    final PickedFile? pickedFile = await picker.getImage(source: source);
     if (pickedFile != null) {
       _image = File(pickedFile.path);
     } else {
@@ -189,16 +190,16 @@ class _ButtonContainerState extends State<ButtonContainer> {
     }
 
     // compress and upload
-    await context.read<OtherProvider>().uploadImage(id, _image!).then((value) {
+    await context
+        .read<OtherProvider>()
+        .uploadImage(id, _image!)
+        .then((bool value) {
       if (value) {
         showToastSuccess(
-            context: context,
-            message: "Berhasil mengupload gambar",
-            onTop: true);
+            context: context, message: "Berhasil mengupload gambar");
       }
-    }).onError((error, _) {
+    }).onError((Object? error, _) {
       showToastError(context: context, message: error.toString());
-      return Future.error(error.toString());
     });
   }
 
@@ -214,8 +215,8 @@ class _ButtonContainerState extends State<ButtonContainer> {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).accentColor),
-                  child: const Text("Tidak"),
-                  onPressed: () => Navigator.of(context).pop(false)),
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text("Tidak")),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   child: const Text("Ya"))
@@ -226,96 +227,87 @@ class _ButtonContainerState extends State<ButtonContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final detail = widget.provider.otherDetail;
-    return Container(
-      child: Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                child: (detail.image.isNotEmpty)
-                    ? Flexible(
-                        flex: 1,
-                        child: GestureDetector(
-                          onTap: () => _getImageAndUpload(
-                              context: context,
-                              source: ImageSource.camera,
-                              id: detail.id),
-                          onLongPress: () => _getImageAndUpload(
-                              context: context,
-                              source: ImageSource.gallery,
-                              id: detail.id),
-                          child: CachedImageSquare(
-                            urlPath: "${Constant.baseUrl}${detail.image}",
-                          ),
-                        ))
-                    : GestureDetector(
-                        onTap: () => _getImageAndUpload(
-                            context: context,
-                            source: ImageSource.camera,
-                            id: detail.id),
-                        onLongPress: () => _getImageAndUpload(
-                            context: context,
-                            source: ImageSource.gallery,
-                            id: detail.id),
-                        child: Container(
-                            decoration: BoxDecoration(
-                                color: Pallete.secondaryBackground,
-                                borderRadius: BorderRadius.circular(10.0)),
-                            width: 100,
-                            height: 100,
-                            child: Icon(CupertinoIcons.camera)),
+    final OtherDetailResponseData detail = widget.provider.otherDetail;
+    return Padding(
+        padding: const EdgeInsets.only(left: 16),
+        child: Row(
+          children: <Widget>[
+            Container(
+              child: (detail.image.isNotEmpty)
+                  ? Flexible(
+                      child: GestureDetector(
+                      onTap: () => _getImageAndUpload(
+                          context: context,
+                          source: ImageSource.camera,
+                          id: detail.id),
+                      onLongPress: () => _getImageAndUpload(
+                          context: context,
+                          source: ImageSource.gallery,
+                          id: detail.id),
+                      child: CachedImageSquare(
+                        urlPath: "${Constant.baseUrl}${detail.image}",
                       ),
-              ),
-              horizontalSpaceMedium,
-              Expanded(
-                  flex: 1,
-                  child: Wrap(
-                    alignment: WrapAlignment.start,
-                    spacing: 10.0,
-                    children: [
-                      ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, RouteGenerator.otherEdit);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.green[300],
-                          ),
-                          icon: Icon(CupertinoIcons.pencil_circle),
-                          label: const Text("Edit")),
-                      ElevatedButton.icon(
-                          onPressed: () async {
-                            var confirmDelete = await _deleteConfirm(context);
-                            if (confirmDelete != null && confirmDelete) {
-                              await context
-                                  .read<OtherProvider>()
-                                  .removeOther()
-                                  .then((value) {
-                                if (value) {
-                                  Navigator.pop(context);
-                                  showToastSuccess(
-                                      context: context,
-                                      message:
-                                          "Berhasil menghapus ${detail.name}");
-                                }
-                              }).onError((error, _) {
-                                showToastError(
-                                    context: context,
-                                    message: error.toString());
-                              });
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.red[300],
-                          ),
-                          icon: Icon(CupertinoIcons.trash_circle),
-                          label: const Text("Hapus")),
-                    ],
-                  ))
-            ],
-          )),
-    );
+                    ))
+                  : GestureDetector(
+                      onTap: () => _getImageAndUpload(
+                          context: context,
+                          source: ImageSource.camera,
+                          id: detail.id),
+                      onLongPress: () => _getImageAndUpload(
+                          context: context,
+                          source: ImageSource.gallery,
+                          id: detail.id),
+                      child: Container(
+                          decoration: BoxDecoration(
+                              color: Pallete.secondaryBackground,
+                              borderRadius: BorderRadius.circular(10.0)),
+                          width: 100,
+                          height: 100,
+                          child: const Icon(CupertinoIcons.camera)),
+                    ),
+            ),
+            horizontalSpaceMedium,
+            Expanded(
+                child: Wrap(
+              spacing: 10.0,
+              children: <Widget>[
+                ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, RouteGenerator.otherEdit);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.green[300],
+                    ),
+                    icon: const Icon(CupertinoIcons.pencil_circle),
+                    label: const Text("Edit")),
+                ElevatedButton.icon(
+                    onPressed: () async {
+                      final bool? confirmDelete = await _deleteConfirm(context);
+                      if (confirmDelete != null && confirmDelete) {
+                        await context
+                            .read<OtherProvider>()
+                            .removeOther()
+                            .then((bool value) {
+                          if (value) {
+                            Navigator.pop(context);
+                            showToastSuccess(
+                                context: context,
+                                message: "Berhasil menghapus ${detail.name}");
+                          }
+                        }).onError((Object? error, _) {
+                          showToastError(
+                              context: context, message: error.toString());
+                        });
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red[300],
+                    ),
+                    icon: const Icon(CupertinoIcons.trash_circle),
+                    label: const Text("Hapus")),
+              ],
+            ))
+          ],
+        ));
   }
 }

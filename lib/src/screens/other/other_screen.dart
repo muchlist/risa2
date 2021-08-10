@@ -13,7 +13,8 @@ import '../../utils/enums.dart';
 import '../search/other_search_delegate.dart';
 import 'other_with_incident_dialog.dart';
 
-var refreshKeyOtherScreen = GlobalKey<RefreshIndicatorState>();
+GlobalKey<RefreshIndicatorState> refreshKeyOtherScreen =
+    GlobalKey<RefreshIndicatorState>();
 
 class OtherScreen extends StatefulWidget {
   @override
@@ -41,13 +42,14 @@ class _OtherScreenState extends State<OtherScreen> {
       appBar: AppBar(
         elevation: 0,
         title: Text("Daftar ${_otherProvider.subCategory}"),
-        actions: [
+        actions: <Widget>[
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.search,
               size: 28,
             ),
             onPressed: () async {
+              // ignore: always_specify_types
               final searchResult = await showSearch(
                 context: context,
                 delegate: OtherSearchDelegate(),
@@ -62,7 +64,7 @@ class _OtherScreenState extends State<OtherScreen> {
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.decrease_indent,
               size: 28,
             ),
@@ -71,7 +73,7 @@ class _OtherScreenState extends State<OtherScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
           onPressed: () {
             Navigator.pushNamed(context, RouteGenerator.otherAdd);
           },
@@ -91,17 +93,17 @@ class _OtherRecyclerViewState extends State<OtherRecyclerView> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      builder: (context) => OtherWithIncidentDialog(),
+      builder: (BuildContext context) => OtherWithIncidentDialog(),
     );
   }
 
   Future<void> _loadOther() {
-    return Future.delayed(Duration.zero, () {
-      context.read<OtherProvider>().findOther().onError((error, _) {
+    return Future<void>.delayed(Duration.zero, () {
+      context.read<OtherProvider>().findOther().onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -115,23 +117,24 @@ class _OtherRecyclerViewState extends State<OtherRecyclerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<OtherProvider>(builder: (_, data, __) {
+    return Consumer<OtherProvider>(builder: (_, OtherProvider data, __) {
       return Stack(
         alignment: Alignment.center,
-        children: [
+        children: <Widget>[
           Positioned(
               top: 0,
               bottom: 0,
               left: 0,
               right: 0,
-              child: (data.otherList.length != 0)
+              child: (data.otherList.isNotEmpty)
                   ? buildListView(data)
                   : (data.state == ViewState.idle)
                       ? EmptyBox(loadTap: _loadOther)
-                      : Center()),
-          (data.state == ViewState.busy)
-              ? Center(child: CircularProgressIndicator())
-              : Center(),
+                      : const Center()),
+          if (data.state == ViewState.busy)
+            const Center(child: CircularProgressIndicator())
+          else
+            const Center(),
         ],
       );
     });
@@ -143,7 +146,7 @@ class _OtherRecyclerViewState extends State<OtherRecyclerView> {
       onRefresh: _loadOther,
       child: CustomScrollView(
         slivers: <Widget>[
-          if (data.otherExtraList.length != 0)
+          if (data.otherExtraList.isNotEmpty)
             SliverToBoxAdapter(
                 child: OtherSliverHeading(
               totalIncident: data.otherExtraList.length,
@@ -151,7 +154,8 @@ class _OtherRecyclerViewState extends State<OtherRecyclerView> {
             )),
           // LIST CCTV INVENTORY
           SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
+            delegate:
+                SliverChildBuilderDelegate((BuildContext context, int index) {
               return GestureDetector(
                   onTap: () {
                     context.read<OtherProvider>().removeDetail();
@@ -163,7 +167,7 @@ class _OtherRecyclerViewState extends State<OtherRecyclerView> {
                   child: OtherListTile(data: data.otherList[index]));
             }, childCount: data.otherList.length),
           ),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
               child: SizedBox(
             height: 100,
           )),
@@ -174,9 +178,9 @@ class _OtherRecyclerViewState extends State<OtherRecyclerView> {
 }
 
 class OtherSliverHeading extends StatelessWidget {
+  const OtherSliverHeading({required this.totalIncident, required this.onTap});
   final int totalIncident;
   final GestureTapCallback onTap;
-  const OtherSliverHeading({required this.totalIncident, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -185,24 +189,24 @@ class OtherSliverHeading extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: Pallete.secondaryBackground,
           ),
           child: Row(
-            children: [
+            children: <Widget>[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text("Bermasalah: $totalIncident item"),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               CircleAvatar(
                 maxRadius: 16,
                 backgroundColor: Colors.red.shade300,
-                child: Icon(
+                child: const Icon(
                   CupertinoIcons.eyeglasses,
                   color: Colors.white,
                 ),

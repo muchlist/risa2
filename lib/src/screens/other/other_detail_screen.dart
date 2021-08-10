@@ -17,17 +17,17 @@ class _OtherDetailScreenState extends State<OtherDetailScreen> {
   late final OtherProvider otherProvider;
 
   Future<void> _loadHistory() {
-    final parentID = otherProvider.getOtherId();
-    return Future.delayed(Duration.zero, () {
+    final String parentID = otherProvider.getOtherId();
+    return Future<void>.delayed(Duration.zero, () {
       historyProvider.findParentHistory(parentID: parentID).onError(
-          (error, _) =>
+          (Object? error, _) =>
               showToastError(context: context, message: error.toString()));
     });
   }
 
   Future<void> _loadDetail() {
-    return Future.delayed(Duration.zero, () {
-      context.read<OtherProvider>().getDetail().onError((error, _) =>
+    return Future<void>.delayed(Duration.zero, () {
+      context.read<OtherProvider>().getDetail().onError((Object? error, _) =>
           showToastError(context: context, message: error.toString()));
     });
   }
@@ -54,12 +54,12 @@ class _OtherDetailScreenState extends State<OtherDetailScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          bottom: TabBar(
-            tabs: [
-              const Tab(
+          bottom: const TabBar(
+            tabs: <Tab>[
+              Tab(
                 text: "Detail",
               ),
-              const Tab(
+              Tab(
                 text: "Riwayat",
               ),
             ],
@@ -67,7 +67,7 @@ class _OtherDetailScreenState extends State<OtherDetailScreen> {
           title: Text('${otherProvider.subCategory} Detail'),
         ),
         body: TabBarView(
-          children: [
+          children: <Widget>[
             OtherDetailFragment(),
             OtherHistoryRecyclerView(),
           ],
