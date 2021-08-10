@@ -1,55 +1,44 @@
-analyzer:
-  strong-mode:
-    implicit-casts: false
+include: package:lint/analysis_options.yaml
+
 linter:
   rules:
-    - annotate_overrides
-    - avoid_empty_else
-    - avoid_function_literals_in_foreach_calls
-    - avoid_init_to_null
-    - avoid_null_checks_in_equality_operators
-    - avoid_relative_lib_imports
-    - avoid_returning_null
-    - avoid_types_as_parameter_names
-    - avoid_unused_constructor_parameters
-    - await_only_futures
-    - camel_case_types
-    - cancel_subscriptions
-    - cascade_invocations
-    - comment_references
-    - constant_identifier_names
-    - control_flow_in_finally
-    - directives_ordering
-    - empty_catches
-    - empty_constructor_bodies
-    - empty_statements
-    - hash_and_equals
-    - implementation_imports
-    - invariant_booleans
-    - library_names
-    - library_prefixes
-    - list_remove_unrelated_type
-    - no_adjacent_strings_in_list
-    - no_duplicate_case_values
-    - non_constant_identifier_names
-    - null_closures
-    - omit_local_variable_types
-    - only_throw_errors
-    - overridden_fields
-    - package_api_docs
-    - package_names
-    - package_prefixed_library_names
-    - slash_for_doc_comments
-    - test_types_in_equals
-    - throw_in_finally
-    - type_init_formals
-    - unawaited_futures
-    - unnecessary_const
-    - unnecessary_getters_setters
-    - unnecessary_lambdas
-    - unnecessary_new
-    - unnecessary_statements
-    - unnecessary_this
-    - unrelated_type_equality_checks
-    - use_rethrow_when_possible
-    - valid_regexps
+    # ------ Disable individual rules ----- #
+    #                 ---                   #
+    # Turn off what you don't like.         #
+    # ------------------------------------- #
+
+    # Use parameter order as in json response
+    always_put_required_named_parameters_first: false
+    
+    # Util classes are awesome!
+    avoid_classes_with_only_static_members: false
+
+
+    # ------ Enable individual rules ------ #
+    #                 ---                   #
+    # These rules here are good but too     #
+    # opinionated to enable them by default #
+    # ------------------------------------- #
+
+    # Make constructors the first thing in every class
+    sort_constructors_first: true
+
+    # The new tabs vs. spaces. Choose wisely
+    # prefer_single_quotes: true
+    # prefer_double_quotes: true
+
+    # Good packages document everything
+    # public_member_api_docs: true
+    
+    # Blindly follow the Flutter code style, which prefers types everywhere
+    always_specify_types: true
+  
+    use_setters_to_change_properties: false
+    # Back to the 80s
+    lines_longer_than_80_chars: false
+    prefer_interpolation_to_compose_strings: false
+    sort_pub_dependencies: false
+
+analyzer:
+  exclude: 
+    - '**/*g.dart'

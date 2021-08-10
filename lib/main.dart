@@ -47,7 +47,7 @@ late AndroidNotificationChannel channel;
 /// Initialize the [FlutterLocalNotificationsPlugin] package.
 late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // init SharedPrefs
@@ -87,12 +87,12 @@ void main() async {
 
   // add font licensi
   LicenseRegistry.addLicense(() async* {
-    final license = await rootBundle.loadString('google_fonts/OFL.txt');
-    yield LicenseEntryWithLineBreaks(['google_fonts'], license);
+    final String license = await rootBundle.loadString('google_fonts/OFL.txt');
+    yield LicenseEntryWithLineBreaks(<String>['google_fonts'], license);
   });
 
   // Set notification bar tot transfarent
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarIconBrightness: Brightness.light,
     statusBarColor: Colors.transparent,
   ));
@@ -108,19 +108,19 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final generalService = GeneralService();
-  final historyService = HistoryService();
-  final checkService = CheckService();
-  final vendorCheckService = VendorCheckService();
-  final checkMasterService = CheckpService();
-  final authService = AuthService();
-  final improveService = ImproveService();
-  final stockService = StockService();
-  final cctvService = CctvService();
-  final computerService = ComputerService();
-  final otherService = OtherService();
-  final speedService = SpeedService();
-  final pdfService = PdfService();
+  final GeneralService generalService = const GeneralService();
+  final HistoryService historyService = const HistoryService();
+  final CheckService checkService = const CheckService();
+  final VendorCheckService vendorCheckService = const VendorCheckService();
+  final CheckpService checkMasterService = const CheckpService();
+  final AuthService authService = const AuthService();
+  final ImproveService improveService = const ImproveService();
+  final StockService stockService = const StockService();
+  final CctvService cctvService = const CctvService();
+  final ComputerService computerService = const ComputerService();
+  final OtherService otherService = const OtherService();
+  final SpeedService speedService = const SpeedService();
+  final PdfService pdfService = const PdfService();
 
   @override
   void initState() {
@@ -130,29 +130,35 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => AuthProvider(authService)),
-        ChangeNotifierProvider(
-            create: (context) => HistoryProvider(historyService)),
-        ChangeNotifierProvider(
-            create: (context) => ImproveProvider(improveService)),
-        ChangeNotifierProvider(
-            create: (context) => GeneralProvider(generalService)),
-        ChangeNotifierProvider(
-            create: (context) => CheckProvider(checkService)),
-        ChangeNotifierProvider(
-            create: (context) => VendorCheckProvider(vendorCheckService)),
-        ChangeNotifierProvider(
-            create: (context) => CheckMasterProvider(checkMasterService)),
-        ChangeNotifierProvider(
-            create: (context) => StockProvider(stockService)),
-        ChangeNotifierProvider(create: (context) => CctvProvider(cctvService)),
-        ChangeNotifierProvider(
-            create: (context) => ComputerProvider(computerService)),
-        ChangeNotifierProvider(
-            create: (context) => OtherProvider(otherService)),
-        ChangeNotifierProvider(
-            create: (context) => DashboardProvider(speedService, pdfService)),
+      providers: <ChangeNotifierProvider<ChangeNotifier>>[
+        ChangeNotifierProvider<AuthProvider>(
+            create: (BuildContext context) => AuthProvider(authService)),
+        ChangeNotifierProvider<HistoryProvider>(
+            create: (BuildContext context) => HistoryProvider(historyService)),
+        ChangeNotifierProvider<ImproveProvider>(
+            create: (BuildContext context) => ImproveProvider(improveService)),
+        ChangeNotifierProvider<GeneralProvider>(
+            create: (BuildContext context) => GeneralProvider(generalService)),
+        ChangeNotifierProvider<CheckProvider>(
+            create: (BuildContext context) => CheckProvider(checkService)),
+        ChangeNotifierProvider<VendorCheckProvider>(
+            create: (BuildContext context) =>
+                VendorCheckProvider(vendorCheckService)),
+        ChangeNotifierProvider<CheckMasterProvider>(
+            create: (BuildContext context) =>
+                CheckMasterProvider(checkMasterService)),
+        ChangeNotifierProvider<StockProvider>(
+            create: (BuildContext context) => StockProvider(stockService)),
+        ChangeNotifierProvider<CctvProvider>(
+            create: (BuildContext context) => CctvProvider(cctvService)),
+        ChangeNotifierProvider<ComputerProvider>(
+            create: (BuildContext context) =>
+                ComputerProvider(computerService)),
+        ChangeNotifierProvider<OtherProvider>(
+            create: (BuildContext context) => OtherProvider(otherService)),
+        ChangeNotifierProvider<DashboardProvider>(
+            create: (BuildContext context) =>
+                DashboardProvider(speedService, pdfService)),
       ],
       child: MaterialApp(
         title: MyApp._title,

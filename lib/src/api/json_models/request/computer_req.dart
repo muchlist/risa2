@@ -4,26 +4,6 @@ part 'computer_req.g.dart';
 
 @JsonSerializable()
 class ComputerRequest {
-  final String name;
-  final String hostname;
-  @JsonKey(name: "inventory_number")
-  final String inventoryNumber;
-  final String ip;
-  final String location;
-  final String division;
-  @JsonKey(name: "seat_management")
-  final bool seatManagement;
-  final String os;
-  final String processor;
-  final int ram;
-  final int hardisk;
-  final String brand;
-  final int date;
-  @JsonKey(defaultValue: [])
-  final List<String> tag;
-  final String note;
-  final String type;
-
   ComputerRequest(
       {required this.name,
       required this.hostname,
@@ -44,6 +24,26 @@ class ComputerRequest {
 
   factory ComputerRequest.fromJson(Map<String, dynamic> json) =>
       _$ComputerRequestFromJson(json);
+
+  final String name;
+  final String hostname;
+  @JsonKey(name: "inventory_number")
+  final String inventoryNumber;
+  final String ip;
+  final String location;
+  final String division;
+  @JsonKey(name: "seat_management")
+  final bool seatManagement;
+  final String os;
+  final String processor;
+  final int ram;
+  final int hardisk;
+  final String brand;
+  final int date;
+  @JsonKey(defaultValue: <String>[])
+  final List<String> tag;
+  final String note;
+  final String type;
 
   Map<String, dynamic> toJson() => _$ComputerRequestToJson(this);
 }

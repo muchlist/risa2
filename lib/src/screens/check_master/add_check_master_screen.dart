@@ -30,28 +30,28 @@ class AddCheckMasterBody extends StatefulWidget {
 
 class _AddCheckMasterBodyState extends State<AddCheckMasterBody> {
   // pilihan chip
-  final listChoices = getItemShiftChoice();
-  List<int> _multiShiftSelected = [];
+  final List<ItemShiftChoice> listChoices = getItemShiftChoice();
+  final List<int> _multiShiftSelected = <int>[];
 
   String? _selectedLocation;
   String? _selectedType;
 
-  final titleController = TextEditingController();
-  final noteController = TextEditingController();
-  final tagController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController noteController = TextEditingController();
+  final TextEditingController tagController = TextEditingController();
 
   List<String> _getListTag() {
     if (tagController.text.isNotEmpty) {
-      final tags = tagController.text.split(",");
-      return tags.map((e) => e.trim()).toList();
+      final List<String> tags = tagController.text.split(",");
+      return tags.map((String e) => e.trim()).toList();
     }
-    return [];
+    return <String>[];
   }
 
   void _addMasterCheck() {
     // validasi
-    var errorMessage = "";
-    final title = titleController.text;
+    String errorMessage = "";
+    final String title = titleController.text;
     if (title.isEmpty) {
       errorMessage = errorMessage + "judul tidak boleh kosong. ";
     }
@@ -67,28 +67,28 @@ class _AddCheckMasterBodyState extends State<AddCheckMasterBody> {
     }
 
     // Payload
-    final payload = CheckpRequest(
+    final CheckpRequest payload = CheckpRequest(
         name: title.toUpperCase(),
         location: _selectedLocation!,
         note: noteController.text,
         shifts: _multiShiftSelected,
         type: _selectedType!,
         tag: _getListTag(),
-        tagExtra: []);
+        tagExtra: <String>[]);
 
     // Call Provider
-    Future.delayed(
+    Future<void>.delayed(
         Duration.zero,
         () => context
                 .read<CheckMasterProvider>()
                 .addCheckMaster(payload)
-                .then((value) {
+                .then((bool value) {
               if (value) {
                 Navigator.of(context).pop();
                 showToastSuccess(
                     context: context, message: "Berhasil membuat master check");
               }
-            }).onError((error, _) {
+            }).onError((Object? error, _) {
               if (error != null) {
                 showToastError(context: context, message: error.toString());
               }
@@ -105,12 +105,12 @@ class _AddCheckMasterBodyState extends State<AddCheckMasterBody> {
 
   @override
   void initState() {
-    Future.delayed(
+    Future<void>.delayed(
         Duration.zero,
         () => context
                 .read<CheckMasterProvider>()
                 .findOptionCheckMaster()
-                .onError((error, _) {
+                .onError((Object? error, _) {
               showToastError(context: context, message: error.toString());
             }));
 
@@ -124,10 +124,10 @@ class _AddCheckMasterBodyState extends State<AddCheckMasterBody> {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         // Consumer ------------------------------------------------------
         child: Consumer<CheckMasterProvider>(
-          builder: (_, data, __) {
+          builder: (_, CheckMasterProvider data, __) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 // * Judul text ------------------------
                 const Text(
                   "Judul",
@@ -137,7 +137,6 @@ class _AddCheckMasterBodyState extends State<AddCheckMasterBody> {
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Pallete.secondaryBackground,
@@ -154,25 +153,26 @@ class _AddCheckMasterBodyState extends State<AddCheckMasterBody> {
                   style: TextStyle(fontSize: 16),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   height: 50,
                   width: double.infinity,
                   alignment: Alignment.centerLeft,
-                  decoration: BoxDecoration(color: Pallete.secondaryBackground),
+                  decoration:
+                      const BoxDecoration(color: Pallete.secondaryBackground),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       isExpanded: true,
-                      hint: Text("Location"),
+                      hint: const Text("Location"),
                       value: (_selectedLocation != null)
                           ? _selectedLocation
                           : null,
-                      items: data.checkOption.location.map((loc) {
+                      items: data.checkOption.location.map((String loc) {
                         return DropdownMenuItem<String>(
                           value: loc,
                           child: Text(loc),
                         );
                       }).toList(),
-                      onChanged: (value) {
+                      onChanged: (String? value) {
                         setState(() {
                           _selectedLocation = value;
                           FocusScope.of(context).requestFocus(FocusNode());
@@ -190,23 +190,24 @@ class _AddCheckMasterBodyState extends State<AddCheckMasterBody> {
                   style: TextStyle(fontSize: 16),
                 ),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
                   height: 50,
                   width: double.infinity,
                   alignment: Alignment.centerLeft,
-                  decoration: BoxDecoration(color: Pallete.secondaryBackground),
+                  decoration:
+                      const BoxDecoration(color: Pallete.secondaryBackground),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       isExpanded: true,
-                      hint: Text("Tipe"),
+                      hint: const Text("Tipe"),
                       value: (_selectedType != null) ? _selectedType : null,
-                      items: data.checkOption.type.map((tipe) {
+                      items: data.checkOption.type.map((String tipe) {
                         return DropdownMenuItem<String>(
                           value: tipe,
                           child: Text(tipe),
                         );
                       }).toList(),
-                      onChanged: (value) {
+                      onChanged: (String? value) {
                         setState(() {
                           _selectedType = value;
                           FocusScope.of(context).requestFocus(FocusNode());
@@ -224,28 +225,28 @@ class _AddCheckMasterBodyState extends State<AddCheckMasterBody> {
                   style: TextStyle(fontSize: 16),
                 ),
                 Wrap(
+                  spacing: 10,
                   children: listChoices
-                      .map((e) => ChoiceChip(
+                      .map((ItemShiftChoice e) => ChoiceChip(
                             label: Text(
                               e.label,
                               style: (_multiShiftSelected.contains(e.id))
-                                  ? TextStyle(color: Colors.white)
-                                  : TextStyle(),
+                                  ? const TextStyle(color: Colors.white)
+                                  : const TextStyle(),
                             ),
-                            selected: (_multiShiftSelected.contains(e.id)),
+                            selected: _multiShiftSelected.contains(e.id),
                             selectedColor: Theme.of(context).accentColor,
                             // * Setstate ------------------------------
                             onSelected: (_) => setState(() {
                               if (_multiShiftSelected.contains(e.id)) {
                                 _multiShiftSelected
-                                    .removeWhere((item) => item == e.id);
+                                    .removeWhere((int item) => item == e.id);
                               } else {
                                 _multiShiftSelected.add(e.id);
                               }
                             }),
                           ))
                       .toList(),
-                  spacing: 10,
                 ),
 
                 verticalSpaceTiny,
@@ -287,14 +288,15 @@ class _AddCheckMasterBodyState extends State<AddCheckMasterBody> {
                 ),
 
                 verticalSpaceMedium,
-                (data.detailState == ViewState.busy)
-                    ? Center(child: const CircularProgressIndicator())
-                    : Center(
-                        child: HomeLikeButton(
-                            iconData: CupertinoIcons.add,
-                            text: "Tambah master check",
-                            tapTap: _addMasterCheck),
-                      ),
+                if (data.detailState == ViewState.busy)
+                  const Center(child: CircularProgressIndicator())
+                else
+                  Center(
+                    child: HomeLikeButton(
+                        iconData: CupertinoIcons.add,
+                        text: "Tambah master check",
+                        tapTap: _addMasterCheck),
+                  ),
 
                 verticalSpaceMedium,
               ],

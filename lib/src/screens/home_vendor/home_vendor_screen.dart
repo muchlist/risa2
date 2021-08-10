@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/utils/enums.dart';
 
 import '../../api/filter_models/history_filter.dart';
 import '../../config/histo_category.dart';
@@ -22,6 +21,7 @@ import '../../shared/func_history_dialog.dart';
 import '../../shared/history_v_item_complete.dart';
 import '../../shared/history_v_item_widget.dart';
 import '../../shared/ui_helpers.dart';
+import '../../utils/enums.dart';
 
 class HomeVScreen extends StatefulWidget {
   @override

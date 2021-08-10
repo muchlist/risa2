@@ -4,18 +4,6 @@ part 'cctv_req.g.dart';
 
 @JsonSerializable()
 class CctvRequest {
-  final String name;
-  @JsonKey(name: "inventory_number")
-  final String inventoryNumber;
-  final String ip;
-  final String location;
-  final String brand;
-  final int date;
-  @JsonKey(defaultValue: [])
-  final List<String> tag;
-  final String note;
-  final String type;
-
   CctvRequest(
       {required this.name,
       required this.inventoryNumber,
@@ -29,6 +17,18 @@ class CctvRequest {
 
   factory CctvRequest.fromJson(Map<String, dynamic> json) =>
       _$CctvRequestFromJson(json);
+
+  final String name;
+  @JsonKey(name: "inventory_number")
+  final String inventoryNumber;
+  final String ip;
+  final String location;
+  final String brand;
+  final int date;
+  @JsonKey(defaultValue: <String>[])
+  final List<String> tag;
+  final String note;
+  final String type;
 
   Map<String, dynamic> toJson() => _$CctvRequestToJson(this);
 }

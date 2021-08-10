@@ -4,19 +4,6 @@ part 'checkp_edit_req.g.dart';
 
 @JsonSerializable()
 class CheckpEditRequest {
-  @JsonKey(name: "filter_timestamp")
-  final int filterTimestamp;
-  final String name;
-  final String location;
-  final String note;
-  @JsonKey(defaultValue: [])
-  final List<int> shifts;
-  final String type;
-  @JsonKey(name: "tag", defaultValue: [])
-  final List<String> tag;
-  @JsonKey(name: "tag_extra", defaultValue: [])
-  final List<String> tagExtra;
-
   CheckpEditRequest(
       {required this.filterTimestamp,
       required this.name,
@@ -29,6 +16,19 @@ class CheckpEditRequest {
 
   factory CheckpEditRequest.fromJson(Map<String, dynamic> json) =>
       _$CheckpEditRequestFromJson(json);
+
+  @JsonKey(name: "filter_timestamp")
+  final int filterTimestamp;
+  final String name;
+  final String location;
+  final String note;
+  @JsonKey(defaultValue: <int>[])
+  final List<int> shifts;
+  final String type;
+  @JsonKey(name: "tag", defaultValue: <String>[])
+  final List<String> tag;
+  @JsonKey(name: "tag_extra", defaultValue: <String>[])
+  final List<String> tagExtra;
 
   Map<String, dynamic> toJson() => _$CheckpEditRequestToJson(this);
 }

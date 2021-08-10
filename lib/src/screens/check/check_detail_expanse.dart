@@ -15,10 +15,9 @@ import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 
 class ExpansionChild extends StatefulWidget {
+  const ExpansionChild({required this.parentID, required this.checkItem});
   final String parentID;
   final CheckItem checkItem;
-
-  const ExpansionChild({required this.parentID, required this.checkItem});
 
   @override
   _ExpansionChildState createState() => _ExpansionChildState();
@@ -26,7 +25,7 @@ class ExpansionChild extends StatefulWidget {
 
 class _ExpansionChildState extends State<ExpansionChild> {
   bool _haveProblem = false;
-  final checkNoteController = TextEditingController();
+  final TextEditingController checkNoteController = TextEditingController();
   String? _selectedTag;
 
   void _updateChild({bool bypass = false}) {
@@ -37,7 +36,7 @@ class _ExpansionChildState extends State<ExpansionChild> {
       return;
     }
 
-    var payload = CheckUpdateRequest(
+    final CheckUpdateRequest payload = CheckUpdateRequest(
         parentID: widget.parentID,
         childID: widget.checkItem.id,
         checkedNote: checkNoteController.text,
@@ -47,28 +46,27 @@ class _ExpansionChildState extends State<ExpansionChild> {
         tagSelected: _selectedTag ?? "",
         tagExtraSelected: "");
 
-    context.read<CheckProvider>().updateChildCheck(payload)
-      ..then((value) {
-        if (value) {
-          showToastSuccess(
-              context: context,
-              message: "Berhasil mengupdate check",
-              onTop: true);
-        }
-      }).onError((error, _) {
-        if (error != null) {
-          showToastError(
-              context: context, message: error.toString(), onTop: true);
-        }
-      });
+    context.read<CheckProvider>().updateChildCheck(payload).then((bool value) {
+      if (value) {
+        showToastSuccess(
+          context: context,
+          message: "Berhasil mengupdate check",
+        );
+      }
+    }).onError((Object? error, _) {
+      if (error != null) {
+        showToastError(context: context, message: error.toString());
+      }
+    });
   }
 
-  File? _image;
-  final picker = ImagePicker();
+  late File? _image;
+  final ImagePicker picker = ImagePicker();
 
-  Future getImageAndUpload(
+  Future<void> getImageAndUpload(
       BuildContext context, String id, String childID) async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    final PickedFile? pickedFile =
+        await picker.getImage(source: ImageSource.camera);
     if (pickedFile != null) {
       _image = File(pickedFile.path);
     } else {
@@ -79,15 +77,16 @@ class _ExpansionChildState extends State<ExpansionChild> {
     await context
         .read<CheckProvider>()
         .uploadChildCheck(id, childID, _image!)
-        .then((value) {
+        .then((bool value) {
       if (value) {
         if (widget.checkItem.checkedAt == 0) {
           _updateChild(bypass: true);
         }
       }
-    }).onError((error, _) {
+    }).onError((Object? error, _) {
       showToastError(context: context, message: error.toString());
-      return Future.error(error.toString());
+      // ignore: prefer_void_to_null
+      return Future<Null>.error(error.toString());
     });
   }
 
@@ -107,14 +106,13 @@ class _ExpansionChildState extends State<ExpansionChild> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 8, right: 8, bottom: 8),
+      padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
       child: Row(
-        children: [
+        children: <Widget>[
           Expanded(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 TextFormField(
                   // initialValue: widget.checkItem.checkedNote,
                   controller: checkNoteController,
@@ -129,41 +127,42 @@ class _ExpansionChildState extends State<ExpansionChild> {
 
                 verticalSpaceTiny,
                 // dropdown item
-                (widget.checkItem.tag.length != 0)
-                    ? Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8),
-                        height: 50,
-                        width: double.infinity,
-                        alignment: Alignment.centerLeft,
-                        decoration:
-                            BoxDecoration(color: Pallete.secondaryBackground),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton<String>(
-                            isExpanded: true,
-                            hint: Text("Tag"),
-                            value: _selectedTag,
-                            items: widget.checkItem.tag.map((tag) {
-                              return DropdownMenuItem<String>(
-                                value: tag,
-                                child: Text(tag),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedTag = value!;
-                              });
-                            },
-                          ),
-                        ),
-                      )
-                    : Container(),
-                Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                if (widget.checkItem.tag.isNotEmpty)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    height: 50,
+                    width: double.infinity,
+                    alignment: Alignment.centerLeft,
+                    decoration:
+                        const BoxDecoration(color: Pallete.secondaryBackground),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        hint: const Text("Tag"),
+                        value: _selectedTag,
+                        items: widget.checkItem.tag.map((String tag) {
+                          return DropdownMenuItem<String>(
+                            value: tag,
+                            child: Text(tag),
+                          );
+                        }).toList(),
+                        onChanged: (String? value) {
+                          setState(() {
+                            _selectedTag = value;
+                          });
+                        },
+                      ),
+                    ),
+                  )
+                else
+                  Container(),
+                Row(children: <Widget>[
                   horizontalSpaceTiny,
                   const Text("Terdapat kendala / outstanding? "),
-                  Spacer(),
+                  const Spacer(),
                   Switch(
                     value: _haveProblem,
-                    onChanged: (value) {
+                    onChanged: (bool value) {
                       setState(() {
                         _haveProblem = !_haveProblem;
                       });
@@ -173,12 +172,12 @@ class _ExpansionChildState extends State<ExpansionChild> {
                   ),
                 ]),
                 Row(
-                  children: [
+                  children: <Widget>[
                     SizedBox(
                       width: 60,
                       height: 60,
                       child: IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           CupertinoIcons.camera_fill,
                           color: Colors.grey,
                         ),
@@ -186,9 +185,9 @@ class _ExpansionChildState extends State<ExpansionChild> {
                             context, widget.parentID, widget.checkItem.id),
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
                     Consumer<CheckProvider>(
-                      builder: (_, data, __) {
+                      builder: (_, CheckProvider data, __) {
                         return Flexible(
                           child: RisaButton(
                             title: "Update",

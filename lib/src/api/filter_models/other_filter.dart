@@ -1,11 +1,4 @@
 class FilterOther {
-  final String? ip;
-  final String? name;
-  final String? branch;
-  final String? location;
-  final String? disable;
-  final String? division;
-
   FilterOther({
     this.ip,
     this.name,
@@ -14,4 +7,10 @@ class FilterOther {
     this.disable,
     this.division,
   });
+  final String? ip;
+  final String? name;
+  final String? branch;
+  final String? location;
+  final String? disable;
+  final String? division;
 }

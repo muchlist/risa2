@@ -1,11 +1,4 @@
 class FilterHistory {
-  String? branch;
-  String? category;
-  int? completeStatus;
-  int? start;
-  int? end;
-  int? limit;
-
   FilterHistory(
       {this.branch,
       this.category,
@@ -13,4 +6,10 @@ class FilterHistory {
       this.start,
       this.end,
       this.limit});
+  String? branch;
+  String? category;
+  int? completeStatus;
+  int? start;
+  int? end;
+  int? limit;
 }

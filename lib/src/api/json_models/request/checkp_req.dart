@@ -4,17 +4,6 @@ part 'checkp_req.g.dart';
 
 @JsonSerializable()
 class CheckpRequest {
-  final String name;
-  final String location;
-  final String note;
-  @JsonKey(defaultValue: [])
-  final List<int> shifts;
-  final String type;
-  @JsonKey(name: "tag", defaultValue: [])
-  final List<String> tag;
-  @JsonKey(name: "tag_extra", defaultValue: [])
-  final List<String> tagExtra;
-
   CheckpRequest(
       {required this.name,
       required this.location,
@@ -26,6 +15,17 @@ class CheckpRequest {
 
   factory CheckpRequest.fromJson(Map<String, dynamic> json) =>
       _$CheckpRequestFromJson(json);
+
+  final String name;
+  final String location;
+  final String note;
+  @JsonKey(defaultValue: <int>[])
+  final List<int> shifts;
+  final String type;
+  @JsonKey(name: "tag", defaultValue: <String>[])
+  final List<String> tag;
+  @JsonKey(name: "tag_extra", defaultValue: <String>[])
+  final List<String> tagExtra;
 
   Map<String, dynamic> toJson() => _$CheckpRequestToJson(this);
 }

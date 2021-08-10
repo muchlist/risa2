@@ -29,7 +29,7 @@ class AddComputerBody extends StatefulWidget {
 }
 
 class _AddComputerBodyState extends State<AddComputerBody> {
-  final _key = GlobalKey<FormState>();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   bool _isSeatManagement = false;
   String? _selectedLocation;
@@ -49,17 +49,17 @@ class _AddComputerBodyState extends State<AddComputerBody> {
     return _dateSelected!.getMonthYearDisplay();
   }
 
-  final nameController = TextEditingController();
-  final hostnameController = TextEditingController();
-  final inventoryNumController = TextEditingController();
-  final ipController = TextEditingController();
-  final brandController = TextEditingController();
-  final noteController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController hostnameController = TextEditingController();
+  final TextEditingController inventoryNumController = TextEditingController();
+  final TextEditingController ipController = TextEditingController();
+  final TextEditingController brandController = TextEditingController();
+  final TextEditingController noteController = TextEditingController();
 
   void _addComputer() {
     if (_key.currentState?.validate() ?? false) {
       // validasi tambahan
-      var errorMessage = "";
+      String errorMessage = "";
       if (_selectedLocation == null) {
         errorMessage = errorMessage + "Lokasi tidak boleh kosong. ";
       }
@@ -77,19 +77,19 @@ class _AddComputerBodyState extends State<AddComputerBody> {
       }
 
       if (errorMessage.isNotEmpty) {
-        showToastWarning(context: context, message: errorMessage, onTop: true);
+        showToastWarning(context: context, message: errorMessage);
         return;
       }
 
       // Payload
-      final payload = ComputerRequest(
+      final ComputerRequest payload = ComputerRequest(
           name: nameController.text,
           inventoryNumber: inventoryNumController.text,
           ip: ipController.text,
           location: _selectedLocation!,
           brand: brandController.text,
           date: (_dateSelected != null) ? _dateSelected!.toInt() : 0,
-          tag: [],
+          tag: <String>[],
           note: noteController.text,
           type: _selectedType!,
           division: _selectedDivision!,
@@ -101,31 +101,30 @@ class _AddComputerBodyState extends State<AddComputerBody> {
           seatManagement: _isSeatManagement);
 
       // Call Provider
-      Future.delayed(
+      Future<void>.delayed(
           Duration.zero,
           () => context
                   .read<ComputerProvider>()
                   .addComputer(payload)
-                  .then((value) {
+                  .then((bool value) {
                 if (value) {
                   Navigator.of(context).pop();
                   showToastSuccess(
                       context: context,
                       message: "Berhasil membuat computer ${payload.name}");
                 }
-              }).onError((error, _) {
+              }).onError((Object? error, _) {
                 if (error != null) {
-                  showToastError(
-                      context: context, message: error.toString(), onTop: true);
+                  showToastError(context: context, message: error.toString());
                 }
               }));
     }
   }
 
-  Future _pickDate(BuildContext context) async {
-    final initialDate =
+  Future<void> _pickDate(BuildContext context) async {
+    final DateTime initialDate =
         (_dateSelected == null) ? DateTime.now() : _dateSelected!;
-    final newDate = await showDatePicker(
+    final DateTime? newDate = await showDatePicker(
         context: context,
         initialDate: initialDate,
         firstDate: DateTime(DateTime.now().year - 10),
@@ -154,12 +153,12 @@ class _AddComputerBodyState extends State<AddComputerBody> {
   void initState() {
     // default length == 1 , if option got update length more than 1
     if (context.read<ComputerProvider>().computerOption.location.length == 1) {
-      Future.delayed(
+      Future<void>.delayed(
           Duration.zero,
           () => context
                   .read<ComputerProvider>()
                   .findOptionComputer()
-                  .onError((error, _) {
+                  .onError((Object? error, _) {
                 showToastError(context: context, message: error.toString());
               }));
     }
@@ -176,7 +175,7 @@ class _AddComputerBodyState extends State<AddComputerBody> {
             key: _key,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 // * Judul text ------------------------
                 const Text(
                   "Nama User",
@@ -186,14 +185,13 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: nameController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return 'Nama user tidak boleh kosong';
                     }
@@ -212,7 +210,6 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -232,7 +229,6 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
@@ -252,14 +248,13 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: ipController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return null;
                     } else {
@@ -278,27 +273,28 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                   "Lokasi",
                   style: TextStyle(fontSize: 16),
                 ),
-                Consumer<ComputerProvider>(builder: (_, data, __) {
+                Consumer<ComputerProvider>(
+                    builder: (_, ComputerProvider data, __) {
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     height: 50,
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isExpanded: true,
-                        hint: Text("Lokasi"),
+                        hint: const Text("Lokasi"),
                         value: (_selectedLocation != null)
                             ? _selectedLocation
                             : null,
-                        items: data.computerOption.location.map((loc) {
+                        items: data.computerOption.location.map((String loc) {
                           return DropdownMenuItem<String>(
                             value: loc,
                             child: Text(loc),
                           );
                         }).toList(),
-                        onChanged: (value) {
+                        onChanged: (String? value) {
                           setState(() {
                             _selectedLocation = value;
                             FocusScope.of(context).requestFocus(FocusNode());
@@ -316,27 +312,28 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                   "Divisi",
                   style: TextStyle(fontSize: 16),
                 ),
-                Consumer<ComputerProvider>(builder: (_, data, __) {
+                Consumer<ComputerProvider>(
+                    builder: (_, ComputerProvider data, __) {
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     height: 50,
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isExpanded: true,
-                        hint: Text("Divisi"),
+                        hint: const Text("Divisi"),
                         value: (_selectedDivision != null)
                             ? _selectedDivision
                             : null,
-                        items: data.computerOption.division.map((loc) {
+                        items: data.computerOption.division.map((String loc) {
                           return DropdownMenuItem<String>(
                             value: loc,
                             child: Text(loc),
                           );
                         }).toList(),
-                        onChanged: (value) {
+                        onChanged: (String? value) {
                           setState(() {
                             _selectedDivision = value;
                             FocusScope.of(context).requestFocus(FocusNode());
@@ -359,14 +356,13 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Colors.white,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: brandController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return "merk tidak boleh kosong";
                     }
@@ -386,17 +382,17 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                   onTap: () => _pickDate(context),
                   child: Container(
                     height: 50,
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                        children: <Widget>[
                           Text(
                             getDateString(),
                           ),
-                          Icon(CupertinoIcons.calendar),
+                          const Icon(CupertinoIcons.calendar),
                         ]),
                   ),
                 ),
@@ -404,13 +400,13 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                 verticalSpaceSmall,
 
                 // * Seat switch
-                Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Row(children: <Widget>[
                   horizontalSpaceTiny,
                   const Text("Komputer sewa? "),
-                  Spacer(),
+                  const Spacer(),
                   Switch(
                     value: _isSeatManagement,
-                    onChanged: (value) {
+                    onChanged: (bool value) {
                       setState(() {
                         _isSeatManagement = !_isSeatManagement;
                       });
@@ -426,25 +422,26 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                   "Tipe Computer",
                   style: TextStyle(fontSize: 16),
                 ),
-                Consumer<ComputerProvider>(builder: (_, data, __) {
+                Consumer<ComputerProvider>(
+                    builder: (_, ComputerProvider data, __) {
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     height: 50,
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isExpanded: true,
-                        hint: Text("Tipe"),
+                        hint: const Text("Tipe"),
                         value: (_selectedType != null) ? _selectedType : null,
-                        items: data.computerOption.type.map((loc) {
+                        items: data.computerOption.type.map((String loc) {
                           return DropdownMenuItem<String>(
                             value: loc,
                             child: Text(loc),
                           );
                         }).toList(),
-                        onChanged: (value) {
+                        onChanged: (String? value) {
                           setState(() {
                             _selectedType = value;
                             FocusScope.of(context).requestFocus(FocusNode());
@@ -462,25 +459,26 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                   "Sistem Operasi",
                   style: TextStyle(fontSize: 16),
                 ),
-                Consumer<ComputerProvider>(builder: (_, data, __) {
+                Consumer<ComputerProvider>(
+                    builder: (_, ComputerProvider data, __) {
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     height: 50,
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isExpanded: true,
-                        hint: Text("Sistem Operasi"),
+                        hint: const Text("Sistem Operasi"),
                         value: (_selectedOS != null) ? _selectedOS : null,
-                        items: data.computerOption.os.map((loc) {
+                        items: data.computerOption.os.map((String loc) {
                           return DropdownMenuItem<String>(
                             value: loc,
                             child: Text(loc),
                           );
                         }).toList(),
-                        onChanged: (value) {
+                        onChanged: (String? value) {
                           setState(() {
                             _selectedOS = value;
                             FocusScope.of(context).requestFocus(FocusNode());
@@ -498,27 +496,28 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                   "Prosesor",
                   style: TextStyle(fontSize: 16),
                 ),
-                Consumer<ComputerProvider>(builder: (_, data, __) {
+                Consumer<ComputerProvider>(
+                    builder: (_, ComputerProvider data, __) {
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     height: 50,
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isExpanded: true,
-                        hint: Text("Prosesor"),
+                        hint: const Text("Prosesor"),
                         value: (_selectedProcessor != null)
                             ? _selectedProcessor
                             : null,
-                        items: data.computerOption.processor.map((loc) {
+                        items: data.computerOption.processor.map((String loc) {
                           return DropdownMenuItem<String>(
                             value: loc,
                             child: Text(loc),
                           );
                         }).toList(),
-                        onChanged: (value) {
+                        onChanged: (String? value) {
                           setState(() {
                             _selectedProcessor = value;
                             FocusScope.of(context).requestFocus(FocusNode());
@@ -536,27 +535,28 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                   "RAM",
                   style: TextStyle(fontSize: 16),
                 ),
-                Consumer<ComputerProvider>(builder: (_, data, __) {
+                Consumer<ComputerProvider>(
+                    builder: (_, ComputerProvider data, __) {
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     height: 50,
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isExpanded: true,
-                        hint: Text("RAM"),
+                        hint: const Text("RAM"),
                         value: (_selectedRAM != null)
                             ? _selectedRAM.toString()
                             : null,
-                        items: data.computerOption.ram.map((loc) {
+                        items: data.computerOption.ram.map((int loc) {
                           return DropdownMenuItem<String>(
                             value: loc.toString(),
                             child: Text(loc.toString()),
                           );
                         }).toList(),
-                        onChanged: (value) {
+                        onChanged: (String? value) {
                           setState(() {
                             _selectedRAM = int.tryParse(value ?? "0");
                             FocusScope.of(context).requestFocus(FocusNode());
@@ -574,27 +574,28 @@ class _AddComputerBodyState extends State<AddComputerBody> {
                   "Hardisk",
                   style: TextStyle(fontSize: 16),
                 ),
-                Consumer<ComputerProvider>(builder: (_, data, __) {
+                Consumer<ComputerProvider>(
+                    builder: (_, ComputerProvider data, __) {
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     height: 50,
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
-                    decoration: BoxDecoration(color: Colors.white),
+                    decoration: const BoxDecoration(color: Colors.white),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isExpanded: true,
-                        hint: Text("Hardisk"),
+                        hint: const Text("Hardisk"),
                         value: (_selectedHardisk != null)
                             ? _selectedHardisk.toString()
                             : null,
-                        items: data.computerOption.hardisk.map((loc) {
+                        items: data.computerOption.hardisk.map((int loc) {
                           return DropdownMenuItem<String>(
                             value: loc.toString(),
                             child: Text(loc.toString()),
                           );
                         }).toList(),
-                        onChanged: (value) {
+                        onChanged: (String? value) {
                           setState(() {
                             _selectedHardisk = int.tryParse(value ?? "0");
                             FocusScope.of(context).requestFocus(FocusNode());
@@ -627,9 +628,10 @@ class _AddComputerBodyState extends State<AddComputerBody> {
 
                 verticalSpaceMedium,
 
-                Consumer<ComputerProvider>(builder: (_, data, __) {
+                Consumer<ComputerProvider>(
+                    builder: (_, ComputerProvider data, __) {
                   return (data.state == ViewState.busy)
-                      ? Center(child: const CircularProgressIndicator())
+                      ? const Center(child: CircularProgressIndicator())
                       : Center(
                           child: HomeLikeButton(
                               iconData: CupertinoIcons.add,

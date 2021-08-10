@@ -4,6 +4,19 @@ part 'check_update_req.g.dart';
 
 @JsonSerializable()
 class CheckUpdateRequest {
+  CheckUpdateRequest(
+      {required this.parentID,
+      required this.childID,
+      required this.checkedNote,
+      required this.isChecked,
+      required this.haveProblem,
+      required this.completeStatus,
+      required this.tagSelected,
+      required this.tagExtraSelected});
+
+  factory CheckUpdateRequest.fromJson(Map<String, dynamic> json) =>
+      _$CheckUpdateRequestFromJson(json);
+
   @JsonKey(name: "parent_id")
   final String parentID;
   @JsonKey(name: "child_id")
@@ -20,19 +33,6 @@ class CheckUpdateRequest {
   final String tagSelected;
   @JsonKey(name: "tag_extra_selected")
   final String tagExtraSelected;
-
-  CheckUpdateRequest(
-      {required this.parentID,
-      required this.childID,
-      required this.checkedNote,
-      required this.isChecked,
-      required this.haveProblem,
-      required this.completeStatus,
-      required this.tagSelected,
-      required this.tagExtraSelected});
-
-  factory CheckUpdateRequest.fromJson(Map<String, dynamic> json) =>
-      _$CheckUpdateRequestFromJson(json);
 
   Map<String, dynamic> toJson() => _$CheckUpdateRequestToJson(this);
 }

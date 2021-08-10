@@ -8,6 +8,7 @@ import '../api/json_models/option/location_division.dart';
 import '../api/json_models/request/other_edit_req.dart';
 import '../api/json_models/request/other_req.dart';
 import '../api/json_models/response/general_list_resp.dart';
+import '../api/json_models/response/message_resp.dart';
 import '../api/json_models/response/other_list_resp.dart';
 import '../api/json_models/response/other_resp.dart';
 import '../api/services/other_service.dart';
@@ -16,8 +17,8 @@ import '../utils/enums.dart';
 import '../utils/image_compress.dart';
 
 class OtherProvider extends ChangeNotifier {
-  final OtherService _otherService;
   OtherProvider(this._otherService);
+  final OtherService _otherService;
 
   // =======================================================
   String _subCategory = "";
@@ -39,15 +40,15 @@ class OtherProvider extends ChangeNotifier {
   }
 
   // other list cache
-  List<OtherMinResponse> _otherList = [];
+  List<OtherMinResponse> _otherList = <OtherMinResponse>[];
   List<OtherMinResponse> get otherList {
-    return UnmodifiableListView(_otherList);
+    return UnmodifiableListView<OtherMinResponse>(_otherList);
   }
 
   // other extra list cache
   List<GeneralMinResponse> _otherExtraList = [];
   List<GeneralMinResponse> get otherExtraList {
-    return UnmodifiableListView(_otherExtraList);
+    return UnmodifiableListView<GeneralMinResponse>(_otherExtraList);
   }
 
   // *memasang filter pada pencarian other
@@ -64,9 +65,9 @@ class OtherProvider extends ChangeNotifier {
       setState(ViewState.busy);
     }
 
-    var error = "";
+    String error = "";
     try {
-      final response =
+      final OtherListResponse response =
           await _otherService.findOther(_filterOther, _subCategory);
       if (response.error != null) {
         error = response.error!.message;
@@ -81,7 +82,7 @@ class OtherProvider extends ChangeNotifier {
     setState(ViewState.idle);
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
@@ -124,12 +125,12 @@ class OtherProvider extends ChangeNotifier {
       "",
       "",
       0,
-      [],
+      <String>[],
       "",
       "",
       "",
       "",
-      OtherExtra([], 0, [], ""));
+      OtherExtra(<Case>[], 0, <PingState>[], ""));
   OtherDetailResponseData get otherDetail {
     return _otherDetail;
   }
@@ -155,12 +156,12 @@ class OtherProvider extends ChangeNotifier {
         "",
         "",
         0,
-        [],
+        <String>[],
         "",
         "",
         "",
         "",
-        OtherExtra([], 0, [], ""));
+        OtherExtra(<Case>[], 0, <PingState>[], ""));
   }
 
   // get detail other
@@ -168,13 +169,14 @@ class OtherProvider extends ChangeNotifier {
   Future<void> getDetail() async {
     setDetailState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _otherService.getOther(_otherIDSaved);
+      final OtherDetailResponse response =
+          await _otherService.getOther(_otherIDSaved);
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        final otherData = response.data!;
+        final OtherDetailResponseData otherData = response.data!;
         _otherDetail = otherData;
       }
     } catch (e) {
@@ -183,7 +185,7 @@ class OtherProvider extends ChangeNotifier {
 
     setDetailState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
@@ -191,10 +193,10 @@ class OtherProvider extends ChangeNotifier {
   // memanggil findOther sehingga tidak perlu notifyListener
   Future<bool> addOther(OtherRequest payload) async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _otherService.createOther(payload);
+      final MessageResponse response = await _otherService.createOther(payload);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -204,14 +206,15 @@ class OtherProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findOther(loading: false);
     return true;
   }
 
   // other option cache
-  OptLocationDivison _otherOption = OptLocationDivison(["None"], ["None"]);
+  OptLocationDivison _otherOption =
+      OptLocationDivison(<String>["None"], <String>["None"]);
   OptLocationDivison get otherOption {
     return _otherOption;
   }
@@ -219,11 +222,11 @@ class OtherProvider extends ChangeNotifier {
   // * Mendapatkan check option
   Future<void> findOptionOther() async {
     try {
-      final response =
+      final OptLocationDivison response =
           await _otherService.getOptCreateOther(App.getBranch() ?? "");
       _otherOption = response;
     } catch (e) {
-      return Future.error(e.toString());
+      return Future<void>.error(e.toString());
     }
     notifyListeners();
   }
@@ -231,10 +234,11 @@ class OtherProvider extends ChangeNotifier {
   // return future OtherDetail jika edit other berhasil
   Future<bool> editOther(OtherEditRequest payload) async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _otherService.editOther(_otherIDSaved, payload);
+      final OtherDetailResponse response =
+          await _otherService.editOther(_otherIDSaved, payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -246,7 +250,7 @@ class OtherProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
 
     await findOther(loading: false);
@@ -256,12 +260,13 @@ class OtherProvider extends ChangeNotifier {
   // * update image
   // return future true jika update image berhasil
   Future<bool> uploadImage(String id, File file) async {
-    var error = "";
+    String error = "";
 
-    final fileCompressed = await compressFile(file);
+    final File fileCompressed = await compressFile(file);
 
     try {
-      final response = await _otherService.uploadImage(id, fileCompressed);
+      final OtherDetailResponse response =
+          await _otherService.uploadImage(id, fileCompressed);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -274,17 +279,17 @@ class OtherProvider extends ChangeNotifier {
     notifyListeners();
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     return true;
   }
 
   // remove other
   Future<bool> removeOther() async {
-    var error = "";
+    String error = "";
 
     try {
-      final response =
+      final MessageResponse response =
           await _otherService.deleteOther(_otherIDSaved, _subCategory);
       if (response.error != null) {
         error = response.error!.message;
@@ -295,7 +300,7 @@ class OtherProvider extends ChangeNotifier {
 
     notifyListeners();
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findOther(loading: false);
     return true;
@@ -314,6 +319,6 @@ class OtherProvider extends ChangeNotifier {
   void onClose() {
     removeDetail();
     // _otherExtraList = [];
-    _otherList = [];
+    _otherList = <OtherMinResponse>[];
   }
 }

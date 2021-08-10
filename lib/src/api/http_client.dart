@@ -5,12 +5,11 @@ import '../globals.dart';
 import 'json_parsers/json_parsers.dart';
 
 class RequestREST {
+  RequestREST({required this.endpoint, this.data = const <String, dynamic>{}});
   final String endpoint;
   final Map<String, dynamic> data;
 
-  RequestREST({required this.endpoint, this.data = const {}});
-
-  static final _client = Dio(BaseOptions(
+  static final Dio _client = Dio(BaseOptions(
     baseUrl: Constant.baseApiUrl,
     connectTimeout: 10000, // 10 second
     receiveTimeout: 10000,
@@ -21,7 +20,7 @@ class RequestREST {
       "Content-Type": "application/json"
     },
     followRedirects: false,
-    validateStatus: (status) {
+    validateStatus: (int? status) {
       return status! < 501;
     },
   ));
@@ -29,19 +28,19 @@ class RequestREST {
   // GET <<<<<<<<<<<
   Future<T> executeGet<T>(JsonParser<T> parser) async {
     try {
-      final response = await _client.get<String>(
+      final Response<String> response = await _client.get<String>(
         endpoint,
         options: Options(
-          headers: {
+          headers: <String, dynamic>{
             "Authorization": "Bearer ${App.getToken()}",
           },
         ),
       );
       return parser.parseFromJson(response.data ?? "");
     } on DioError catch (e) {
-      return Future.error(_dioErrorHandler(e));
+      return Future<T>.error(_dioErrorHandler(e));
     } catch (e) {
-      return Future.error(e);
+      return Future<T>.error(e);
     }
   }
 
@@ -49,20 +48,20 @@ class RequestREST {
   Future<T> executePost<T>(JsonParser<T> parser) async {
     // final formData = FormData.fromMap(data);
     try {
-      final response = await _client.post<String>(
+      final Response<String> response = await _client.post<String>(
         endpoint,
         data: data,
         options: Options(
-          headers: {
+          headers: <String, dynamic>{
             "Authorization": "Bearer ${App.getToken()}",
           },
         ),
       );
       return parser.parseFromJson(response.data ?? "");
     } on DioError catch (e) {
-      return Future.error(_dioErrorHandler(e));
+      return Future<T>.error(_dioErrorHandler(e));
     } catch (e) {
-      return Future.error(e);
+      return Future<T>.error(e);
     }
   }
 
@@ -70,29 +69,29 @@ class RequestREST {
   Future<T> executePut<T>(JsonParser<T> parser) async {
     // final formData = FormData.fromMap(data);
     try {
-      final response = await _client.put<String>(
+      final Response<String> response = await _client.put<String>(
         endpoint,
         data: data,
         options: Options(
-          headers: {
+          headers: <String, dynamic>{
             "Authorization": "Bearer ${App.getToken()}",
           },
         ),
       );
       return parser.parseFromJson(response.data ?? "");
     } on DioError catch (e) {
-      return Future.error(_dioErrorHandler(e));
+      return Future<T>.error(_dioErrorHandler(e));
     } catch (e) {
-      return Future.error(e);
+      return Future<T>.error(e);
     }
   }
 
   // DELETE <<<<<<<<<<<
   Future<T> executeDelete<T>(JsonParser<T> parser) async {
-    final response = await _client.delete<String>(
+    final Response<String> response = await _client.delete<String>(
       endpoint,
       options: Options(
-        headers: {
+        headers: <String, dynamic>{
           "Authorization": "Bearer ${App.getToken()}",
         },
       ),
@@ -102,23 +101,23 @@ class RequestREST {
 
   // UPLOAD <<<<<<<<<<<
   Future<T> executeUpload<T>(JsonParser<T> parser) async {
-    final formData = FormData.fromMap(data);
+    final FormData formData = FormData.fromMap(data);
 
     try {
-      final response = await _client.post<String>(
+      final Response<String> response = await _client.post<String>(
         endpoint,
         data: formData,
         options: Options(
-          headers: {
+          headers: <String, dynamic>{
             "Authorization": "Bearer ${App.getToken()}",
           },
         ),
       );
       return parser.parseFromJson(response.data ?? "");
     } on DioError catch (e) {
-      return Future.error(_dioErrorHandler(e));
+      return Future<T>.error(_dioErrorHandler(e));
     } catch (e) {
-      return Future.error(e);
+      return Future<T>.error(e);
     }
   }
 

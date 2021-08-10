@@ -29,7 +29,7 @@ class AddCctvBody extends StatefulWidget {
 }
 
 class _AddCctvBodyState extends State<AddCctvBody> {
-  final _key = GlobalKey<FormState>();
+  final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   String? _selectedLocation;
   String? _selectedType;
@@ -43,16 +43,16 @@ class _AddCctvBodyState extends State<AddCctvBody> {
     return _dateSelected!.getMonthYearDisplay();
   }
 
-  final nameController = TextEditingController();
-  final inventoryNumController = TextEditingController();
-  final ipController = TextEditingController();
-  final brandController = TextEditingController();
-  final noteController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController inventoryNumController = TextEditingController();
+  final TextEditingController ipController = TextEditingController();
+  final TextEditingController brandController = TextEditingController();
+  final TextEditingController noteController = TextEditingController();
 
   void _addCctv() {
     if (_key.currentState?.validate() ?? false) {
       // validasi tambahan
-      var errorMessage = "";
+      String errorMessage = "";
       if (_selectedLocation == null) {
         errorMessage = errorMessage + "lokasi tidak boleh kosong. ";
       }
@@ -61,45 +61,45 @@ class _AddCctvBodyState extends State<AddCctvBody> {
       }
 
       if (errorMessage.isNotEmpty) {
-        showToastWarning(context: context, message: errorMessage, onTop: true);
+        showToastWarning(context: context, message: errorMessage);
         return;
       }
 
       // Payload
-      final payload = CctvRequest(
+      final CctvRequest payload = CctvRequest(
           name: nameController.text,
           inventoryNumber: inventoryNumController.text,
           ip: ipController.text,
           location: _selectedLocation!,
           brand: brandController.text,
           date: (_dateSelected != null) ? _dateSelected!.toInt() : 0,
-          tag: [],
+          tag: <String>[],
           note: noteController.text,
           type: _selectedType!);
 
       // Call Provider
-      Future.delayed(
+      Future<void>.delayed(
           Duration.zero,
-          () => context.read<CctvProvider>().addCctv(payload).then((value) {
+          () =>
+              context.read<CctvProvider>().addCctv(payload).then((bool value) {
                 if (value) {
                   Navigator.of(context).pop();
                   showToastSuccess(
                       context: context,
                       message: "Berhasil membuat cctv ${payload.name}");
                 }
-              }).onError((error, _) {
+              }).onError((Object? error, _) {
                 if (error != null) {
-                  showToastError(
-                      context: context, message: error.toString(), onTop: true);
+                  showToastError(context: context, message: error.toString());
                 }
               }));
     }
   }
 
-  Future _pickDate(BuildContext context) async {
-    final initialDate =
+  Future<void> _pickDate(BuildContext context) async {
+    final DateTime initialDate =
         (_dateSelected == null) ? DateTime.now() : _dateSelected!;
-    final newDate = await showDatePicker(
+    final DateTime? newDate = await showDatePicker(
         context: context,
         initialDate: initialDate,
         firstDate: DateTime(DateTime.now().year - 10),
@@ -129,10 +129,12 @@ class _AddCctvBodyState extends State<AddCctvBody> {
   void initState() {
     // default length == 1 , if option got update length more than 1
     if (context.read<CctvProvider>().cctvOption.location.length == 1) {
-      Future.delayed(
+      Future<void>.delayed(
           Duration.zero,
-          () =>
-              context.read<CctvProvider>().findOptionCctv().onError((error, _) {
+          () => context
+                  .read<CctvProvider>()
+                  .findOptionCctv()
+                  .onError((Object? error, _) {
                 showToastError(context: context, message: error.toString());
               }));
     }
@@ -149,7 +151,7 @@ class _AddCctvBodyState extends State<AddCctvBody> {
             key: _key,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 // * Judul text ------------------------
                 const Text(
                   "Nama Cctv",
@@ -159,14 +161,13 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Pallete.secondaryBackground,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: nameController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return 'Nama cctv tidak boleh kosong';
                     }
@@ -185,7 +186,6 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Pallete.secondaryBackground,
@@ -205,14 +205,13 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                 TextFormField(
                   textInputAction: TextInputAction.next,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Pallete.secondaryBackground,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: ipController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return null;
                     } else {
@@ -231,28 +230,28 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                   "Lokasi",
                   style: TextStyle(fontSize: 16),
                 ),
-                Consumer<CctvProvider>(builder: (_, data, __) {
+                Consumer<CctvProvider>(builder: (_, CctvProvider data, __) {
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     height: 50,
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
                     decoration:
-                        BoxDecoration(color: Pallete.secondaryBackground),
+                        const BoxDecoration(color: Pallete.secondaryBackground),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isExpanded: true,
-                        hint: Text("Lokasi"),
+                        hint: const Text("Lokasi"),
                         value: (_selectedLocation != null)
                             ? _selectedLocation
                             : null,
-                        items: data.cctvOption.location.map((loc) {
+                        items: data.cctvOption.location.map((String loc) {
                           return DropdownMenuItem<String>(
                             value: loc,
                             child: Text(loc),
                           );
                         }).toList(),
-                        onChanged: (value) {
+                        onChanged: (String? value) {
                           setState(() {
                             _selectedLocation = value;
                             FocusScope.of(context).requestFocus(FocusNode());
@@ -275,14 +274,13 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                   minLines: 1,
-                  maxLines: 1,
                   decoration: const InputDecoration(
                       filled: true,
                       fillColor: Pallete.secondaryBackground,
                       enabledBorder: InputBorder.none,
                       border: InputBorder.none),
                   controller: brandController,
-                  validator: (text) {
+                  validator: (String? text) {
                     if (text == null || text.isEmpty) {
                       return "merk tidak boleh kosong";
                     }
@@ -302,18 +300,18 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                   onTap: () => _pickDate(context),
                   child: Container(
                     height: 50,
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
                     decoration:
-                        BoxDecoration(color: Pallete.secondaryBackground),
+                        const BoxDecoration(color: Pallete.secondaryBackground),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                        children: <Widget>[
                           Text(
                             getDateString(),
                           ),
-                          Icon(CupertinoIcons.calendar),
+                          const Icon(CupertinoIcons.calendar),
                         ]),
                   ),
                 ),
@@ -325,26 +323,26 @@ class _AddCctvBodyState extends State<AddCctvBody> {
                   "Tipe Cctv",
                   style: TextStyle(fontSize: 16),
                 ),
-                Consumer<CctvProvider>(builder: (_, data, __) {
+                Consumer<CctvProvider>(builder: (_, CctvProvider data, __) {
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     height: 50,
                     width: double.infinity,
                     alignment: Alignment.centerLeft,
                     decoration:
-                        BoxDecoration(color: Pallete.secondaryBackground),
+                        const BoxDecoration(color: Pallete.secondaryBackground),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         isExpanded: true,
-                        hint: Text("Tipe"),
+                        hint: const Text("Tipe"),
                         value: (_selectedType != null) ? _selectedType : null,
-                        items: data.cctvOption.type.map((loc) {
+                        items: data.cctvOption.type.map((String loc) {
                           return DropdownMenuItem<String>(
                             value: loc,
                             child: Text(loc),
                           );
                         }).toList(),
-                        onChanged: (value) {
+                        onChanged: (String? value) {
                           setState(() {
                             _selectedType = value;
                             FocusScope.of(context).requestFocus(FocusNode());
@@ -377,9 +375,9 @@ class _AddCctvBodyState extends State<AddCctvBody> {
 
                 verticalSpaceMedium,
 
-                Consumer<CctvProvider>(builder: (_, data, __) {
+                Consumer<CctvProvider>(builder: (_, CctvProvider data, __) {
                   return (data.state == ViewState.busy)
-                      ? Center(child: const CircularProgressIndicator())
+                      ? const Center(child: CircularProgressIndicator())
                       : Center(
                           child: HomeLikeButton(
                               iconData: CupertinoIcons.add,

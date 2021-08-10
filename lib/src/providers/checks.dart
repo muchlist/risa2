@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:risa2/src/api/json_models/response/message_resp.dart';
 
 import '../api/filter_models/check_filter.dart';
 import '../api/json_models/request/check_edit_req.dart';
@@ -15,8 +16,8 @@ import '../utils/enums.dart';
 import '../utils/image_compress.dart';
 
 class CheckProvider extends ChangeNotifier {
-  final CheckService _checkService;
   CheckProvider(this._checkService);
+  final CheckService _checkService;
 
   // =======================================================
   // List Check
@@ -30,9 +31,9 @@ class CheckProvider extends ChangeNotifier {
   }
 
   // check list cache
-  List<CheckMinResponse> _checkList = [];
+  List<CheckMinResponse> _checkList = <CheckMinResponse>[];
   List<CheckMinResponse> get checkList {
-    return UnmodifiableListView(_checkList);
+    return UnmodifiableListView<CheckMinResponse>(_checkList);
   }
 
   // *memasang filter pada pencarian check
@@ -45,9 +46,10 @@ class CheckProvider extends ChangeNotifier {
   Future<void> findCheck() async {
     setState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _checkService.findCheck(_filterCheck);
+      final CheckListResponse response =
+          await _checkService.findCheck(_filterCheck);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -59,7 +61,7 @@ class CheckProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
@@ -67,10 +69,10 @@ class CheckProvider extends ChangeNotifier {
   // memanggil findCheck sehigga tidak perlu notifyListener
   Future<bool> addCheck(CheckRequest payload) async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _checkService.createCheck(payload);
+      final MessageResponse response = await _checkService.createCheck(payload);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -80,7 +82,7 @@ class CheckProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findCheck();
     return true;
@@ -117,9 +119,10 @@ class CheckProvider extends ChangeNotifier {
   Future<void> getDetail() async {
     setDetailState(ViewState.busy);
 
-    var error = "";
+    String error = "";
     try {
-      final response = await _checkService.getCheck(_checkIDSaved);
+      final CheckDetailResponse response =
+          await _checkService.getCheck(_checkIDSaved);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -131,7 +134,7 @@ class CheckProvider extends ChangeNotifier {
 
     setDetailState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<void>.error(error);
     }
   }
 
@@ -149,10 +152,11 @@ class CheckProvider extends ChangeNotifier {
 // return future true jika update check berhasil
   Future<bool> updateChildCheck(CheckUpdateRequest payload) async {
     setChildState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _checkService.updateCheck(payload);
+      final CheckDetailResponse response =
+          await _checkService.updateCheck(payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {
@@ -165,7 +169,7 @@ class CheckProvider extends ChangeNotifier {
     setChildState(ViewState.idle);
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     return true;
   }
@@ -174,12 +178,12 @@ class CheckProvider extends ChangeNotifier {
   // return future true jika update check image berhasil
   Future<bool> uploadChildCheck(String id, String childID, File file) async {
     setChildState(ViewState.busy);
-    var error = "";
+    String error = "";
 
-    final fileCompressed = await compressFile(file);
+    final File fileCompressed = await compressFile(file);
 
     try {
-      final response =
+      final CheckDetailResponse response =
           await _checkService.uploadImage(id, childID, fileCompressed);
       if (response.error != null) {
         error = response.error!.message;
@@ -193,7 +197,7 @@ class CheckProvider extends ChangeNotifier {
     setChildState(ViewState.idle);
 
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     return true;
   }
@@ -204,10 +208,10 @@ class CheckProvider extends ChangeNotifier {
   // memanggil findCheck sehigga tidak perlu notifyListener
   Future<bool> completeCheck() async {
     setDetailState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _checkService.editCheck(
+      final CheckDetailResponse response = await _checkService.editCheck(
           _checkDetail?.id ?? "", CheckEditRequest(isFinish: true, note: ""));
       if (response.error != null) {
         error = response.error!.message;
@@ -220,7 +224,7 @@ class CheckProvider extends ChangeNotifier {
 
     setDetailState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findCheck();
     return true;
@@ -230,10 +234,11 @@ class CheckProvider extends ChangeNotifier {
   // memanggil findCheck sehigga tidak perlu notifyListener
   Future<bool> deleteCheck() async {
     setState(ViewState.busy);
-    var error = "";
+    String error = "";
 
     try {
-      final response = await _checkService.deleteCheck(_checkIDSaved);
+      final MessageResponse response =
+          await _checkService.deleteCheck(_checkIDSaved);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -243,7 +248,7 @@ class CheckProvider extends ChangeNotifier {
 
     setState(ViewState.idle);
     if (error.isNotEmpty) {
-      return Future.error(error);
+      return Future<bool>.error(error);
     }
     await findCheck();
     return true;
@@ -253,6 +258,6 @@ class CheckProvider extends ChangeNotifier {
   // di on dispose
   void onClose() {
     removeDetail();
-    _checkList = [];
+    _checkList = <CheckMinResponse>[];
   }
 }
