@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/api/json_models/response/computer_resp.dart';
 
 import '../../config/constant.dart';
 import '../../config/pallatte.dart';
@@ -23,31 +24,32 @@ class ComputerDetailFragment extends StatefulWidget {
 class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
   @override
   Widget build(BuildContext context) {
-    final computerProvider = context.watch<ComputerProvider>();
-    final detail = computerProvider.computerDetail;
+    final ComputerProvider computerProvider = context.watch<ComputerProvider>();
+    final ComputerDetailResponseData detail = computerProvider.computerDetail;
 
-    return Stack(children: [
+    return Stack(children: <Widget>[
       SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               // Upper table
               Text(
                 detail.name,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 16),
                 child: Table(
-                  columnWidths: {
+                  columnWidths: const <int, TableColumnWidth>{
                     0: FlexColumnWidth(2.0),
                     1: FlexColumnWidth(0.5),
                     2: FlexColumnWidth(3.0)
                   },
-                  children: [
-                    TableRow(children: [
+                  children: <TableRow>[
+                    TableRow(children: <Widget>[
                       const Text("Host"),
                       const Text("   :   "),
                       Text(
@@ -57,7 +59,7 @@ class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
                         overflow: TextOverflow.clip,
                       ),
                     ]),
-                    TableRow(children: [
+                    TableRow(children: <Widget>[
                       const Text("IP"),
                       const Text("   :   "),
                       Text(
@@ -67,7 +69,7 @@ class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
                         overflow: TextOverflow.clip,
                       ),
                     ]),
-                    TableRow(children: [
+                    TableRow(children: <Widget>[
                       const Text("No Invent"),
                       const Text("   :   "),
                       Text(
@@ -77,7 +79,7 @@ class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
                         overflow: TextOverflow.clip,
                       ),
                     ]),
-                    TableRow(children: [
+                    TableRow(children: <Widget>[
                       const Text("Cabang"),
                       const Text("   :   "),
                       Text(
@@ -87,7 +89,7 @@ class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
                         overflow: TextOverflow.clip,
                       ),
                     ]),
-                    TableRow(children: [
+                    TableRow(children: <Widget>[
                       const Text("Lokasi"),
                       const Text("   :   "),
                       Text(
@@ -97,7 +99,7 @@ class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
                         overflow: TextOverflow.clip,
                       ),
                     ]),
-                    TableRow(children: [
+                    TableRow(children: <Widget>[
                       const Text("Merk Tipe"),
                       const Text("   :   "),
                       Text(
@@ -107,7 +109,7 @@ class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
                         overflow: TextOverflow.clip,
                       ),
                     ]),
-                    TableRow(children: [
+                    TableRow(children: <Widget>[
                       const Text("Sewa"),
                       const Text("   :   "),
                       Text(
@@ -117,19 +119,20 @@ class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
                         overflow: TextOverflow.clip,
                       ),
                     ]),
-                    TableRow(children: [
+                    TableRow(children: <Widget>[
                       const Text("Tahun"),
                       const Text("   :   "),
-                      (detail.date != 0)
-                          ? Text(
-                              "${detail.date.getMonthYear()}",
-                              softWrap: true,
-                              maxLines: 2,
-                              overflow: TextOverflow.clip,
-                            )
-                          : Text(""),
+                      if (detail.date != 0)
+                        Text(
+                          detail.date.getMonthYear(),
+                          softWrap: true,
+                          maxLines: 2,
+                          overflow: TextOverflow.clip,
+                        )
+                      else
+                        const Text(""),
                     ]),
-                    TableRow(children: [
+                    TableRow(children: <Widget>[
                       const Text("Update"),
                       const Text("   :   "),
                       Text(
@@ -139,7 +142,7 @@ class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
                         overflow: TextOverflow.clip,
                       ),
                     ]),
-                    TableRow(children: [
+                    TableRow(children: <Widget>[
                       const Text("Catatan"),
                       const Text("   :   "),
                       Text(
@@ -154,20 +157,20 @@ class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
               ),
               verticalSpaceMedium,
               // Bottom table
-              Text(
+              const Text(
                 "Spesifikasi",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 16, top: 16),
                 child: Table(
-                  columnWidths: {
-                    0: FlexColumnWidth(1.0),
+                  columnWidths: const <int, TableColumnWidth>{
+                    0: FlexColumnWidth(),
                     1: FlexColumnWidth(0.5),
                     2: FlexColumnWidth(3.0)
                   },
-                  children: [
-                    TableRow(children: [
+                  children: <TableRow>[
+                    TableRow(children: <Widget>[
                       const Text("OS"),
                       const Text("   :   "),
                       Text(
@@ -177,7 +180,7 @@ class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
                         overflow: TextOverflow.clip,
                       ),
                     ]),
-                    TableRow(children: [
+                    TableRow(children: <Widget>[
                       const Text("Prosesor"),
                       const Text("   :   "),
                       Text(
@@ -187,7 +190,7 @@ class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
                         overflow: TextOverflow.clip,
                       ),
                     ]),
-                    TableRow(children: [
+                    TableRow(children: <Widget>[
                       const Text("RAM"),
                       const Text("   :   "),
                       Text(
@@ -197,7 +200,7 @@ class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
                         overflow: TextOverflow.clip,
                       ),
                     ]),
-                    TableRow(children: [
+                    TableRow(children: <Widget>[
                       const Text("Hardisk"),
                       const Text("   :   "),
                       Text(
@@ -221,7 +224,7 @@ class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
       ),
       // Loading Screen
       if (computerProvider.detailState == ViewState.busy)
-        Scaffold(
+        const Scaffold(
           body: Center(
             child: CircularProgressIndicator(),
           ),
@@ -231,23 +234,22 @@ class _ComputerDetailFragmentState extends State<ComputerDetailFragment> {
 }
 
 class ButtonContainer extends StatefulWidget {
-  final ComputerProvider provider;
-
   const ButtonContainer({required this.provider});
+  final ComputerProvider provider;
 
   @override
   _ButtonContainerState createState() => _ButtonContainerState();
 }
 
 class _ButtonContainerState extends State<ButtonContainer> {
-  File? _image;
-  final picker = ImagePicker();
+  late File? _image;
+  final ImagePicker picker = ImagePicker();
 
-  Future _getImageAndUpload(
+  Future<void> _getImageAndUpload(
       {required BuildContext context,
       required ImageSource source,
       required String id}) async {
-    final pickedFile = await picker.getImage(source: source);
+    final PickedFile? pickedFile = await picker.getImage(source: source);
     if (pickedFile != null) {
       _image = File(pickedFile.path);
     } else {
@@ -258,16 +260,13 @@ class _ButtonContainerState extends State<ButtonContainer> {
     await context
         .read<ComputerProvider>()
         .uploadImage(id, _image!)
-        .then((value) {
+        .then((bool value) {
       if (value) {
         showToastSuccess(
-            context: context,
-            message: "Berhasil mengupload gambar",
-            onTop: true);
+            context: context, message: "Berhasil mengupload gambar");
       }
-    }).onError((error, _) {
+    }).onError((Object? error, _) {
       showToastError(context: context, message: error.toString());
-      return Future.error(error.toString());
     });
   }
 
@@ -283,8 +282,8 @@ class _ButtonContainerState extends State<ButtonContainer> {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       primary: Theme.of(context).accentColor),
-                  child: const Text("Tidak"),
-                  onPressed: () => Navigator.of(context).pop(false)),
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text("Tidak")),
               TextButton(
                   onPressed: () => Navigator.of(context).pop(true),
                   child: const Text("Ya"))
@@ -295,96 +294,88 @@ class _ButtonContainerState extends State<ButtonContainer> {
 
   @override
   Widget build(BuildContext context) {
-    final detail = widget.provider.computerDetail;
-    return Container(
-      child: Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                child: (detail.image.isNotEmpty)
-                    ? Flexible(
-                        flex: 1,
-                        child: GestureDetector(
-                          onTap: () => _getImageAndUpload(
-                              context: context,
-                              source: ImageSource.camera,
-                              id: detail.id),
-                          onLongPress: () => _getImageAndUpload(
-                              context: context,
-                              source: ImageSource.gallery,
-                              id: detail.id),
-                          child: CachedImageSquare(
-                            urlPath: "${Constant.baseUrl}${detail.image}",
-                          ),
-                        ))
-                    : GestureDetector(
-                        onTap: () => _getImageAndUpload(
-                            context: context,
-                            source: ImageSource.camera,
-                            id: detail.id),
-                        onLongPress: () => _getImageAndUpload(
-                            context: context,
-                            source: ImageSource.gallery,
-                            id: detail.id),
-                        child: Container(
-                            decoration: BoxDecoration(
-                                color: Pallete.secondaryBackground,
-                                borderRadius: BorderRadius.circular(10.0)),
-                            width: 100,
-                            height: 100,
-                            child: Icon(CupertinoIcons.camera)),
+    final ComputerDetailResponseData detail = widget.provider.computerDetail;
+    return Padding(
+        padding: const EdgeInsets.only(left: 16),
+        child: Row(
+          children: <Widget>[
+            Container(
+              child: (detail.image.isNotEmpty)
+                  ? Flexible(
+                      child: GestureDetector(
+                      onTap: () => _getImageAndUpload(
+                          context: context,
+                          source: ImageSource.camera,
+                          id: detail.id),
+                      onLongPress: () => _getImageAndUpload(
+                          context: context,
+                          source: ImageSource.gallery,
+                          id: detail.id),
+                      child: CachedImageSquare(
+                        urlPath: "${Constant.baseUrl}${detail.image}",
                       ),
-              ),
-              horizontalSpaceMedium,
-              Expanded(
-                  flex: 1,
-                  child: Wrap(
-                    alignment: WrapAlignment.start,
-                    spacing: 10.0,
-                    children: [
-                      ElevatedButton.icon(
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, RouteGenerator.computerEdit);
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.green[300],
-                          ),
-                          icon: Icon(CupertinoIcons.pencil_circle),
-                          label: const Text("Edit")),
-                      ElevatedButton.icon(
-                          onPressed: () async {
-                            var confirmDelete = await _deleteConfirm(context);
-                            if (confirmDelete != null && confirmDelete) {
-                              await context
-                                  .read<ComputerProvider>()
-                                  .removeComputer()
-                                  .then((value) {
-                                if (value) {
-                                  Navigator.pop(context);
-                                  showToastSuccess(
-                                      context: context,
-                                      message:
-                                          "Berhasil menghapus computer ${detail.name}");
-                                }
-                              }).onError((error, _) {
-                                showToastError(
-                                    context: context,
-                                    message: error.toString());
-                              });
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.red[300],
-                          ),
-                          icon: Icon(CupertinoIcons.trash_circle),
-                          label: const Text("Hapus")),
-                    ],
-                  ))
-            ],
-          )),
-    );
+                    ))
+                  : GestureDetector(
+                      onTap: () => _getImageAndUpload(
+                          context: context,
+                          source: ImageSource.camera,
+                          id: detail.id),
+                      onLongPress: () => _getImageAndUpload(
+                          context: context,
+                          source: ImageSource.gallery,
+                          id: detail.id),
+                      child: Container(
+                          decoration: BoxDecoration(
+                              color: Pallete.secondaryBackground,
+                              borderRadius: BorderRadius.circular(10.0)),
+                          width: 100,
+                          height: 100,
+                          child: const Icon(CupertinoIcons.camera)),
+                    ),
+            ),
+            horizontalSpaceMedium,
+            Expanded(
+                child: Wrap(
+              spacing: 10.0,
+              children: <Widget>[
+                ElevatedButton.icon(
+                    onPressed: () {
+                      Navigator.pushNamed(context, RouteGenerator.computerEdit);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.green[300],
+                    ),
+                    icon: const Icon(CupertinoIcons.pencil_circle),
+                    label: const Text("Edit")),
+                ElevatedButton.icon(
+                    onPressed: () async {
+                      final bool? confirmDelete = await _deleteConfirm(context);
+                      if (confirmDelete != null && confirmDelete) {
+                        await context
+                            .read<ComputerProvider>()
+                            .removeComputer()
+                            .then((bool value) {
+                          if (value) {
+                            Navigator.pop(context);
+                            showToastSuccess(
+                                context: context,
+                                message:
+                                    "Berhasil menghapus computer ${detail.name}");
+                          }
+                        }).onError((Object? error, _) {
+                          showToastError(
+                              context: context, message: error.toString());
+                        });
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.red[300],
+                    ),
+                    icon: const Icon(CupertinoIcons.trash_circle),
+                    label: const Text("Hapus")),
+              ],
+            ))
+          ],
+        ));
   }
 }

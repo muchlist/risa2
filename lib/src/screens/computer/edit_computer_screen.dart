@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/api/json_models/response/computer_resp.dart';
-import '../../api/json_models/request/computer_edit_req.dart';
 
+import '../../api/json_models/request/computer_edit_req.dart';
+import '../../api/json_models/response/computer_resp.dart';
 import '../../config/pallatte.dart';
 import '../../providers/computers.dart';
 import '../../shared/func_flushbar.dart';

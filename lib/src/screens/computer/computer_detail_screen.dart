@@ -17,17 +17,17 @@ class _ComputerDetailScreenState extends State<ComputerDetailScreen> {
   late final ComputerProvider computerProvider;
 
   Future<void> _loadHistory() {
-    final parentID = computerProvider.getComputerId();
-    return Future.delayed(Duration.zero, () {
+    final String parentID = computerProvider.getComputerId();
+    return Future<void>.delayed(Duration.zero, () {
       historyProvider.findParentHistory(parentID: parentID).onError(
-          (error, _) =>
+          (Object? error, _) =>
               showToastError(context: context, message: error.toString()));
     });
   }
 
   Future<void> _loadDetail() {
-    return Future.delayed(Duration.zero, () {
-      context.read<ComputerProvider>().getDetail().onError((error, _) =>
+    return Future<void>.delayed(Duration.zero, () {
+      context.read<ComputerProvider>().getDetail().onError((Object? error, _) =>
           showToastError(context: context, message: error.toString()));
     });
   }
@@ -54,12 +54,12 @@ class _ComputerDetailScreenState extends State<ComputerDetailScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          bottom: TabBar(
-            tabs: [
-              const Tab(
+          bottom: const TabBar(
+            tabs: <Widget>[
+              Tab(
                 text: "Detail",
               ),
-              const Tab(
+              Tab(
                 text: "Riwayat",
               ),
             ],
@@ -67,7 +67,7 @@ class _ComputerDetailScreenState extends State<ComputerDetailScreen> {
           title: const Text('Komputer Detail'),
         ),
         body: TabBarView(
-          children: [
+          children: <Widget>[
             ComputerDetailFragment(),
             ComputerHistoryRecyclerView(),
           ],

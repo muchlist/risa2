@@ -13,7 +13,8 @@ import '../../utils/enums.dart';
 import '../search/computer_search_delegate.dart';
 import 'computer_with_incident_dialog.dart';
 
-var refreshKeyComputerScreen = GlobalKey<RefreshIndicatorState>();
+GlobalKey<RefreshIndicatorState> refreshKeyComputerScreen =
+    GlobalKey<RefreshIndicatorState>();
 
 class ComputerScreen extends StatefulWidget {
   @override
@@ -41,13 +42,14 @@ class _ComputerScreenState extends State<ComputerScreen> {
       appBar: AppBar(
         elevation: 0,
         title: const Text("Daftar Computer"),
-        actions: [
+        actions: <Widget>[
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.search,
               size: 28,
             ),
             onPressed: () async {
+              // ignore: always_specify_types
               final searchResult = await showSearch(
                 context: context,
                 delegate: ComputerSearchDelegate(),
@@ -63,7 +65,7 @@ class _ComputerScreenState extends State<ComputerScreen> {
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               CupertinoIcons.decrease_indent,
               size: 28,
             ),
@@ -72,11 +74,11 @@ class _ComputerScreenState extends State<ComputerScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-          icon: Icon(Icons.add),
+          icon: const Icon(Icons.add),
           onPressed: () {
             Navigator.pushNamed(context, RouteGenerator.computerAdd);
           },
-          label: Text("Tambah Komputer")),
+          label: const Text("Tambah Komputer")),
       body: ComputerRecyclerView(),
     );
   }
@@ -92,17 +94,20 @@ class _ComputerRecyclerViewState extends State<ComputerRecyclerView> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      builder: (context) => ComputerWithIncidentDialog(),
+      builder: (BuildContext context) => ComputerWithIncidentDialog(),
     );
   }
 
   Future<void> _loadComputer() {
-    return Future.delayed(Duration.zero, () {
-      context.read<ComputerProvider>().findComputer().onError((error, _) {
+    return Future<void>.delayed(Duration.zero, () {
+      context
+          .read<ComputerProvider>()
+          .findComputer()
+          .onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -116,23 +121,24 @@ class _ComputerRecyclerViewState extends State<ComputerRecyclerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ComputerProvider>(builder: (_, data, __) {
+    return Consumer<ComputerProvider>(builder: (_, ComputerProvider data, __) {
       return Stack(
         alignment: Alignment.center,
-        children: [
+        children: <Widget>[
           Positioned(
               top: 0,
               bottom: 0,
               left: 0,
               right: 0,
-              child: (data.computerList.length != 0)
+              child: (data.computerList.isNotEmpty)
                   ? buildListView(data)
                   : (data.state == ViewState.idle)
                       ? EmptyBox(loadTap: _loadComputer)
-                      : Center()),
-          (data.state == ViewState.busy)
-              ? Center(child: CircularProgressIndicator())
-              : Center(),
+                      : const Center()),
+          if (data.state == ViewState.busy)
+            const Center(child: CircularProgressIndicator())
+          else
+            const Center(),
         ],
       );
     });
@@ -144,7 +150,7 @@ class _ComputerRecyclerViewState extends State<ComputerRecyclerView> {
       onRefresh: _loadComputer,
       child: CustomScrollView(
         slivers: <Widget>[
-          if (data.computerExtraList.length != 0)
+          if (data.computerExtraList.isNotEmpty)
             SliverToBoxAdapter(
                 child: ComputerSliverHeading(
               totalIncident: data.computerExtraList.length,
@@ -152,7 +158,8 @@ class _ComputerRecyclerViewState extends State<ComputerRecyclerView> {
             )),
           // LIST CCTV INVENTORY
           SliverList(
-            delegate: SliverChildBuilderDelegate((context, index) {
+            delegate:
+                SliverChildBuilderDelegate((BuildContext context, int index) {
               return GestureDetector(
                   onTap: () {
                     context.read<ComputerProvider>().removeDetail();
@@ -164,7 +171,7 @@ class _ComputerRecyclerViewState extends State<ComputerRecyclerView> {
                   child: ComputerListTile(data: data.computerList[index]));
             }, childCount: data.computerList.length),
           ),
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
               child: SizedBox(
             height: 100,
           )),
@@ -175,10 +182,10 @@ class _ComputerRecyclerViewState extends State<ComputerRecyclerView> {
 }
 
 class ComputerSliverHeading extends StatelessWidget {
-  final int totalIncident;
-  final GestureTapCallback onTap;
   const ComputerSliverHeading(
       {required this.totalIncident, required this.onTap});
+  final int totalIncident;
+  final GestureTapCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -187,24 +194,24 @@ class ComputerSliverHeading extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
             color: Pallete.secondaryBackground,
           ),
           child: Row(
-            children: [
+            children: <Widget>[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text("Bermasalah: $totalIncident unit"),
                 ],
               ),
-              Spacer(),
+              const Spacer(),
               CircleAvatar(
                 maxRadius: 16,
                 backgroundColor: Colors.red.shade300,
-                child: Icon(
+                child: const Icon(
                   CupertinoIcons.eyeglasses,
                   color: Colors.white,
                 ),
