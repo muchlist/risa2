@@ -324,7 +324,7 @@ class _EditCctvBodyState extends State<EditCctvBody> {
                         const BoxDecoration(color: Pallete.secondaryBackground),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
+                        children: <Widget>[
                           Text(
                             getDateString(),
                           ),

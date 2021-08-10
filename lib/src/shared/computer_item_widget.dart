@@ -15,7 +15,7 @@ class ComputerListTile extends StatelessWidget {
         child: ListTile(
             title: Text(data.name),
             subtitle: Row(
-              children: [
+              children: <Widget>[
                 if (data.seatManagement)
                   Container(
                     decoration: BoxDecoration(
