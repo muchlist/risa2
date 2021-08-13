@@ -24,6 +24,8 @@ class PdfScreen extends StatefulWidget {
 }
 
 class _PdfScreenState extends State<PdfScreen> {
+  late bool _isVendor = App.getRoles().contains("VENDOR");
+
   void _startGeneratePDF(BuildContext context) {
     showModalBottomSheet(
       // isScrollControlled: true,
@@ -89,7 +91,7 @@ class _PdfScreenState extends State<PdfScreen> {
                 child: HomeLikeButton(
                     iconData: CupertinoIcons.printer,
                     text: "Generate PDF",
-                    tapTap: _generatePdfAuto),
+                    tapTap: () => _generatePdfAuto(forVendor: _isVendor)),
               )),
           Positioned(
             bottom: 30,

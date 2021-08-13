@@ -35,7 +35,7 @@ class PdfService {
 
   Future<MessageResponse> generatePDFforVendorAuto(String branch) {
     //generate-pdf-vendor-auto?branch=BANJARMASIN
-    return RequestREST(endpoint: "/generate-pdf-vendor?branch=$branch")
+    return RequestREST(endpoint: "/generate-pdf-vendor-auto?branch=$branch")
         .executeGet<MessageResponse>(const MessageParser());
   }
 }
