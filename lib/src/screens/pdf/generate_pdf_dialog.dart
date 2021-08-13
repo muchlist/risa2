@@ -25,12 +25,12 @@ class _GeneratePdfDialogState extends State<GeneratePdfDialog> {
 
   void _generatePdf(int start, int end, {bool forVendor = false}) {
     // Call Provider
-    Future.delayed(
+    Future<void>.delayed(
         Duration.zero,
         () => context
                 .read<DashboardProvider>()
                 .generatePDF(start, end, forVendor)
-                .then((value) {
+                .then((bool value) {
               if (value) {
                 Navigator.of(context).pop();
                 showToastSuccess(

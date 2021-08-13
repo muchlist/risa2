@@ -196,6 +196,15 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
     // Watch data ====================================================
     final VendorCheckProvider data = context.watch<VendorCheckProvider>();
 
+    /// perhitungan hari agar cek fisik hanya bisa ditutup 5 hari sebelum akhir bulan
+    /// atau 2 hari setelah awal bulan
+    final DateTime now = DateTime.now();
+    final int lastDayEpoch = DateTime(now.year, now.month + 1, 0).toInt();
+    final int firstDayEpoch = DateTime(now.year, now.month).toInt();
+    final int nowEpoch = now.toInt();
+    final bool isNBeforeLastMonth = lastDayEpoch - nowEpoch < 60 * 60 * 24 * 5;
+    final bool isNAfterNewMonth = nowEpoch - firstDayEpoch < 60 * 60 * 24 * 2;
+
     return (data.detailState == ViewState.busy)
         ? const Center(child: CircularProgressIndicator())
         : Stack(
@@ -203,7 +212,9 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
               buildBody(data),
               if (data.vendorCheckDetail.isFinish)
                 const SizedBox.shrink()
-              else
+              else if (isNBeforeLastMonth ||
+                  isNAfterNewMonth ||
+                  data.vendorCheckDetail.isVirtualCheck)
                 Positioned(
                     bottom: 15,
                     right: 20,

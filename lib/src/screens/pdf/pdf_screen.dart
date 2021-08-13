@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/constant.dart';
 import '../../config/pallatte.dart';
@@ -14,6 +13,7 @@ import '../../globals.dart';
 import '../../providers/dashboard.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/func_flushbar.dart';
+import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/utils.dart';
 import 'generate_pdf_dialog.dart';
@@ -34,6 +34,24 @@ class _PdfScreenState extends State<PdfScreen> {
       ),
       builder: (BuildContext context) => const GeneratePdfDialog(),
     );
+  }
+
+  void _generatePdfAuto({bool forVendor = false}) {
+    Future<void>.delayed(
+        Duration.zero,
+        () => context
+                .read<DashboardProvider>()
+                .generatePDFAuto(forVendor)
+                .then((bool value) {
+              if (value) {
+                showToastSuccess(
+                    context: context, message: "Berhasil membuat pdf");
+              }
+            }).onError((Object? error, _) {
+              if (error != null) {
+                showToastError(context: context, message: error.toString());
+              }
+            }));
   }
 
   Future<void> _loadAllPdf() {
@@ -60,13 +78,28 @@ class _PdfScreenState extends State<PdfScreen> {
           horizontalSpaceSmall,
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            _startGeneratePDF(context);
-          },
-          label: const Text("Buat Manual")),
-      body: PdfRecyclerView(),
+      body: Stack(
+        children: <Widget>[
+          Positioned(child: PdfRecyclerView()),
+          Positioned(
+              bottom: 30,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: HomeLikeButton(
+                    iconData: CupertinoIcons.printer,
+                    text: "Generate PDF",
+                    tapTap: _generatePdfAuto),
+              )),
+          Positioned(
+            bottom: 30,
+            right: 40,
+            child: IconButton(
+                icon: const Icon(CupertinoIcons.ant_circle, size: 28),
+                onPressed: () => _startGeneratePDF(context)),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -94,17 +127,6 @@ class _PdfRecyclerViewState extends State<PdfRecyclerView> {
       });
     });
   }
-
-  // Future<void> _launchInBrowser(String url) async {
-  //   if (await canLaunch(url)) {
-  //     await launch(
-  //       url,
-  //       forceSafariVC: false,
-  //     );
-  //   } else {
-  //     showToastError(context: context, message: "Error saat membuka link pdf!");
-  //   }
-  // }
 
   Future<void> download(Dio dio, String url, String savePath) async {
     try {
