@@ -24,7 +24,7 @@ class PdfScreen extends StatefulWidget {
 }
 
 class _PdfScreenState extends State<PdfScreen> {
-  late bool _isVendor = App.getRoles().contains("VENDOR");
+  late final bool _isVendor = App.getRoles().contains("VENDOR");
 
   void _startGeneratePDF(BuildContext context) {
     showModalBottomSheet(
