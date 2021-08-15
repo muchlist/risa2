@@ -1,8 +1,6 @@
-import 'package:risa2/src/api/json_models/request/cctv_maintenance_req.dart';
-
 import '../filter_models/check_filter.dart';
 import '../http_client.dart';
-import '../json_models/request/vendor_req.dart';
+import '../json_models/request/cctv_maintenance_req.dart';
 import '../json_models/response/cctv_maintenance_resp.dart';
 import '../json_models/response/main_maintenance_list_resp.dart';
 import '../json_models/response/message_resp.dart';
