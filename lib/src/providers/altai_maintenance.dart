@@ -82,8 +82,8 @@ class AltaiMaintProvider extends ChangeNotifier {
     String error = "";
 
     try {
-      final MessageResponse response =
-          await _altaiMaintService.createAltaiMaintenance(isQuartal, name);
+      final MessageResponse response = await _altaiMaintService
+          .createAltaiMaintenance(isQuartal, name.toUpperCase());
       if (response.error != null) {
         error = response.error!.message;
       }

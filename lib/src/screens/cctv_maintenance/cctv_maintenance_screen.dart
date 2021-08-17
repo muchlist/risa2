@@ -10,6 +10,7 @@ import '../../shared/empty_box.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../utils/enums.dart';
+import 'maintenance.dart';
 
 class CctvMaintScreen extends StatefulWidget {
   @override
@@ -27,17 +28,17 @@ class _CctvMaintScreenState extends State<CctvMaintScreen> {
     });
   }
 
-  // void _startAddCctvMaint(BuildContext context) {
-  //   showModalBottomSheet(
-  //     // isScrollControlled: true,
-  //     context: context,
-  //     shape: const RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.only(
-  //           topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-  //     ),
-  //     builder: (BuildContext context) => const AddCctvMaintDialog(),
-  //   );
-  // }
+  void _startAddCctvMaint(BuildContext context) {
+    showModalBottomSheet(
+      // isScrollControlled: true,
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) => const AddMaintenanceDialog(),
+    );
+  }
 
   @override
   void initState() {
@@ -100,7 +101,7 @@ class _CctvMaintScreenState extends State<CctvMaintScreen> {
                       iconData: CupertinoIcons.add,
                       text: "Buat Checklist",
                       tapTap: () {
-                        // _startAddCctvMaint(context);
+                        _startAddCctvMaint(context);
                       }),
                 )),
           ],

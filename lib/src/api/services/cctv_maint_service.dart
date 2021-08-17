@@ -9,10 +9,11 @@ import '../json_parsers/json_parsers.dart';
 class CctvMaintService {
   const CctvMaintService();
 
-  Future<MessageResponse> createCctvMaintenance(bool isQuartal, String name) {
+  Future<MessageResponse> createCctvMaintenance(
+      bool isQuartal, String nameValue) {
     return RequestREST(
-            endpoint: isQuartal ? "/phy-check" : "/phy-check-quarter",
-            data: <String, dynamic>{name: name})
+            endpoint: isQuartal ? "/phy-check-quarter" : "/phy-check",
+            data: <String, dynamic>{"name": nameValue})
         .executePost<MessageResponse>(const MessageParser());
   }
 

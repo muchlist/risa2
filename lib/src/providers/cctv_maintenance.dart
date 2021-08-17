@@ -82,8 +82,8 @@ class CctvMaintProvider extends ChangeNotifier {
     String error = "";
 
     try {
-      final MessageResponse response =
-          await _cctvMaintService.createCctvMaintenance(isQuartal, name);
+      final MessageResponse response = await _cctvMaintService
+          .createCctvMaintenance(isQuartal, name.toUpperCase());
       if (response.error != null) {
         error = response.error!.message;
       }

@@ -46,7 +46,9 @@ class _AddMaintenanceHistoryDialogState
     resolveNoteController.text =
         (widget.mtState.isBlur || widget.mtState.isOffline)
             ? ""
-            : "Selesai dilakukan pengecekan";
+            : (widget.mtState.isMaintained)
+                ? "Selesai dilakukan pengecekan dan pembersihan"
+                : "Selesai dilakukan pengecekan dan pembersihan";
     super.initState();
   }
 
