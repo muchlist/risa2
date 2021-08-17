@@ -334,6 +334,14 @@ class _HomeVScreenState extends State<HomeVScreen> {
                 "Cek CCTV", CupertinoIcons.checkmark_seal,
                 color: Pallete.green.withOpacity(0.6))),
           ),
+          horizontalSpaceTiny,
+          GestureDetector(
+            onTap: () =>
+                Navigator.pushNamed(context, RouteGenerator.cctvMaintenance),
+            child: DashboardVIcon(Dashboard(
+                "Fisik CCTV", CupertinoIcons.doc_checkmark,
+                color: Pallete.green.withOpacity(0.6))),
+          ),
         ],
       ),
     );

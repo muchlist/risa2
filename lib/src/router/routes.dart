@@ -5,6 +5,7 @@ import '../screens/cctv/add_cctv_screen.dart';
 import '../screens/cctv/cctv_detail_screen.dart';
 import '../screens/cctv/cctv_screen.dart';
 import '../screens/cctv/edit_cctv_screen.dart';
+import '../screens/cctv_maintenance/cctv_maintenance_screen.dart';
 import '../screens/check/check_detail_screen.dart';
 import '../screens/check/check_screen.dart';
 import '../screens/check_master/add_check_master_screen.dart';
@@ -79,6 +80,7 @@ class RouteGenerator {
   static const String otherEdit = '/other-edit';
   static const String dashboard = '/dashboard';
   static const String pdf = '/pdf';
+  static const String cctvMaintenance = '/cctv-maintenance';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -156,6 +158,8 @@ class RouteGenerator {
         return transitionFade(const DashboardScreen());
       case pdf:
         return transitionFade(PdfScreen());
+      case cctvMaintenance:
+        return transitionFade(CctvMaintScreen());
       default:
         return MaterialPageRoute<LoginScreen>(builder: (_) => LoginScreen());
     }

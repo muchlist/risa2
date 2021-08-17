@@ -13,7 +13,7 @@ import '../utils/enums.dart';
 
 class CctvMaintProvider extends ChangeNotifier {
   CctvMaintProvider(this._cctvMaintService);
-  final CCTVMaintService _cctvMaintService;
+  final CctvMaintService _cctvMaintService;
 
   // =======================================================
   // List VendorCheck

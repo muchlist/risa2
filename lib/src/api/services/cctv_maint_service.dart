@@ -6,8 +6,8 @@ import '../json_models/response/main_maintenance_list_resp.dart';
 import '../json_models/response/message_resp.dart';
 import '../json_parsers/json_parsers.dart';
 
-class CCTVMaintService {
-  const CCTVMaintService();
+class CctvMaintService {
+  const CctvMaintService();
 
   Future<MessageResponse> createCctvMaintenance(bool isQuartal, String name) {
     return RequestREST(

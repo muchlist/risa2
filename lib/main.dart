@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/api/services/cctv_maint_service.dart';
+import 'package:risa2/src/providers/cctv_maintenance.dart';
 
 import 'src/api/services/auth_service.dart';
 import 'src/api/services/cctv_service.dart';
@@ -112,6 +114,7 @@ class _MyAppState extends State<MyApp> {
   final HistoryService historyService = const HistoryService();
   final CheckService checkService = const CheckService();
   final VendorCheckService vendorCheckService = const VendorCheckService();
+  final CctvMaintService cctvMaintService = const CctvMaintService();
   final CheckpService checkMasterService = const CheckpService();
   final AuthService authService = const AuthService();
   final ImproveService improveService = const ImproveService();
@@ -156,6 +159,9 @@ class _MyAppState extends State<MyApp> {
                 ComputerProvider(computerService)),
         ChangeNotifierProvider<OtherProvider>(
             create: (BuildContext context) => OtherProvider(otherService)),
+        ChangeNotifierProvider<CctvMaintProvider>(
+            create: (BuildContext context) =>
+                CctvMaintProvider(cctvMaintService)),
         ChangeNotifierProvider<DashboardProvider>(
             create: (BuildContext context) =>
                 DashboardProvider(speedService, pdfService)),
