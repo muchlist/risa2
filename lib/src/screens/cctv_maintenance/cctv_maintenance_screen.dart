@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../api/json_models/response/main_maintenance_list_resp.dart';
 import '../../providers/cctv_maintenance.dart';
+import '../../router/routes.dart';
 import '../../shared/cctv_maint_item_widget.dart';
-
 import '../../shared/empty_box.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
@@ -180,7 +181,8 @@ class _CctvMaintRecyclerViewState extends State<CctvMaintRecyclerView> {
           return GestureDetector(
             onTap: () {
               widget.cctvMaintProviderR.setIDSaved(checkList[index].id);
-              // Navigator.of(context).pushNamed(RouteGenerator.cctvMaintDetail);
+              Navigator.of(context)
+                  .pushNamed(RouteGenerator.cctvMaintenanceDetail);
             },
             child: CctvMaintListTile(data: checkList[index]),
           );

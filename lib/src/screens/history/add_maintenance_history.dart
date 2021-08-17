@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/api/json_models/request/vendor_req.dart';
+import '../../api/json_models/request/cctv_maintenance_req.dart';
 
 import '../../api/json_models/request/history_req.dart';
 import '../../config/constant.dart';
@@ -23,7 +23,7 @@ class AddMaintenanceHistoryDialog extends StatefulWidget {
 
   final String parentName;
   // child id in VendorUpdateRequest is parent ID item for maintenance
-  final VendorUpdateRequest mtState;
+  final CCTVMaintUpdateRequest mtState;
 
   @override
   _AddMaintenanceHistoryDialogState createState() =>
@@ -46,11 +46,11 @@ class _AddMaintenanceHistoryDialogState
     resolveNoteController.text =
         (widget.mtState.isBlur || widget.mtState.isOffline)
             ? ""
-            : "Selesai dilakukan pemeliharaan";
+            : "Selesai dilakukan pengecekan";
     super.initState();
   }
 
-  String _problemTextBuilder(VendorUpdateRequest state) {
+  String _problemTextBuilder(CCTVMaintUpdateRequest state) {
     String problem = "#maintenance\n";
     if (state.isBlur) {
       problem += "#isBlur CCTV display bermasalah\n";

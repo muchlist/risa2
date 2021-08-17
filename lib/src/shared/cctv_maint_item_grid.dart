@@ -1,15 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../api/json_models/response/vendor_check_resp.dart';
+import '../api/json_models/response/cctv_maintenance_resp.dart';
 import '../utils/utils.dart';
 
-class VendorGridItemTile extends StatelessWidget {
-  const VendorGridItemTile({
+class CctvGridItemTile extends StatelessWidget {
+  const CctvGridItemTile({
     Key? key,
     required this.data,
   }) : super(key: key);
 
-  final VendorCheckItem data;
+  final CCTVMaintCheckItem data;
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +21,11 @@ class VendorGridItemTile extends StatelessWidget {
     } else if (data.isBlur) {
       cardColor = Colors.deepOrange[300];
       textIconColor = Colors.white;
-    } else if (data.isChecked) {
+    } else if (data.isMaintained) {
       cardColor = Colors.teal[400];
+      textIconColor = Colors.white;
+    } else if (data.isChecked) {
+      cardColor = Colors.blue[400];
       textIconColor = Colors.white;
     }
 
@@ -60,6 +63,12 @@ class VendorGridItemTile extends StatelessWidget {
                   if (data.isChecked)
                     Icon(
                       CupertinoIcons.check_mark_circled,
+                      size: 18,
+                      color: textIconColor,
+                    ),
+                  if (data.isMaintained)
+                    Icon(
+                      CupertinoIcons.paintbrush,
                       size: 18,
                       color: textIconColor,
                     )

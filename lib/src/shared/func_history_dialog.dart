@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/api/json_models/request/vendor_req.dart';
 import 'package:risa2/src/screens/history/add_history_v_dialog.dart';
 import 'package:risa2/src/screens/history/add_maintenance_history.dart';
+import '../api/json_models/request/cctv_maintenance_req.dart';
 
 import '../api/json_models/response/history_list_resp.dart';
 import '../globals.dart';
@@ -68,7 +68,7 @@ class HistoryHelper {
   }
 
   void showAddMaintenanceIncident(
-      BuildContext context, String parentName, VendorUpdateRequest mtState) {
+      BuildContext context, String parentName, CCTVMaintUpdateRequest mtState) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
