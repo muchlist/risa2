@@ -22,3 +22,8 @@ extension CapExtension on String {
       .map((String str) => str.inCaps)
       .join(" ");
 }
+
+extension Name on String {
+  // Hello world -> Hello
+  String get firstname => length > 0 ? split(" ")[0] : "";
+}

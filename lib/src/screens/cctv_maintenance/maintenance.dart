@@ -61,6 +61,7 @@ class _AddMaintenanceDialogState extends State<AddMaintenanceDialog> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
+      height: screenHeightPercentage(context, percentage: 0.95),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(

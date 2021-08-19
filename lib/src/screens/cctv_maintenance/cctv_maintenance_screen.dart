@@ -30,7 +30,7 @@ class _CctvMaintScreenState extends State<CctvMaintScreen> {
 
   void _startAddCctvMaint(BuildContext context) {
     showModalBottomSheet(
-      // isScrollControlled: true,
+      isScrollControlled: true,
       context: context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -99,7 +99,7 @@ class _CctvMaintScreenState extends State<CctvMaintScreen> {
                 child: Center(
                   child: HomeLikeButton(
                       iconData: CupertinoIcons.add,
-                      text: "Buat Checklist",
+                      text: "Buat Cek Fisik",
                       tapTap: () {
                         _startAddCctvMaint(context);
                       }),
