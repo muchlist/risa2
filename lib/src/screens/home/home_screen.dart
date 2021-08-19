@@ -14,7 +14,7 @@ import '../../providers/histories.dart';
 import '../../providers/improves.dart';
 import '../../router/routes.dart';
 import '../../shared/func_flushbar.dart';
-import '../../shared/func_history_dialog.dart';
+import '../../shared/func_history_dial.dart';
 import '../../shared/ui_helpers.dart';
 import '../search/main_search_delegate.dart';
 import 'corousel_fragment.dart';

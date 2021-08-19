@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/generals.dart';
-import '../../shared/func_history_dialog.dart';
+import '../../shared/func_history_dial.dart';
 import '../../shared/general_item_widget.dart';
 import '../../utils/enums.dart';
 

@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../api/json_models/response/vendor_check_resp.dart';
-import '../utils/utils.dart';
+import '../api/json_models/response/altai_maintenance_resp.dart';
 
-class VendorGridItemTile extends StatelessWidget {
-  const VendorGridItemTile({
+class AltaiGridItemTile extends StatelessWidget {
+  const AltaiGridItemTile({
     Key? key,
     required this.data,
   }) : super(key: key);
 
-  final VendorCheckItem data;
+  final AltaiMaintCheckItem data;
 
   @override
   Widget build(BuildContext context) {
@@ -18,11 +17,11 @@ class VendorGridItemTile extends StatelessWidget {
     if (data.isOffline) {
       cardColor = Colors.red[300];
       textIconColor = Colors.white;
-    } else if (data.isBlur) {
-      cardColor = Colors.deepOrange[300];
+    } else if (data.isMaintained) {
+      cardColor = Colors.teal[400];
       textIconColor = Colors.white;
     } else if (data.isChecked) {
-      cardColor = Colors.teal[400];
+      cardColor = Colors.blue[400];
       textIconColor = Colors.white;
     }
 
@@ -37,7 +36,7 @@ class VendorGridItemTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                data.name.toLowerCase().capitalizeFirstofEach,
+                data.name,
                 style: TextStyle(fontSize: 14, color: textIconColor),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 3,
@@ -51,15 +50,15 @@ class VendorGridItemTile extends StatelessWidget {
                       size: 18,
                       color: textIconColor,
                     ),
-                  if (data.isBlur)
-                    Icon(
-                      CupertinoIcons.circle_lefthalf_fill,
-                      size: 18,
-                      color: textIconColor,
-                    ),
                   if (data.isChecked)
                     Icon(
                       CupertinoIcons.check_mark_circled,
+                      size: 18,
+                      color: textIconColor,
+                    ),
+                  if (data.isMaintained)
+                    Icon(
+                      CupertinoIcons.paintbrush,
                       size: 18,
                       color: textIconColor,
                     )

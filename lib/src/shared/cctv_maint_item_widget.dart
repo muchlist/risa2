@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../api/json_models/response/vendor_check_list_resp.dart';
+import '../api/json_models/response/main_maintenance_list_resp.dart';
 import '../utils/utils.dart';
 
-class VendorCheckListTile extends StatelessWidget {
-  const VendorCheckListTile({Key? key, required this.data}) : super(key: key);
-  final VendorCheckMinResponse data;
+class CctvMaintListTile extends StatelessWidget {
+  const CctvMaintListTile({Key? key, required this.data}) : super(key: key);
+  final MainMaintMinResponse data;
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +22,10 @@ class VendorCheckListTile extends StatelessWidget {
             leading: (data.isFinish)
                 ? const Icon(CupertinoIcons.check_mark_circled)
                 : const Icon(CupertinoIcons.timer_fill),
-            title: (data.isVirtualCheck)
-                ? Text("Pengecekan Virtual\n${data.createdBy.firstname}")
-                : Text("Pengecekan Fisik\n${data.createdBy.firstname}"),
+            // title: Text(data.name),
+            title: (data.quarterlyMode)
+                ? Text("Pengecekan Triwulan\n${data.name}")
+                : Text("Pengecekan Bulanan\n${data.name}"),
             subtitle: Text(dateDescription),
           ),
         ));

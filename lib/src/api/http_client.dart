@@ -121,16 +121,6 @@ class RequestREST {
     }
   }
 
-//   Future<String> uploadImage(File file) async {
-//     String fileName = file.path.split('/').last;
-//     FormData formData = FormData.fromMap({
-//         "file":
-//             await MultipartFile.fromFile(file.path, filename:fileName),
-//     });
-//     response = await dio.post("/info", data: formData);
-//     return response.data['id'];
-// }
-
   String _dioErrorHandler(DioError e) {
     if (e.type == DioErrorType.connectTimeout ||
         e.type == DioErrorType.receiveTimeout ||

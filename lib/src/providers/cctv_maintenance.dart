@@ -3,17 +3,17 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 
 import '../api/filter_models/check_filter.dart';
-import '../api/json_models/request/vendor_req.dart';
+import '../api/json_models/request/cctv_maintenance_req.dart';
+import '../api/json_models/response/cctv_maintenance_resp.dart';
+import '../api/json_models/response/main_maintenance_list_resp.dart';
 import '../api/json_models/response/message_resp.dart';
-import '../api/json_models/response/vendor_check_list_resp.dart';
-import '../api/json_models/response/vendor_check_resp.dart';
-import '../api/services/vendor_service.dart';
+import '../api/services/cctv_maint_service.dart';
 import '../globals.dart';
 import '../utils/enums.dart';
 
-class VendorCheckProvider extends ChangeNotifier {
-  VendorCheckProvider(this._vendorCheckService);
-  final VendorCheckService _vendorCheckService;
+class CctvMaintProvider extends ChangeNotifier {
+  CctvMaintProvider(this._cctvMaintService);
+  final CctvMaintService _cctvMaintService;
 
   // =======================================================
   // List VendorCheck
@@ -26,44 +26,44 @@ class VendorCheckProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // vendorCheck list cache
-  List<VendorCheckMinResponse> _vendorCheckList = <VendorCheckMinResponse>[];
-  List<VendorCheckMinResponse> get vendorCheckList {
-    return UnmodifiableListView<VendorCheckMinResponse>(_vendorCheckList);
+  // MainMaint list cache
+  List<MainMaintMinResponse> _cctvCheckList = <MainMaintMinResponse>[];
+  List<MainMaintMinResponse> get vendorCheckList {
+    return UnmodifiableListView<MainMaintMinResponse>(_cctvCheckList);
   }
 
-  // vendorCheck list virtual cache
-  List<VendorCheckMinResponse> get vendorCheckListVirtual {
-    return _vendorCheckList
-        .where((VendorCheckMinResponse element) => element.isVirtualCheck)
+  // MainMaint list monthly cache
+  List<MainMaintMinResponse> get cctvCheckListMonthly {
+    return _cctvCheckList
+        .where((MainMaintMinResponse element) => !element.quarterlyMode)
         .toList();
   }
 
-  // vendorCheck list virtual cache
-  List<VendorCheckMinResponse> get vendorCheckListPhyshic {
-    return _vendorCheckList
-        .where((VendorCheckMinResponse element) => !element.isVirtualCheck)
+  // MainMaint list monthly cache
+  List<MainMaintMinResponse> get cctvCheckListQuarter {
+    return _cctvCheckList
+        .where((MainMaintMinResponse element) => element.quarterlyMode)
         .toList();
   }
 
-  // *memasang filter pada pencarian vendorCheck
-  FilterCheck _filterVendorCheck = FilterCheck(branch: App.getBranch());
+  // *memasang filter pada pencarian Check
+  FilterCheck _filterCctvCheck = FilterCheck(branch: App.getBranch());
   void setFilter(FilterCheck filter) {
-    _filterVendorCheck = filter;
+    _filterCctvCheck = filter;
   }
 
   // * Mendapatkan vendorChecks
-  Future<void> findVendorCheck() async {
+  Future<void> findCctvCheck() async {
     setState(ViewState.busy);
 
     String error = "";
     try {
-      final VendorCheckListResponse response =
-          await _vendorCheckService.findVendorCheck(_filterVendorCheck);
+      final MainMaintenanceListResponse response =
+          await _cctvMaintService.findCctvMaintenance(_filterCctvCheck);
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        _vendorCheckList = response.data;
+        _cctvCheckList = response.data;
       }
     } catch (e) {
       error = e.toString();
@@ -75,15 +75,15 @@ class VendorCheckProvider extends ChangeNotifier {
     }
   }
 
-  // return future true jika add vendorVendorCheck berhasil
-  // memanggil findVendorCheck sehigga tidak perlu notifyListener
-  Future<bool> addVendorCheck(bool isVirtual) async {
+  // return future true jika add addCctvCheck berhasil
+  // memanggil findCctvCheck sehigga tidak perlu notifyListener
+  Future<bool> addCctvCheck(bool isQuartal, String name) async {
     setState(ViewState.busy);
     String error = "";
 
     try {
-      final MessageResponse response =
-          await _vendorCheckService.createVendorCheck(isVirtual);
+      final MessageResponse response = await _cctvMaintService
+          .createCctvMaintenance(isQuartal, name.toUpperCase());
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -95,7 +95,7 @@ class VendorCheckProvider extends ChangeNotifier {
     if (error.isNotEmpty) {
       return Future<bool>.error(error);
     }
-    await findVendorCheck();
+    await findCctvCheck();
     return true;
   }
 
@@ -110,23 +110,23 @@ class VendorCheckProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  String _vendorCheckIDSaved = "";
-  void setVendorCheckID(String vendorCheckID) {
-    _vendorCheckIDSaved = vendorCheckID;
+  String _idSaved = "";
+  void setIDSaved(String cctvCheckID) {
+    _idSaved = cctvCheckID;
   }
 
-  // vendorVendorCheck detail cache
-  VendorCheckDetailResponseData? _vendorCheckDetail;
-  VendorCheckDetailResponseData get vendorCheckDetail {
-    if (_vendorCheckDetail == null) {
-      return VendorCheckDetailResponseData("", 0, "", "", 0, "", "", "", 0, 0,
-          false, false, "", <VendorCheckItem>[]);
+  // CctvCheck detail cache
+  CCTVMaintDetailResponseData? _cctvCheckDetail;
+  CCTVMaintDetailResponseData get cctvCheckDetail {
+    if (_cctvCheckDetail == null) {
+      return CCTVMaintDetailResponseData("", false, "", 0, "", "", 0, "", "",
+          "", 0, 0, false, "", <CCTVMaintCheckItem>[]);
     }
-    return _vendorCheckDetail!;
+    return _cctvCheckDetail!;
   }
 
   void removeDetail() {
-    _vendorCheckDetail = null;
+    _cctvCheckDetail = null;
   }
 
   // get detail vendorVendorCheck
@@ -136,12 +136,12 @@ class VendorCheckProvider extends ChangeNotifier {
 
     String error = "";
     try {
-      final VendorCheckDetailResponse response =
-          await _vendorCheckService.getVendorCheck(_vendorCheckIDSaved);
+      final CCTVMaintDetailResponse response =
+          await _cctvMaintService.getCctvMaintenance(_idSaved);
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        _vendorCheckDetail = response.data;
+        _cctvCheckDetail = response.data;
       }
     } catch (e) {
       error = e.toString();
@@ -156,35 +156,35 @@ class VendorCheckProvider extends ChangeNotifier {
   // =============================
   // get distinct location
   List<String> getLocationList() {
-    final List<VendorCheckItem> checkItems =
-        _vendorCheckDetail?.vendorCheckItems ?? <VendorCheckItem>[];
+    final List<CCTVMaintCheckItem> checkItems =
+        _cctvCheckDetail?.cctvMaintCheckItems ?? <CCTVMaintCheckItem>[];
     final List<String> allLocation = <String>[];
     if (checkItems.isEmpty) {
       return <String>[];
     }
-    for (final VendorCheckItem check in checkItems) {
+    for (final CCTVMaintCheckItem check in checkItems) {
       allLocation.add(check.location);
     }
     return allLocation.toSet().toList();
   }
 
-  Map<String, List<VendorCheckItem>> getCheckItemPerLocation(
+  Map<String, List<CCTVMaintCheckItem>> getCheckItemPerLocation(
       List<String> locations) {
-    final Map<String, List<VendorCheckItem>> checkMap =
-        <String, List<VendorCheckItem>>{};
-    if (_vendorCheckDetail == null) {
+    final Map<String, List<CCTVMaintCheckItem>> checkMap =
+        <String, List<CCTVMaintCheckItem>>{};
+    if (_cctvCheckDetail == null) {
       return checkMap;
     }
     for (final String loc in locations) {
-      checkMap[loc] = _vendorCheckDetail!.vendorCheckItems
-          .where((VendorCheckItem cctv) => cctv.location == loc)
+      checkMap[loc] = _cctvCheckDetail!.cctvMaintCheckItems
+          .where((CCTVMaintCheckItem cctv) => cctv.location == loc)
           .toList();
     }
     return checkMap;
   }
 
   // =====================================================================
-  // child vendorVendorCheck
+  // child cctvCheck
 
   ViewState _childState = ViewState.idle;
   ViewState get childState => _childState;
@@ -194,18 +194,18 @@ class VendorCheckProvider extends ChangeNotifier {
   }
 
 // * update child
-// return future true jika update vendorVendorCheck berhasil
-  Future<bool> updateChildVendorCheck(VendorUpdateRequest payload) async {
+// return future true jika update updateChildCctvCheck berhasil
+  Future<bool> updateChildCctvCheck(CCTVMaintUpdateRequest payload) async {
     setChildState(ViewState.busy);
     String error = "";
 
     try {
-      final VendorCheckDetailResponse response =
-          await _vendorCheckService.updateVendorCheck(payload);
+      final CCTVMaintDetailResponse response =
+          await _cctvMaintService.updateCctvMaint(payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        _vendorCheckDetail = response.data;
+        _cctvCheckDetail = response.data;
       }
     } catch (e) {
       error = e.toString();
@@ -220,19 +220,19 @@ class VendorCheckProvider extends ChangeNotifier {
   }
 
   // * =======================================================
-  // return future true jika completeVendorCheck berhasil
-  // memanggil findVendorCheck sehigga tidak perlu notifyListener
-  Future<bool> completeVendorCheck() async {
+  // return future true jika completeCctvCheck berhasil
+  // memanggil findCctvCheck sehigga tidak perlu notifyListener
+  Future<bool> completeCctvCheck() async {
     setDetailState(ViewState.busy);
     String error = "";
 
     try {
-      final VendorCheckDetailResponse response =
-          await _vendorCheckService.finishVendorCheck(_vendorCheckIDSaved);
+      final CCTVMaintDetailResponse response =
+          await _cctvMaintService.finishCctvMaintenance(_idSaved);
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        _vendorCheckDetail = response.data;
+        _cctvCheckDetail = response.data;
       }
     } catch (e) {
       error = e.toString();
@@ -242,19 +242,19 @@ class VendorCheckProvider extends ChangeNotifier {
     if (error.isNotEmpty) {
       return Future<bool>.error(error);
     }
-    await findVendorCheck();
+    await findCctvCheck();
     return true;
   }
 
-  // return future true jika delete vendorVendorCheck berhasil
-  // memanggil findVendorCheck sehigga tidak perlu notifyListener
-  Future<bool> deleteVendorCheck() async {
+  // return future true jika delete deleteCctvCheck berhasil
+  // memanggil findCctvCheck sehigga tidak perlu notifyListener
+  Future<bool> deleteCctvCheck() async {
     setState(ViewState.busy);
     String error = "";
 
     try {
       final MessageResponse response =
-          await _vendorCheckService.deleteVendorCheck(_vendorCheckIDSaved);
+          await _cctvMaintService.deleteCctvMaintenance(_idSaved);
       if (response.error != null) {
         error = response.error!.message;
       }
@@ -266,7 +266,7 @@ class VendorCheckProvider extends ChangeNotifier {
     if (error.isNotEmpty) {
       return Future<bool>.error(error);
     }
-    await findVendorCheck();
+    await findCctvCheck();
     return true;
   }
 
@@ -274,6 +274,6 @@ class VendorCheckProvider extends ChangeNotifier {
   // di on dispose
   void onClose() {
     removeDetail();
-    _vendorCheckList = <VendorCheckMinResponse>[];
+    _cctvCheckList = <MainMaintMinResponse>[];
   }
 }

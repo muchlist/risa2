@@ -9,7 +9,7 @@ import '../../globals.dart';
 import '../../providers/histories.dart';
 import '../../shared/disable_glow.dart';
 import '../../shared/func_flushbar.dart';
-import '../../shared/func_history_dialog.dart';
+import '../../shared/func_history_dial.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 import 'history_list_fragment.dart';

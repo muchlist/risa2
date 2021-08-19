@@ -7,7 +7,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import 'src/api/services/altai_maint_service.dart';
 import 'src/api/services/auth_service.dart';
+import 'src/api/services/cctv_maint_service.dart';
 import 'src/api/services/cctv_service.dart';
 import 'src/api/services/check_service.dart';
 import 'src/api/services/checkp_service.dart';
@@ -22,7 +24,9 @@ import 'src/api/services/stock_service.dart';
 import 'src/api/services/vendor_service.dart';
 import 'src/config/pallatte.dart';
 import 'src/globals.dart';
+import 'src/providers/altai_maintenance.dart';
 import 'src/providers/auth.dart';
+import 'src/providers/cctv_maintenance.dart';
 import 'src/providers/cctvs.dart';
 import 'src/providers/checks.dart';
 import 'src/providers/checks_master.dart';
@@ -112,6 +116,8 @@ class _MyAppState extends State<MyApp> {
   final HistoryService historyService = const HistoryService();
   final CheckService checkService = const CheckService();
   final VendorCheckService vendorCheckService = const VendorCheckService();
+  final CctvMaintService cctvMaintService = const CctvMaintService();
+  final AltaiMaintService altaiMaintService = const AltaiMaintService();
   final CheckpService checkMasterService = const CheckpService();
   final AuthService authService = const AuthService();
   final ImproveService improveService = const ImproveService();
@@ -156,6 +162,12 @@ class _MyAppState extends State<MyApp> {
                 ComputerProvider(computerService)),
         ChangeNotifierProvider<OtherProvider>(
             create: (BuildContext context) => OtherProvider(otherService)),
+        ChangeNotifierProvider<CctvMaintProvider>(
+            create: (BuildContext context) =>
+                CctvMaintProvider(cctvMaintService)),
+        ChangeNotifierProvider<AltaiMaintProvider>(
+            create: (BuildContext context) =>
+                AltaiMaintProvider(altaiMaintService)),
         ChangeNotifierProvider<DashboardProvider>(
             create: (BuildContext context) =>
                 DashboardProvider(speedService, pdfService)),

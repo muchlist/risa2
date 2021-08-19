@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/constant.dart';
 import '../../config/pallatte.dart';
@@ -9,6 +13,7 @@ import '../../globals.dart';
 import '../../providers/dashboard.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/func_flushbar.dart';
+import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/utils.dart';
 import 'generate_pdf_dialog.dart';
@@ -19,6 +24,8 @@ class PdfScreen extends StatefulWidget {
 }
 
 class _PdfScreenState extends State<PdfScreen> {
+  late final bool _isVendor = App.getRoles().contains("VENDOR");
+
   void _startGeneratePDF(BuildContext context) {
     showModalBottomSheet(
       // isScrollControlled: true,
@@ -29,6 +36,24 @@ class _PdfScreenState extends State<PdfScreen> {
       ),
       builder: (BuildContext context) => const GeneratePdfDialog(),
     );
+  }
+
+  void _generatePdfAuto({bool forVendor = false}) {
+    Future<void>.delayed(
+        Duration.zero,
+        () => context
+                .read<DashboardProvider>()
+                .generatePDFAuto(forVendor)
+                .then((bool value) {
+              if (value) {
+                showToastSuccess(
+                    context: context, message: "Berhasil membuat pdf");
+              }
+            }).onError((Object? error, _) {
+              if (error != null) {
+                showToastError(context: context, message: error.toString());
+              }
+            }));
   }
 
   Future<void> _loadAllPdf() {
@@ -55,13 +80,28 @@ class _PdfScreenState extends State<PdfScreen> {
           horizontalSpaceSmall,
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          icon: const Icon(Icons.add),
-          onPressed: () {
-            _startGeneratePDF(context);
-          },
-          label: const Text("Buat Manual")),
-      body: PdfRecyclerView(),
+      body: Stack(
+        children: <Widget>[
+          Positioned(child: PdfRecyclerView()),
+          Positioned(
+              bottom: 30,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: HomeLikeButton(
+                    iconData: CupertinoIcons.printer,
+                    text: "Generate PDF",
+                    tapTap: () => _generatePdfAuto(forVendor: _isVendor)),
+              )),
+          Positioned(
+            bottom: 30,
+            right: 40,
+            child: IconButton(
+                icon: const Icon(CupertinoIcons.ant_circle, size: 28),
+                onPressed: () => _startGeneratePDF(context)),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -72,6 +112,8 @@ class PdfRecyclerView extends StatefulWidget {
 }
 
 class _PdfRecyclerViewState extends State<PdfRecyclerView> {
+  double _downloadProgress = 0.0;
+
   final GlobalKey<RefreshIndicatorState> refreshKeyPdfScreen =
       GlobalKey<RefreshIndicatorState>();
   late final bool _isVendor = App.getRoles().contains("VENDOR");
@@ -88,14 +130,43 @@ class _PdfRecyclerViewState extends State<PdfRecyclerView> {
     });
   }
 
-  Future<void> _launchInBrowser(String url) async {
-    if (await canLaunch(url)) {
-      await launch(
+  Future<void> download(Dio dio, String url, String savePath) async {
+    try {
+      final Response<List<int>> response = await dio.get(
         url,
-        forceSafariVC: false,
+        onReceiveProgress: showDownloadProgress,
+        //Received data with List<int>
+        options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            validateStatus: (int? status) {
+              if (status != null) {
+                return status < 500;
+              }
+              return false;
+            }),
       );
-    } else {
-      showToastError(context: context, message: "Error saat membuka link pdf!");
+      final File file = File(savePath);
+      final RandomAccessFile raf = file.openSync(mode: FileMode.write);
+      // response.data is List<int> type
+      raf.writeFromSync(response.data!);
+      await raf.close();
+    } catch (e) {
+      showToastError(context: context, message: e.toString());
+      return;
+    }
+    setState(() {
+      _downloadProgress = 0.0;
+    });
+
+    OpenFile.open(savePath);
+  }
+
+  void showDownloadProgress(int received, int total) {
+    if (total != -1) {
+      setState(() {
+        _downloadProgress = received / total;
+      });
     }
   }
 
@@ -126,6 +197,17 @@ class _PdfRecyclerViewState extends State<PdfRecyclerView> {
             const Center(child: CircularProgressIndicator())
           else
             const Center(),
+          if (_downloadProgress != 0.0)
+            Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                child: Center(
+                  child: LinearProgressIndicator(
+                    value: _downloadProgress,
+                    color: Colors.deepOrange,
+                  ),
+                ))
         ],
       );
     });
@@ -140,10 +222,15 @@ class _PdfRecyclerViewState extends State<PdfRecyclerView> {
         itemCount: data.pdfList.length,
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
-              onTap: () {
+              onTap: () async {
                 final String url =
                     "${Constant.baseUrl}${data.pdfList[index].fileName}";
-                _launchInBrowser(url);
+                final String fileName =
+                    data.pdfList[index].fileName.split("/").last;
+                final Directory tempDir = await getTemporaryDirectory();
+                final String fullPath = tempDir.path + "/$fileName";
+                // _launchInBrowser(url); todo
+                download(Dio(), url, fullPath);
               },
               child: Card(
                   child: ListTile(

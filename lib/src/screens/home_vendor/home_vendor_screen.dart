@@ -17,7 +17,7 @@ import '../../router/routes.dart';
 import '../../shared/dashboard_v_item_widget.dart';
 import '../../shared/disable_glow.dart';
 import '../../shared/func_flushbar.dart';
-import '../../shared/func_history_dialog.dart';
+import '../../shared/func_history_dial.dart';
 import '../../shared/history_v_item_complete.dart';
 import '../../shared/history_v_item_widget.dart';
 import '../../shared/ui_helpers.dart';
@@ -333,6 +333,22 @@ class _HomeVScreenState extends State<HomeVScreen> {
             child: DashboardVIcon(Dashboard(
                 "Cek CCTV", CupertinoIcons.checkmark_seal,
                 color: Pallete.green.withOpacity(0.6))),
+          ),
+          horizontalSpaceTiny,
+          GestureDetector(
+            onTap: () =>
+                Navigator.pushNamed(context, RouteGenerator.cctvMaintenance),
+            child: DashboardVIcon(Dashboard(
+                "Fisik CCTV", CupertinoIcons.doc_checkmark,
+                color: Pallete.green.withOpacity(0.6))),
+          ),
+          horizontalSpaceTiny,
+          GestureDetector(
+            onTap: () =>
+                Navigator.pushNamed(context, RouteGenerator.altaiMaintenance),
+            child: DashboardVIcon(Dashboard(
+                "Fisik ALtai", CupertinoIcons.checkmark_rectangle,
+                color: Pallete.green.withOpacity(0.5))),
           ),
         ],
       ),

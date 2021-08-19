@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../../api/json_models/request/cctv_maintenance_req.dart';
+import '../../api/json_models/request/altai_maintenance_req.dart';
 
 import '../../api/json_models/request/history_req.dart';
 import '../../config/constant.dart';
@@ -16,52 +16,44 @@ import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 
-class AddMaintenanceHistoryDialog extends StatefulWidget {
-  const AddMaintenanceHistoryDialog(
+class AddAltaiMaintenanceHistoryDialog extends StatefulWidget {
+  const AddAltaiMaintenanceHistoryDialog(
       {Key? key, required this.parentName, required this.mtState})
       : super(key: key);
 
   final String parentName;
   // child id in VendorUpdateRequest is parent ID item for maintenance
-  final CCTVMaintUpdateRequest mtState;
+  final AltaiMaintUpdateRequest mtState;
 
   @override
-  _AddMaintenanceHistoryDialogState createState() =>
-      _AddMaintenanceHistoryDialogState();
+  _AddAltaiMaintenanceHistoryDialogState createState() =>
+      _AddAltaiMaintenanceHistoryDialogState();
 }
 
-class _AddMaintenanceHistoryDialogState
-    extends State<AddMaintenanceHistoryDialog> {
+class _AddAltaiMaintenanceHistoryDialogState
+    extends State<AddAltaiMaintenanceHistoryDialog> {
   late double _selectedSlider;
   late String _selectedLabel;
 
   @override
   void initState() {
-    _selectedSlider =
-        (widget.mtState.isBlur || widget.mtState.isOffline) ? 1.0 : 4.0;
-    _selectedLabel = (widget.mtState.isBlur || widget.mtState.isOffline)
-        ? "Progress"
-        : "Completed";
+    _selectedSlider = (widget.mtState.isOffline) ? 1.0 : 4.0;
+    _selectedLabel = (widget.mtState.isOffline) ? "Progress" : "Completed";
     problemController.text = _problemTextBuilder(widget.mtState);
-    resolveNoteController.text =
-        (widget.mtState.isBlur || widget.mtState.isOffline)
-            ? ""
-            : (widget.mtState.isMaintained)
-                ? "Selesai dilakukan pengecekan dan pembersihan"
-                : "Selesai dilakukan pengecekan dan pembersihan";
+    resolveNoteController.text = (widget.mtState.isOffline)
+        ? ""
+        : (widget.mtState.isMaintained)
+            ? "Selesai dilakukan pengecekan dan pembersihan"
+            : "Selesai dilakukan pengecekan dan pembersihan";
     super.initState();
   }
 
-  String _problemTextBuilder(CCTVMaintUpdateRequest state) {
+  String _problemTextBuilder(AltaiMaintUpdateRequest state) {
     String problem = "#maintenance\n";
-    if (state.isBlur) {
-      problem += "#isBlur CCTV display bermasalah\n";
-    }
     if (state.isOffline) {
-      problem += "#isOffline CCTV dalam keadaan mati\n";
-    }
-    if (!state.isBlur && !state.isOffline) {
-      problem += "Tidak ada kendala pada CCTV";
+      problem += "#isOffline Altai dalam keadaan mati\n";
+    } else {
+      problem += "Tidak ada kendala pada Altai";
     }
     return problem;
   }
