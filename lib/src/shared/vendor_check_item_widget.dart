@@ -23,8 +23,8 @@ class VendorCheckListTile extends StatelessWidget {
                 ? const Icon(CupertinoIcons.check_mark_circled)
                 : const Icon(CupertinoIcons.timer_fill),
             title: (data.isVirtualCheck)
-                ? Text("Pengecekan Virtual\n${data.createdBy.firstname}")
-                : Text("Pengecekan Fisik\n${data.createdBy.firstname}"),
+                ? Text("Pengecekan CCTV Virtual\n${data.createdBy.firstname}")
+                : Text("Pengecekan CCTV Fisik\n${data.createdBy.firstname}"),
             subtitle: Text(dateDescription),
           ),
         ));

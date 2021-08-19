@@ -11,9 +11,10 @@ class AltaiMaintService {
 
   Future<MessageResponse> createAltaiMaintenance(bool isQuartal, String name) {
     return RequestREST(
-            endpoint: isQuartal ? "/altai-check-quarter" : "/altai-phy-check",
-            data: <String, dynamic>{"name": name})
-        .executePost<MessageResponse>(const MessageParser());
+        endpoint: isQuartal ? "/altai-phy-check-quarter" : "/altai-phy-check",
+        data: <String, dynamic>{
+          "name": name
+        }).executePost<MessageResponse>(const MessageParser());
   }
 
   Future<AltaiMaintDetailResponse> getAltaiMaintenance(String id) {

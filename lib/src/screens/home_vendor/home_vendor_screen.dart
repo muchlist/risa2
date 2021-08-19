@@ -341,7 +341,7 @@ class _HomeVScreenState extends State<HomeVScreen> {
             onTap: () =>
                 Navigator.pushNamed(context, RouteGenerator.vendorCheck),
             child: DashboardVIcon(Dashboard(
-                "Cek CCTV", CupertinoIcons.checkmark_seal,
+                "Cek Virtual", CupertinoIcons.checkmark_seal,
                 color: Pallete.green.withOpacity(0.6))),
           ),
           horizontalSpaceTiny,

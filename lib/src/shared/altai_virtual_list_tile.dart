@@ -22,7 +22,8 @@ class AltaiVirtualListTile extends StatelessWidget {
             leading: (data.isFinish)
                 ? const Icon(CupertinoIcons.check_mark_circled)
                 : const Icon(CupertinoIcons.timer_fill),
-            title: Text(data.createdBy),
+            title:
+                Text("Pengecekan Altai Virtual\n${data.createdBy.firstname}"),
             subtitle: Text(dateDescription),
           ),
         ));
