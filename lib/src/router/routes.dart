@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+
 import '../screens/altai_maintenance/altai_maintenance_detail_screen.dart';
 import '../screens/altai_maintenance/altai_maintenance_screen.dart';
-
 import '../screens/cctv/add_cctv_screen.dart';
 import '../screens/cctv/cctv_detail_screen.dart';
 import '../screens/cctv/cctv_screen.dart';
@@ -40,6 +40,7 @@ import '../screens/stock/edit_stock_screen.dart';
 import '../screens/stock/increment_stock_screen.dart';
 import '../screens/stock/stock_detail_screen.dart';
 import '../screens/stock/stock_screen.dart';
+import '../screens/vendor_check/altai_virtual_detail_screen.dart';
 import '../screens/vendor_check/vendor_check_detail_screen.dart';
 import '../screens/vendor_check/vendor_check_screen.dart';
 
@@ -54,6 +55,7 @@ class RouteGenerator {
   static const String check = '/check';
   static const String vendorCheck = '/vendor-check';
   static const String vendorCheckDetail = '/vendor-check-detail';
+  static const String altaiVirtualDetail = '/altai-virtual-detail';
   static const String checkMaster = '/check-master';
   static const String checkMasterAdd = '/check-master-add';
   static const String checkMasterEdit = '/check-master-edit';
@@ -160,6 +162,8 @@ class RouteGenerator {
         return transitionFade(VendorCheckScreen());
       case vendorCheckDetail:
         return transitionFade(VendorCheckDetailScreen());
+      case altaiVirtualDetail:
+        return transitionFade(AltaiVirtualDetailScreen());
       case dashboard:
         return transitionFade(const DashboardScreen());
       case pdf:

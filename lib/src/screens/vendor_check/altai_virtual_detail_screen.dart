@@ -2,56 +2,56 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../api/json_models/request/vendor_req.dart';
-import '../../api/json_models/response/vendor_check_resp.dart';
+import '../../api/json_models/request/altai_virtual_req.dart';
+import '../../api/json_models/response/altai_virtual_resp.dart';
 import '../../config/pallatte.dart';
 import '../../globals.dart';
+import '../../providers/altai_virtual.dart';
 import '../../providers/histories.dart';
-import '../../providers/vendor_check.dart';
+import '../../shared/altai_virtual_grid.dart';
 import '../../shared/disable_glow.dart';
 import '../../shared/func_confirm.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../shared/text_with_icon.dart';
-import '../../shared/vendor_check_grid.dart';
 import '../../utils/date_unix.dart';
 import '../../utils/enums.dart';
 
-GlobalKey<RefreshIndicatorState> refreshKeyVendorCheckDetailScreen =
+GlobalKey<RefreshIndicatorState> refreshKeyAltaiVirtualDetailScreen =
     GlobalKey<RefreshIndicatorState>();
 
-class VendorCheckDetailScreen extends StatelessWidget {
+class AltaiVirtualDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           elevation: 0,
-          title: const Text("Pengecekan Cctv Virtual"),
+          title: const Text("Pengecekan Altai Virtual"),
         ),
-        body: VendorCheckDetailBody());
+        body: AltaiVirtualDetailBody());
   }
 }
 
-class VendorCheckDetailBody extends StatefulWidget {
+class AltaiVirtualDetailBody extends StatefulWidget {
   @override
-  _VendorCheckDetailBodyState createState() => _VendorCheckDetailBodyState();
+  _AltaiVirtualDetailBodyState createState() => _AltaiVirtualDetailBodyState();
 }
 
-class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
-  late VendorCheckProvider _vendorCheckProviderR;
+class _AltaiVirtualDetailBodyState extends State<AltaiVirtualDetailBody> {
+  late AltaiVirtualProvider _altaiVirtualProviderR;
 
   @override
   void initState() {
-    _vendorCheckProviderR = context.read<VendorCheckProvider>();
-    _vendorCheckProviderR.removeDetail();
+    _altaiVirtualProviderR = context.read<AltaiVirtualProvider>();
+    _altaiVirtualProviderR.removeDetail();
     _loadDetail();
     super.initState();
   }
 
   Future<void> _loadDetail() {
     return Future<void>.delayed(Duration.zero, () {
-      _vendorCheckProviderR.getDetail().onError((Object? error, _) {
+      _altaiVirtualProviderR.getDetail().onError((Object? error, _) {
         Navigator.pop(context);
         showToastError(context: context, message: error.toString());
       });
@@ -84,11 +84,11 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
 
   // Memunculkan return
   Future<void> _dialogUpdateItem(BuildContext context, String cctvname,
-      VendorUpdateRequest itemStateValue) async {
+      AltaiVirtualUpdateRequest itemStateValue) async {
     await showDialog<void>(
         context: context,
         builder: (BuildContext context) {
-          final VendorUpdateRequest itemState = itemStateValue;
+          final AltaiVirtualUpdateRequest itemState = itemStateValue;
           return StatefulBuilder(
               builder: (BuildContext context, Function setState) {
             return AlertDialog(
@@ -103,7 +103,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                             icon: CupertinoIcons.check_mark_circled,
                             text: "Sudah dicek",
                           ),
-                          subtitle: const Text("tandai jika cctv sudah dicek"),
+                          subtitle: const Text("tandai jika altai sudah dicek"),
                           value: itemState.isChecked,
                           onChanged: (bool? checked) {
                             setState(() {
@@ -116,7 +116,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                       CheckboxListTile(
                           title: const TextIcon(
                             icon: CupertinoIcons.multiply_circle,
-                            text: "Cctv offline",
+                            text: "Altai offline",
                           ),
                           subtitle: const Text(
                               "perangkat mati atau tidak dapat di ping"),
@@ -126,22 +126,6 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                               itemState.isOffline = checked ?? false;
                             });
                           }),
-                      const Divider(
-                        thickness: 1,
-                      ),
-                      CheckboxListTile(
-                          title: const TextIcon(
-                            icon: CupertinoIcons.circle_lefthalf_fill,
-                            text: "Cctv blur",
-                          ),
-                          subtitle: const Text(
-                              "kamera mengalami gangguan dari segi tangkapan gambar"),
-                          value: itemState.isBlur,
-                          onChanged: (bool? checked) {
-                            setState(() {
-                              itemState.isBlur = checked ?? false;
-                            });
-                          })
                     ],
                   ),
                 ),
@@ -151,8 +135,8 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                     style: ElevatedButton.styleFrom(
                         primary: Theme.of(context).accentColor),
                     onPressed: () {
-                      _vendorCheckProviderR
-                          .updateChildVendorCheck(itemState)
+                      _altaiVirtualProviderR
+                          .updateChildAltaiVirtual(itemState)
                           .then((bool value) {
                         if (value && itemState.isChecked) {
                           Navigator.of(context).pop(itemState);
@@ -175,27 +159,16 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
   @override
   Widget build(BuildContext context) {
     // Watch data ====================================================
-    final VendorCheckProvider data = context.watch<VendorCheckProvider>();
-
-    /// perhitungan hari agar cek fisik hanya bisa ditutup 5 hari sebelum akhir bulan
-    /// atau 2 hari setelah awal bulan
-    final DateTime now = DateTime.now();
-    final int lastDayEpoch = DateTime(now.year, now.month + 1, 0).toInt();
-    final int firstDayEpoch = DateTime(now.year, now.month).toInt();
-    final int nowEpoch = now.toInt();
-    final bool isNBeforeLastMonth = lastDayEpoch - nowEpoch < 60 * 60 * 24 * 5;
-    final bool isNAfterNewMonth = nowEpoch - firstDayEpoch < 60 * 60 * 24 * 2;
+    final AltaiVirtualProvider data = context.watch<AltaiVirtualProvider>();
 
     return (data.detailState == ViewState.busy)
         ? const Center(child: CircularProgressIndicator())
         : Stack(
             children: <Widget>[
               buildBody(data),
-              if (data.vendorCheckDetail.isFinish)
+              if (data.altaiVirtualDetail.isFinish)
                 const SizedBox.shrink()
-              else if (isNBeforeLastMonth ||
-                  isNAfterNewMonth ||
-                  data.vendorCheckDetail.isVirtualCheck)
+              else
                 Positioned(
                     bottom: 15,
                     right: 20,
@@ -205,7 +178,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                       tapTap: () async {
                         final bool? isFinish = await _getConfirm(context);
                         if (isFinish != null && isFinish) {
-                          await data.completeVendorCheck().then((bool value) {
+                          await data.completeAltaiVirtual().then((bool value) {
                             if (value) {
                               showToastSuccess(
                                   context: context, message: "Cek selesai");
@@ -222,10 +195,10 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
           );
   }
 
-  Widget buildBody(VendorCheckProvider data) {
-    final VendorCheckDetailResponseData detail = data.vendorCheckDetail;
+  Widget buildBody(AltaiVirtualProvider data) {
+    final AltaiVirtualDetailResponseData detail = data.altaiVirtualDetail;
     final List<String> locations = data.getLocationList();
-    final Map<String, List<VendorCheckItem>> cctvs =
+    final Map<String, List<AltaiCheckItem>> cctvs =
         data.getCheckItemPerLocation(locations);
 
     final List<Widget> slivers = <Widget>[
@@ -244,7 +217,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
             ),
           ),
         ))
-        ..add(buildGridViewReady(cctvs[loc] ?? <VendorCheckItem>[], detail.id));
+        ..add(buildGridViewReady(cctvs[loc] ?? <AltaiCheckItem>[], detail.id));
     }
 
     // end sliver
@@ -257,7 +230,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: RefreshIndicator(
-        key: refreshKeyVendorCheckDetailScreen,
+        key: refreshKeyAltaiVirtualDetailScreen,
         onRefresh: _loadDetail,
         child: DisableOverScrollGlow(
           child: CustomScrollView(slivers: slivers),
@@ -266,22 +239,18 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
     );
   }
 
-  SliverToBoxAdapter buildHeaderSliver(VendorCheckProvider data) {
-    final VendorCheckDetailResponseData detail = data.vendorCheckDetail;
+  SliverToBoxAdapter buildHeaderSliver(AltaiVirtualProvider data) {
+    final AltaiVirtualDetailResponseData detail = data.altaiVirtualDetail;
 
     int cctvChecked = 0;
     int cctvOffline = 0;
-    int cctvBlur = 0;
     int cctvTotal = 0;
 
-    for (final VendorCheckItem cctv in detail.vendorCheckItems) {
-      if (cctv.isChecked) {
+    for (final AltaiCheckItem altai in detail.altaiCheckItems) {
+      if (altai.isChecked) {
         cctvChecked++;
       }
-      if (cctv.isBlur) {
-        cctvBlur++;
-      }
-      if (cctv.isOffline) {
+      if (altai.isOffline) {
         cctvOffline++;
       }
       cctvTotal++;
@@ -301,20 +270,16 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const <Widget>[
                 Text("Dibuat / update"),
-                Text("Tipe cek"),
                 Text("Cabang"),
                 Text("Mulai cek"),
                 Text("Selesai cek"),
                 Text("Sudah dicek"),
-                Text("Cctv offline"),
-                Text("Cctv buram"),
+                Text("Altai offline"),
               ],
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: const <Widget>[
-                Text("   :   "),
-                Text("   :   "),
                 Text("   :   "),
                 Text("   :   "),
                 Text("   :   "),
@@ -335,12 +300,6 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                     maxLines: 2,
                     overflow: TextOverflow.clip,
                     style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    (detail.isVirtualCheck) ? "Virtual" : "Fisik",
-                    softWrap: true,
-                    maxLines: 2,
-                    overflow: TextOverflow.clip,
                   ),
                   Text(
                     detail.branch,
@@ -376,12 +335,6 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                     maxLines: 2,
                     overflow: TextOverflow.clip,
                   ),
-                  Text(
-                    "$cctvBlur unit",
-                    softWrap: true,
-                    maxLines: 2,
-                    overflow: TextOverflow.clip,
-                  ),
                 ],
               ),
             ),
@@ -391,7 +344,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                   final bool? isDeleted = await getConfirm(context,
                       "Konfirmasi", "Yakin ingin menghapus daftar cek ini?");
                   if (isDeleted != null && isDeleted) {
-                    await data.deleteVendorCheck().then((bool value) {
+                    await data.deleteAltaiVirtual().then((bool value) {
                       if (value) {
                         Navigator.pop(context);
                         showToastSuccess(
@@ -415,7 +368,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
     );
   }
 
-  Widget buildGridViewReady(List<VendorCheckItem> checkItems, String parentID) {
+  Widget buildGridViewReady(List<AltaiCheckItem> checkItems, String parentID) {
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
         maxCrossAxisExtent: 130.0,
@@ -431,14 +384,13 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                 await _dialogUpdateItem(
                     context,
                     checkItems[index].name,
-                    VendorUpdateRequest(
+                    AltaiVirtualUpdateRequest(
                         parentID: parentID,
                         childID: checkItems[index].id,
                         isChecked: checkItems[index].isChecked,
-                        isBlur: checkItems[index].isBlur,
                         isOffline: checkItems[index].isOffline));
               },
-              child: VendorGridItemTile(
+              child: AltaiVGridItemTile(
                   key: Key(checkItems[index].id), data: checkItems[index]),
             ),
           );

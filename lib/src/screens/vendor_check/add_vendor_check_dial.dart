@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/providers/altai_virtual.dart';
 
 import '../../config/pallatte.dart';
 import '../../providers/vendor_check.dart';
@@ -15,20 +16,40 @@ class AddVendorCheckDialog extends StatefulWidget {
 }
 
 class _AddVendorCheckDialogState extends State<AddVendorCheckDialog> {
-  void _generateCheck(bool isVirtual) {
+  void _generateCheckCctv() {
     // Call Provider
-    Future.delayed(
+    Future<void>.delayed(
         Duration.zero,
         () => context
                 .read<VendorCheckProvider>()
-                .addVendorCheck(isVirtual)
-                .then((value) {
+                .addVendorCheck(false)
+                .then((bool value) {
               if (value) {
                 Navigator.of(context).pop();
                 showToastSuccess(
-                    context: context, message: "Berhasil membuat check");
+                    context: context, message: "Berhasil membuat check cctv");
               }
-            }).onError((error, _) {
+            }).onError((Object? error, _) {
+              if (error != null) {
+                showToastError(context: context, message: error.toString());
+              }
+            }));
+  }
+
+  void _generateCheckAltai() {
+    // Call Provider
+    Future<void>.delayed(
+        Duration.zero,
+        () => context
+                .read<AltaiVirtualProvider>()
+                .addAltaiVirtual()
+                .then((bool value) {
+              if (value) {
+                Navigator.of(context).pop();
+                showToastSuccess(
+                    context: context, message: "Berhasil membuat check altai");
+              }
+            }).onError((Object? error, _) {
               if (error != null) {
                 showToastError(context: context, message: error.toString());
               }
@@ -37,16 +58,16 @@ class _AddVendorCheckDialogState extends State<AddVendorCheckDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final height = screenHeight(context);
-    var isPortrait = screenIsPortrait(context);
+    final double height = screenHeight(context);
+    final bool isPortrait = screenIsPortrait(context);
 
-    return Container(
-      height: (isPortrait) ? height * 0.35 : height,
+    return SizedBox(
+      height: isPortrait ? height * 0.35 : height,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             const Divider(
               indent: 70,
               endIndent: 70,
@@ -58,7 +79,7 @@ class _AddVendorCheckDialogState extends State<AddVendorCheckDialog> {
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     const SizedBox(
                       height: 40,
                     ),
@@ -79,38 +100,36 @@ class _AddVendorCheckDialogState extends State<AddVendorCheckDialog> {
                     // * Chip choice
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
+                      children: <Widget>[
                         GestureDetector(
-                          onLongPress: () => _generateCheck(true),
+                          onLongPress: () => _generateCheckCctv(),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
+                            children: const <Widget>[
                               CircleAvatar(
                                 backgroundColor: Pallete.green,
+                                radius: 30,
                                 child: Icon(
                                   CupertinoIcons.waveform_circle_fill,
                                   color: Colors.white,
                                 ),
-                                radius: 30,
                               ),
                               verticalSpaceTiny,
-                              Text("VIRTUAL"),
+                              Text("CCTV"),
                             ],
                           ),
                         ),
                         GestureDetector(
-                          onLongPress: () => _generateCheck(false),
+                          onLongPress: () => _generateCheckAltai(),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
+                            children: const <Widget>[
                               CircleAvatar(
                                 backgroundColor: Colors.blueAccent,
+                                radius: 30,
                                 child: Icon(CupertinoIcons.ant_circle_fill,
                                     color: Colors.white),
-                                radius: 30,
                               ),
                               verticalSpaceTiny,
-                              Text("FISIK"),
+                              Text("ALTAI"),
                             ],
                           ),
                         ),
