@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/providers/others.dart';
 
 import '../../api/filter_models/history_filter.dart';
 import '../../config/histo_category.dart';
@@ -324,6 +325,15 @@ class _HomeVScreenState extends State<HomeVScreen> {
           GestureDetector(
             onTap: () => Navigator.pushNamed(context, RouteGenerator.cctv),
             child: DashboardVIcon(Dashboard("CCTV", CupertinoIcons.camera,
+                color: Pallete.green.withOpacity(0.8))),
+          ),
+          horizontalSpaceTiny,
+          GestureDetector(
+            onTap: () {
+              context.read<OtherProvider>().setSubCategory(HistCategory.altai);
+              Navigator.pushNamed(context, RouteGenerator.other);
+            },
+            child: DashboardVIcon(Dashboard("Altai", CupertinoIcons.wifi,
                 color: Pallete.green.withOpacity(0.8))),
           ),
           horizontalSpaceTiny,
