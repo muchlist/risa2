@@ -8,6 +8,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'src/api/services/altai_maint_service.dart';
+import 'src/api/services/altai_virtual_service.dart';
 import 'src/api/services/auth_service.dart';
 import 'src/api/services/cctv_maint_service.dart';
 import 'src/api/services/cctv_service.dart';
@@ -25,6 +26,7 @@ import 'src/api/services/vendor_service.dart';
 import 'src/config/pallatte.dart';
 import 'src/globals.dart';
 import 'src/providers/altai_maintenance.dart';
+import 'src/providers/altai_virtual.dart';
 import 'src/providers/auth.dart';
 import 'src/providers/cctv_maintenance.dart';
 import 'src/providers/cctvs.dart';
@@ -116,6 +118,7 @@ class _MyAppState extends State<MyApp> {
   final HistoryService historyService = const HistoryService();
   final CheckService checkService = const CheckService();
   final VendorCheckService vendorCheckService = const VendorCheckService();
+  final AltaiVirtualService altaiVirtualService = const AltaiVirtualService();
   final CctvMaintService cctvMaintService = const CctvMaintService();
   final AltaiMaintService altaiMaintService = const AltaiMaintService();
   final CheckpService checkMasterService = const CheckpService();
@@ -150,6 +153,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<VendorCheckProvider>(
             create: (BuildContext context) =>
                 VendorCheckProvider(vendorCheckService)),
+        ChangeNotifierProvider<AltaiVirtualProvider>(
+            create: (BuildContext context) =>
+                AltaiVirtualProvider(altaiVirtualService)),
         ChangeNotifierProvider<CheckMasterProvider>(
             create: (BuildContext context) =>
                 CheckMasterProvider(checkMasterService)),
