@@ -5,7 +5,7 @@ import '../../api/json_models/response/history_list_resp.dart';
 import '../../providers/histories.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/func_flushbar.dart';
-import '../../shared/func_history_dialog.dart';
+import '../../shared/func_history_dial.dart';
 import '../../shared/history_item_widget.dart';
 import '../../utils/enums.dart';
 

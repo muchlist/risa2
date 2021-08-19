@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/screens/history/add_history_v_dialog.dart';
-import 'package:risa2/src/screens/history/add_maintenance_history.dart';
-import '../api/json_models/request/cctv_maintenance_req.dart';
 
+import '../api/json_models/request/altai_maintenance_req.dart';
+import '../api/json_models/request/cctv_maintenance_req.dart';
 import '../api/json_models/response/history_list_resp.dart';
 import '../globals.dart';
 import '../providers/cctvs.dart';
@@ -11,30 +10,33 @@ import '../providers/computers.dart';
 import '../providers/others.dart';
 import '../providers/stock.dart';
 import '../router/routes.dart';
+import '../screens/history/add_altai_maintenance_history.dart';
 import '../screens/history/add_history_dialog.dart';
+import '../screens/history/add_history_v_dialog.dart';
+import '../screens/history/add_maintenance_history.dart';
 import '../screens/history/add_parent_history_dialog.dart';
 import '../screens/history/detail_history_dialog.dart';
 import '../screens/history/edit_history_dialog.dart';
 import '../utils/enums.dart';
 
 class HistoryHelper {
-  static final HistoryHelper _historyHelper = HistoryHelper._internal();
-
   factory HistoryHelper() {
     return _historyHelper;
   }
 
   HistoryHelper._internal();
 
+  static final HistoryHelper _historyHelper = HistoryHelper._internal();
+
   void showAddIncident(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      builder: (context) => AddHistoryDialog(),
+      builder: (BuildContext context) => const AddHistoryDialog(),
     );
   }
 
@@ -43,11 +45,11 @@ class HistoryHelper {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      builder: (context) => AddHistoryVDialog(),
+      builder: (BuildContext context) => const AddHistoryVDialog(),
     );
   }
 
@@ -56,11 +58,11 @@ class HistoryHelper {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      builder: (context) => AddParentHistoryDialog(
+      builder: (BuildContext context) => AddParentHistoryDialog(
         parentID: parentID,
         parentName: parentName,
       ),
@@ -72,11 +74,27 @@ class HistoryHelper {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      builder: (context) => AddMaintenanceHistoryDialog(
+      builder: (BuildContext context) => AddMaintenanceHistoryDialog(
+        parentName: parentName,
+        mtState: mtState,
+      ),
+    );
+  }
+
+  void showAddAltaiMaintenanceIncident(BuildContext context, String parentName,
+      AltaiMaintUpdateRequest mtState) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) => AddAltaiMaintenanceHistoryDialog(
         parentName: parentName,
         mtState: mtState,
       ),
@@ -85,13 +103,14 @@ class HistoryHelper {
 
   void showEditIncident(
       BuildContext context, HistoryMinResponse history, bool forParent) {
-    final statusInfo = history.completeStatus == enumStatus.info.index;
-    final statusComplete = history.completeStatus == enumStatus.completed.index;
+    final bool statusInfo = history.completeStatus == enumStatus.info.index;
+    final bool statusComplete =
+        history.completeStatus == enumStatus.completed.index;
     if (statusInfo || statusComplete) {
       return;
     }
 
-    final userBranch = App.getBranch();
+    final String? userBranch = App.getBranch();
     if (userBranch != history.branch) {
       return;
     }
@@ -99,11 +118,11 @@ class HistoryHelper {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      builder: (context) => EditHistoryDialog(
+      builder: (BuildContext context) => EditHistoryDialog(
         history: history,
         forParent: forParent,
       ),
@@ -118,11 +137,11 @@ class HistoryHelper {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
             topLeft: Radius.circular(20), topRight: Radius.circular(20)),
       ),
-      builder: (context) => DetailHistoryDialog(
+      builder: (BuildContext context) => DetailHistoryDialog(
         history: history,
       ),
     );
@@ -132,7 +151,7 @@ class HistoryHelper {
       {required BuildContext context,
       required String category,
       required String parentID}) {
-    var routeName = "";
+    String routeName = "";
 
     switch (category.toUpperCase()) {
       case "CCTV":

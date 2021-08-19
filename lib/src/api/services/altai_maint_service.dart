@@ -11,8 +11,8 @@ class AltaiMaintService {
 
   Future<MessageResponse> createAltaiMaintenance(bool isQuartal, String name) {
     return RequestREST(
-            endpoint: isQuartal ? "/altai-phy-check" : "/phy-check-quarter",
-            data: <String, dynamic>{name: name})
+            endpoint: isQuartal ? "/altai-check-quarter" : "/altai-phy-check",
+            data: <String, dynamic>{"name": name})
         .executePost<MessageResponse>(const MessageParser());
   }
 
@@ -55,11 +55,5 @@ class AltaiMaintService {
     return RequestREST(
             endpoint: "/altai-phy-check-update", data: payload.toJson())
         .executePost<AltaiMaintDetailResponse>(const AltaiMaintParser());
-  }
-
-  Future<MessageResponse> bulkUpdateVendorCheck(
-      BulkAltaiMaintUpdateRequest payload) {
-    return RequestREST(endpoint: "/bulk-phy-update", data: payload.toJson())
-        .executePost<MessageResponse>(const MessageParser());
   }
 }

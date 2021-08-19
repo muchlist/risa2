@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import '../screens/altai_maintenance/altai_maintenance_detail_screen.dart';
+import '../screens/altai_maintenance/altai_maintenance_screen.dart';
 
 import '../screens/cctv/add_cctv_screen.dart';
 import '../screens/cctv/cctv_detail_screen.dart';
@@ -83,6 +85,8 @@ class RouteGenerator {
   static const String pdf = '/pdf';
   static const String cctvMaintenance = '/cctv-maintenance';
   static const String cctvMaintenanceDetail = '/cctv-maintenance-detail';
+  static const String altaiMaintenance = '/altai-maintenance';
+  static const String altaiMaintenanceDetail = '/altai-maintenance-detail';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -164,6 +168,10 @@ class RouteGenerator {
         return transitionFade(CctvMaintScreen());
       case cctvMaintenanceDetail:
         return transitionFade(CctvMaintDetailScreen());
+      case altaiMaintenance:
+        return transitionFade(AltaiMaintScreen());
+      case altaiMaintenanceDetail:
+        return transitionFade(AltaiMaintDetailScreen());
       default:
         return MaterialPageRoute<LoginScreen>(builder: (_) => LoginScreen());
     }

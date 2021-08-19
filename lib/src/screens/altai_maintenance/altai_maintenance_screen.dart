@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../api/json_models/response/main_maintenance_list_resp.dart';
-import '../../providers/cctv_maintenance.dart';
+import '../../providers/altai_maintenance.dart';
 import '../../router/routes.dart';
 import '../../shared/cctv_maint_item_widget.dart';
 import '../../shared/empty_box.dart';
@@ -12,23 +12,23 @@ import '../../shared/home_like_button.dart';
 import '../../utils/enums.dart';
 import 'maintenance_dialog.dart';
 
-class CctvMaintScreen extends StatefulWidget {
+class AltaiMaintScreen extends StatefulWidget {
   @override
-  _CctvMaintScreenState createState() => _CctvMaintScreenState();
+  _AltaiMaintScreenState createState() => _AltaiMaintScreenState();
 }
 
-class _CctvMaintScreenState extends State<CctvMaintScreen> {
-  late CctvMaintProvider _cctvMaintProvider;
+class _AltaiMaintScreenState extends State<AltaiMaintScreen> {
+  late AltaiMaintProvider _altaiMaintProvider;
 
-  Future<dynamic> _loadCctvMaint() {
+  Future<dynamic> _loadAltaiMaint() {
     return Future<void>.delayed(Duration.zero, () {
-      _cctvMaintProvider.findCctvCheck().onError((Object? error, _) {
+      _altaiMaintProvider.findAltaiCheck().onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
   }
 
-  void _startAddCctvMaint(BuildContext context) {
+  void _startAddAltaiMaint(BuildContext context) {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -42,14 +42,14 @@ class _CctvMaintScreenState extends State<CctvMaintScreen> {
 
   @override
   void initState() {
-    _cctvMaintProvider = context.read<CctvMaintProvider>();
-    _loadCctvMaint();
+    _altaiMaintProvider = context.read<AltaiMaintProvider>();
+    _loadAltaiMaint();
     super.initState();
   }
 
   @override
   void dispose() {
-    _cctvMaintProvider.onClose();
+    _altaiMaintProvider.onClose();
     super.dispose();
   }
 
@@ -60,7 +60,7 @@ class _CctvMaintScreenState extends State<CctvMaintScreen> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: const Text("Cek Fisik CCTV"),
+          title: const Text("Cek Fisik Altai"),
           bottom: const TabBar(
             tabs: <Tab>[
               Tab(
@@ -81,13 +81,13 @@ class _CctvMaintScreenState extends State<CctvMaintScreen> {
               right: 0,
               child: TabBarView(
                 children: <Widget>[
-                  CctvMaintRecyclerView(
+                  AltaiMaintRecyclerView(
                     isQuarterCheck: false,
-                    cctvMaintProviderR: _cctvMaintProvider,
+                    altaiMaintProviderR: _altaiMaintProvider,
                   ),
-                  CctvMaintRecyclerView(
+                  AltaiMaintRecyclerView(
                     isQuarterCheck: true,
-                    cctvMaintProviderR: _cctvMaintProvider,
+                    altaiMaintProviderR: _altaiMaintProvider,
                   ),
                 ],
               ),
@@ -101,7 +101,7 @@ class _CctvMaintScreenState extends State<CctvMaintScreen> {
                       iconData: CupertinoIcons.add,
                       text: "Buat Cek Fisik",
                       tapTap: () {
-                        _startAddCctvMaint(context);
+                        _startAddAltaiMaint(context);
                       }),
                 )),
           ],
@@ -111,27 +111,27 @@ class _CctvMaintScreenState extends State<CctvMaintScreen> {
   }
 }
 
-// CctvMaintReceiclerView ------------------------------------
-class CctvMaintRecyclerView extends StatefulWidget {
-  const CctvMaintRecyclerView(
+// AltaiMaintReceiclerView ------------------------------------
+class AltaiMaintRecyclerView extends StatefulWidget {
+  const AltaiMaintRecyclerView(
       {Key? key,
       required this.isQuarterCheck,
-      required this.cctvMaintProviderR})
+      required this.altaiMaintProviderR})
       : super(key: key);
   final bool isQuarterCheck;
-  final CctvMaintProvider cctvMaintProviderR;
+  final AltaiMaintProvider altaiMaintProviderR;
 
   @override
-  _CctvMaintRecyclerViewState createState() => _CctvMaintRecyclerViewState();
+  _AltaiMaintRecyclerViewState createState() => _AltaiMaintRecyclerViewState();
 }
 
-class _CctvMaintRecyclerViewState extends State<CctvMaintRecyclerView> {
-  GlobalKey<RefreshIndicatorState> refreshKeyCctvMaintScreen =
+class _AltaiMaintRecyclerViewState extends State<AltaiMaintRecyclerView> {
+  GlobalKey<RefreshIndicatorState> refreshKeyAltaiMaintScreen =
       GlobalKey<RefreshIndicatorState>();
 
-  Future<dynamic> _loadCctvMaint() {
+  Future<dynamic> _loadAltaiMaint() {
     return Future<void>.delayed(Duration.zero, () {
-      widget.cctvMaintProviderR.findCctvCheck().onError((Object? error, _) {
+      widget.altaiMaintProviderR.findAltaiCheck().onError((Object? error, _) {
         showToastError(context: context, message: error.toString());
       });
     });
@@ -139,13 +139,13 @@ class _CctvMaintRecyclerViewState extends State<CctvMaintRecyclerView> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<CctvMaintProvider>(
-      builder: (_, CctvMaintProvider data, __) {
+    return Consumer<AltaiMaintProvider>(
+      builder: (_, AltaiMaintProvider data, __) {
         List<MainMaintMinResponse> checkList = <MainMaintMinResponse>[];
         if (widget.isQuarterCheck) {
-          checkList = data.cctvCheckListQuarter;
+          checkList = data.altaiCheckListQuarter;
         } else {
-          checkList = data.cctvCheckListMonthly;
+          checkList = data.altaiCheckListMonthly;
         }
 
         return Stack(
@@ -159,7 +159,7 @@ class _CctvMaintRecyclerViewState extends State<CctvMaintRecyclerView> {
                 child: (checkList.isNotEmpty)
                     ? buildListView(checkList)
                     : (data.state == ViewState.idle)
-                        ? EmptyBox(loadTap: _loadCctvMaint)
+                        ? EmptyBox(loadTap: _loadAltaiMaint)
                         : const Center()),
             if (data.state == ViewState.busy)
               const Center(child: CircularProgressIndicator())
@@ -173,17 +173,17 @@ class _CctvMaintRecyclerViewState extends State<CctvMaintRecyclerView> {
 
   Widget buildListView(List<MainMaintMinResponse> checkList) {
     return RefreshIndicator(
-      key: refreshKeyCctvMaintScreen,
-      onRefresh: _loadCctvMaint,
+      key: refreshKeyAltaiMaintScreen,
+      onRefresh: _loadAltaiMaint,
       child: ListView.builder(
         padding: const EdgeInsets.only(bottom: 120),
         itemCount: checkList.length,
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              widget.cctvMaintProviderR.setIDSaved(checkList[index].id);
+              widget.altaiMaintProviderR.setIDSaved(checkList[index].id);
               Navigator.of(context)
-                  .pushNamed(RouteGenerator.cctvMaintenanceDetail);
+                  .pushNamed(RouteGenerator.altaiMaintenanceDetail);
             },
             child: CctvMaintListTile(data: checkList[index]),
           );

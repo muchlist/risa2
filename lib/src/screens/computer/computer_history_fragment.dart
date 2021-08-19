@@ -6,7 +6,7 @@ import '../../providers/computers.dart';
 import '../../providers/histories.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/func_flushbar.dart';
-import '../../shared/func_history_dialog.dart';
+import '../../shared/func_history_dial.dart';
 import '../../shared/history_item_widget.dart';
 import '../../shared/home_like_button.dart';
 import '../../utils/utils.dart';
