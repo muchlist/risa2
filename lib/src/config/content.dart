@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../models/dashboard.dart';
 import '../router/routes.dart';
@@ -17,7 +18,7 @@ class Content {
         route: RouteGenerator.improve),
     const Dashboard("Checklist", CupertinoIcons.chevron_down_square,
         route: RouteGenerator.check),
-    const Dashboard("Check Cctv", CupertinoIcons.checkmark_seal,
+    const Dashboard("Check Virtual", CupertinoIcons.checkmark_seal,
         route: RouteGenerator.vendorCheck),
     const Dashboard("Application", CupertinoIcons.square_stack_3d_up,
         route: RouteGenerator.other),
@@ -32,6 +33,12 @@ class Content {
         route: RouteGenerator.other),
     const Dashboard("Gate", CupertinoIcons.building_2_fill,
         route: RouteGenerator.other),
+    Dashboard("Fisik CCTV", CupertinoIcons.doc_checkmark,
+        route: RouteGenerator.cctvMaintenance,
+        color: Colors.deepOrange.shade300),
+    Dashboard("Fisik Altai", CupertinoIcons.checkmark_rectangle,
+        route: RouteGenerator.altaiMaintenance,
+        color: Colors.deepOrange.shade300),
     Dashboard("Other", CupertinoIcons.question_circle,
         color: Pallete.green.withOpacity(0.4), route: RouteGenerator.other),
   ];

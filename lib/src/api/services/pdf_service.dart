@@ -33,6 +33,12 @@ class PdfService {
         .executeGet<MessageResponse>(const MessageParser());
   }
 
+  Future<MessageResponse> generatePDFVendorDaily(String branch, int target) {
+    //daily-vendor?branch=BANJARMASIN&target=1625721500
+    return RequestREST(endpoint: "/daily-vendor?branch=$branch&target=$target")
+        .executeGet<MessageResponse>(const MessageParser());
+  }
+
   Future<MessageResponse> generatePDFforVendorAuto(String branch) {
     //generate-pdf-vendor-auto?branch=BANJARMASIN
     return RequestREST(endpoint: "/generate-pdf-vendor-auto?branch=$branch")

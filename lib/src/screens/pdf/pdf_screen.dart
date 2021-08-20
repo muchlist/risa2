@@ -56,6 +56,24 @@ class _PdfScreenState extends State<PdfScreen> {
             }));
   }
 
+  void _generatePdfDailyVendor() {
+    Future<void>.delayed(
+        Duration.zero,
+        () => context
+                .read<DashboardProvider>()
+                .generatePDFdaily()
+                .then((bool value) {
+              if (value) {
+                showToastSuccess(
+                    context: context, message: "Berhasil membuat pdf");
+              }
+            }).onError((Object? error, _) {
+              if (error != null) {
+                showToastError(context: context, message: error.toString());
+              }
+            }));
+  }
+
   Future<void> _loadAllPdf() {
     return Future<void>.delayed(Duration.zero, () {
       context.read<DashboardProvider>().findPdf().onError((Object? error, _) {
@@ -90,8 +108,14 @@ class _PdfScreenState extends State<PdfScreen> {
               child: Center(
                 child: HomeLikeButton(
                     iconData: CupertinoIcons.printer,
-                    text: "Generate PDF",
-                    tapTap: () => _generatePdfAuto(forVendor: _isVendor)),
+                    text: _isVendor ? "Daily PDF" : "Generate PDF",
+                    tapTap: () {
+                      if (_isVendor) {
+                        _generatePdfDailyVendor();
+                      } else {
+                        _generatePdfAuto(forVendor: _isVendor);
+                      }
+                    }),
               )),
           Positioned(
             bottom: 30,

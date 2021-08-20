@@ -214,9 +214,9 @@ class _EditCctvBodyState extends State<EditCctvBody> {
 
                 verticalSpaceSmall,
 
-                // * IP Editress text
+                // * IP Address text
                 const Text(
-                  "IP Editress",
+                  "IP Address",
                   style: TextStyle(fontSize: 16),
                 ),
 
@@ -234,7 +234,7 @@ class _EditCctvBodyState extends State<EditCctvBody> {
                       return null;
                     } else {
                       if (!ValueValidator().ip(text)) {
-                        return "IP Editress tidak valid";
+                        return "IP Address tidak valid";
                       }
                     }
                     return null;

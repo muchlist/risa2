@@ -149,6 +149,30 @@ class DashboardProvider extends ChangeNotifier {
     return true;
   }
 
+  // generate PDF Auto
+  Future<bool> generatePDFdaily() async {
+    setState(ViewState.busy);
+    String error = "";
+
+    try {
+      final MessageResponse response = await _pdfService.generatePDFVendorDaily(
+          App.getBranch() ?? "", DateTime.now().toInt());
+      if (response.error != null) {
+        error = response.error!.message;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setState(ViewState.idle);
+    if (error.isNotEmpty) {
+      return Future<bool>.error(error);
+    }
+
+    await findPdf(loading: false, pdfType: "VENDOR");
+    return true;
+  }
+
   // dipanggil ketika data sudah tidak dibutuhkan lagi,
   // di on dispose
   void onClose() {

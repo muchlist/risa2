@@ -22,7 +22,7 @@ class _AddVendorCheckDialogState extends State<AddVendorCheckDialog> {
         Duration.zero,
         () => context
                 .read<VendorCheckProvider>()
-                .addVendorCheck(false)
+                .addVendorCheck(true)
                 .then((bool value) {
               if (value) {
                 Navigator.of(context).pop();

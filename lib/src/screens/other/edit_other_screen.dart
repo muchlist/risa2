@@ -274,7 +274,7 @@ class _EditOtherBodyState extends State<EditOtherBody> {
                       return null;
                     } else {
                       if (!ValueValidator().ip(text)) {
-                        return "IP Editress tidak valid";
+                        return "IP Address tidak valid";
                       }
                     }
                     return null;

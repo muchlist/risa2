@@ -173,7 +173,11 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
         floatingActionButton: FloatingActionButton.extended(
             icon: const Icon(Icons.add),
             onPressed: () {
-              HistoryHelper().showAddIncident(context);
+              if (_isVendor) {
+                HistoryHelper().showAddIncidentV(context);
+              } else {
+                HistoryHelper().showAddIncident(context);
+              }
             },
             label: const Text("Tambah Log")),
       ),
