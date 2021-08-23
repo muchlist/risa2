@@ -297,14 +297,14 @@ class _AltaiVirtualDetailBodyState extends State<AltaiVirtualDetailBody> {
                         ? detail.createdBy
                         : "${detail.createdBy} / ${detail.updatedBy}",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
                     detail.branch,
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
@@ -312,7 +312,7 @@ class _AltaiVirtualDetailBodyState extends State<AltaiVirtualDetailBody> {
                         ? detail.timeStarted.getDateString()
                         : "",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
@@ -320,19 +320,19 @@ class _AltaiVirtualDetailBodyState extends State<AltaiVirtualDetailBody> {
                         ? detail.timeEnded.getDateString()
                         : "",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
                     "$cctvChecked dari $cctvTotal unit",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
                     "$cctvOffline unit",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                 ],

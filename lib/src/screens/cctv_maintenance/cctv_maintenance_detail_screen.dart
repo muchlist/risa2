@@ -345,7 +345,7 @@ class _CctvMaintDetailBodyState extends State<CctvMaintDetailBody> {
                 Text("Mulai cek"),
                 Text("Selesai cek"),
                 Text("Sudah dicek"),
-                Text("Sudah dimaintain"),
+                Text("Sudah dimaint"),
                 Text("Cctv offline"),
                 Text("Cctv buram"),
               ],
@@ -372,7 +372,7 @@ class _CctvMaintDetailBodyState extends State<CctvMaintDetailBody> {
                   Text(
                     detail.name,
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -381,19 +381,19 @@ class _CctvMaintDetailBodyState extends State<CctvMaintDetailBody> {
                         ? detail.createdBy
                         : "${detail.createdBy} / ${detail.updatedBy}",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
                     (detail.quarterlyMode) ? "Triwulan" : "Bulanan",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
                     detail.branch,
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
@@ -401,7 +401,7 @@ class _CctvMaintDetailBodyState extends State<CctvMaintDetailBody> {
                         ? detail.timeStarted.getDateString()
                         : "",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
@@ -409,31 +409,31 @@ class _CctvMaintDetailBodyState extends State<CctvMaintDetailBody> {
                         ? detail.timeEnded.getDateString()
                         : "",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
                     "$cctvChecked dari $cctvTotal unit",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
                     "$cctvMaintained dari $cctvTotal unit",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
                     "$cctvOffline unit",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
                     "$cctvBlur unit",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                 ],

@@ -326,7 +326,7 @@ class _AltaiMaintDetailBodyState extends State<AltaiMaintDetailBody> {
                 Text("Mulai cek"),
                 Text("Selesai cek"),
                 Text("Sudah dicek"),
-                Text("Sudah dimaintain"),
+                Text("Sudah dimaint"),
                 Text("Altai offline"),
               ],
             ),
@@ -351,7 +351,7 @@ class _AltaiMaintDetailBodyState extends State<AltaiMaintDetailBody> {
                   Text(
                     detail.name,
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -360,19 +360,19 @@ class _AltaiMaintDetailBodyState extends State<AltaiMaintDetailBody> {
                         ? detail.createdBy
                         : "${detail.createdBy} / ${detail.updatedBy}",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
                     (detail.quarterlyMode) ? "Triwulan" : "Bulanan",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
                     detail.branch,
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
@@ -380,7 +380,7 @@ class _AltaiMaintDetailBodyState extends State<AltaiMaintDetailBody> {
                         ? detail.timeStarted.getDateString()
                         : "",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
@@ -388,25 +388,25 @@ class _AltaiMaintDetailBodyState extends State<AltaiMaintDetailBody> {
                         ? detail.timeEnded.getDateString()
                         : "",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
                     "$altaiChecked dari $altaiTotal unit",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
                     "$altaiMaintained dari $altaiTotal unit",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                   Text(
                     "$altaiOffline unit",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                   ),
                 ],

@@ -44,7 +44,7 @@ class _AddAltaiMaintenanceHistoryDialogState
         ? ""
         : (widget.mtState.isMaintained)
             ? "Selesai dilakukan pengecekan dan pembersihan"
-            : "Selesai dilakukan pengecekan dan pembersihan";
+            : "Selesai dilakukan pengecekan";
     super.initState();
   }
 

@@ -332,7 +332,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
                         ? detail.createdBy
                         : "${detail.createdBy} / ${detail.updatedBy}",
                     softWrap: true,
-                    maxLines: 2,
+                    maxLines: 1,
                     overflow: TextOverflow.clip,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
