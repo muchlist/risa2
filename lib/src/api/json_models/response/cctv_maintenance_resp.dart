@@ -19,24 +19,27 @@ class CCTVMaintDetailResponse {
 @JsonSerializable(explicitToJson: true)
 class CCTVMaintDetailResponseData {
   CCTVMaintDetailResponseData(
-      this.id,
-      this.quarterlyMode,
-      this.name,
-      this.createdAt,
-      this.createdBy,
-      this.createdById,
-      this.updatedAt,
-      this.updatedBy,
-      this.updatedById,
-      this.branch,
-      this.timeStarted,
-      this.timeEnded,
-      this.isFinish,
-      this.note,
-      this.cctvMaintCheckItems);
+    this.id,
+    this.quarterlyMode,
+    this.name,
+    this.createdAt,
+    this.createdBy,
+    this.createdById,
+    this.updatedAt,
+    this.updatedBy,
+    this.updatedById,
+    this.branch,
+    this.timeStarted,
+    this.timeEnded,
+    this.isFinish,
+    this.note,
+    this.cctvMaintCheckItems,
+  );
 
   factory CCTVMaintDetailResponseData.fromJson(Map<String, dynamic> json) =>
       _$CCTVMaintDetailResponseDataFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CCTVMaintDetailResponseDataToJson(this);
 
   final String id;
   @JsonKey(name: "quarterly_mode")
@@ -65,7 +68,39 @@ class CCTVMaintDetailResponseData {
   @JsonKey(name: "ven_phy_check_items", defaultValue: <CCTVMaintCheckItem>[])
   final List<CCTVMaintCheckItem> cctvMaintCheckItems;
 
-  Map<String, dynamic> toJson() => _$CCTVMaintDetailResponseDataToJson(this);
+  CCTVMaintDetailResponseData copyWith(
+      {String? id,
+      bool? quarterlyMode,
+      String? name,
+      int? createdAt,
+      String? createdBy,
+      String? createdById,
+      int? updatedAt,
+      String? updatedBy,
+      String? updatedById,
+      String? branch,
+      int? timeStarted,
+      int? timeEnded,
+      bool? isFinish,
+      String? note,
+      List<CCTVMaintCheckItem>? cctvMaintCheckItems}) {
+    return CCTVMaintDetailResponseData(
+        id ?? this.id,
+        quarterlyMode ?? this.quarterlyMode,
+        name ?? this.name,
+        createdAt ?? this.createdAt,
+        createdBy ?? this.createdBy,
+        createdById ?? this.createdById,
+        updatedAt ?? this.updatedAt,
+        updatedBy ?? this.updatedBy,
+        updatedById ?? this.updatedById,
+        branch ?? this.branch,
+        timeStarted ?? this.timeStarted,
+        timeEnded ?? this.timeEnded,
+        isFinish ?? this.isFinish,
+        note ?? this.note,
+        cctvMaintCheckItems ?? this.cctvMaintCheckItems);
+  }
 }
 
 @JsonSerializable()

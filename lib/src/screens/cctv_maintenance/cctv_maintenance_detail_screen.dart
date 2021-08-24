@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/screens/cctv_maintenance/searchbar.dart';
 import 'package:risa2/src/shared/func_history_dial.dart';
 
 import '../../api/json_models/request/cctv_maintenance_req.dart';
@@ -226,7 +227,7 @@ class _CctvMaintDetailBodyState extends State<CctvMaintDetailBody> {
         : Stack(
             children: <Widget>[
               buildBody(data),
-              if (data.cctvCheckDetail.isFinish)
+              if (data.cctvCheckDetailWithSearch.isFinish)
                 const SizedBox.shrink()
               else if (isNBeforeLastMonth || isNAfterNewMonth)
                 Positioned(
@@ -256,13 +257,14 @@ class _CctvMaintDetailBodyState extends State<CctvMaintDetailBody> {
   }
 
   Widget buildBody(CctvMaintProvider data) {
-    final CCTVMaintDetailResponseData detail = data.cctvCheckDetail;
+    final CCTVMaintDetailResponseData detail = data.cctvCheckDetailWithSearch;
     final List<String> locations = data.getLocationList();
     final Map<String, List<CCTVMaintCheckItem>> cctvs =
         data.getCheckItemPerLocation(locations);
 
     final List<Widget> slivers = <Widget>[
       buildHeaderSliver(data),
+      buildSearchBar()
     ];
 
     for (final String loc in locations) {
@@ -301,7 +303,7 @@ class _CctvMaintDetailBodyState extends State<CctvMaintDetailBody> {
   }
 
   SliverToBoxAdapter buildHeaderSliver(CctvMaintProvider data) {
-    final CCTVMaintDetailResponseData detail = data.cctvCheckDetail;
+    final CCTVMaintDetailResponseData detail = data.getFullCctvCheckDetail;
 
     int cctvChecked = 0;
     int cctvMaintained = 0;
@@ -466,6 +468,12 @@ class _CctvMaintDetailBodyState extends State<CctvMaintDetailBody> {
           ],
         ),
       ),
+    );
+  }
+
+  SliverToBoxAdapter buildSearchBar() {
+    return const SliverToBoxAdapter(
+      child: SearchBar(),
     );
   }
 

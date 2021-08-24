@@ -105,7 +105,7 @@ class DashboardProvider extends ChangeNotifier {
 
     try {
       final MessageResponse response = forVendor
-          ? await _pdfService.generatePDFforVendor(
+          ? await _pdfService.generatePDFVendorDaily(
               App.getBranch() ?? "", start, end)
           : await _pdfService.generatePDF(App.getBranch() ?? "", start, end);
       if (response.error != null) {
@@ -131,7 +131,7 @@ class DashboardProvider extends ChangeNotifier {
 
     try {
       final MessageResponse response = forVendor
-          ? await _pdfService.generatePDFforVendorAuto(App.getBranch() ?? "")
+          ? await _pdfService.generatePDFVendorDailyAuto(App.getBranch() ?? "")
           : await _pdfService.generatePDFAuto(App.getBranch() ?? "");
       if (response.error != null) {
         error = response.error!.message;
@@ -150,28 +150,28 @@ class DashboardProvider extends ChangeNotifier {
   }
 
   // generate PDF Auto
-  Future<bool> generatePDFdaily() async {
-    setState(ViewState.busy);
-    String error = "";
+  // Future<bool> generatePDFdaily() async {
+  //   setState(ViewState.busy);
+  //   String error = "";
 
-    try {
-      final MessageResponse response = await _pdfService.generatePDFVendorDaily(
-          App.getBranch() ?? "", DateTime.now().toInt());
-      if (response.error != null) {
-        error = response.error!.message;
-      }
-    } catch (e) {
-      error = e.toString();
-    }
+  //   try {
+  //     final MessageResponse response =
+  //         await _pdfService.generatePDFVendorDailyAuto(App.getBranch() ?? "");
+  //     if (response.error != null) {
+  //       error = response.error!.message;
+  //     }
+  //   } catch (e) {
+  //     error = e.toString();
+  //   }
 
-    setState(ViewState.idle);
-    if (error.isNotEmpty) {
-      return Future<bool>.error(error);
-    }
+  //   setState(ViewState.idle);
+  //   if (error.isNotEmpty) {
+  //     return Future<bool>.error(error);
+  //   }
 
-    await findPdf(loading: false, pdfType: "VENDOR");
-    return true;
-  }
+  //   await findPdf(loading: false, pdfType: "VENDOR");
+  //   return true;
+  // }
 
   // dipanggil ketika data sudah tidak dibutuhkan lagi,
   // di on dispose

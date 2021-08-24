@@ -39,7 +39,7 @@ class CctvMaintProvider extends ChangeNotifier {
         .toList();
   }
 
-  // MainMaint list monthly cache
+  // MainMaint list quarterly cache
   List<MainMaintMinResponse> get cctvCheckListQuarter {
     return _cctvCheckList
         .where((MainMaintMinResponse element) => element.quarterlyMode)
@@ -115,14 +115,42 @@ class CctvMaintProvider extends ChangeNotifier {
     _idSaved = cctvCheckID;
   }
 
-  // CctvCheck detail cache
+  String _searchDetail = "";
+
+  // CctvCheck detail cache ============================================ detail
   CCTVMaintDetailResponseData? _cctvCheckDetail;
-  CCTVMaintDetailResponseData get cctvCheckDetail {
+  CCTVMaintDetailResponseData get getFullCctvCheckDetail {
     if (_cctvCheckDetail == null) {
       return CCTVMaintDetailResponseData("", false, "", 0, "", "", 0, "", "",
           "", 0, 0, false, "", <CCTVMaintCheckItem>[]);
     }
     return _cctvCheckDetail!;
+  }
+
+  CCTVMaintDetailResponseData get cctvCheckDetailWithSearch {
+    if (_cctvCheckDetail == null) {
+      return CCTVMaintDetailResponseData("", false, "", 0, "", "", 0, "", "",
+          "", 0, 0, false, "", <CCTVMaintCheckItem>[]);
+    }
+    if (_searchDetail.length > 1) {
+      return _cctvCheckDetail!.copyWith(
+          cctvMaintCheckItems: _cctvCheckDetail!.cctvMaintCheckItems
+              .where((CCTVMaintCheckItem element) => element.name
+                  .toUpperCase()
+                  .contains(_searchDetail.toUpperCase()))
+              .toList());
+    }
+    return _cctvCheckDetail!;
+  }
+
+  void setSearchDetail({String search = ""}) {
+    _searchDetail = search;
+    notifyListeners();
+  }
+
+  void resetSearchDetail() {
+    _searchDetail = "";
+    notifyListeners();
   }
 
   void removeDetail() {
@@ -157,7 +185,7 @@ class CctvMaintProvider extends ChangeNotifier {
   // get distinct location
   List<String> getLocationList() {
     final List<CCTVMaintCheckItem> checkItems =
-        _cctvCheckDetail?.cctvMaintCheckItems ?? <CCTVMaintCheckItem>[];
+        cctvCheckDetailWithSearch.cctvMaintCheckItems;
     final List<String> allLocation = <String>[];
     if (checkItems.isEmpty) {
       return <String>[];
@@ -176,7 +204,7 @@ class CctvMaintProvider extends ChangeNotifier {
       return checkMap;
     }
     for (final String loc in locations) {
-      checkMap[loc] = _cctvCheckDetail!.cctvMaintCheckItems
+      checkMap[loc] = cctvCheckDetailWithSearch.cctvMaintCheckItems
           .where((CCTVMaintCheckItem cctv) => cctv.location == loc)
           .toList();
     }

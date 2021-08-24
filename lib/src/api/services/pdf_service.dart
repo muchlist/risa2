@@ -33,9 +33,17 @@ class PdfService {
         .executeGet<MessageResponse>(const MessageParser());
   }
 
-  Future<MessageResponse> generatePDFVendorDaily(String branch, int target) {
-    //daily-vendor?branch=BANJARMASIN&target=1625721500
-    return RequestREST(endpoint: "/daily-vendor?branch=$branch&target=$target")
+  Future<MessageResponse> generatePDFVendorDaily(
+      String branch, int start, int end) {
+    //daily-vendor?branch=BANJARMASIN&start=1625721500&end=12312312313
+    return RequestREST(
+            endpoint: "/daily-vendor?branch=$branch&start=$start&end=$end")
+        .executeGet<MessageResponse>(const MessageParser());
+  }
+
+  Future<MessageResponse> generatePDFVendorDailyAuto(String branch) {
+    //generate-pdf-auto?branch=BANJARMASIN
+    return RequestREST(endpoint: "/daily-vendor-auto?branch=$branch")
         .executeGet<MessageResponse>(const MessageParser());
   }
 
