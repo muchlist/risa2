@@ -115,14 +115,42 @@ class VendorCheckProvider extends ChangeNotifier {
     _vendorCheckIDSaved = vendorCheckID;
   }
 
+  String _searchDetail = "";
+
   // vendorVendorCheck detail cache
   VendorCheckDetailResponseData? _vendorCheckDetail;
-  VendorCheckDetailResponseData get vendorCheckDetail {
+  VendorCheckDetailResponseData get geFullVendorCheckDetail {
     if (_vendorCheckDetail == null) {
       return VendorCheckDetailResponseData("", 0, "", "", 0, "", "", "", 0, 0,
           false, false, "", <VendorCheckItem>[]);
     }
     return _vendorCheckDetail!;
+  }
+
+  VendorCheckDetailResponseData get getVendorCheckDetailWithSearch {
+    if (_vendorCheckDetail == null) {
+      return VendorCheckDetailResponseData("", 0, "", "", 0, "", "", "", 0, 0,
+          false, false, "", <VendorCheckItem>[]);
+    }
+    if (_searchDetail.length > 1) {
+      return _vendorCheckDetail!.copyWith(
+          vendorCheckItems: _vendorCheckDetail!.vendorCheckItems
+              .where((VendorCheckItem element) => element.name
+                  .toUpperCase()
+                  .contains(_searchDetail.toUpperCase()))
+              .toList());
+    }
+    return _vendorCheckDetail!;
+  }
+
+  void setSearchDetail({String search = ""}) {
+    _searchDetail = search;
+    notifyListeners();
+  }
+
+  void resetSearchDetail() {
+    _searchDetail = "";
+    notifyListeners();
   }
 
   void removeDetail() {
@@ -157,7 +185,7 @@ class VendorCheckProvider extends ChangeNotifier {
   // get distinct location
   List<String> getLocationList() {
     final List<VendorCheckItem> checkItems =
-        _vendorCheckDetail?.vendorCheckItems ?? <VendorCheckItem>[];
+        getVendorCheckDetailWithSearch.vendorCheckItems;
     final List<String> allLocation = <String>[];
     if (checkItems.isEmpty) {
       return <String>[];
@@ -176,7 +204,7 @@ class VendorCheckProvider extends ChangeNotifier {
       return checkMap;
     }
     for (final String loc in locations) {
-      checkMap[loc] = _vendorCheckDetail!.vendorCheckItems
+      checkMap[loc] = getVendorCheckDetailWithSearch.vendorCheckItems
           .where((VendorCheckItem cctv) => cctv.location == loc)
           .toList();
     }

@@ -37,6 +37,8 @@ class VendorCheckDetailResponseData {
   factory VendorCheckDetailResponseData.fromJson(Map<String, dynamic> json) =>
       _$VendorCheckDetailResponseDataFromJson(json);
 
+  Map<String, dynamic> toJson() => _$VendorCheckDetailResponseDataToJson(this);
+
   final String id;
   @JsonKey(name: "created_at")
   final int createdAt;
@@ -63,7 +65,38 @@ class VendorCheckDetailResponseData {
   @JsonKey(name: "vendor_check_items", defaultValue: <VendorCheckItem>[])
   final List<VendorCheckItem> vendorCheckItems;
 
-  Map<String, dynamic> toJson() => _$VendorCheckDetailResponseDataToJson(this);
+  VendorCheckDetailResponseData copyWith(
+      {String? id,
+      int? createdAt,
+      String? createdBy,
+      String? createdById,
+      int? updatedAt,
+      String? updatedBy,
+      String? updatedById,
+      String? branch,
+      int? timeStarted,
+      int? timeEnded,
+      bool? isVirtualCheck,
+      bool? isFinish,
+      String? note,
+      List<VendorCheckItem>? vendorCheckItems}) {
+    return VendorCheckDetailResponseData(
+      id ?? this.id,
+      createdAt ?? this.createdAt,
+      createdBy ?? this.createdBy,
+      createdById ?? this.createdById,
+      updatedAt ?? this.updatedAt,
+      updatedBy ?? this.updatedBy,
+      updatedById ?? this.updatedById,
+      branch ?? this.branch,
+      timeStarted ?? this.timeStarted,
+      timeEnded ?? this.timeEnded,
+      isVirtualCheck ?? this.isVirtualCheck,
+      isFinish ?? this.isFinish,
+      note ?? this.note,
+      vendorCheckItems ?? this.vendorCheckItems,
+    );
+  }
 }
 
 @JsonSerializable()

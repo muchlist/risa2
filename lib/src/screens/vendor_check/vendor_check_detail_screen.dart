@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/screens/vendor_check/searchbar.dart';
 
 import '../../api/json_models/request/vendor_req.dart';
 import '../../api/json_models/response/vendor_check_resp.dart';
@@ -191,11 +192,11 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
         : Stack(
             children: <Widget>[
               buildBody(data),
-              if (data.vendorCheckDetail.isFinish)
+              if (data.geFullVendorCheckDetail.isFinish)
                 const SizedBox.shrink()
               else if (isNBeforeLastMonth ||
                   isNAfterNewMonth ||
-                  data.vendorCheckDetail.isVirtualCheck)
+                  data.geFullVendorCheckDetail.isVirtualCheck)
                 Positioned(
                     bottom: 15,
                     right: 20,
@@ -223,13 +224,15 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
   }
 
   Widget buildBody(VendorCheckProvider data) {
-    final VendorCheckDetailResponseData detail = data.vendorCheckDetail;
+    final VendorCheckDetailResponseData detail =
+        data.getVendorCheckDetailWithSearch;
     final List<String> locations = data.getLocationList();
     final Map<String, List<VendorCheckItem>> cctvs =
         data.getCheckItemPerLocation(locations);
 
     final List<Widget> slivers = <Widget>[
       buildHeaderSliver(data),
+      buildSearchBar(),
     ];
 
     for (final String loc in locations) {
@@ -267,7 +270,7 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
   }
 
   SliverToBoxAdapter buildHeaderSliver(VendorCheckProvider data) {
-    final VendorCheckDetailResponseData detail = data.vendorCheckDetail;
+    final VendorCheckDetailResponseData detail = data.geFullVendorCheckDetail;
 
     int cctvChecked = 0;
     int cctvOffline = 0;
@@ -412,6 +415,12 @@ class _VendorCheckDetailBodyState extends State<VendorCheckDetailBody> {
           ],
         ),
       ),
+    );
+  }
+
+  SliverToBoxAdapter buildSearchBar() {
+    return const SliverToBoxAdapter(
+      child: SearchBar(),
     );
   }
 

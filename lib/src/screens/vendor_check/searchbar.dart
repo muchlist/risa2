@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../providers/cctv_maintenance.dart';
+import '../../providers/vendor_check.dart';
 
 class SearchBar extends StatefulWidget {
   const SearchBar({
@@ -15,13 +14,13 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   final TextEditingController _nameController = TextEditingController();
-  late final CctvMaintProvider _cctvMaintProvider;
+  late final VendorCheckProvider _vendorMaintProvider;
 
   @override
   void initState() {
-    _cctvMaintProvider = context.read<CctvMaintProvider>();
+    _vendorMaintProvider = context.read<VendorCheckProvider>();
     Future<void>.delayed(
-        Duration.zero, () => _cctvMaintProvider.resetSearchDetail());
+        Duration.zero, () => _vendorMaintProvider.resetSearchDetail());
     super.initState();
   }
 
@@ -48,7 +47,7 @@ class _SearchBarState extends State<SearchBar> {
                     enabledBorder: InputBorder.none,
                     suffixIcon: IconButton(
                       onPressed: () {
-                        _cctvMaintProvider.resetSearchDetail();
+                        _vendorMaintProvider.resetSearchDetail();
                         _nameController.clear();
                         FocusScope.of(context).requestFocus(
                           FocusNode(),
@@ -67,7 +66,7 @@ class _SearchBarState extends State<SearchBar> {
             IconButton(
               icon: const Icon(CupertinoIcons.search),
               onPressed: () {
-                _cctvMaintProvider.setSearchDetail(
+                _vendorMaintProvider.setSearchDetail(
                     search: _nameController.text);
                 FocusScope.of(context).requestFocus(FocusNode());
               },
