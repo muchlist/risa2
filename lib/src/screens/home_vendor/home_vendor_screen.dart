@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/providers/others.dart';
 
 import '../../api/filter_models/history_filter.dart';
 import '../../config/histo_category.dart';
@@ -14,6 +13,7 @@ import '../../globals.dart';
 import '../../models/dashboard.dart';
 import '../../providers/auth.dart';
 import '../../providers/histories.dart';
+import '../../providers/others.dart';
 import '../../router/routes.dart';
 import '../../shared/dashboard_v_item_widget.dart';
 import '../../shared/disable_glow.dart';
@@ -39,7 +39,8 @@ class _HomeVScreenState extends State<HomeVScreen> {
     return Future<void>.delayed(Duration.zero, () {
       historyProvider.setFilter(FilterHistory(
           branch: App.getBranch(),
-          category: "${HistCategory.cctv},${HistCategory.altai}"));
+          category:
+              "${HistCategory.cctv},${HistCategory.altai},${HistCategory.otherVendor}"));
 
       historyProvider.findHistory().then((_) {}).onError((Object? error, _) {
         if (error != null) {
@@ -182,7 +183,7 @@ class _HomeVScreenState extends State<HomeVScreen> {
                                 child: Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
-                                "CCTV BERMASALAH",
+                                "UNIT BERMASALAH",
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),

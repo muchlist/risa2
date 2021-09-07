@@ -40,6 +40,7 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
   final listChoices = <ItemChoice>[
     ItemChoice(1, 'CCTV'),
     ItemChoice(7, 'ALTAI'),
+    ItemChoice(11, 'OTHER-V'),
   ];
 
   // Default value

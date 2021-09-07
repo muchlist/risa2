@@ -11,6 +11,7 @@ class HistCategory {
   static const String gate = "GATE";
   static const String ups = "UPS";
   static const String other = "OTHER";
+  static const String otherVendor = "OTHER-V";
 
   final List<String> categoryList = <String>[
     all,
