@@ -19,9 +19,9 @@ class ServerConfigParser extends JsonParser<ServerConfigDetailResponse>
   }
 }
 
-class ServerConfiglistParser extends JsonParser<ServerConfigListResponse>
+class ServerConfigListParser extends JsonParser<ServerConfigListResponse>
     with ObjectDecoder<ServerConfigListResponse> {
-  const ServerConfiglistParser();
+  const ServerConfigListParser();
 
   @override
   Future<ServerConfigListResponse> parseFromJson(String json) async {
