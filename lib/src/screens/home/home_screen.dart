@@ -270,7 +270,10 @@ class _HomeScreenState extends State<HomeScreen> {
             bottom: 50,
             left: 40,
             child: IconButton(
-                icon: const Icon(CupertinoIcons.square_arrow_down, size: 28),
+                icon: const Icon(
+                  CupertinoIcons.square_arrow_down,
+                  size: 28,
+                ),
                 onPressed: () {
                   Navigator.pushNamed(context, RouteGenerator.pdf);
                 }),

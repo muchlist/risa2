@@ -48,6 +48,7 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
     ItemChoice(8, 'SERVER'),
     ItemChoice(9, 'GATE'),
     ItemChoice(10, 'OTHER'),
+    ItemChoice(11, 'OTHER-V'),
   ];
 
   // Default value

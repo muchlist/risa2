@@ -366,7 +366,7 @@ class _HomeVScreenState extends State<HomeVScreen> {
             onTap: () =>
                 Navigator.pushNamed(context, RouteGenerator.serverConfig),
             child: DashboardVIcon(Dashboard(
-                "Config Server", CupertinoIcons.greaterthan_circle_fill,
+                "Cfg Server", CupertinoIcons.greaterthan_circle_fill,
                 color: Pallete.green.withOpacity(0.4))),
           ),
         ],

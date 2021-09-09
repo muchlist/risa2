@@ -197,12 +197,12 @@ class ServerConfigProvider extends ChangeNotifier {
   }
 
   // remove serverConfig
-  Future<bool> removeServerConfig() async {
+  Future<bool> removeServerConfig(String id) async {
     String error = "";
 
     try {
       final MessageResponse response =
-          await _serverConfigService.deleteServerConfig(_serverConfigIDSaved);
+          await _serverConfigService.deleteServerConfig(id);
       if (response.error != null) {
         error = response.error!.message;
       }

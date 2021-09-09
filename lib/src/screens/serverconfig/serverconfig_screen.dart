@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/router/routes.dart';
 
 import '../../api/json_models/response/server_config_resp.dart';
 import '../../config/constant.dart';
@@ -38,7 +39,7 @@ class _ServerConfigScreenState extends State<ServerConfigScreen> {
       floatingActionButton: FloatingActionButton.extended(
           icon: const Icon(Icons.add),
           onPressed: () {
-            // Navigator.pushNamed(context, RouteGenerator.serverConfigAdd);
+            Navigator.pushNamed(context, RouteGenerator.serverConfigAdd);
           },
           label: const Text("Tambah data")),
       body: ServerConfigRecyclerView(),
@@ -112,21 +113,31 @@ class _ServerConfigRecyclerViewState extends State<ServerConfigRecyclerView> {
             title: dataSpec.title,
             note: dataSpec.note,
             diff: dataSpec.diff,
-            imageUrl: "${Constant.baseUrl}${dataSpec.image.thumbnailMod()}",
+            imageUrl: dataSpec.image.isNotEmpty
+                ? "${Constant.baseUrl}${dataSpec.image.thumbnailMod()}"
+                : "",
             updatedAt: dataSpec.updatedAt,
             updatedBy: dataSpec.updatedBy,
           );
 
           return GestureDetector(
               onTap: () {
-                context.read<ServerConfigProvider>().removeDetail();
-                context
+                showToastWarning(
+                    context: context,
+                    message: "tahan lama untuk menghapus item");
+              },
+              onLongPress: () async {
+                await context
                     .read<ServerConfigProvider>()
-                    .setServerConfigID(data.serverConfigList[index].id);
-                // Navigator.pushNamed(
-                //   context,
-                //   RouteGenerator.serverConfigDetail,
-                // );
+                    .removeServerConfig(data.serverConfigList[index].id)
+                    .then((bool value) {
+                  if (value) {
+                    showToastSuccess(
+                        context: context, message: "Berhasil menghapus item");
+                  }
+                }).onError((Object? error, _) {
+                  showToastError(context: context, message: error.toString());
+                });
               },
               child: ConfigListTile(data: dataToWidget));
         },
