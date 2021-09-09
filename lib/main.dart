@@ -20,6 +20,7 @@ import 'src/api/services/history_service.dart';
 import 'src/api/services/improve_service.dart';
 import 'src/api/services/other_service.dart';
 import 'src/api/services/pdf_service.dart';
+import 'src/api/services/server_config_service.dart';
 import 'src/api/services/speed_service.dart';
 import 'src/api/services/stock_service.dart';
 import 'src/api/services/vendor_service.dart';
@@ -33,6 +34,7 @@ import 'src/providers/cctvs.dart';
 import 'src/providers/checks.dart';
 import 'src/providers/checks_master.dart';
 import 'src/providers/computers.dart';
+import 'src/providers/conf_server.dart';
 import 'src/providers/dashboard.dart';
 import 'src/providers/generals.dart';
 import 'src/providers/histories.dart';
@@ -130,6 +132,7 @@ class _MyAppState extends State<MyApp> {
   final OtherService otherService = const OtherService();
   final SpeedService speedService = const SpeedService();
   final PdfService pdfService = const PdfService();
+  final ServerConfigService serverConfigService = const ServerConfigService();
 
   @override
   void initState() {
@@ -177,6 +180,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<DashboardProvider>(
             create: (BuildContext context) =>
                 DashboardProvider(speedService, pdfService)),
+        ChangeNotifierProvider<ServerConfigProvider>(
+            create: (BuildContext context) =>
+                ServerConfigProvider(serverConfigService)),
       ],
       child: MaterialApp(
         title: MyApp._title,
