@@ -6,6 +6,7 @@ export "cctv_parser.dart";
 export "check_parser.dart";
 export "checkp_parser.dart";
 export "computer_parser.dart";
+export "config_check_parser.dart";
 export "general_parser.dart";
 export "history_parser.dart";
 export "improve_parser.dart";
