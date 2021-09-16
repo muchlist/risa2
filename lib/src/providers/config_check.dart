@@ -27,9 +27,10 @@ class ConfigCheckProvider extends ChangeNotifier {
   }
 
   // configCheckItem list cache
-  List<ConfigCheckItem> _configItemList = <ConfigCheckItem>[];
-  List<ConfigCheckItem> get configItemList {
-    return UnmodifiableListView<ConfigCheckItem>(_configItemList);
+  List<ConfigCheckDetailResponseData> _configList =
+      <ConfigCheckDetailResponseData>[];
+  List<ConfigCheckDetailResponseData> get configList {
+    return UnmodifiableListView<ConfigCheckDetailResponseData>(_configList);
   }
 
   // *memasang filter pada pencarian configItem
@@ -49,7 +50,7 @@ class ConfigCheckProvider extends ChangeNotifier {
       if (response.error != null) {
         error = response.error!.message;
       } else {
-        _configItemList = response.data;
+        _configList = response.data;
       }
     } catch (e) {
       error = e.toString();
@@ -255,6 +256,6 @@ class ConfigCheckProvider extends ChangeNotifier {
   // di on dispose
   void onClose() {
     removeDetail();
-    _configItemList = <ConfigCheckItem>[];
+    _configList = <ConfigCheckDetailResponseData>[];
   }
 }

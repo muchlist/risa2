@@ -34,8 +34,6 @@ import '../screens/other/edit_other_screen.dart';
 import '../screens/other/other_detail_screen.dart';
 import '../screens/other/other_screen.dart';
 import '../screens/pdf/pdf_screen.dart';
-import '../screens/serverconfig/add_serverconfig_screen.dart';
-import '../screens/serverconfig/serverconfig_screen.dart';
 import '../screens/stock/add_stock_screen.dart';
 import '../screens/stock/decrement_stock_screen.dart';
 import '../screens/stock/edit_stock_screen.dart';
@@ -77,8 +75,6 @@ class RouteGenerator {
   static const String improveDetail = '/improve-detail';
   static const String improveAdd = '/improve-add';
   static const String improveEdit = '/improve-edit';
-  static const String serverConfig = '/server-config';
-  static const String serverConfigAdd = '/server-config-add';
   static const String computer = '/computer';
   static const String computerDetail = '/computer-detail';
   static const String computerAdd = '/computer-add';
@@ -93,6 +89,9 @@ class RouteGenerator {
   static const String cctvMaintenanceDetail = '/cctv-maintenance-detail';
   static const String altaiMaintenance = '/altai-maintenance';
   static const String altaiMaintenanceDetail = '/altai-maintenance-detail';
+  static const String configCheck = '/config-check';
+  static const String configCheckAdd = '/config-check-add';
+  static const String configCheckDetail = '/config-check-detail';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -180,10 +179,6 @@ class RouteGenerator {
         return transitionFade(AltaiMaintScreen());
       case altaiMaintenanceDetail:
         return transitionFade(AltaiMaintDetailScreen());
-      case serverConfig:
-        return transitionFade(ServerConfigScreen());
-      case serverConfigAdd:
-        return transitionFade(AddServerConfigScreen());
       default:
         return MaterialPageRoute<LoginScreen>(builder: (_) => LoginScreen());
     }

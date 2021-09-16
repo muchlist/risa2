@@ -15,12 +15,12 @@ import 'src/api/services/cctv_service.dart';
 import 'src/api/services/check_service.dart';
 import 'src/api/services/checkp_service.dart';
 import 'src/api/services/computer_service.dart';
+import 'src/api/services/config_check_service.dart';
 import 'src/api/services/general_service.dart';
 import 'src/api/services/history_service.dart';
 import 'src/api/services/improve_service.dart';
 import 'src/api/services/other_service.dart';
 import 'src/api/services/pdf_service.dart';
-import 'src/api/services/server_config_service.dart';
 import 'src/api/services/speed_service.dart';
 import 'src/api/services/stock_service.dart';
 import 'src/api/services/vendor_service.dart';
@@ -34,7 +34,7 @@ import 'src/providers/cctvs.dart';
 import 'src/providers/checks.dart';
 import 'src/providers/checks_master.dart';
 import 'src/providers/computers.dart';
-import 'src/providers/conf_server.dart';
+import 'src/providers/config_check.dart';
 import 'src/providers/dashboard.dart';
 import 'src/providers/generals.dart';
 import 'src/providers/histories.dart';
@@ -132,7 +132,7 @@ class _MyAppState extends State<MyApp> {
   final OtherService otherService = const OtherService();
   final SpeedService speedService = const SpeedService();
   final PdfService pdfService = const PdfService();
-  final ServerConfigService serverConfigService = const ServerConfigService();
+  final ConfigCheckService configCheckService = const ConfigCheckService();
 
   @override
   void initState() {
@@ -180,9 +180,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<DashboardProvider>(
             create: (BuildContext context) =>
                 DashboardProvider(speedService, pdfService)),
-        ChangeNotifierProvider<ServerConfigProvider>(
+        ChangeNotifierProvider<ConfigCheckProvider>(
             create: (BuildContext context) =>
-                ServerConfigProvider(serverConfigService)),
+                ConfigCheckProvider(configCheckService)),
       ],
       child: MaterialApp(
         title: MyApp._title,

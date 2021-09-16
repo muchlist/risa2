@@ -31,8 +31,8 @@ class ConfigCheckListParser extends JsonParser<ConfigCheckListResponse>
       final Map<String, dynamic> decoded = decodeJsonObject(json);
       return ConfigCheckListResponse.fromJson(decoded);
     } catch (e) {
-      return ConfigCheckListResponse(
-          ErrorResp(0, e.toString(), "", <String>[]), <ConfigCheckItem>[]);
+      return ConfigCheckListResponse(ErrorResp(0, e.toString(), "", <String>[]),
+          <ConfigCheckDetailResponseData>[]);
     }
   }
 }

@@ -39,8 +39,8 @@ class Content {
     Dashboard("Fisik Altai", CupertinoIcons.checkmark_rectangle,
         route: RouteGenerator.altaiMaintenance,
         color: Colors.deepOrange.shade300),
-    Dashboard("Cfg Server", CupertinoIcons.greaterthan_circle_fill,
-        route: RouteGenerator.serverConfig, color: Colors.deepOrange.shade300),
+    // Dashboard("Cfg Server", CupertinoIcons.greaterthan_circle_fill,
+    //     route: RouteGenerator.serverConfig, color: Colors.deepOrange.shade300),
     Dashboard("Other", CupertinoIcons.question_circle,
         color: Pallete.green.withOpacity(0.4), route: RouteGenerator.other),
   ];

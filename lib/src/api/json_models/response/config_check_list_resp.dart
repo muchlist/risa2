@@ -15,6 +15,6 @@ class ConfigCheckListResponse {
   Map<String, dynamic> toJson() => _$ConfigCheckListResponseToJson(this);
 
   final ErrorResp? error;
-  @JsonKey(defaultValue: <ConfigCheckItem>[])
-  final List<ConfigCheckItem> data;
+  @JsonKey(defaultValue: <ConfigCheckDetailResponseData>[])
+  final List<ConfigCheckDetailResponseData> data;
 }
