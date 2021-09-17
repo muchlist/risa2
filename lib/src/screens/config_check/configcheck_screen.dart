@@ -9,6 +9,7 @@ import '../../shared/func_flushbar.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 import '../../utils/utils.dart';
+import 'add_configcheck_dial.dart';
 
 class ConfigCheckScreen extends StatefulWidget {
   @override
@@ -16,6 +17,18 @@ class ConfigCheckScreen extends StatefulWidget {
 }
 
 class _ConfigCheckScreenState extends State<ConfigCheckScreen> {
+  void _startAddConfigCheck(BuildContext context) {
+    showModalBottomSheet(
+      // isScrollControlled: true,
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) => const AddConfigCheckDialog(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +48,7 @@ class _ConfigCheckScreenState extends State<ConfigCheckScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
           icon: const Icon(Icons.add),
-          onPressed: () {},
+          onPressed: () => _startAddConfigCheck(context),
           label: const Text("Tambah data")),
       body: ConfigCheckRecyclerView(),
     );

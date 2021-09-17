@@ -22,8 +22,7 @@ class ConfigCheckListTile extends StatelessWidget {
             leading: (data.isFinish)
                 ? const Icon(CupertinoIcons.check_mark_circled)
                 : const Icon(CupertinoIcons.timer_fill),
-            title:
-                Text("Pengecekan Altai Virtual\n${data.createdBy.firstname}"),
+            title: Text("Backup Config ${data.createdAt.getMonthYear()}"),
             subtitle: Text(dateDescription),
           ),
         ));

@@ -13,7 +13,8 @@ ConfigCheckListResponse _$ConfigCheckListResponseFromJson(
         ? null
         : ErrorResp.fromJson(json['error'] as Map<String, dynamic>),
     (json['data'] as List<dynamic>?)
-            ?.map((e) => ConfigCheckItem.fromJson(e as Map<String, dynamic>))
+            ?.map((e) => ConfigCheckDetailResponseData.fromJson(
+                e as Map<String, dynamic>))
             .toList() ??
         [],
   );
