@@ -308,6 +308,9 @@ class _AddHistoryDialogState extends State<AddHistoryDialog> {
                         min: 1,
                         max: 4,
                         divisions: 3,
+                        inactiveColor: Colors.blueGrey.shade200,
+                        thumbColor: Pallete.green,
+                        activeColor: Colors.green.shade400,
                         value: _selectedSlider,
                         label: _selectedLabel,
                         onChanged: (value) {

@@ -141,6 +141,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = ThemeData(
+      fontFamily: GoogleFonts.montserrat().fontFamily,
+      primarySwatch: Colors.green,
+    );
+
     return MultiProvider(
       providers: <ChangeNotifierProvider<ChangeNotifier>>[
         ChangeNotifierProvider<AuthProvider>(
@@ -186,15 +191,20 @@ class _MyAppState extends State<MyApp> {
       ],
       child: MaterialApp(
         title: MyApp._title,
-        theme: ThemeData(
-            appBarTheme: const AppBarTheme(backgroundColor: Pallete.background),
-            scaffoldBackgroundColor: Pallete.background,
-            primaryColor: Colors.grey,
-            accentColor: Pallete.green,
-            primarySwatch: Colors.green,
-            iconTheme: const IconThemeData(color: Colors.black),
-            fontFamily: GoogleFonts.montserrat().fontFamily,
-            textTheme: GoogleFonts.montserratTextTheme()),
+        theme: theme.copyWith(
+          appBarTheme: theme.appBarTheme.copyWith(
+              backgroundColor: Pallete.background,
+              titleTextStyle: theme.textTheme.subtitle1,
+              toolbarTextStyle: theme.textTheme.subtitle1,
+              iconTheme: theme.iconTheme),
+          scaffoldBackgroundColor: Pallete.background,
+          primaryColor: Colors.grey,
+          colorScheme: theme.colorScheme
+              .copyWith(primary: Colors.grey, secondary: Pallete.green),
+          iconTheme: const IconThemeData(color: Colors.black),
+          textTheme: GoogleFonts.montserratTextTheme(),
+          primaryTextTheme: GoogleFonts.montserratTextTheme(),
+        ),
         onGenerateRoute: RouteGenerator.generateRoute,
         home: LandingPage(),
         debugShowCheckedModeBanner: false,

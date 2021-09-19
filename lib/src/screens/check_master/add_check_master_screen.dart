@@ -235,7 +235,8 @@ class _AddCheckMasterBodyState extends State<AddCheckMasterBody> {
                                   : const TextStyle(),
                             ),
                             selected: _multiShiftSelected.contains(e.id),
-                            selectedColor: Theme.of(context).accentColor,
+                            selectedColor:
+                                Theme.of(context).colorScheme.secondary,
                             // * Setstate ------------------------------
                             onSelected: (_) => setState(() {
                               if (_multiShiftSelected.contains(e.id)) {
