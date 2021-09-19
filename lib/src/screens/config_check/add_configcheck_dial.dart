@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:risa2/src/shared/home_like_button.dart';
 
 import '../../config/pallatte.dart';
-import '../../providers/altai_virtual.dart';
 import '../../providers/config_check.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/ui_helpers.dart';

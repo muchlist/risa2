@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/router/routes.dart';
 
 import '../../providers/config_check.dart';
 import '../../shared/config_check_widget.dart';
@@ -118,9 +119,9 @@ class _ConfigCheckRecyclerViewState extends State<ConfigCheckRecyclerView> {
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
               onTap: () {
-                showToastWarning(
-                    context: context,
-                    message: "tahan lama untuk menghapus item");
+                data.setConfigCheckID(data.configList[index].id);
+                Navigator.of(context)
+                    .pushNamed(RouteGenerator.configCheckDetail);
               },
               child: ConfigCheckListTile(data: data.configList[index]));
         },

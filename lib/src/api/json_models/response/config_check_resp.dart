@@ -66,8 +66,8 @@ class ConfigCheckDetailResponseData {
 
 @JsonSerializable()
 class ConfigCheckItem {
-  ConfigCheckItem(this.id, this.name, this.location, this.checkedAt,
-      this.checkedBy, this.isUpdated);
+  ConfigCheckItem(
+      this.id, this.name, this.checkedAt, this.checkedBy, this.isUpdated);
 
   factory ConfigCheckItem.fromJson(Map<String, dynamic> json) =>
       _$ConfigCheckItemFromJson(json);
@@ -76,7 +76,6 @@ class ConfigCheckItem {
 
   final String id;
   final String name;
-  final String location;
   @JsonKey(name: "checked_at")
   final int checkedAt;
   @JsonKey(name: "checked_by")

@@ -120,7 +120,6 @@ class ConfigCheckProvider extends ChangeNotifier {
   // * Mendapatkan detail configCheck
   Future<void> getDetail() async {
     setDetailState(ViewState.busy);
-
     String error = "";
     try {
       final ConfigCheckDetailResponse response =
@@ -157,6 +156,7 @@ class ConfigCheckProvider extends ChangeNotifier {
 
     for (final ConfigCheckItem item in configCheckItems) {
       final String letter = item.name.toUpperCase()[0];
+
       if (checkMap.containsKey(letter)) {
         checkMap[letter]!.add(item);
       } else {

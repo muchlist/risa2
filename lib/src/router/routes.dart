@@ -18,6 +18,7 @@ import '../screens/computer/add_computer_screen.dart';
 import '../screens/computer/computer_detail_screen.dart';
 import '../screens/computer/computer_screen.dart';
 import '../screens/computer/edit_computer_screen.dart';
+import '../screens/config_check/configcheck_detail_screen.dart';
 import '../screens/config_check/configcheck_screen.dart';
 import '../screens/dashboard/dashboard_screen.dart';
 import '../screens/history/histories_screen.dart';
@@ -164,12 +165,12 @@ class RouteGenerator {
         return transitionFade(EditOtherScreen());
       case vendorCheck:
         return transitionFade(VendorCheckScreen());
-      // case vendorCheckDetail:
-      //   return transitionFade(ConfigCheckDetailScreen());
+      case vendorCheckDetail:
+        return transitionFade(VendorCheckDetailScreen());
       case configCheck:
         return transitionFade(ConfigCheckScreen());
       case configCheckDetail:
-        return transitionFade(VendorCheckDetailScreen());
+        return transitionFade(ConfigCheckDetailScreen());
       case altaiVirtualDetail:
         return transitionFade(AltaiVirtualDetailScreen());
       case dashboard:
