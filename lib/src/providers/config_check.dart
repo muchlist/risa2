@@ -112,6 +112,49 @@ class ConfigCheckProvider extends ChangeNotifier {
     return _configDetail!;
   }
 
+  void toggleUpdatedByID(String id) {
+    if (_configDetail?.isFinish ?? false) {
+      return;
+    }
+    final List<ConfigCheckItem> checkItems =
+        _configDetail?.configCheckItems ?? <ConfigCheckItem>[];
+    if (checkItems.isEmpty) {
+      return;
+    }
+
+    for (int i = 0; i < checkItems.length; i++) {
+      if (checkItems[i].id == id) {
+        checkItems[i].isUpdated = !checkItems[i].isUpdated;
+      } else {}
+    }
+    // _configDetail!.configCheckItems = checkItems;
+    notifyListeners();
+  }
+
+  bool needPercentage(double percent) {
+    final List<ConfigCheckItem> checkItems =
+        _configDetail?.configCheckItems ?? <ConfigCheckItem>[];
+    if (checkItems.isEmpty) {
+      return false;
+    }
+
+    // generate payload
+    int childUpdatedCount = 0;
+    final int total = checkItems.length;
+
+    for (final ConfigCheckItem child
+        in _configDetail?.configCheckItems ?? <ConfigCheckItem>[]) {
+      if (child.isUpdated) {
+        childUpdatedCount++;
+      }
+    }
+    final double percentFinished = childUpdatedCount / total * 100;
+    if (percentFinished >= percent) {
+      return true;
+    }
+    return false;
+  }
+
   void removeDetail() {
     _configDetail = null;
   }
@@ -155,7 +198,7 @@ class ConfigCheckProvider extends ChangeNotifier {
     }
 
     for (final ConfigCheckItem item in configCheckItems) {
-      final String letter = item.name.toUpperCase()[0];
+      final String letter = item.name.split(" ")[0].toUpperCase();
 
       if (checkMap.containsKey(letter)) {
         checkMap[letter]!.add(item);
@@ -184,6 +227,51 @@ class ConfigCheckProvider extends ChangeNotifier {
     try {
       final ConfigCheckDetailResponse response =
           await _configItemService.updateConfigCheck(payload);
+      if (response.error != null) {
+        error = response.error!.message;
+      } else {
+        _configDetail = response.data;
+      }
+    } catch (e) {
+      error = e.toString();
+    }
+
+    setChildState(ViewState.idle);
+
+    if (error.isNotEmpty) {
+      return Future<bool>.error(error);
+    }
+    return true;
+  }
+
+// * updatemany child
+// return future true jika update configConfigCheck berhasil
+  Future<bool> updateManyChildConfigCheck() async {
+    setChildState(ViewState.busy);
+    String error = "";
+
+    // generate payload
+    final List<String> childUpdated = <String>[];
+    final List<String> childNotUpdated = <String>[];
+
+    for (final ConfigCheckItem child
+        in _configDetail?.configCheckItems ?? <ConfigCheckItem>[]) {
+      if (child.isUpdated) {
+        childUpdated.add(child.id);
+      } else {
+        childNotUpdated.add(child.id);
+      }
+    }
+
+    final ConfigCheckUpdateManyRequest payload = ConfigCheckUpdateManyRequest(
+      parentID: _idSaved,
+      childUpdate: childUpdated,
+      childNotUpdate: childNotUpdated,
+    );
+
+    try {
+      final ConfigCheckDetailResponse response =
+          await _configItemService.updateManyConfigCheck(payload);
       if (response.error != null) {
         error = response.error!.message;
       } else {

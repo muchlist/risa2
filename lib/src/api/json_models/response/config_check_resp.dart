@@ -61,7 +61,7 @@ class ConfigCheckDetailResponseData {
   final bool isFinish;
   final String note;
   @JsonKey(name: "config_check_items", defaultValue: <ConfigCheckItem>[])
-  final List<ConfigCheckItem> configCheckItems;
+  List<ConfigCheckItem> configCheckItems;
 }
 
 @JsonSerializable()
@@ -81,5 +81,5 @@ class ConfigCheckItem {
   @JsonKey(name: "checked_by")
   final String checkedBy;
   @JsonKey(name: "is_updated")
-  final bool isUpdated;
+  bool isUpdated;
 }

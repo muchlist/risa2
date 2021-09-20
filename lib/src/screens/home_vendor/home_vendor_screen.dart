@@ -361,14 +361,14 @@ class _HomeVScreenState extends State<HomeVScreen> {
                 "Fisik ALtai", CupertinoIcons.checkmark_rectangle,
                 color: Pallete.green.withOpacity(0.5))),
           ),
-          // horizontalSpaceTiny,
-          // GestureDetector(
-          //   onTap: () =>
-          //       Navigator.pushNamed(context, RouteGenerator.serverConfig),
-          //   child: DashboardVIcon(Dashboard(
-          //       "Cfg Server", CupertinoIcons.greaterthan_circle_fill,
-          //       color: Pallete.green.withOpacity(0.4))),
-          // ),
+          horizontalSpaceTiny,
+          GestureDetector(
+            onTap: () =>
+                Navigator.pushNamed(context, RouteGenerator.configCheck),
+            child: DashboardVIcon(Dashboard(
+                "Cfg Server", CupertinoIcons.greaterthan_circle_fill,
+                color: Pallete.green.withOpacity(0.4))),
+          ),
         ],
       ),
     );

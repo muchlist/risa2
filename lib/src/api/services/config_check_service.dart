@@ -53,4 +53,10 @@ class ConfigCheckService {
     return RequestREST(endpoint: "/config-check-update", data: payload.toJson())
         .executePost<ConfigCheckDetailResponse>(const ConfigCheckParser());
   }
+
+  Future<ConfigCheckDetailResponse> updateManyConfigCheck(
+      ConfigCheckUpdateManyRequest payload) {
+    return RequestREST(endpoint: "/config-update-many", data: payload.toJson())
+        .executePost<ConfigCheckDetailResponse>(const ConfigCheckParser());
+  }
 }

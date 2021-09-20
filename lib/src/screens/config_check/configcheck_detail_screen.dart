@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:risa2/src/shared/disable_glow.dart';
+import 'package:risa2/src/shared/ui_helpers.dart';
 
 import '../../api/json_models/response/config_check_resp.dart';
 import '../../config/pallatte.dart';
 import '../../globals.dart';
 import '../../providers/config_check.dart';
-import '../../providers/histories.dart';
 import '../../shared/func_confirm.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
@@ -55,6 +55,19 @@ class _ConfigCheckDetailBodyState extends State<ConfigCheckDetailBody> {
     });
   }
 
+  Future<void> _saveConfig() {
+    return Future<void>.delayed(Duration.zero, () {
+      _configCheckProviderR.updateManyChildConfigCheck().then((bool value) {
+        if (value) {
+          showToastSuccess(
+              context: context, message: "Berhasil memperbarui data");
+        }
+      }).onError((Object? error, _) {
+        showToastError(context: context, message: error.toString());
+      });
+    });
+  }
+
   // Memunculkan dialog
   Future<bool?> _getConfirm(BuildContext context) {
     return showDialog<bool?>(
@@ -95,24 +108,67 @@ class _ConfigCheckDetailBodyState extends State<ConfigCheckDetailBody> {
                 Positioned(
                     bottom: 15,
                     right: 20,
-                    child: HomeLikeButton(
-                      iconData: CupertinoIcons.check_mark_circled_solid,
-                      text: "Tutup pengecekan",
-                      tapTap: () async {
-                        final bool? isFinish = await _getConfirm(context);
-                        if (isFinish != null && isFinish) {
-                          await data.completeConfigCheck().then((bool value) {
-                            if (value) {
-                              showToastSuccess(
-                                  context: context, message: "Cek selesai");
-                              // reload history
-                              context
-                                  .read<HistoryProvider>()
-                                  .findHistory(loading: false);
-                            }
-                          });
-                        }
-                      },
+                    child: Row(
+                      children: <Widget>[
+                        if (data.childState == ViewState.busy)
+                          const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: Center(
+                                child: CircularProgressIndicator(
+                              color: Pallete.green,
+                            )),
+                          ),
+                        horizontalSpaceSmall,
+                        HomeLikeButton(
+                          iconData: CupertinoIcons.lock_circle,
+                          text: "Lock",
+                          tapTap: (data.needPercentage(80.0))
+                              ? () async {
+                                  final bool? isFinish =
+                                      await _getConfirm(context);
+                                  if (isFinish != null && isFinish) {
+                                    _configCheckProviderR
+                                        .updateManyChildConfigCheck()
+                                        .then((bool value) {
+                                      if (value) {
+                                        _configCheckProviderR
+                                            .completeConfigCheck()
+                                            .then((bool success) {
+                                          if (success) {
+                                            showToastSuccess(
+                                                context: context,
+                                                message:
+                                                    "Berhasil mengunci data");
+                                          } else {
+                                            showToastError(
+                                                context: context,
+                                                message: "Gagal mengunci data");
+                                          }
+                                        });
+                                      }
+                                    }).onError((Object? error, _) {
+                                      showToastError(
+                                          context: context,
+                                          message: error.toString());
+                                    });
+                                  }
+                                }
+                              : () {
+                                  showToastError(
+                                      context: context,
+                                      message:
+                                          "Memerlukan setidaknya 80 persen cek item terisi");
+                                },
+                          color: Colors.deepOrange.shade200,
+                        ),
+                        horizontalSpaceSmall,
+                        HomeLikeButton(
+                          iconData: CupertinoIcons.check_mark_circled_solid,
+                          text: "Update",
+                          tapTap: _saveConfig,
+                        ),
+                      ],
                     ))
             ],
           );
@@ -135,7 +191,10 @@ class _ConfigCheckDetailBodyState extends State<ConfigCheckDetailBody> {
                 const EdgeInsets.only(left: 8, right: 8, top: 15, bottom: 8),
             child: Text(
               key,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87),
             ),
           ),
         ))
@@ -271,12 +330,16 @@ class _ConfigCheckDetailBodyState extends State<ConfigCheckDetailBody> {
     return SliverList(
         delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
       return Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 0,
         child: CheckboxListTile(
           value: checkItems[index].isUpdated,
-          onChanged: (bool? value) {
-            // todo
+          onChanged: (_) {
+            context
+                .read<ConfigCheckProvider>()
+                .toggleUpdatedByID(checkItems[index].id);
           },
-          title: Text(checkItems[index].name.capitalizeFirstofEach),
+          title: Text(checkItems[index].name),
         ),
       );
     }, childCount: checkItems.length));
