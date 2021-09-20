@@ -22,3 +22,24 @@ Map<String, dynamic> _$ConfigCheckUpdateRequestToJson(
       'child_id': instance.childID,
       'is_updated': instance.isUpdated,
     };
+
+ConfigCheckUpdateManyRequest _$ConfigCheckUpdateManyRequestFromJson(
+    Map<String, dynamic> json) {
+  return ConfigCheckUpdateManyRequest(
+    parentID: json['parent_id'] as String,
+    childUpdate: (json['child_update'] as List<dynamic>)
+        .map((e) => e as String)
+        .toList(),
+    childNotUpdate: (json['child_not_updated'] as List<dynamic>)
+        .map((e) => e as String)
+        .toList(),
+  );
+}
+
+Map<String, dynamic> _$ConfigCheckUpdateManyRequestToJson(
+        ConfigCheckUpdateManyRequest instance) =>
+    <String, dynamic>{
+      'parent_id': instance.parentID,
+      'child_update': instance.childUpdate,
+      'child_not_updated': instance.childNotUpdate,
+    };

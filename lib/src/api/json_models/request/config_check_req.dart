@@ -22,3 +22,24 @@ class ConfigCheckUpdateRequest {
   @JsonKey(name: "is_updated")
   bool isUpdated;
 }
+
+@JsonSerializable()
+class ConfigCheckUpdateManyRequest {
+  ConfigCheckUpdateManyRequest({
+    required this.parentID,
+    required this.childUpdate,
+    required this.childNotUpdate,
+  });
+
+  factory ConfigCheckUpdateManyRequest.fromJson(Map<String, dynamic> json) =>
+      _$ConfigCheckUpdateManyRequestFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ConfigCheckUpdateManyRequestToJson(this);
+
+  @JsonKey(name: "parent_id")
+  final String parentID;
+  @JsonKey(name: "child_update")
+  final List<String> childUpdate;
+  @JsonKey(name: "child_not_updated")
+  final List<String> childNotUpdate;
+}
