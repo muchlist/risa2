@@ -92,7 +92,7 @@ class HistoryProvider extends ChangeNotifier {
     String error = "";
     try {
       final HistoryListResponse response =
-          await _historyService.findHistory(_filter);
+          await _historyService.findHistoryHome(_filter);
       if (response.error != null) {
         error = response.error!.message;
       } else {

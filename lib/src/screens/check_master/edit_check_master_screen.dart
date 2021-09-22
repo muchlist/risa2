@@ -61,7 +61,7 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
             actions: <Widget>[
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).accentColor),
+                      primary: Theme.of(context).colorScheme.secondary),
                   onPressed: () => Navigator.of(context).pop(false),
                   child: const Text("Tidak")),
               TextButton(
@@ -291,7 +291,8 @@ class _EditCheckMasterBodyState extends State<EditCheckMasterBody> {
                                     : const TextStyle(),
                               ),
                               selected: _multiShiftSelected.contains(e.id),
-                              selectedColor: Theme.of(context).accentColor,
+                              selectedColor:
+                                  Theme.of(context).colorScheme.secondary,
                               // * Setstate ------------------------------
                               onSelected: (_) => setState(() {
                                 if (_multiShiftSelected.contains(e.id)) {

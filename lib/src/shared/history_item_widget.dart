@@ -14,6 +14,11 @@ class HistoryListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int status = history.completeStatus;
+    if (history.completeStatus == -1) {
+      status = 0;
+    }
+
     return Card(
       shape: RoundedRectangleBorder(
           side: BorderSide(
@@ -53,18 +58,16 @@ class HistoryListTile extends StatelessWidget {
               children: <Widget>[
                 Container(
                   decoration: BoxDecoration(
-                      color: (history.completeStatus == 4 ||
-                              history.completeStatus == 0)
+                      color: (status == 4 || status == 0)
                           ? Colors.green.withOpacity(0.5)
                           : const Color.fromRGBO(255, 186, 130, 0.15),
                       borderRadius: BorderRadius.circular(5)),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Text(
-                      enumStatus.values[history.completeStatus].toShortString(),
+                      enumStatus.values[status].toShortString(),
                       maxLines: 1,
-                      style: (history.completeStatus == 4 ||
-                              history.completeStatus == 0)
+                      style: (status == 4 || status == 0)
                           ? const TextStyle(color: Colors.white)
                           : TextStyle(color: Colors.deepOrange[300]),
                     ),

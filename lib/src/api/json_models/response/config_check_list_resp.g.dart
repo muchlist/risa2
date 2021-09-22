@@ -1,27 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'server_config_list_resp.dart';
+part of 'config_check_list_resp.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-ServerConfigListResponse _$ServerConfigListResponseFromJson(
+ConfigCheckListResponse _$ConfigCheckListResponseFromJson(
     Map<String, dynamic> json) {
-  return ServerConfigListResponse(
+  return ConfigCheckListResponse(
     json['error'] == null
         ? null
         : ErrorResp.fromJson(json['error'] as Map<String, dynamic>),
     (json['data'] as List<dynamic>?)
-            ?.map(
-                (e) => ServerConfigResponse.fromJson(e as Map<String, dynamic>))
+            ?.map((e) => ConfigCheckDetailResponseData.fromJson(
+                e as Map<String, dynamic>))
             .toList() ??
         [],
   );
 }
 
-Map<String, dynamic> _$ServerConfigListResponseToJson(
-        ServerConfigListResponse instance) =>
+Map<String, dynamic> _$ConfigCheckListResponseToJson(
+        ConfigCheckListResponse instance) =>
     <String, dynamic>{
       'error': instance.error?.toJson(),
       'data': instance.data.map((e) => e.toJson()).toList(),

@@ -18,6 +18,8 @@ import '../screens/computer/add_computer_screen.dart';
 import '../screens/computer/computer_detail_screen.dart';
 import '../screens/computer/computer_screen.dart';
 import '../screens/computer/edit_computer_screen.dart';
+import '../screens/config_check/configcheck_detail_screen.dart';
+import '../screens/config_check/configcheck_screen.dart';
 import '../screens/dashboard/dashboard_screen.dart';
 import '../screens/history/histories_screen.dart';
 import '../screens/home/home_screen.dart';
@@ -89,6 +91,9 @@ class RouteGenerator {
   static const String cctvMaintenanceDetail = '/cctv-maintenance-detail';
   static const String altaiMaintenance = '/altai-maintenance';
   static const String altaiMaintenanceDetail = '/altai-maintenance-detail';
+  static const String configCheck = '/config-check';
+  static const String configCheckAdd = '/config-check-add';
+  static const String configCheckDetail = '/config-check-detail';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -162,6 +167,10 @@ class RouteGenerator {
         return transitionFade(VendorCheckScreen());
       case vendorCheckDetail:
         return transitionFade(VendorCheckDetailScreen());
+      case configCheck:
+        return transitionFade(ConfigCheckScreen());
+      case configCheckDetail:
+        return transitionFade(ConfigCheckDetailScreen());
       case altaiVirtualDetail:
         return transitionFade(AltaiVirtualDetailScreen());
       case dashboard:

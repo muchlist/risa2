@@ -72,7 +72,7 @@ class _AltaiMaintDetailBodyState extends State<AltaiMaintDetailBody> {
             actions: <Widget>[
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).accentColor),
+                      primary: Theme.of(context).colorScheme.secondary),
                   onPressed: () => Navigator.of(context).pop(false),
                   child: const Text("Tidak")),
               TextButton(
@@ -154,7 +154,7 @@ class _AltaiMaintDetailBodyState extends State<AltaiMaintDetailBody> {
                   actions: <Widget>[
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            primary: Theme.of(context).accentColor),
+                            primary: Theme.of(context).colorScheme.secondary),
                         onPressed: () {
                           _altaiMaintProviderR
                               .updateChildAltaiCheck(itemState)

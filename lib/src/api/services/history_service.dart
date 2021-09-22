@@ -44,6 +44,20 @@ class HistoryService {
         .executeGet<HistoryListResponse>(const HistoryListParser());
   }
 
+  // {{url}}/api/v1/histories-home?branch=&category=
+  Future<HistoryListResponse> findHistoryHome(FilterHistory f) {
+    String query = "";
+    if (f.branch != null) {
+      query = query + "branch=${f.branch}&";
+    }
+    if (f.category != null) {
+      query = query + "category=${f.category}&";
+    }
+
+    return RequestREST(endpoint: "/histories-home?$query")
+        .executeGet<HistoryListResponse>(const HistoryListParser());
+  }
+
   Future<HistoryListResponse> findHistoryFromParent(String id) {
     return RequestREST(endpoint: "/histories-parent/$id")
         .executeGet<HistoryListResponse>(const HistoryListParser());

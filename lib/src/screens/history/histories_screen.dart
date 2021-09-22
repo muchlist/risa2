@@ -81,7 +81,7 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
               actions: <Widget>[
                 ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).accentColor),
+                        primary: Theme.of(context).colorScheme.secondary),
                     onPressed: () {
                       historyProvider.setFilter(filter);
                       _loadHistories();
@@ -128,6 +128,7 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
       child: Scaffold(
         appBar: AppBar(
           bottom: const TabBar(
+            labelColor: Colors.black,
             tabs: <Tab>[
               Tab(
                 text: "All",

@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
             actions: <Widget>[
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).accentColor),
+                      primary: Theme.of(context).colorScheme.secondary),
                   onPressed: () => Navigator.of(context).pop(false),
                   child: const Text("Jangan Logout")),
               TextButton(
@@ -116,6 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(
               CupertinoIcons.search,
               size: 28,
+              color: Colors.black,
             ),
             onPressed: () {
               context.read<GeneralProvider>().removeGenerals();
@@ -239,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                      color: Theme.of(context).accentColor,
+                      color: Theme.of(context).colorScheme.secondary,
                       borderRadius: BorderRadius.circular(24)),
                   child: const Text.rich(TextSpan(children: <InlineSpan>[
                     WidgetSpan(
@@ -270,7 +271,10 @@ class _HomeScreenState extends State<HomeScreen> {
             bottom: 50,
             left: 40,
             child: IconButton(
-                icon: const Icon(CupertinoIcons.square_arrow_down, size: 28),
+                icon: const Icon(
+                  CupertinoIcons.square_arrow_down,
+                  size: 28,
+                ),
                 onPressed: () {
                   Navigator.pushNamed(context, RouteGenerator.pdf);
                 }),

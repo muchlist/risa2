@@ -62,7 +62,7 @@ class _HomeVScreenState extends State<HomeVScreen> {
             actions: <Widget>[
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).accentColor),
+                      primary: Theme.of(context).colorScheme.secondary),
                   onPressed: () => Navigator.of(context).pop(false),
                   child: const Text("Jangan Logout")),
               TextButton(
@@ -229,7 +229,7 @@ class _HomeVScreenState extends State<HomeVScreen> {
                     child: Container(
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                          color: Theme.of(context).accentColor,
+                          color: Theme.of(context).colorScheme.secondary,
                           borderRadius: BorderRadius.circular(24)),
                       child: const Text.rich(TextSpan(children: <InlineSpan>[
                         WidgetSpan(
@@ -360,6 +360,14 @@ class _HomeVScreenState extends State<HomeVScreen> {
             child: DashboardVIcon(Dashboard(
                 "Fisik ALtai", CupertinoIcons.checkmark_rectangle,
                 color: Pallete.green.withOpacity(0.5))),
+          ),
+          horizontalSpaceTiny,
+          GestureDetector(
+            onTap: () =>
+                Navigator.pushNamed(context, RouteGenerator.configCheck),
+            child: DashboardVIcon(Dashboard(
+                "Cfg Server", CupertinoIcons.greaterthan_circle_fill,
+                color: Pallete.green.withOpacity(0.4))),
           ),
         ],
       ),
