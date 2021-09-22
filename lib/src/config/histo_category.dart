@@ -8,6 +8,7 @@ class HistCategory {
   static const String altai = "ALTAI";
   static const String handheld = "HANDHELD";
   static const String server = "SERVER";
+  static const String network = "NETWORK";
   static const String gate = "GATE";
   static const String ups = "UPS";
   static const String other = "OTHER";
@@ -23,6 +24,7 @@ class HistCategory {
     altai,
     handheld,
     server,
+    network,
     gate,
     ups,
     other,

@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/disable_glow.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
 
 import '../../api/json_models/response/config_check_resp.dart';
 import '../../config/pallatte.dart';
 import '../../globals.dart';
 import '../../providers/config_check.dart';
+import '../../shared/disable_glow.dart';
 import '../../shared/func_confirm.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
+import '../../shared/ui_helpers.dart';
 import '../../utils/utils.dart';
 
 GlobalKey<RefreshIndicatorState> refreshKeyConfigCheckDetailScreen =
@@ -339,7 +339,8 @@ class _ConfigCheckDetailBodyState extends State<ConfigCheckDetailBody> {
                 .read<ConfigCheckProvider>()
                 .toggleUpdatedByID(checkItems[index].id);
           },
-          title: Text(checkItems[index].name),
+          title:
+              Text(checkItems[index].name.toLowerCase().capitalizeFirstofEach),
         ),
       );
     }, childCount: checkItems.length));

@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/router/routes.dart';
 
 import '../../providers/config_check.dart';
+import '../../router/routes.dart';
 import '../../shared/config_check_widget.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/func_flushbar.dart';

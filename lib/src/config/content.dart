@@ -33,6 +33,8 @@ class Content {
         route: RouteGenerator.other),
     const Dashboard("Gate", CupertinoIcons.building_2_fill,
         route: RouteGenerator.other),
+    const Dashboard("Network", CupertinoIcons.link,
+        route: RouteGenerator.other),
     Dashboard("Fisik CCTV", CupertinoIcons.doc_checkmark,
         route: RouteGenerator.cctvMaintenance,
         color: Colors.deepOrange.shade300),

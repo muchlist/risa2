@@ -9,11 +9,6 @@ class ConfigCheckListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String dateDescription = data.createdAt.getDateString();
-    if (data.timeEnded != 0) {
-      dateDescription += "   ~   ${data.timeEnded.getDateString()}";
-    }
-
     return Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Padding(
@@ -23,7 +18,7 @@ class ConfigCheckListTile extends StatelessWidget {
                 ? const Icon(CupertinoIcons.check_mark_circled)
                 : const Icon(CupertinoIcons.timer_fill),
             title: Text("Backup Config ${data.createdAt.getMonthYear()}"),
-            subtitle: Text(dateDescription),
+            subtitle: Text(data.createdAt.getDateString()),
           ),
         ));
   }

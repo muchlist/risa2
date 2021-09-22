@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/shared/home_like_button.dart';
 
 import '../../config/pallatte.dart';
 import '../../providers/config_check.dart';
 import '../../shared/func_flushbar.dart';
+import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 
 class AddConfigCheckDialog extends StatefulWidget {
