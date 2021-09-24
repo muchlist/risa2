@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
 import '../api/json_models/response/general_list_resp.dart';
 import '../config/pallatte.dart';
@@ -62,7 +63,12 @@ class CctvActionTile extends StatelessWidget {
                   if (data.casesSize != 0)
                     Text(_generateCase())
                   else
-                    const SizedBox.shrink(),
+                    Text(
+                      "Perangkat perlu pengecekan",
+                      style: TextStyle(
+                          color: Colors.red.shade400,
+                          fontWeight: FontWeight.bold),
+                    ),
                 ],
               ),
               trailing: Text("${_calculatePercentPing().toStringAsFixed(0)}%")),
