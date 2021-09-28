@@ -71,6 +71,12 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
                           ),
                         ),
                       ),
+                      verticalSpaceTiny,
+                      const Text(
+                        "Sebagian atau seluruh hasil pencarian\nmungkin akan berada di tab [All]",
+                        style:
+                            TextStyle(color: Colors.deepOrange, fontSize: 13),
+                      ),
                       verticalSpaceSmall,
                       const Text("Kategori"),
                       verticalSpaceSmall,
