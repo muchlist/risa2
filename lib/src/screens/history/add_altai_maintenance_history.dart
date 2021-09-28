@@ -231,6 +231,9 @@ class _AddAltaiMaintenanceHistoryDialogState
                         divisions: 3,
                         value: _selectedSlider,
                         label: _selectedLabel,
+                        inactiveColor: Colors.blueGrey.shade200,
+                        thumbColor: Pallete.green,
+                        activeColor: Colors.green.shade400,
                         onChanged: (double value) {
                           setState(() {
                             _selectedSlider = value;
