@@ -341,6 +341,10 @@ class _ConfigCheckDetailBodyState extends State<ConfigCheckDetailBody> {
           },
           title:
               Text(checkItems[index].name.toLowerCase().capitalizeFirstofEach),
+          subtitle: Text(
+            checkItems[index].location,
+            style: const TextStyle(color: Colors.grey),
+          ),
         ),
       );
     }, childCount: checkItems.length));

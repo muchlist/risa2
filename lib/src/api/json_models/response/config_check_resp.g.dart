@@ -71,6 +71,7 @@ ConfigCheckItem _$ConfigCheckItemFromJson(Map<String, dynamic> json) {
   return ConfigCheckItem(
     json['id'] as String,
     json['name'] as String,
+    json['location'] as String,
     json['checked_at'] as int,
     json['checked_by'] as String,
     json['is_updated'] as bool,
@@ -81,6 +82,7 @@ Map<String, dynamic> _$ConfigCheckItemToJson(ConfigCheckItem instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'location': instance.location,
       'checked_at': instance.checkedAt,
       'checked_by': instance.checkedBy,
       'is_updated': instance.isUpdated,
