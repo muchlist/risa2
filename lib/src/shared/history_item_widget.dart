@@ -47,38 +47,51 @@ class HistoryListTile extends StatelessWidget {
           ),
         ),
         subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             if (history.problemResolve.isEmpty)
               Text("📝 ${history.problem}")
             else
               Text("📝 ${history.problem} \n💡 ${history.problemResolve}"),
             verticalSpaceSmall,
-            Row(
+            Wrap(
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 5.0,
               children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                      color: (status == 4 || status == 0)
-                          ? Colors.green.withOpacity(0.5)
-                          : const Color.fromRGBO(255, 186, 130, 0.15),
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Text(
-                      enumStatus.values[status].toShortString(),
-                      maxLines: 1,
-                      style: (status == 4 || status == 0)
-                          ? const TextStyle(color: Colors.white)
-                          : TextStyle(color: Colors.deepOrange[300]),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                      decoration: BoxDecoration(
+                          color: (status == 4 ||
+                                  status == 0 ||
+                                  status == -1 ||
+                                  status == 6)
+                              ? Colors.green.withOpacity(0.5)
+                              : const Color.fromRGBO(255, 186, 130, 0.15),
+                          borderRadius: BorderRadius.circular(5)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          enumStatus.values[status].toShortString(),
+                          maxLines: 1,
+                          style: (status == 4 ||
+                                  status == 0 ||
+                                  status == -1 ||
+                                  status == 6)
+                              ? const TextStyle(color: Colors.white)
+                              : TextStyle(color: Colors.deepOrange[300]),
+                        ),
+                      ),
                     ),
-                  ),
+                    horizontalSpaceSmall,
+                    Text(
+                      history.updatedAt.getDateString(),
+                      maxLines: 1,
+                    ),
+                  ],
                 ),
-                horizontalSpaceSmall,
-                Text(
-                  history.updatedAt.getDateString(),
-                  maxLines: 1,
-                ),
-                const Spacer(),
                 Text(
                   history.updatedBy.toLowerCase().split(" ")[0],
                   maxLines: 1,

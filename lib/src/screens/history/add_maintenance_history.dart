@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import '../../api/json_models/request/cctv_maintenance_req.dart';
 
+import '../../api/json_models/request/cctv_maintenance_req.dart';
 import '../../api/json_models/request/history_req.dart';
 import '../../config/constant.dart';
 import '../../config/pallatte.dart';
@@ -15,6 +15,7 @@ import '../../shared/func_flushbar.dart';
 import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
+import 'slider_history_helper.dart';
 
 class AddMaintenanceHistoryDialog extends StatefulWidget {
   const AddMaintenanceHistoryDialog(
@@ -90,7 +91,7 @@ class _AddMaintenanceHistoryDialogState
         problemResolve: resolveText,
         status: "Maintenance",
         tag: <String>["Maintenance"],
-        completeStatus: _selectedSlider.toInt(),
+        completeStatus: const SliderHelper().getStatus(_selectedSlider),
         image: _imagePath,
       );
 
@@ -245,8 +246,7 @@ class _AddMaintenanceHistoryDialogState
                         onChanged: (double value) {
                           setState(() {
                             _selectedSlider = value;
-                            _selectedLabel = context
-                                .read<HistoryProvider>()
+                            _selectedLabel = const SliderHelper()
                                 .getLabelStatus(_selectedSlider);
                           });
                         },
@@ -256,7 +256,7 @@ class _AddMaintenanceHistoryDialogState
 
                       // * ResolveNote text ------------------------
 
-                      if (_selectedSlider == 4.0)
+                      if (_selectedSlider == 3.0 || _selectedSlider == 4.0)
                         const Text(
                           "Resolve Note",
                           style: TextStyle(fontSize: 16),
@@ -264,7 +264,7 @@ class _AddMaintenanceHistoryDialogState
                       else
                         const SizedBox.shrink(),
 
-                      if (_selectedSlider == 4.0)
+                      if (_selectedSlider == 3.0 || _selectedSlider == 4.0)
                         TextFormField(
                           textInputAction: TextInputAction.newline,
                           maxLines: 3,

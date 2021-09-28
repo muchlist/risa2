@@ -25,10 +25,13 @@ class OtherActionTile extends StatelessWidget {
       caseString.writeln(caseItem.caseNote);
     }
 
-    return caseString.toString()
-      ..replaceAll("#Pending#", "⏱")
-      ..replaceAll("#Progress#", "🔧")
-      ..replaceAll(" None", "");
+    String caseTemp = caseString.toString();
+    caseTemp = caseTemp.replaceAll("#Pending#", "⏱");
+    caseTemp = caseTemp.replaceAll("#Complete#", "⏱");
+    caseTemp = caseTemp.replaceAll("#Progress#", "🔧");
+    caseTemp = caseTemp.replaceAll(" None", "");
+
+    return caseTemp;
   }
 
   @override

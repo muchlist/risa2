@@ -20,16 +20,19 @@ class CctvActionTile extends StatelessWidget {
     return pingSum / 2 / data.pingsState.length * 100;
   }
 
-  String _generateCase() {
+  String _generateCase(List<Case> cases) {
     final StringBuffer caseString = StringBuffer();
-    for (final Case caseItem in data.cases) {
+    for (final Case caseItem in cases) {
       caseString.writeln(caseItem.caseNote);
     }
 
-    return caseString.toString()
-      ..replaceAll("#Pending#", "⏱")
-      ..replaceAll("#Progress#", "🔧")
-      ..replaceAll(" None", "");
+    String caseTemp = caseString.toString();
+    caseTemp = caseTemp.replaceAll("#Pending#", "⏱");
+    caseTemp = caseTemp.replaceAll("#Complete#", "⏱");
+    caseTemp = caseTemp.replaceAll("#Progress#", "🔧");
+    caseTemp = caseTemp.replaceAll(" None", "");
+
+    return caseTemp;
   }
 
   @override
@@ -61,7 +64,7 @@ class CctvActionTile extends StatelessWidget {
                     ),
                   ),
                   if (data.casesSize != 0)
-                    Text(_generateCase())
+                    Text(_generateCase(data.cases))
                   else
                     Text(
                       "Perangkat perlu pengecekan",

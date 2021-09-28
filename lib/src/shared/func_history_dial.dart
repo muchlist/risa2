@@ -11,12 +11,12 @@ import '../providers/others.dart';
 import '../providers/stock.dart';
 import '../router/routes.dart';
 import '../screens/history/add_altai_maintenance_history.dart';
-import '../screens/history/add_history_dialog.dart';
-import '../screens/history/add_history_v_dialog.dart';
+import '../screens/history/add_history_showdial.dart';
+import '../screens/history/add_history_v_showdial.dart';
 import '../screens/history/add_maintenance_history.dart';
-import '../screens/history/add_parent_history_dialog.dart';
-import '../screens/history/detail_history_dialog.dart';
-import '../screens/history/edit_history_dialog.dart';
+import '../screens/history/add_parent_history_showdial.dart';
+import '../screens/history/detail_history_showdial.dart';
+import '../screens/history/edit_history_showdial.dart';
 import '../utils/enums.dart';
 
 class HistoryHelper {

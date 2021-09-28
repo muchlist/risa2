@@ -23,6 +23,7 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
   late final HistoryProvider historyProvider;
   late final bool _progressIsZero = historyProvider.historyProgressList.isEmpty;
   late final bool _isVendor = App.getRoles().contains("VENDOR");
+  final TextEditingController searchController = TextEditingController();
 
   // Memunculkan dialog
   Future<void> _dialogChangeFilter(BuildContext context) async {
@@ -30,8 +31,6 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
         context: context,
         builder: (BuildContext context) {
           final FilterHistory filter = historyProvider.filter;
-          final TextEditingController searchController =
-              TextEditingController();
 
           return StatefulBuilder(
               builder: (BuildContext context, Function setState) {
@@ -156,6 +155,7 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
     if (!_isVendor) {
       historyProvider.resetFilter();
     }
+    searchController.dispose();
     super.dispose();
   }
 

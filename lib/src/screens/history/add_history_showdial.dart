@@ -18,49 +18,57 @@ import '../../shared/home_like_button.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 import '../search/general_search_delegate.dart';
+import 'slider_history_helper.dart';
 
 class ItemChoice {
+  ItemChoice(this.id, this.label);
   final int id;
   final String label;
-
-  ItemChoice(this.id, this.label);
 }
 
-class AddHistoryVDialog extends StatefulWidget {
-  const AddHistoryVDialog({
+class AddHistoryDialog extends StatefulWidget {
+  const AddHistoryDialog({
     Key? key,
   }) : super(key: key);
 
   @override
-  _AddHistoryVDialogState createState() => _AddHistoryVDialogState();
+  _AddHistoryDialogState createState() => _AddHistoryDialogState();
 }
 
-class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
+class _AddHistoryDialogState extends State<AddHistoryDialog> {
   // pilihan chip kategory
-  final listChoices = <ItemChoice>[
+  final List<ItemChoice> listChoices = <ItemChoice>[
     ItemChoice(1, 'CCTV'),
+    ItemChoice(2, 'PC'),
+    ItemChoice(3, 'UPS'),
+    ItemChoice(4, 'PRINTER'),
+    ItemChoice(5, 'HANDHELD'),
+    ItemChoice(6, 'APPLICATION'),
     ItemChoice(7, 'ALTAI'),
+    ItemChoice(8, 'SERVER'),
+    ItemChoice(9, 'GATE'),
+    ItemChoice(10, 'OTHER'),
     ItemChoice(11, 'OTHER-V'),
   ];
 
   // Default value
-  var _selectedCategoryID = 0;
-  var _selectedUnitID = "";
-  var _selectedUnitName = "Pilih Perangkat"; // untuk tampilan saja
-  var _selectedSlider = 1.0;
-  var _selectedLabel = "Progress";
+  int _selectedCategoryID = 0;
+  String _selectedUnitID = "";
+  String _selectedUnitName = "Pilih Perangkat"; // untuk tampilan saja
+  double _selectedSlider = 1.0;
+  String _selectedLabel = "Progress";
 
   // image
   String _imagePath = "";
-  File? _image;
-  final picker = ImagePicker();
+  late File? _image;
+  final ImagePicker picker = ImagePicker();
 
   // Text controller
-  final problemController = TextEditingController();
-  final resolveNoteController = TextEditingController();
+  final TextEditingController problemController = TextEditingController();
+  final TextEditingController resolveNoteController = TextEditingController();
 
   // Form key
-  final _addHistoryFormkey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _addHistoryFormkey = GlobalKey<FormState>();
 
   void _addHistory() {
     if (_selectedUnitID.isEmpty) {
@@ -71,42 +79,41 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
     }
 
     if (_addHistoryFormkey.currentState?.validate() ?? false) {
-      final problemText = problemController.text;
-      final resolveText = resolveNoteController.text;
+      final String problemText = problemController.text;
+      final String resolveText = resolveNoteController.text;
 
-      final payload = HistoryRequest(
-        id: "",
-        parentID: _selectedUnitID,
-        problem: problemText,
-        problemResolve: resolveText,
-        status: "None",
-        tag: [],
-        completeStatus: _selectedSlider.toInt(),
-        image: _imagePath,
-      );
+      final HistoryRequest payload = HistoryRequest(
+          id: "",
+          parentID: _selectedUnitID,
+          problem: problemText,
+          problemResolve: resolveText,
+          status: "None",
+          tag: <String>[],
+          completeStatus: const SliderHelper().getStatus(_selectedSlider),
+          image: _imagePath);
 
-      Future.delayed(Duration.zero, () {
+      Future<void>.delayed(Duration.zero, () {
         // * CALL Provider -----------------------------------------------------
-        context.read<HistoryProvider>().addHistory(payload).then((value) {
+        context.read<HistoryProvider>().addHistory(payload).then((bool value) {
           if (value) {
             Navigator.of(context).pop();
             showToastSuccess(
                 context: context, message: "Berhasil menambahkan log");
           }
-        }).onError((error, _) {
+        }).onError((Object? error, _) {
           if (error != null) {
             showToastError(context: context, message: error.toString());
           }
         });
       });
     } else {
-      debugPrint("Error :(");
+      // error
     }
   }
 
-  Future _getImageAndUpload(
+  Future<void> _getImageAndUpload(
       {required BuildContext context, required ImageSource source}) async {
-    final pickedFile = await picker.getImage(source: source);
+    final PickedFile? pickedFile = await picker.getImage(source: source);
     if (pickedFile != null) {
       _image = File(pickedFile.path);
     } else {
@@ -117,15 +124,14 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
     await context
         .read<HistoryProvider>()
         .uploadImageForpath(_image!)
-        .then((value) {
+        .then((String value) {
       if (value.isNotEmpty) {
         setState(() {
           _imagePath = value;
         });
       }
-    }).onError((error, _) {
+    }).onError((Object? error, _) {
       showToastError(context: context, message: error.toString());
-      return Future.error(error.toString());
     });
   }
 
@@ -138,13 +144,13 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: screenHeightPercentage(context, percentage: 0.95),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             const Divider(
               height: 40,
               thickness: 5,
@@ -154,7 +160,7 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
             ),
             verticalSpaceSmall,
             Expanded(
-                child: NotificationListener(
+                child: NotificationListener<OverscrollIndicatorNotification>(
               onNotification: (OverscrollIndicatorNotification overScroll) {
                 overScroll.disallowGlow();
                 return false;
@@ -164,9 +170,9 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
                   key: _addHistoryFormkey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       const Text(
-                        "Menambahkan Pekerjaan",
+                        "Menambahkan Log",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -178,16 +184,18 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
                       ),
                       // * Chip choice
                       Wrap(
+                        spacing: 5,
                         children: listChoices
-                            .map((e) => ChoiceChip(
+                            .map((ItemChoice e) => ChoiceChip(
                                   label: Text(
                                     e.label,
                                     style: (_selectedCategoryID == e.id)
-                                        ? TextStyle(color: Colors.white)
-                                        : TextStyle(),
+                                        ? const TextStyle(color: Colors.white)
+                                        : const TextStyle(),
                                   ),
                                   selected: _selectedCategoryID == e.id,
-                                  selectedColor: Theme.of(context).accentColor,
+                                  selectedColor:
+                                      Theme.of(context).colorScheme.secondary,
                                   // * Setstate ------------------------------
                                   onSelected: (_) {
                                     // mengeset filter berdasarkan pilihan chip
@@ -201,7 +209,7 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
                                       setState(() {
                                         _selectedCategoryID = e.id;
                                       });
-                                    }).onError((error, _) {
+                                    }).onError((Object? error, _) {
                                       if (error != null) {
                                         setState(() {
                                           _selectedCategoryID = 0;
@@ -216,7 +224,6 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
                                   },
                                 ))
                             .toList(),
-                        spacing: 5,
                       ),
 
                       verticalSpaceSmall,
@@ -235,7 +242,7 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
                             });
                             return;
                           }
-                          final searchResult =
+                          final GeneralMinResponse? searchResult =
                               await showSearch<GeneralMinResponse?>(
                             context: context,
                             delegate: GeneralSearchDelegate(),
@@ -249,18 +256,18 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
                         },
                         child: Container(
                           height: 50,
-                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
                           width: double.infinity,
                           alignment: Alignment.centerLeft,
-                          decoration:
-                              BoxDecoration(color: Pallete.secondaryBackground),
+                          decoration: const BoxDecoration(
+                              color: Pallete.secondaryBackground),
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
+                              children: <Widget>[
                                 Text(
                                   _selectedUnitName,
                                 ),
-                                Icon(CupertinoIcons.search),
+                                const Icon(CupertinoIcons.search),
                               ]),
                         ),
                       ),
@@ -281,7 +288,7 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
                             fillColor: Pallete.secondaryBackground,
                             enabledBorder: InputBorder.none,
                             border: InputBorder.none),
-                        validator: (text) {
+                        validator: (String? text) {
                           if (text == null || text.isEmpty) {
                             return 'problem tidak boleh kosong';
                           }
@@ -295,22 +302,21 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
                       // * Status pekerjaan text ------------------------
                       Text(
                         "Status pekerjaan ($_selectedLabel)",
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                       Slider(
                         min: 1,
                         max: 4,
                         divisions: 3,
-                        value: _selectedSlider,
-                        label: _selectedLabel,
                         inactiveColor: Colors.blueGrey.shade200,
                         thumbColor: Pallete.green,
                         activeColor: Colors.green.shade400,
-                        onChanged: (value) {
+                        value: _selectedSlider,
+                        label: _selectedLabel,
+                        onChanged: (double value) {
                           setState(() {
                             _selectedSlider = value;
-                            _selectedLabel = context
-                                .read<HistoryProvider>()
+                            _selectedLabel = const SliderHelper()
                                 .getLabelStatus(_selectedSlider);
                           });
                         },
@@ -320,37 +326,39 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
 
                       // * ResolveNote text ------------------------
 
-                      (_selectedSlider == 4.0)
-                          ? const Text(
-                              "Resolve Note",
-                              style: TextStyle(fontSize: 16),
-                            )
-                          : const SizedBox.shrink(),
+                      if (_selectedSlider == 3.0 || _selectedSlider == 4.0)
+                        const Text(
+                          "Resolve Note",
+                          style: TextStyle(fontSize: 16),
+                        )
+                      else
+                        const SizedBox.shrink(),
 
-                      (_selectedSlider == 4.0)
-                          ? TextFormField(
-                              textInputAction: TextInputAction.newline,
-                              maxLines: 3,
-                              decoration: const InputDecoration(
-                                  filled: true,
-                                  fillColor: Pallete.secondaryBackground,
-                                  enabledBorder: InputBorder.none,
-                                  border: InputBorder.none),
-                              validator: (text) {
-                                if ((text == null || text.isEmpty) &&
-                                    _selectedSlider == 4.0) {
-                                  return 'resolve note tidak boleh kosong';
-                                }
-                                return null;
-                              },
-                              controller: resolveNoteController,
-                            )
-                          : const SizedBox.shrink(),
+                      if (_selectedSlider == 3.0 || _selectedSlider == 4.0)
+                        TextFormField(
+                          textInputAction: TextInputAction.newline,
+                          maxLines: 3,
+                          decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Pallete.secondaryBackground,
+                              enabledBorder: InputBorder.none,
+                              border: InputBorder.none),
+                          validator: (String? text) {
+                            if ((text == null || text.isEmpty) &&
+                                _selectedSlider == 4.0) {
+                              return 'resolve note tidak boleh kosong';
+                            }
+                            return null;
+                          },
+                          controller: resolveNoteController,
+                        )
+                      else
+                        const SizedBox.shrink(),
                       verticalSpaceRegular,
                       if (_imagePath.isNotEmpty)
                         Center(
                           child: CachedImageSquare(
-                            urlPath: "${Constant.baseUrl}${_imagePath}",
+                            urlPath: "${Constant.baseUrl}$_imagePath",
                             width: 200,
                             height: 200,
                           ),
@@ -358,9 +366,8 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
                       verticalSpaceRegular,
 
                       Row(
-                        children: [
+                        children: <Widget>[
                           Expanded(
-                            flex: 1,
                             child: GestureDetector(
                                 onTap: () => _getImageAndUpload(
                                     context: context,
@@ -368,17 +375,16 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
                                 onLongPress: () => _getImageAndUpload(
                                     context: context,
                                     source: ImageSource.gallery),
-                                child: Icon(CupertinoIcons.camera)),
+                                child: const Icon(CupertinoIcons.camera)),
                           ),
                           Expanded(
                             flex: 2,
                             child: Consumer<HistoryProvider>(
-                              builder: (_, data, __) {
+                              builder: (_, HistoryProvider data, __) {
                                 return (data.state == ViewState.busy)
                                     // * Button ---------------------------
-                                    ? Center(
-                                        child:
-                                            const CircularProgressIndicator())
+                                    ? const Center(
+                                        child: CircularProgressIndicator())
                                     : Center(
                                         child: HomeLikeButton(
                                           iconData: CupertinoIcons.add,
@@ -389,9 +395,8 @@ class _AddHistoryVDialogState extends State<AddHistoryVDialog> {
                               },
                             ),
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: const SizedBox.shrink(),
+                          const Expanded(
+                            child: SizedBox.shrink(),
                           )
                         ],
                       ),

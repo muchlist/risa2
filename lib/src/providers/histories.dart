@@ -2,13 +2,13 @@ import 'dart:collection';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:risa2/src/api/json_models/response/history_resp.dart';
-import 'package:risa2/src/api/json_models/response/message_resp.dart';
 
 import '../api/filter_models/history_filter.dart';
 import '../api/json_models/request/history_edit_req.dart';
 import '../api/json_models/request/history_req.dart';
 import '../api/json_models/response/history_list_resp.dart';
+import '../api/json_models/response/history_resp.dart';
+import '../api/json_models/response/message_resp.dart';
 import '../api/services/history_service.dart';
 import '../config/histo_category.dart';
 import '../globals.dart';
@@ -40,7 +40,8 @@ class HistoryProvider extends ChangeNotifier {
   List<HistoryMinResponse> get historyProgressList {
     return _historyList.where((HistoryMinResponse hist) {
       return hist.completeStatus == enumStatus.progress.index ||
-          hist.completeStatus == enumStatus.rpending.index;
+          hist.completeStatus == enumStatus.rpending.index ||
+          hist.completeStatus == enumStatus.rcompleted.index;
     }).toList();
   }
 
@@ -48,14 +49,16 @@ class HistoryProvider extends ChangeNotifier {
   List<HistoryMinResponse> get historyPendingList {
     return _historyList
         .where((HistoryMinResponse hist) =>
-            hist.completeStatus == enumStatus.pending.index)
+            hist.completeStatus == enumStatus.pending.index ||
+            hist.completeStatus == enumStatus.completedwithnote.index)
         .toList();
   }
 
   // history complete
   List<HistoryMinResponse> get historyCompletedList {
     return _historyList.where((HistoryMinResponse hist) {
-      return hist.completeStatus == enumStatus.completed.index;
+      return hist.completeStatus == enumStatus.completed.index ||
+          hist.completeStatus == enumStatus.info.index;
     }).toList();
   }
 
@@ -336,21 +339,6 @@ class HistoryProvider extends ChangeNotifier {
       if (_parentHistory[i].id == id) {
         _parentHistory[i].image = imageUrl;
       }
-    }
-  }
-
-  String getLabelStatus(double number) {
-    switch (number.toInt()) {
-      case 1:
-        return "Progress";
-      case 2:
-        return "Req Pending";
-      case 3:
-        return "Pending";
-      case 4:
-        return "Completed";
-      default:
-        return "Progress";
     }
   }
 }

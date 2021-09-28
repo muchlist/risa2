@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/screens/history/slider_history_helper.dart';
 import '../../api/json_models/request/altai_maintenance_req.dart';
 
 import '../../api/json_models/request/history_req.dart';
@@ -82,7 +83,7 @@ class _AddAltaiMaintenanceHistoryDialogState
         problemResolve: resolveText,
         status: "Maintenance",
         tag: <String>["Maintenance"],
-        completeStatus: _selectedSlider.toInt(),
+        completeStatus: const SliderHelper().getStatus(_selectedSlider),
         image: _imagePath,
       );
 
@@ -237,8 +238,7 @@ class _AddAltaiMaintenanceHistoryDialogState
                         onChanged: (double value) {
                           setState(() {
                             _selectedSlider = value;
-                            _selectedLabel = context
-                                .read<HistoryProvider>()
+                            _selectedLabel = const SliderHelper()
                                 .getLabelStatus(_selectedSlider);
                           });
                         },
@@ -248,7 +248,7 @@ class _AddAltaiMaintenanceHistoryDialogState
 
                       // * ResolveNote text ------------------------
 
-                      if (_selectedSlider == 4.0)
+                      if (_selectedSlider == 3.0 || _selectedSlider == 4.0)
                         const Text(
                           "Resolve Note",
                           style: TextStyle(fontSize: 16),
@@ -256,7 +256,7 @@ class _AddAltaiMaintenanceHistoryDialogState
                       else
                         const SizedBox.shrink(),
 
-                      if (_selectedSlider == 4.0)
+                      if (_selectedSlider == 3.0 || _selectedSlider == 4.0)
                         TextFormField(
                           textInputAction: TextInputAction.newline,
                           maxLines: 3,

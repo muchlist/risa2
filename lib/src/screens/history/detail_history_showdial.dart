@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:risa2/src/screens/history/slider_history_helper.dart';
 import 'package:risa2/src/screens/image_viewer/image_viewer.dart';
 import 'package:risa2/src/shared/home_like_button.dart';
 
@@ -12,12 +13,11 @@ import '../../utils/enums.dart';
 import '../../utils/utils.dart';
 
 class DetailHistoryDialog extends StatefulWidget {
-  final HistoryMinResponse history;
-
   const DetailHistoryDialog({
     Key? key,
     required this.history,
   }) : super(key: key);
+  final HistoryMinResponse history;
 
   @override
   _DetailHistoryDialogState createState() => _DetailHistoryDialogState();
@@ -26,13 +26,13 @@ class DetailHistoryDialog extends StatefulWidget {
 class _DetailHistoryDialogState extends State<DetailHistoryDialog> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: screenHeightPercentage(context, percentage: 0.95),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             const Divider(
               height: 40,
               thickness: 5,
@@ -42,7 +42,7 @@ class _DetailHistoryDialogState extends State<DetailHistoryDialog> {
             ),
             verticalSpaceSmall,
             Expanded(
-                child: NotificationListener(
+                child: NotificationListener<OverscrollIndicatorNotification>(
               onNotification: (OverscrollIndicatorNotification overScroll) {
                 overScroll.disallowGlow();
                 return false;
@@ -50,7 +50,7 @@ class _DetailHistoryDialogState extends State<DetailHistoryDialog> {
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     const Text(
                       "Detail Incident",
                       style:
@@ -66,11 +66,11 @@ class _DetailHistoryDialogState extends State<DetailHistoryDialog> {
                     ),
                     Container(
                       height: 50,
-                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                       width: double.infinity,
                       alignment: Alignment.centerLeft,
-                      decoration:
-                          BoxDecoration(color: Pallete.secondaryBackground),
+                      decoration: const BoxDecoration(
+                          color: Pallete.secondaryBackground),
                       child: Text(
                         widget.history.parentName,
                       ),
@@ -84,11 +84,11 @@ class _DetailHistoryDialogState extends State<DetailHistoryDialog> {
                     ),
                     Container(
                       height: 50,
-                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
                       width: double.infinity,
                       alignment: Alignment.centerLeft,
-                      decoration:
-                          BoxDecoration(color: Pallete.secondaryBackground),
+                      decoration: const BoxDecoration(
+                          color: Pallete.secondaryBackground),
                       child: Text(
                         widget.history.category,
                       ),
@@ -106,7 +106,6 @@ class _DetailHistoryDialogState extends State<DetailHistoryDialog> {
                       enabled: false,
                       initialValue: widget.history.problem,
                       maxLines: null,
-                      minLines: null,
                       decoration: const InputDecoration(
                           filled: true,
                           fillColor: Pallete.secondaryBackground,
@@ -119,13 +118,14 @@ class _DetailHistoryDialogState extends State<DetailHistoryDialog> {
                     // * Status pekerjaan text ------------------------
                     Text(
                       "Status pekerjaan (${enumStatus.values[widget.history.completeStatus].toShortString()})",
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                     Slider(
                       min: 1,
                       max: 4,
                       divisions: 3,
-                      value: widget.history.completeStatus.toDouble(),
+                      value: const SliderHelper()
+                          .getSliderNum(widget.history.completeStatus),
                       label: enumStatus.values[widget.history.completeStatus]
                           .toShortString(),
                       onChanged: (_) {},
@@ -134,35 +134,46 @@ class _DetailHistoryDialogState extends State<DetailHistoryDialog> {
                     verticalSpaceSmall,
 
                     // * ResolveNote text ------------------------
-                    (widget.history.completeStatus.toDouble() == 4.0)
-                        ? const Text(
-                            "Resolve Note",
-                            style: TextStyle(fontSize: 16),
-                          )
-                        : const SizedBox.shrink(),
+                    if (const SliderHelper()
+                                .getSliderNum(widget.history.completeStatus) ==
+                            3.0 ||
+                        const SliderHelper()
+                                .getSliderNum(widget.history.completeStatus) ==
+                            4.0)
+                      const Text(
+                        "Resolve Note",
+                        style: TextStyle(fontSize: 16),
+                      )
+                    else
+                      const SizedBox.shrink(),
 
-                    (widget.history.completeStatus.toDouble() == 4.0)
-                        ? TextFormField(
-                            textInputAction: TextInputAction.newline,
-                            initialValue: widget.history.problemResolve,
-                            enabled: false,
-                            maxLines: null,
-                            minLines: null,
-                            decoration: const InputDecoration(
-                                filled: true,
-                                fillColor: Pallete.secondaryBackground,
-                                enabledBorder: InputBorder.none,
-                                border: InputBorder.none),
-                          )
-                        : const SizedBox.shrink(),
+                    if (const SliderHelper()
+                                .getSliderNum(widget.history.completeStatus) ==
+                            3.0 ||
+                        const SliderHelper()
+                                .getSliderNum(widget.history.completeStatus) ==
+                            4.0)
+                      TextFormField(
+                        textInputAction: TextInputAction.newline,
+                        initialValue: widget.history.problemResolve,
+                        enabled: false,
+                        maxLines: null,
+                        decoration: const InputDecoration(
+                            filled: true,
+                            fillColor: Pallete.secondaryBackground,
+                            enabledBorder: InputBorder.none,
+                            border: InputBorder.none),
+                      )
+                    else
+                      const SizedBox.shrink(),
                     verticalSpaceRegular,
                     if (widget.history.image.isNotEmpty)
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => ImageViewer(
+                            MaterialPageRoute<ImageViewer>(
+                              builder: (BuildContext context) => ImageViewer(
                                   imgUrl:
                                       "${Constant.baseUrl}${widget.history.image}"),
                             ),

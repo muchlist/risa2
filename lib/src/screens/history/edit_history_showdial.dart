@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/screens/history/slider_history_helper.dart';
 
 import '../../api/json_models/request/history_edit_req.dart';
 import '../../api/json_models/response/history_list_resp.dart';
@@ -18,12 +19,11 @@ import '../../utils/enums.dart';
 import '../../utils/utils.dart';
 
 class EditHistoryDialog extends StatefulWidget {
-  final HistoryMinResponse history;
-  final bool forParent;
-
   const EditHistoryDialog(
       {Key? key, required this.history, required this.forParent})
       : super(key: key);
+  final HistoryMinResponse history;
+  final bool forParent;
 
   @override
   _EditHistoryDialogState createState() => _EditHistoryDialogState();
@@ -33,30 +33,30 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
   late double _selectedSlider;
   late String _selectedLabel;
   // Text controller
-  final problemController = TextEditingController();
-  final resolveNoteController = TextEditingController();
+  final TextEditingController problemController = TextEditingController();
+  final TextEditingController resolveNoteController = TextEditingController();
 
   String imageUrl = "";
 
-  File? _image;
-  final picker = ImagePicker();
+  late File? _image;
+  final ImagePicker picker = ImagePicker();
 
   @override
   void initState() {
-    var history = widget.history;
-    _selectedSlider = history.completeStatus.toDouble();
-    _selectedLabel = enumStatus.values[history.completeStatus].toShortString();
+    final HistoryMinResponse history = widget.history;
+    _selectedSlider = const SliderHelper().getSliderNum(history.completeStatus);
+    _selectedLabel = const SliderHelper().getLabelStatus(_selectedSlider);
     problemController.text = history.problem;
     resolveNoteController.text = history.problemResolve;
     imageUrl = history.image;
     super.initState();
   }
 
-  Future _getImageAndUpload(
+  Future<void> _getImageAndUpload(
       {required BuildContext context,
       required ImageSource source,
       required String id}) async {
-    final pickedFile = await picker.getImage(source: source);
+    final PickedFile? pickedFile = await picker.getImage(source: source);
     if (pickedFile != null) {
       _image = File(pickedFile.path);
     } else {
@@ -67,40 +67,39 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
     await context
         .read<HistoryProvider>()
         .uploadImage(id, _image!)
-        .then((value) {
+        .then((String value) {
       if (value.isNotEmpty) {
         showToastSuccess(
-            context: context,
-            message: "Berhasil mengupload gambar",
-            onTop: true);
+          context: context,
+          message: "Berhasil mengupload gambar",
+        );
         setState(() {
           imageUrl = value;
         });
       }
-    }).onError((error, _) {
+    }).onError((Object? error, _) {
       showToastError(context: context, message: error.toString());
-      return Future.error(error.toString());
     });
   }
 
   // Form key
-  final _addHistoryFormkey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _addHistoryFormkey = GlobalKey<FormState>();
 
   void _editHistory() {
     if (_addHistoryFormkey.currentState?.validate() ?? false) {
-      final problemText = problemController.text;
-      final resolveText = resolveNoteController.text;
+      final String problemText = problemController.text;
+      final String resolveText = resolveNoteController.text;
 
-      final payload = HistoryEditRequest(
+      final HistoryEditRequest payload = HistoryEditRequest(
           filterTimestamp: widget.history.updatedAt,
           problem: problemText,
           problemResolve: resolveText,
           status: "None",
-          tag: [],
-          completeStatus: _selectedSlider.toInt(),
+          tag: <String>[],
+          completeStatus: const SliderHelper().getStatus(_selectedSlider),
           dateEnd: DateTime.now().toInt());
 
-      Future.delayed(Duration.zero, () {
+      Future<void>.delayed(Duration.zero, () {
         // * CALL Provider -----------------------------------------------------
 
         if (widget.forParent) {
@@ -110,13 +109,13 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
                   id: widget.history.id,
                   payload: payload,
                   parentID: widget.history.parentID)
-              .then((value) {
+              .then((bool value) {
             if (value) {
               Navigator.of(context).pop();
               showToastSuccess(
                   context: context, message: "Berhasil memperbarui history");
             }
-          }).onError((error, _) {
+          }).onError((Object? error, _) {
             if (error != null) {
               showToastError(context: context, message: error.toString());
             }
@@ -128,13 +127,13 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
                 id: widget.history.id,
                 payload: payload,
               )
-              .then((value) {
+              .then((bool value) {
             if (value) {
               Navigator.of(context).pop();
               showToastSuccess(
                   context: context, message: "Berhasil memperbarui history");
             }
-          }).onError((error, _) {
+          }).onError((Object? error, _) {
             if (error != null) {
               showToastError(context: context, message: error.toString());
             }
@@ -157,7 +156,7 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
             actions: <Widget>[
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).accentColor),
+                      primary: Theme.of(context).colorScheme.secondary),
                   child: const Text("Tidak"),
                   onPressed: () => Navigator.of(context).pop(false)),
               TextButton(
@@ -177,13 +176,13 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: screenHeightPercentage(context, percentage: 0.95),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             const Divider(
               height: 40,
               thickness: 5,
@@ -193,7 +192,7 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
             ),
             verticalSpaceSmall,
             Expanded(
-                child: NotificationListener(
+                child: NotificationListener<OverscrollIndicatorNotification>(
               onNotification: (OverscrollIndicatorNotification overScroll) {
                 overScroll.disallowGlow();
                 return false;
@@ -203,7 +202,7 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
                   key: _addHistoryFormkey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       const Text(
                         "Update Incident",
                         style: TextStyle(
@@ -219,11 +218,11 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
                       ),
                       Container(
                         height: 50,
-                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
                         width: double.infinity,
                         alignment: Alignment.centerLeft,
-                        decoration:
-                            BoxDecoration(color: Pallete.secondaryBackground),
+                        decoration: const BoxDecoration(
+                            color: Pallete.secondaryBackground),
                         child: Text(
                           widget.history.parentName,
                         ),
@@ -245,7 +244,7 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
                             fillColor: Pallete.secondaryBackground,
                             enabledBorder: InputBorder.none,
                             border: InputBorder.none),
-                        validator: (text) {
+                        validator: (String? text) {
                           if (text == null || text.isEmpty) {
                             return 'problem tidak boleh kosong';
                           }
@@ -259,7 +258,7 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
                       // * Status pekerjaan text ------------------------
                       Text(
                         "Status pekerjaan ($_selectedLabel)",
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                       Slider(
                         min: 1,
@@ -270,11 +269,10 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
                         inactiveColor: Colors.blueGrey.shade200,
                         thumbColor: Pallete.green,
                         activeColor: Colors.green.shade400,
-                        onChanged: (value) {
+                        onChanged: (double value) {
                           setState(() {
                             _selectedSlider = value;
-                            _selectedLabel = context
-                                .read<HistoryProvider>()
+                            _selectedLabel = const SliderHelper()
                                 .getLabelStatus(_selectedSlider);
                           });
                         },
@@ -283,44 +281,46 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
                       verticalSpaceSmall,
 
                       // * ResolveNote text ------------------------
-                      (_selectedSlider == 4.0)
-                          ? const Text(
-                              "Resolve Note",
-                              style: TextStyle(fontSize: 16),
-                            )
-                          : const SizedBox.shrink(),
+                      if (_selectedSlider == 3.0 || _selectedSlider == 4.0)
+                        const Text(
+                          "Resolve Note",
+                          style: TextStyle(fontSize: 16),
+                        )
+                      else
+                        const SizedBox.shrink(),
 
-                      (_selectedSlider == 4.0)
-                          ? TextFormField(
-                              textInputAction: TextInputAction.newline,
-                              maxLines: 3,
-                              decoration: const InputDecoration(
-                                  filled: true,
-                                  fillColor: Pallete.secondaryBackground,
-                                  enabledBorder: InputBorder.none,
-                                  border: InputBorder.none),
-                              validator: (text) {
-                                if ((text == null || text.isEmpty) &&
-                                    _selectedSlider == 4.0) {
-                                  return 'resolve note tidak boleh kosong';
-                                }
-                                return null;
-                              },
-                              controller: resolveNoteController,
-                            )
-                          : const SizedBox.shrink(),
+                      if (_selectedSlider == 3.0 || _selectedSlider == 4.0)
+                        TextFormField(
+                          textInputAction: TextInputAction.newline,
+                          maxLines: 3,
+                          decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Pallete.secondaryBackground,
+                              enabledBorder: InputBorder.none,
+                              border: InputBorder.none),
+                          validator: (String? text) {
+                            if ((text == null || text.isEmpty) &&
+                                _selectedSlider == 4.0) {
+                              return 'resolve note tidak boleh kosong';
+                            }
+                            return null;
+                          },
+                          controller: resolveNoteController,
+                        )
+                      else
+                        const SizedBox.shrink(),
                       verticalSpaceRegular,
                       if (imageUrl.isNotEmpty)
                         Center(
                           child: CachedImageSquare(
-                            urlPath: "${Constant.baseUrl}${imageUrl}",
+                            urlPath: "${Constant.baseUrl}$imageUrl",
                             width: 200,
                             height: 200,
                           ),
                         ),
                       verticalSpaceRegular,
                       Row(
-                        children: [
+                        children: <Widget>[
                           Expanded(
                             child: GestureDetector(
                                 onTap: () => _getImageAndUpload(
@@ -331,16 +331,15 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
                                     context: context,
                                     source: ImageSource.gallery,
                                     id: widget.history.id),
-                                child: Icon(CupertinoIcons.camera)),
+                                child: const Icon(CupertinoIcons.camera)),
                           ),
                           Expanded(
                             child: Consumer<HistoryProvider>(
-                              builder: (_, data, __) {
+                              builder: (_, HistoryProvider data, __) {
                                 return (data.state == ViewState.busy)
                                     // * Button ---------------------------
-                                    ? Center(
-                                        child:
-                                            const CircularProgressIndicator())
+                                    ? const Center(
+                                        child: CircularProgressIndicator())
                                     : HomeLikeButton(
                                         iconData: CupertinoIcons.pencil_circle,
                                         text: "Update",
@@ -355,13 +354,13 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
                                   color: Colors.red[200],
                                 ),
                                 onPressed: () async {
-                                  var confirmDelete =
+                                  final bool? confirmDelete =
                                       await _getConfirm(context);
                                   if (confirmDelete != null && confirmDelete) {
                                     await context
                                         .read<HistoryProvider>()
                                         .deleteHistory(widget.history.id)
-                                        .then((value) {
+                                        .then((bool value) {
                                       if (value) {
                                         Navigator.pop(context);
                                         showToastSuccess(
@@ -369,7 +368,7 @@ class _EditHistoryDialogState extends State<EditHistoryDialog> {
                                             message:
                                                 "Berhasil menghapus check");
                                       }
-                                    }).onError((error, _) {
+                                    }).onError((Object? error, _) {
                                       showToastError(
                                           context: context,
                                           message: error.toString());

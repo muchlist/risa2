@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:risa2/src/screens/history/slider_history_helper.dart';
 
 import '../../api/json_models/request/history_req.dart';
 import '../../config/constant.dart';
@@ -16,12 +17,11 @@ import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 
 class AddParentHistoryDialog extends StatefulWidget {
-  final String parentID;
-  final String parentName;
-
   const AddParentHistoryDialog(
       {Key? key, required this.parentID, required this.parentName})
       : super(key: key);
+  final String parentID;
+  final String parentName;
 
   @override
   _AddParentHistoryDialogState createState() => _AddParentHistoryDialogState();
@@ -30,49 +30,49 @@ class AddParentHistoryDialog extends StatefulWidget {
 class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
   // Default value
   // var _selectedUnitName = widget.history.parentName; // untuk tampilan saja
-  var _selectedSlider = 1.0;
-  var _selectedLabel = "Progress";
+  double _selectedSlider = 1.0;
+  String _selectedLabel = "Progress";
 
   // image
   String _imagePath = "";
-  File? _image;
-  final picker = ImagePicker();
+  late File? _image;
+  final ImagePicker picker = ImagePicker();
 
   // Text controller
-  final problemController = TextEditingController();
-  final resolveNoteController = TextEditingController();
+  final TextEditingController problemController = TextEditingController();
+  final TextEditingController resolveNoteController = TextEditingController();
 
   // Form key
-  final _addHistoryFormkey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _addHistoryFormkey = GlobalKey<FormState>();
 
   void _addHistory() {
     if (_addHistoryFormkey.currentState?.validate() ?? false) {
-      final problemText = problemController.text;
-      final resolveText = resolveNoteController.text;
+      final String problemText = problemController.text;
+      final String resolveText = resolveNoteController.text;
 
-      final payload = HistoryRequest(
+      final HistoryRequest payload = HistoryRequest(
         id: "",
         parentID: widget.parentID,
         problem: problemText,
         problemResolve: resolveText,
         status: "None",
-        tag: [],
-        completeStatus: _selectedSlider.toInt(),
+        tag: <String>[],
+        completeStatus: const SliderHelper().getStatus(_selectedSlider),
         image: _imagePath,
       );
 
-      Future.delayed(Duration.zero, () {
+      Future<void>.delayed(Duration.zero, () {
         // * CALL Provider -----------------------------------------------------
         context
             .read<HistoryProvider>()
             .addHistory(payload, parentID: widget.parentID)
-            .then((value) {
+            .then((bool value) {
           if (value) {
             Navigator.of(context).pop();
             showToastSuccess(
                 context: context, message: "Berhasil menambahkan history");
           }
-        }).onError((error, _) {
+        }).onError((Object? error, _) {
           if (error != null) {
             showToastError(context: context, message: error.toString());
           }
@@ -83,9 +83,9 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
     }
   }
 
-  Future _getImageAndUpload(
+  Future<void> _getImageAndUpload(
       {required BuildContext context, required ImageSource source}) async {
-    final pickedFile = await picker.getImage(source: source);
+    final PickedFile? pickedFile = await picker.getImage(source: source);
     if (pickedFile != null) {
       _image = File(pickedFile.path);
     } else {
@@ -96,15 +96,14 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
     await context
         .read<HistoryProvider>()
         .uploadImageForpath(_image!)
-        .then((value) {
+        .then((String value) {
       if (value.isNotEmpty) {
         setState(() {
           _imagePath = value;
         });
       }
-    }).onError((error, _) {
+    }).onError((Object? error, _) {
       showToastError(context: context, message: error.toString());
-      return Future.error(error.toString());
     });
   }
 
@@ -117,13 +116,13 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: screenHeightPercentage(context, percentage: 0.95),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             const Divider(
               height: 40,
               thickness: 5,
@@ -133,7 +132,7 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
             ),
             verticalSpaceSmall,
             Expanded(
-                child: NotificationListener(
+                child: NotificationListener<OverscrollIndicatorNotification>(
               onNotification: (OverscrollIndicatorNotification overScroll) {
                 overScroll.disallowGlow();
                 return false;
@@ -143,7 +142,7 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
                   key: _addHistoryFormkey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       const Text(
                         "Menambahkan Incident",
                         style: TextStyle(
@@ -159,11 +158,11 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
                       ),
                       Container(
                         height: 50,
-                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
                         width: double.infinity,
                         alignment: Alignment.centerLeft,
-                        decoration:
-                            BoxDecoration(color: Pallete.secondaryBackground),
+                        decoration: const BoxDecoration(
+                            color: Pallete.secondaryBackground),
                         child: Text(
                           widget.parentName,
                         ),
@@ -185,7 +184,7 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
                             fillColor: Pallete.secondaryBackground,
                             enabledBorder: InputBorder.none,
                             border: InputBorder.none),
-                        validator: (text) {
+                        validator: (String? text) {
                           if (text == null || text.isEmpty) {
                             return 'problem tidak boleh kosong';
                           }
@@ -199,7 +198,7 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
                       // * Status pekerjaan text ------------------------
                       Text(
                         "Status pekerjaan ($_selectedLabel)",
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
                       Slider(
                         min: 1,
@@ -210,11 +209,10 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
                         inactiveColor: Colors.blueGrey.shade200,
                         thumbColor: Pallete.green,
                         activeColor: Colors.green.shade400,
-                        onChanged: (value) {
+                        onChanged: (double value) {
                           setState(() {
                             _selectedSlider = value;
-                            _selectedLabel = context
-                                .read<HistoryProvider>()
+                            _selectedLabel = const SliderHelper()
                                 .getLabelStatus(_selectedSlider);
                           });
                         },
@@ -224,37 +222,39 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
 
                       // * ResolveNote text ------------------------
 
-                      (_selectedSlider == 4.0)
-                          ? const Text(
-                              "Resolve Note",
-                              style: TextStyle(fontSize: 16),
-                            )
-                          : const SizedBox.shrink(),
+                      if (_selectedSlider == 3.0 || _selectedSlider == 4.0)
+                        const Text(
+                          "Resolve Note",
+                          style: TextStyle(fontSize: 16),
+                        )
+                      else
+                        const SizedBox.shrink(),
 
-                      (_selectedSlider == 4.0)
-                          ? TextFormField(
-                              textInputAction: TextInputAction.newline,
-                              maxLines: 3,
-                              decoration: const InputDecoration(
-                                  filled: true,
-                                  fillColor: Pallete.secondaryBackground,
-                                  enabledBorder: InputBorder.none,
-                                  border: InputBorder.none),
-                              validator: (text) {
-                                if ((text == null || text.isEmpty) &&
-                                    _selectedSlider == 4.0) {
-                                  return 'resolve note tidak boleh kosong';
-                                }
-                                return null;
-                              },
-                              controller: resolveNoteController,
-                            )
-                          : const SizedBox.shrink(),
+                      if (_selectedSlider == 3.0 || _selectedSlider == 4.0)
+                        TextFormField(
+                          textInputAction: TextInputAction.newline,
+                          maxLines: 3,
+                          decoration: const InputDecoration(
+                              filled: true,
+                              fillColor: Pallete.secondaryBackground,
+                              enabledBorder: InputBorder.none,
+                              border: InputBorder.none),
+                          validator: (String? text) {
+                            if ((text == null || text.isEmpty) &&
+                                _selectedSlider == 4.0) {
+                              return 'resolve note tidak boleh kosong';
+                            }
+                            return null;
+                          },
+                          controller: resolveNoteController,
+                        )
+                      else
+                        const SizedBox.shrink(),
                       verticalSpaceRegular,
                       if (_imagePath.isNotEmpty)
                         Center(
                           child: CachedImageSquare(
-                            urlPath: "${Constant.baseUrl}${_imagePath}",
+                            urlPath: "${Constant.baseUrl}$_imagePath",
                             width: 200,
                             height: 200,
                           ),
@@ -262,9 +262,8 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
                       verticalSpaceRegular,
 
                       Row(
-                        children: [
+                        children: <Widget>[
                           Expanded(
-                            flex: 1,
                             child: GestureDetector(
                                 onTap: () => _getImageAndUpload(
                                     context: context,
@@ -272,17 +271,16 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
                                 onLongPress: () => _getImageAndUpload(
                                     context: context,
                                     source: ImageSource.gallery),
-                                child: Icon(CupertinoIcons.camera)),
+                                child: const Icon(CupertinoIcons.camera)),
                           ),
                           Expanded(
                             flex: 2,
                             child: Consumer<HistoryProvider>(
-                              builder: (_, data, __) {
+                              builder: (_, HistoryProvider data, __) {
                                 return (data.state == ViewState.busy)
                                     // * Button ---------------------------
-                                    ? Center(
-                                        child:
-                                            const CircularProgressIndicator())
+                                    ? const Center(
+                                        child: CircularProgressIndicator())
                                     : Center(
                                         child: HomeLikeButton(
                                           iconData: CupertinoIcons.add,
@@ -293,9 +291,8 @@ class _AddParentHistoryDialogState extends State<AddParentHistoryDialog> {
                               },
                             ),
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: const SizedBox.shrink(),
+                          const Expanded(
+                            child: SizedBox.shrink(),
                           )
                         ],
                       ),
