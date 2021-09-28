@@ -84,15 +84,20 @@ class HistoryProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> findHistory({bool loading = true}) async {
+  Future<void> findHistory({bool loading = true, String search = ""}) async {
     if (loading) {
       setState(ViewState.busy);
     }
 
     String error = "";
     try {
-      final HistoryListResponse response =
-          await _historyService.findHistoryHome(_filter);
+      HistoryListResponse response;
+      if (search.isEmpty) {
+        response = await _historyService.findHistoryHome(_filter);
+      } else {
+        response = await _historyService.findHistory(_filter, search: search);
+      }
+
       if (response.error != null) {
         error = response.error!.message;
       } else {

@@ -19,7 +19,8 @@ class HistoryService {
         .executePost<MessageResponse>(const MessageParser());
   }
 
-  Future<HistoryListResponse> findHistory(FilterHistory f) {
+  Future<HistoryListResponse> findHistory(FilterHistory f,
+      {String search = ""}) {
     String query = "";
     if (f.branch != null) {
       query = query + "branch=${f.branch}&";
@@ -38,6 +39,9 @@ class HistoryService {
     }
     if (f.limit != null) {
       query = query + "limit=${f.limit}&";
+    }
+    if (search != "") {
+      query = query + "search=$search&";
     }
 
     return RequestREST(endpoint: "/histories?$query")

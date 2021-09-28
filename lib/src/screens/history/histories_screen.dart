@@ -30,17 +30,48 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
         context: context,
         builder: (BuildContext context) {
           final FilterHistory filter = historyProvider.filter;
+          final TextEditingController searchController =
+              TextEditingController();
 
           return StatefulBuilder(
               builder: (BuildContext context, Function setState) {
             return AlertDialog(
-              title: const Text("Setting Filter"),
+              title: const Text("Log Filter"),
+              insetPadding: const EdgeInsets.symmetric(horizontal: 1),
               content: DisableOverScrollGlow(
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
+                      const Text("Search"),
+                      verticalSpaceSmall,
+                      Container(
+                        width: double.infinity,
+                        height: 40,
+                        decoration: BoxDecoration(
+                            color: Pallete.secondaryBackground,
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Center(
+                            child: TextField(
+                              controller: searchController,
+                              decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: () {
+                                    searchController.clear();
+                                  },
+                                ),
+                                hintText: 'Search...',
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      verticalSpaceSmall,
                       const Text("Kategori"),
                       verticalSpaceSmall,
                       Container(
@@ -48,7 +79,8 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
                         height: 50,
                         width: double.infinity,
                         alignment: Alignment.centerLeft,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
                             color: Pallete.secondaryBackground),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
@@ -66,7 +98,7 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
                             }).toList(),
                             onChanged: (String? value) {
                               setState(() {
-                                filter.category = value;
+                                filter.category = value ?? HistCategory.all;
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());
                               });
@@ -79,24 +111,29 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
                 ),
               ),
               actions: <Widget>[
-                ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).colorScheme.secondary),
-                    onPressed: () {
-                      historyProvider.setFilter(filter);
-                      _loadHistories();
-                      Navigator.pop(context);
-                    },
-                    child: const Text("Terapkan")),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Theme.of(context).colorScheme.secondary),
+                        onPressed: () {
+                          historyProvider.setFilter(filter);
+                          _loadHistories(search: searchController.text);
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Terapkan")),
+                  ),
+                ),
               ],
             );
           });
         });
   }
 
-  Future<void> _loadHistories() {
+  Future<void> _loadHistories({String search = ""}) {
     return Future<void>.delayed(Duration.zero, () {
-      historyProvider.findHistory().onError((Object? error, _) =>
+      historyProvider.findHistory(search: search).onError((Object? error, _) =>
           showToastError(context: context, message: error.toString()));
     });
   }
@@ -141,7 +178,7 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
               ),
             ],
           ),
-          title: const Text('History'),
+          title: const Text('LOG'),
           actions: <Widget>[
             if (!_isVendor)
               IconButton(
@@ -149,7 +186,7 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
                   await _dialogChangeFilter(context);
                 },
                 icon: const Icon(
-                  CupertinoIcons.decrease_indent,
+                  CupertinoIcons.search,
                   size: 28,
                 ),
               ),
