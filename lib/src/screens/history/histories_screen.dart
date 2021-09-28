@@ -47,8 +47,8 @@ class _HistoriesScreenState extends State<HistoriesScreen> {
                       const Text("Search"),
                       verticalSpaceSmall,
                       Container(
-                        width: double.infinity,
-                        height: 40,
+                        width: screenWidthPercentage(context, percentage: 0.8),
+                        height: 50,
                         decoration: BoxDecoration(
                             color: Pallete.secondaryBackground,
                             borderRadius: BorderRadius.circular(5)),
