@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -44,6 +47,15 @@ import 'src/providers/stock.dart';
 import 'src/providers/vendor_check.dart';
 import 'src/router/routes.dart';
 import 'src/screens/landing/landing.dart';
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
+}
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -104,6 +116,16 @@ Future<void> main() async {
     statusBarIconBrightness: Brightness.light,
     statusBarColor: Colors.transparent,
   ));
+
+  // override http for android less than 7.1.1
+  if (Platform.isAndroid) {
+    final AndroidDeviceInfo androidInfo = await DeviceInfoPlugin().androidInfo;
+    final int? release =
+        int.tryParse(androidInfo.version.release?.split(".")[0] ?? "");
+    if (release != null && release <= 7) {
+      HttpOverrides.global = MyHttpOverrides();
+    }
+  }
 
   runApp(MyApp());
 }

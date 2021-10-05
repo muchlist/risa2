@@ -27,6 +27,13 @@ class RequestREST {
 
   // GET <<<<<<<<<<<
   Future<T> executeGet<T>(JsonParser<T> parser) async {
+    // (_client.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    //     (HttpClient client) {
+    //   client.badCertificateCallback =
+    //       (X509Certificate cert, String host, int port) => true;
+    //   return client;
+    // };
+
     try {
       final Response<String> response = await _client.get<String>(
         endpoint,
@@ -46,6 +53,13 @@ class RequestREST {
 
   // POST <<<<<<<<<<<
   Future<T> executePost<T>(JsonParser<T> parser) async {
+    // (_client.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    //     (HttpClient client) {
+    //   client.badCertificateCallback =
+    //       (X509Certificate cert, String host, int port) => true;
+    //   return client;
+    // };
+
     // final formData = FormData.fromMap(data);
     try {
       final Response<String> response = await _client.post<String>(
@@ -67,6 +81,13 @@ class RequestREST {
 
   // PUT <<<<<<<<<<<
   Future<T> executePut<T>(JsonParser<T> parser) async {
+    // (_client.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    //     (HttpClient client) {
+    //   client.badCertificateCallback =
+    //       (X509Certificate cert, String host, int port) => true;
+    //   return client;
+    // };
+
     // final formData = FormData.fromMap(data);
     try {
       final Response<String> response = await _client.put<String>(
@@ -88,6 +109,13 @@ class RequestREST {
 
   // DELETE <<<<<<<<<<<
   Future<T> executeDelete<T>(JsonParser<T> parser) async {
+    // (_client.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    //     (HttpClient client) {
+    //   client.badCertificateCallback =
+    //       (X509Certificate cert, String host, int port) => true;
+    //   return client;
+    // };
+
     final Response<String> response = await _client.delete<String>(
       endpoint,
       options: Options(
@@ -101,6 +129,13 @@ class RequestREST {
 
   // UPLOAD <<<<<<<<<<<
   Future<T> executeUpload<T>(JsonParser<T> parser) async {
+    // (_client.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+    //     (HttpClient client) {
+    //   client.badCertificateCallback =
+    //       (X509Certificate cert, String host, int port) => true;
+    //   return client;
+    // };
+
     final FormData formData = FormData.fromMap(data);
 
     try {

@@ -23,7 +23,7 @@ class ConfigCheckDetailScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         elevation: 0,
-        title: const Text("Pengecekan Altai Virtual"),
+        title: const Text("Checklist Config"),
       ),
       body: ConfigCheckDetailBody(),
     );
