@@ -1,6 +1,7 @@
 library json_parser;
 
 export "altai_maintenance_parser.dart";
+export "ba_parser.dart";
 export "cctv_maintenance_parser.dart";
 export "cctv_parser.dart";
 export "check_parser.dart";
