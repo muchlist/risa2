@@ -1,3 +1,4 @@
+/// enumStatus digunakan pada history
 enum enumStatus {
   info,
   progress,
@@ -23,4 +24,20 @@ extension ParseToString on enumStatus {
   }
 }
 
+/// ViewState digunakan pada berita acara
 enum ViewState { idle, busy }
+
+/// enumTypeParty digunakan pada berita acara
+enum enumTypeParty { participant, approver }
+
+extension ParsePartyToString on enumTypeParty {
+  String toShortString() {
+    if (this == enumTypeParty.participant) {
+      return "partisipan";
+    }
+    if (this == enumTypeParty.approver) {
+      return "approver";
+    }
+    return toString().split('.').last;
+  }
+}
