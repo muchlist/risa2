@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:risa2/src/screens/ba/signature_screen.dart';
 
 import '../screens/altai_maintenance/altai_maintenance_detail_screen.dart';
 import '../screens/altai_maintenance/altai_maintenance_screen.dart';
@@ -98,6 +99,7 @@ class RouteGenerator {
   static const String configCheckDetail = '/config-check-detail';
   static const String ba = '/ba';
   static const String baDetail = '/ba-detail';
+  static const String signature = '/ba-signature';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -193,6 +195,8 @@ class RouteGenerator {
         return transitionFade(BaScreen());
       case baDetail:
         return transitionFade(BaDetailScreen());
+      case signature:
+        return transitionFade(const SignatureScreen());
       default:
         return MaterialPageRoute<LoginScreen>(builder: (_) => LoginScreen());
     }

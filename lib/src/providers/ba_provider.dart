@@ -336,11 +336,8 @@ class BaProvider extends ChangeNotifier {
   Future<bool> uploadImage(String id, File file) async {
     String error = "";
 
-    final File fileCompressed = await compressFile(file);
-
     try {
-      final BaDetailResponse response =
-          await _baService.uploadImage(id, fileCompressed);
+      final BaDetailResponse response = await _baService.uploadImage(id, file);
       if (response.error != null) {
         error = response.error!.message;
       } else {

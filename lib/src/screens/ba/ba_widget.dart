@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:risa2/src/api/json_models/response/ba_list_resp.dart';
 import 'package:risa2/src/api/json_models/response/ba_resp.dart';
 import 'package:risa2/src/config/constant.dart';
@@ -47,7 +48,7 @@ class BaSignWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(color: Colors.grey.withOpacity(0.5)),
+          border: Border.all(color: Colors.grey.shade100),
           borderRadius: BorderRadius.circular(3)),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -69,7 +70,10 @@ class BaSignWidget extends StatelessWidget {
                 color: Colors.grey,
               ),
             ),
-          Text(data.name),
+          Text(
+            data.name,
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
         ],
       ),
     );

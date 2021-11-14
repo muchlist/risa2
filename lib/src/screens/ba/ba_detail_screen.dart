@@ -2,15 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
-import 'package:risa2/src/config/pallatte.dart';
-import 'package:risa2/src/shared/button.dart';
-import 'package:risa2/src/shared/ui_helpers.dart';
-import '../../api/json_models/response/ba_resp.dart';
 
+import '../../api/json_models/response/ba_resp.dart';
+import '../../config/pallatte.dart';
 import '../../globals.dart';
 import '../../providers/ba_provider.dart';
+import '../../router/routes.dart';
+import '../../shared/button.dart';
 import '../../shared/disable_glow.dart';
 import '../../shared/func_flushbar.dart';
+import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
 import 'ba_component.dart';
 
@@ -68,6 +69,10 @@ class _BaDetailBodyState extends State<BaDetailBody> {
         showToastError(context: context, message: error.toString());
       });
     });
+  }
+
+  Future<void> _toSignScreen() {
+    return Navigator.pushNamed(context, RouteGenerator.signature);
   }
 
   @override
@@ -229,7 +234,7 @@ class _BaDetailBodyState extends State<BaDetailBody> {
             ConfirmButton(
               iconData: CupertinoIcons.signature,
               text: "Sign ",
-              tapTap: _toSignMode,
+              tapTap: _toSignScreen,
               color: Colors.blue.shade400,
             ),
           ],
