@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/ba_provider.dart';
+import '../../router/routes.dart';
 import '../../shared/ba_item_widget.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/func_flushbar.dart';
@@ -120,12 +121,9 @@ class _BaRecyclerViewState extends State<BaRecyclerView> {
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
               onTap: () {
-                // TODO route to detail
-                // context.read<BaProvider>().removeDetail();
-                // context
-                //     .read<BaProvider>()
-                //     .setBaID(data.baList[index].id);
-                // Navigator.pushNamed(context, RouteGenerator.baDetail);
+                context.read<BaProvider>().removeDetail();
+                context.read<BaProvider>().setBaID(data.baList[index].id);
+                Navigator.pushNamed(context, RouteGenerator.baDetail);
               },
               child: BaListTile(data: data.baList[index]));
         },

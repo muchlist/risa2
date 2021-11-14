@@ -3,6 +3,7 @@ import 'package:page_transition/page_transition.dart';
 
 import '../screens/altai_maintenance/altai_maintenance_detail_screen.dart';
 import '../screens/altai_maintenance/altai_maintenance_screen.dart';
+import '../screens/ba/ba_detail_screen.dart';
 import '../screens/ba/ba_screen.dart';
 import '../screens/cctv/add_cctv_screen.dart';
 import '../screens/cctv/cctv_detail_screen.dart';
@@ -96,6 +97,7 @@ class RouteGenerator {
   static const String configCheckAdd = '/config-check-add';
   static const String configCheckDetail = '/config-check-detail';
   static const String ba = '/ba';
+  static const String baDetail = '/ba-detail';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -189,6 +191,8 @@ class RouteGenerator {
         return transitionFade(AltaiMaintDetailScreen());
       case ba:
         return transitionFade(BaScreen());
+      case baDetail:
+        return transitionFade(BaDetailScreen());
       default:
         return MaterialPageRoute<LoginScreen>(builder: (_) => LoginScreen());
     }
