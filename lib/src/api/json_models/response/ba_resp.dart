@@ -101,6 +101,7 @@ class Participant {
   @JsonKey(name: "user_id")
   final String userID;
   final String sign;
+  @JsonKey(name: "sign_at")
   final int signAt;
 }
 

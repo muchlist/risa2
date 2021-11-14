@@ -4,11 +4,11 @@ import 'package:flutter/painting.dart';
 import 'package:provider/provider.dart';
 import '../../api/json_models/response/ba_resp.dart';
 
-import '../../config/pallatte.dart';
 import '../../providers/ba_provider.dart';
 import '../../shared/disable_glow.dart';
 import '../../shared/func_flushbar.dart';
 import '../../utils/enums.dart';
+import 'ba_component.dart';
 
 GlobalKey<RefreshIndicatorState> refreshKeyBaDetailScreen =
     GlobalKey<RefreshIndicatorState>();
@@ -22,7 +22,7 @@ class BaDetailScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0,
-          title: const Text("Detail Berita Acara"),
+          title: const Text("BERITA ACARA"),
         ),
         body: BaDetailBody());
   }
@@ -95,6 +95,8 @@ class _BaDetailBodyState extends State<BaDetailBody> {
       }
     }
 
+    slivers.add(buildPhotoList(detail.images, detail.completeStatus));
+
     // end sliver
     slivers.add(const SliverToBoxAdapter(
       child: SizedBox(
@@ -110,106 +112,6 @@ class _BaDetailBodyState extends State<BaDetailBody> {
         child: DisableOverScrollGlow(
           child: CustomScrollView(slivers: slivers),
         ),
-      ),
-    );
-  }
-
-  // ======================================================================== List Item body start here
-  SliverToBoxAdapter buildTitleSliver(BaDetailResponseData data) {
-    return SliverToBoxAdapter(
-      child: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.grey.withOpacity(0.5)),
-            borderRadius: BorderRadius.circular(3)),
-        child: Column(
-          children: <Widget>[
-            Text(
-              data.title,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            Text(
-              "nomor : ${data.number}",
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  SliverToBoxAdapter buildDescParagraph(Description desc) {
-    return SliverToBoxAdapter(
-        child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
-      child: Text(desc.description),
-    ));
-  }
-
-  SliverToBoxAdapter buildDescTable(List<Equipment> equips) {
-    return SliverToBoxAdapter(
-        child: Padding(
-      padding: const EdgeInsets.only(top: 8.0),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: DataTable(
-          headingRowColor: MaterialStateProperty.resolveWith<Color>(
-              (Set<MaterialState> states) {
-            return Colors.grey.withOpacity(0.5); // Use the default value.
-          }),
-          dataRowColor: MaterialStateProperty.resolveWith<Color>(
-              (Set<MaterialState> states) {
-            return Colors.yellow.shade50; // Use the default value.
-          }),
-          columnSpacing: 30.0,
-          dataRowHeight: 60.0,
-          columns: const <DataColumn>[
-            DataColumn(label: Text("Nama")),
-            DataColumn(label: Text("Keterangan")),
-            DataColumn(label: Text("Jumlah"), numeric: true),
-          ],
-          rows: equips
-              .map((Equipment equip) => DataRow(cells: <DataCell>[
-                    DataCell(SizedBox(
-                      width: 100,
-                      child: Text(equip.equipmentName),
-                    )),
-                    DataCell(SizedBox(
-                      width: 300,
-                      child: Text(equip.description),
-                    )),
-                    DataCell(Text("${equip.qty}"))
-                  ]))
-              .toList(),
-        ),
-      ),
-    ));
-  }
-
-  SliverList buildNumberedText(Description desc) {
-    final String textDesc = desc.description;
-    final List<String> textList = textDesc.split("||");
-
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(" ${index + 1}    "),
-                Flexible(
-                    child: Text(
-                  textList[index],
-                )),
-              ],
-            ),
-          );
-        },
-        childCount: textList.length, // 1000 list items
       ),
     );
   }

@@ -91,7 +91,7 @@ Participant _$ParticipantFromJson(Map<String, dynamic> json) {
     json['division'] as String,
     json['user_id'] as String,
     json['sign'] as String,
-    json['signAt'] as int,
+    json['sign_at'] as int,
   );
 }
 
@@ -103,7 +103,7 @@ Map<String, dynamic> _$ParticipantToJson(Participant instance) =>
       'division': instance.division,
       'user_id': instance.userID,
       'sign': instance.sign,
-      'signAt': instance.signAt,
+      'sign_at': instance.signAt,
     };
 
 Description _$DescriptionFromJson(Map<String, dynamic> json) {
