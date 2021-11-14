@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import 'src/api/services/altai_maint_service.dart';
 import 'src/api/services/altai_virtual_service.dart';
 import 'src/api/services/auth_service.dart';
+import 'src/api/services/ba_service.dart';
 import 'src/api/services/cctv_maint_service.dart';
 import 'src/api/services/cctv_service.dart';
 import 'src/api/services/check_service.dart';
@@ -32,6 +33,7 @@ import 'src/globals.dart';
 import 'src/providers/altai_maintenance.dart';
 import 'src/providers/altai_virtual.dart';
 import 'src/providers/auth.dart';
+import 'src/providers/ba_provider.dart';
 import 'src/providers/cctv_maintenance.dart';
 import 'src/providers/cctvs.dart';
 import 'src/providers/checks.dart';
@@ -155,6 +157,7 @@ class _MyAppState extends State<MyApp> {
   final SpeedService speedService = const SpeedService();
   final PdfService pdfService = const PdfService();
   final ConfigCheckService configCheckService = const ConfigCheckService();
+  final BaService baService = const BaService();
 
   @override
   void initState() {
@@ -210,6 +213,8 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider<ConfigCheckProvider>(
             create: (BuildContext context) =>
                 ConfigCheckProvider(configCheckService)),
+        ChangeNotifierProvider<BaProvider>(
+            create: (BuildContext context) => BaProvider(baService)),
       ],
       child: MaterialApp(
         title: MyApp._title,

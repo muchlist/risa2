@@ -20,6 +20,11 @@ extension UnixTimeStamp on int {
     return DateFormat("MMM y").format(date.toLocal());
   }
 
+  String getDateWithYearString() {
+    final DateTime date = DateTime.fromMillisecondsSinceEpoch(this * 1000);
+    return DateFormat("d MMM y").format(date.toLocal());
+  }
+
   String getCompleteDateString() {
     final DateTime date = DateTime.fromMillisecondsSinceEpoch(this * 1000);
     return DateFormat("d MMM y HH:mm").format(date.toLocal());

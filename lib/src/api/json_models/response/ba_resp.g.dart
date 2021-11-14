@@ -47,7 +47,7 @@ BaDetailResponseData _$BaDetailResponseDataFromJson(Map<String, dynamic> json) {
     json['complete_status'] as int,
     json['location'] as String,
     (json['images'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
-    json['docType'] as String,
+    json['doc_type'] as String,
     (json['descriptions'] as List<dynamic>?)
             ?.map((e) => Description.fromJson(e as Map<String, dynamic>))
             .toList() ??
@@ -75,7 +75,7 @@ Map<String, dynamic> _$BaDetailResponseDataToJson(
       'date': instance.date,
       'complete_status': instance.completeStatus,
       'location': instance.location,
-      'docType': instance.docType,
+      'doc_type': instance.docType,
       'images': instance.images,
       'participants': instance.participants.map((e) => e.toJson()).toList(),
       'approvers': instance.approvers.map((e) => e.toJson()).toList(),

@@ -43,6 +43,8 @@ class Content {
         color: Colors.deepOrange.shade300),
     Dashboard("Cfg Server", CupertinoIcons.greaterthan_circle_fill,
         route: RouteGenerator.configCheck, color: Colors.deepOrange.shade300),
+    const Dashboard("BA", CupertinoIcons.mail_solid,
+        route: RouteGenerator.ba, color: Colors.blueAccent),
     Dashboard("Other", CupertinoIcons.question_circle,
         color: Pallete.green.withOpacity(0.4), route: RouteGenerator.other),
   ];

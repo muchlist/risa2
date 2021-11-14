@@ -48,7 +48,7 @@ BaMinResponse _$BaMinResponseFromJson(Map<String, dynamic> json) {
     json['complete_status'] as int,
     json['location'] as String,
     (json['images'] as List<dynamic>?)?.map((e) => e as String).toList() ?? [],
-    json['docType'] as String,
+    json['doc_type'] as String,
   );
 }
 
@@ -67,7 +67,7 @@ Map<String, dynamic> _$BaMinResponseToJson(BaMinResponse instance) =>
       'date': instance.date,
       'complete_status': instance.completeStatus,
       'location': instance.location,
-      'docType': instance.docType,
+      'doc_type': instance.docType,
       'images': instance.images,
       'participants': instance.participants.map((e) => e.toJson()).toList(),
       'approvers': instance.approvers.map((e) => e.toJson()).toList(),

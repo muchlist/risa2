@@ -111,6 +111,7 @@ class BaMinResponse {
   @JsonKey(name: "complete_status")
   final int completeStatus;
   final String location;
+  @JsonKey(name: "doc_type")
   final String docType;
   @JsonKey(defaultValue: <String>[])
   final List<String> images;
