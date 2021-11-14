@@ -4,11 +4,11 @@ import 'package:provider/provider.dart';
 
 import '../../providers/ba_provider.dart';
 import '../../router/routes.dart';
-import '../../shared/ba_item_widget.dart';
 import '../../shared/empty_box.dart';
 import '../../shared/func_flushbar.dart';
 import '../../shared/ui_helpers.dart';
 import '../../utils/enums.dart';
+import 'ba_widget.dart';
 
 GlobalKey<RefreshIndicatorState> refreshKeyBaScreen =
     GlobalKey<RefreshIndicatorState>();

@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:risa2/src/shared/ui_helpers.dart';
 import '../../api/json_models/response/ba_resp.dart';
 import '../../config/constant.dart';
 import '../../shared/cached_image_square.dart';
 import '../../shared/disable_glow.dart';
+import 'ba_widget.dart';
 
 SliverToBoxAdapter buildTitleSliver(BaDetailResponseData data) {
   return SliverToBoxAdapter(
@@ -37,7 +40,28 @@ SliverToBoxAdapter buildDescParagraph(Description desc) {
   ));
 }
 
-SliverToBoxAdapter buildDescTable(List<Equipment> equips) {
+SliverToBoxAdapter buildDescParagraphBold(Description desc) {
+  return SliverToBoxAdapter(
+      child: Padding(
+    padding: const EdgeInsets.symmetric(vertical: 12.0),
+    child: Text(
+      desc.description,
+      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+    ),
+  ));
+}
+
+SliverToBoxAdapter buildDivider() {
+  return const SliverToBoxAdapter(
+      child: Padding(
+    padding: EdgeInsets.symmetric(vertical: 3.0),
+    child: Divider(
+      thickness: 1,
+    ),
+  ));
+}
+
+SliverToBoxAdapter buildDescTable(List<Equipment> equips, BuildContext ctx) {
   return SliverToBoxAdapter(
       child: Padding(
     padding: const EdgeInsets.only(top: 8.0),
@@ -62,11 +86,11 @@ SliverToBoxAdapter buildDescTable(List<Equipment> equips) {
         rows: equips
             .map((Equipment equip) => DataRow(cells: <DataCell>[
                   DataCell(SizedBox(
-                    width: 100,
+                    width: (screenIsPortrait(ctx)) ? 150 : 200,
                     child: Text(equip.equipmentName),
                   )),
                   DataCell(SizedBox(
-                    width: 300,
+                    width: (screenIsPortrait(ctx)) ? 300 : 600,
                     child: Text(equip.description),
                   )),
                   DataCell(Text("${equip.qty}"))
@@ -157,6 +181,50 @@ SliverToBoxAdapter buildPhotoList(List<String> photos, int completeStatus) {
                 urlPath: "${Constant.baseUrl}${photos[index]}",
                 width: 200,
               ),
+            ),
+          );
+        },
+      ),
+    ),
+  ));
+}
+
+SliverToBoxAdapter buildSignList(
+    List<Participant> participants, int completeStatus) {
+  return SliverToBoxAdapter(
+      child: SizedBox(
+    height: 170,
+    child: DisableOverScrollGlow(
+      child: ListView.builder(
+        shrinkWrap: true,
+        scrollDirection: Axis.horizontal,
+        itemCount: participants.length + 1,
+        itemBuilder: (BuildContext ctx, int index) {
+          if (index == participants.length) {
+            return (completeStatus > 0)
+                ? const SizedBox.shrink()
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30),
+                    child: GestureDetector(
+                      // onTap: () {
+
+                      // },
+                      // onLongPress: () {
+
+                      // },
+                      child: const Icon(
+                        Icons.add_circle_outline,
+                        size: 40,
+                        color: Colors.grey,
+                      ),
+                    ));
+          }
+          return Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: GestureDetector(
+              // onLongPress: () async {
+              // },
+              child: BaSignWidget(data: participants[index]),
             ),
           );
         },

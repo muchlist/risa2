@@ -31,6 +31,7 @@ class AuthProvider extends ChangeNotifier {
         _userData = response.data;
         if (_userData?.accessToken != "") {
           _saveDataToPersistent(
+              id: _userData!.id,
               token: _userData!.accessToken,
               branch: _userData!.branch,
               name: _userData!.name,
@@ -66,17 +67,19 @@ class AuthProvider extends ChangeNotifier {
 
   void logout() {
     _saveDataToPersistent(
-        token: "", branch: "", name: "", role: <String>[], expired: 0);
+        id: "", token: "", branch: "", name: "", role: <String>[], expired: 0);
     notifyListeners();
   }
 
   Future<void> _saveDataToPersistent(
       {required String token,
+      required String id,
       required String name,
       required String branch,
       required List<String> role,
       required int expired}) async {
     await App.setName(name);
+    await App.setID(id);
     await App.setToken(token);
     await App.setBranch(branch);
     await App.setRoles(role);

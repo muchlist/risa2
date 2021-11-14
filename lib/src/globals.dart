@@ -5,6 +5,7 @@ class App {
   static const String _branchSaved = "branch";
   static const String _rolesSaved = "roles";
   static const String _nameSaved = "name";
+  static const String _idSaved = "id";
   static const String _expiredSaved = "expired";
   static const String _fireTokenSaved = "firebaseToken";
 
@@ -43,6 +44,14 @@ class App {
 
   static Future<bool> setName(String value) {
     return localStorage.setString(_nameSaved, value);
+  }
+
+  static String? getID() {
+    return localStorage.getString(_idSaved);
+  }
+
+  static Future<bool> setID(String value) {
+    return localStorage.setString(_idSaved, value);
   }
 
   static String? getBranch() {

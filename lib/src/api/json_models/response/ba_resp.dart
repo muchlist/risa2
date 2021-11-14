@@ -85,6 +85,7 @@ class Participant {
     this.name,
     this.alias,
     this.division,
+    this.position,
     this.userID,
     this.sign,
     this.signAt,
@@ -98,6 +99,7 @@ class Participant {
   final String name;
   final String alias;
   final String division;
+  final String position;
   @JsonKey(name: "user_id")
   final String userID;
   final String sign;
